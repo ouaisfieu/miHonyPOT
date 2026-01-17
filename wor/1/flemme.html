@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>V!VE la FLEMME — diffusion (safe)</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    .cols{display:grid; gap:14px}
+    @media(min-width:860px){.cols{grid-template-columns: 1.2fr .8fr}}
+    .table{width:100%; border-collapse:separate; border-spacing:0 10px}
+    .table td{padding:10px; border:1px solid var(--line); background: color-mix(in oklab, var(--bg) 65%, var(--card));}
+    .table td:first-child{border-radius:14px 0 0 14px}
+    .table td:last-child{border-radius:0 14px 14px 0}
+    .pill{font-family:var(--mono); font-size:.8rem; padding:4px 8px; border:1px solid var(--line); border-radius:999px; display:inline-block}
+  </style>
+</head>
+<body>
+  <main class="wrap" style="padding:22px 0 30px">
+    <section class="card">
+      <div class="kicker">module / diffusion</div>
+      <h1 style="margin:6px 0 10px">V!VE la FLEMME (version safe)</h1>
+      <p class="muted">
+        Objectif : te faire gagner du temps <em>sans</em> tomber dans le spam. Templates + suivi local. :contentReference[oaicite:25]{index=25}
+      </p>
+
+      <div class="callout">
+        <strong>Règle :</strong> uniquement des contacts / groupes où c’est attendu, demandé ou pertinent.
+        Sinon tu donnes des munitions à “Eux” (signalement, discrédit, bannissement).
+      </div>
+
+      <div class="cols">
+        <div class="card" style="box-shadow:none">
+          <h2>Templates</h2>
+          <label>Choisir un template
+            <select id="tpl">
+              <option value="relais">3. Relais (court)</option>
+              <option value="ultra">4. Ultra-court (2 lignes)</option>
+              <option value="context">Contextualisé (explicite + vérifiable)</option>
+            </select>
+          </label>
+          <label>Lien à partager
+            <input id="link" placeholder="https://.../landing-virus.html" />
+          </label>
+          <label>Message
+            <textarea id="msg" rows="7"></textarea>
+          </label>
+
+          <div class="row">
+            <button class="btn primary" id="copy">Copier</button>
+            <button class="btn" id="log">Marquer “envoyé” (log)</button>
+          </div>
+
+          <details class="details" style="margin-top:10px">
+            <summary>Importer des contacts (CSV simple)</summary>
+            <p class="muted small">Format: nom;type;canal;note (une ligne par contact). Stocké localement.</p>
+            <textarea id="csv" rows="6" placeholder="Exemple:
+Association X;asso;email;OK consent
+Media Y;media;formulaire;déjà contacté
+Groupe Z;groupe;fb;autorisé par règles"></textarea>
+            <div class="row">
+              <button class="btn" id="import">Importer</button>
+              <button class="btn" id="clear">Vider la base</button>
+            </div>
+          </details>
+        </div>
+
+        <div class="card" style="box-shadow:none">
+          <h2>Prochain contact</h2>
+          <p class="muted small">Pas d’automatisation plateforme. Juste une checklist humaine. :contentReference[oaicite:26]{index=26}</p>
+          <div id="next" class="callout"><em>Aucun contact importé.</em></div>
+          <div class="row">
+            <button class="btn" id="pick">Prochain</button>
+            <button class="btn" id="done">Fait</button>
+          </div>
+
+          <h3 style="margin-top:14px">Historique (local)</h3>
+          <div id="hist" class="muted small">—</div>
+        </div>
+      </div>
+
+      <p class="muted small" style="margin-top:12px">
+        Référence : templates “Relais / Ultra-court” et logique de module V!VE la FLEMME. :contentReference[oaicite:27]{index=27}
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const KEY = "plaidoyer_ecosystem";
+    const $ = (id) => document.getElementById(id);
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY)) || { contacts: [], logs: [] }; }
+      catch { return { contacts: [], logs: [] }; }
+    }
+    function save(s) { localStorage.setItem(KEY, JSON.stringify(s)); }
+
+    function template(kind, link) {
+      if (kind === "ultra") return `Une page offline, copiables, sans trackers.\n${link}`;
+      if (kind === "relais") return `Si tu veux un kit simple (offline) pour documenter + agir :\n${link}\n(à partager à ton cercle de confiance)`;
+      return `Je partage un kit offline (HTML unique) : ${link}
+But : documenter, outiller, relier — sans trackers.
+Si tu veux, je te fais un récap + une version adaptée à ton contexte.`;
+    }
+
+    function refreshMsg() {
+      const link = $("link").value.trim() || "[COLLE ICI LE LIEN]";
+      $("msg").value = template($("tpl").value, link);
+    }
+
+    function renderNext() {
+      const s = load();
+      const c = s.contacts.find(x => !x.done);
+      $("next").innerHTML = c
+        ? `<div><strong>${c.name}</strong> <span class="pill">${c.type}</span></div>
+           <div class="muted small">Canal: ${c.channel} — Note: ${c.note || "-"}</div>`
+        : `<em>Aucun contact restant.</em>`;
+      $("hist").textContent = (s.logs || []).slice(0,6).map(l => `${l.ts} — ${l.event}`).join("\n") || "—";
+    }
+
+    $("tpl").addEventListener("change", refreshMsg);
+    $("link").addEventListener("input", refreshMsg);
+
+    $("copy").addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText($("msg").value); alert("Copié."); }
+      catch { prompt("Copie :", $("msg").value); }
+    });
+
+    $("log").addEventListener("click", () => {
+      const s = load();
+      s.logs = s.logs || [];
+      s.logs.unshift({ ts: new Date().toISOString(), event: "message_copié", meta: { tpl: $("tpl").value }});
+      s.logs = s.logs.slice(0,200);
+      save(s);
+      renderNext();
+    });
+
+    $("import").addEventListener("click", () => {
+      const raw = $("csv").value.trim();
+      if (!raw) return;
+      const s = load();
+      s.contacts = s.contacts || [];
+      raw.split("\n").forEach(line => {
+        const [name,type,channel,note] = line.split(";").map(x => (x||"").trim());
+        if (name) s.contacts.push({ id: crypto.randomUUID(), name, type:type||"contact", channel:channel||"-", note:note||"", done:false });
+      });
+      save(s);
+      renderNext();
+    });
+
+    $("clear").addEventListener("click", () => {
+      localStorage.removeItem(KEY);
+      renderNext();
+    });
+
+    $("pick").addEventListener("click", renderNext);
+
+    $("done").addEventListener("click", () => {
+      const s = load();
+      const c = s.contacts.find(x => !x.done);
+      if (!c) return;
+      c.done = true;
+      s.logs.unshift({ ts: new Date().toISOString(), event: `contact_fait: ${c.name}` });
+      save(s);
+      renderNext();
+    });
+
+    refreshMsg();
+    renderNext();
+  </script>
+</body>
+</html>

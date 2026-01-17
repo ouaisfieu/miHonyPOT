@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🦠 VIRUS DÉMOCRATIQUE — Le jeu qui change le monde</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Un fichier HTML qui transforme chaque citoyen·ne en agent·e du changement. Joue. Agis. Propage.">
+    <meta name="keywords" content="démocratie, citoyenneté, jeu, ARG, plaidoyer, activisme, éducation populaire">
+    <meta name="author" content="Collectif Virus Démocratique">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="🦠 VIRUS DÉMOCRATIQUE — Le jeu qui change le monde">
+    <meta property="og:description" content="Un seul fichier HTML. Des millions d'actions citoyennes. Tu joues ?">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦠</text></svg>">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🦠 VIRUS DÉMOCRATIQUE">
+    <meta name="twitter:description" content="Le jeu dont les conséquences sont réelles. Tu joues ?">
+    
+    <!-- PWA -->
+    <meta name="theme-color" content="#0a0a12">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Virus Démocratique&quot;,&quot;short_name&quot;:&quot;Virus&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0a0a12&quot;,&quot;theme_color&quot;:&quot;#00ff88&quot;}">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #0a0a12;
+            --text: #ffffff;
+            --accent: #00ff88;
+            --accent2: #00e5ff;
+            --accent3: #b388ff;
+            --danger: #ff4444;
+            --glow: 0 0 30px #00ff8850;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Language selector */
+        .lang-selector {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+            filter: grayscale(1);
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            opacity: 1;
+            filter: grayscale(0);
+            transform: scale(1.2);
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .virus-icon {
+            font-size: clamp(4rem, 15vw, 8rem);
+            animation: pulse 2s ease-in-out infinite, wiggle 5s ease-in-out infinite;
+            filter: drop-shadow(var(--glow));
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 8vw, 4.5rem);
+            font-weight: 900;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            filter: drop-shadow(0 0 30px #00ff8830);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-subtitle strong {
+            color: var(--accent);
+        }
+
+        .hero-subtitle em {
+            color: var(--accent2);
+            font-style: normal;
+        }
+
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cta-main {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px #00ff8840; }
+            50% { box-shadow: 0 0 40px #00ff8860, 0 0 60px #00ff8830; }
+        }
+
+        .cta-main:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px #00ff8880;
+        }
+
+        .cta-secondary {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .cta-secondary:hover {
+            color: var(--accent2);
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-value.counting {
+            animation: count-up 0.1s steps(1) infinite;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scroll indicator */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Section: How it works */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        /* 3-step explanation */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .step:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .step:hover::before {
+            transform: scaleX(1);
+        }
+
+        .step-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            margin: 1rem 0;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.6;
+        }
+
+        /* Features grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .feature:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .feature-text strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.2;
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .testimonial-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Impact section */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,229,255,0.1));
+            border: 1px solid rgba(0,255,136,0.2);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .impact-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .impact-card p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Warning section */
+        .warning-section {
+            background: linear-gradient(135deg, rgba(255,68,68,0.1), rgba(255,68,68,0.05));
+            border: 1px solid rgba(255,68,68,0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .warning-section h3 {
+            color: var(--danger);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .warning-section p {
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(0,255,136,0.05));
+        }
+
+        .final-cta h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 2rem;
+        }
+
+        /* Download options */
+        .download-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .download-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-bar {
+                gap: 1.5rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Animations on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Share buttons */
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .share-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* Counter animation */
+        .counter {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles -->
+    <div class="bg-animation" id="bg-animation"></div>
+
+    <!-- Language selector -->
+    <div class="lang-selector">
+        <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')" title="Français">🇫🇷</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')" title="English">🇬🇧</button>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')" title="Español">🇪🇸</button>
+        <button class="lang-btn" data-lang="de" onclick="setLang('de')" title="Deutsch">🇩🇪</button>
+        <button class="lang-btn" data-lang="ar" onclick="setLang('ar')" title="العربية">🇸🇦</button>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="virus-icon">🦠</div>
+        <h1 class="hero-title" data-i18n="hero_title">VIRUS DÉMOCRATIQUE</h1>
+        <p class="hero-subtitle" data-i18n="hero_subtitle">
+            <strong>Un seul fichier HTML.</strong><br>
+            Des millions d'actions citoyennes.<br>
+            <em>Le jeu dont les conséquences sont réelles.</em>
+        </p>
+        
+        <div class="cta-container">
+            <a href="arg-citoyen.html" class="cta-main" data-i18n="cta_play">
+                <span>▶</span> JOUER MAINTENANT
+            </a>
+            <a href="#how" class="cta-secondary" data-i18n="cta_learn">Comment ça marche ? ↓</a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value"><span class="counter" data-target="1247">0</span></div>
+                <div class="stat-label" data-i18n="stat_players">Joueur·euses</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value"><span class="counter" data-target="8432">0</span></div>
+                <div class="stat-label" data-i18n="stat_actions">Actions réelles</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value"><span class="counter" data-target="23">0</span></div>
+                <div class="stat-label" data-i18n="stat_countries">Pays</div>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span data-i18n="scroll">Défiler</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+        <h2 class="section-title fade-in" data-i18n="how_title">Comment ça <span>marche</span> ?</h2>
+        
+        <div class="steps">
+            <div class="step fade-in">
+                <div class="step-number">01</div>
+                <div class="step-icon">🎮</div>
+                <h3 class="step-title" data-i18n="step1_title">Tu joues</h3>
+                <p class="step-desc" data-i18n="step1_desc">
+                    Crée ton profil en 30 secondes. Choisis ta cause. Reçois tes premières quêtes.
+                </p>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">02</div>
+                <div class="step-icon">✊</div>
+                <h3 class="step-title" data-i18n="step2_title">Tu agis</h3>
+                <p class="step-desc" data-i18n="step2_desc">
+                    Chaque quête est une action citoyenne réelle : veille, analyse, mobilisation, transmission.
+                </p>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">03</div>
+                <div class="step-icon">🦠</div>
+                <h3 class="step-title" data-i18n="step3_title">Tu propages</h3>
+                <p class="step-desc" data-i18n="step3_desc">
+                    Partage le fichier. Chaque nouvelle infection renforce le réseau. Le virus se répand.
+                </p>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature fade-in">
+                <span class="feature-icon">📴</span>
+                <div class="feature-text">
+                    <strong data-i18n="feat1_title">100% Hors-ligne</strong>
+                    <span data-i18n="feat1_desc">Fonctionne sans internet. Un fichier, c'est tout.</span>
+                </div>
+            </div>
+            <div class="feature fade-in">
+                <span class="feature-icon">🔒</span>
+                <div class="feature-text">
+                    <strong data-i18n="feat2_title">Zéro tracking</strong>
+                    <span data-i18n="feat2_desc">Tes données restent sur TON appareil. Toujours.</span>
+                </div>
+            </div>
+            <div class="feature fade-in">
+                <span class="feature-icon">🆓</span>
+                <div class="feature-text">
+                    <strong data-i18n="feat3_title">Gratuit & libre</strong>
+                    <span data-i18n="feat3_desc">Open source. Fork it. Améliore-le. Partage-le.</span>
+                </div>
+            </div>
+            <div class="feature fade-in">
+                <span class="feature-icon">🌍</span>
+                <div class="feature-text">
+                    <strong data-i18n="feat4_title">Impact réel</strong>
+                    <span data-i18n="feat4_desc">Chaque XP gagné correspond à une action concrète.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT LEVELS -->
+    <section class="section">
+        <h2 class="section-title fade-in" data-i18n="impact_title">Trois niveaux d'<span>impact</span></h2>
+        
+        <div class="impact-grid">
+            <div class="impact-card fade-in">
+                <h3>🔬 MICRO</h3>
+                <p data-i18n="impact_micro">Toi. Tes compétences. Ton éveil citoyen. Ta santé militante.</p>
+            </div>
+            <div class="impact-card fade-in">
+                <h3>🏘️ MÉSO</h3>
+                <p data-i18n="impact_meso">Ton collectif. Ton quartier. Tes allié·es. L'entraide locale.</p>
+            </div>
+            <div class="impact-card fade-in">
+                <h3>🌍 MACRO</h3>
+                <p data-i18n="impact_macro">Le système. Les institutions. Le monde. Le changement structurel.</p>
+            </div>
+        </div>
+
+        <div class="warning-section fade-in">
+            <h3>⚠️ <span data-i18n="warning_title">ATTENTION</span></h3>
+            <p data-i18n="warning_text">
+                Ceci n'est pas un jeu vidéo ordinaire. Les quêtes que tu accompliras auront des conséquences réelles. 
+                Tu vas vraiment lire des articles, vraiment contacter des élu·es, vraiment participer à des actions.
+                <strong>Tu joues, mais c'est pour de vrai.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section">
+        <h2 class="section-title fade-in" data-i18n="testimonials_title">Iels <span>jouent</span> déjà</h2>
+        
+        <div class="testimonials">
+            <div class="testimonial fade-in">
+                <p class="testimonial-text" data-i18n="test1_text">
+                    "J'ai commencé par curiosité. Trois mois plus tard, j'ai organisé ma première action citoyenne dans mon quartier. Le jeu m'a donné les outils ET la motivation."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🌱</div>
+                    <div>
+                        <div class="testimonial-name">@planteverte42</div>
+                        <div class="testimonial-role" data-i18n="test1_role">Niveau 12 — Architecte</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial fade-in">
+                <p class="testimonial-text" data-i18n="test2_text">
+                    "En tant que prof, j'utilise l'ARG avec mes élèves. C'est la première fois qu'ils s'intéressent vraiment à l'éducation civique. Ils ne veulent plus s'arrêter."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">📚</div>
+                    <div>
+                        <div class="testimonial-name">Marie L.</div>
+                        <div class="testimonial-role" data-i18n="test2_role">Enseignante, Marseille</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial fade-in">
+                <p class="testimonial-text" data-i18n="test3_text">
+                    "Le système de guilde nous a permis de coordonner notre collectif comme jamais. On a gagné notre premier plaidoyer local grâce aux outils."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">⚡</div>
+                    <div>
+                        <div class="testimonial-name">Collectif Réveil</div>
+                        <div class="testimonial-role" data-i18n="test3_role">Bruxelles — 47 membres</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <h2 class="fade-in" data-i18n="final_title">Prêt·e à changer le monde ?</h2>
+        <p class="fade-in" data-i18n="final_subtitle">Un fichier. Ton appareil. Zéro excuse.</p>
+        
+        <a href="arg-citoyen.html" class="cta-main fade-in" data-i18n="cta_start">
+            <span>🦠</span> COMMENCER L'INFECTION
+        </a>
+
+        <div class="download-options fade-in">
+            <a href="arg-citoyen.html" download class="download-btn">
+                📥 <span data-i18n="dl_html">Télécharger HTML</span>
+            </a>
+            <a href="hub-central.html" class="download-btn">
+                ⚙️ <span data-i18n="dl_hub">Hub complet</span>
+            </a>
+            <a href="politique-nougat.html" class="download-btn">
+                📜 <span data-i18n="dl_doc">Documentation</span>
+            </a>
+        </div>
+
+        <div class="share-buttons fade-in">
+            <a href="#" class="share-btn" onclick="shareTwitter()" title="Twitter/X">🐦</a>
+            <a href="#" class="share-btn" onclick="shareFacebook()" title="Facebook">📘</a>
+            <a href="#" class="share-btn" onclick="shareWhatsapp()" title="WhatsApp">💬</a>
+            <a href="#" class="share-btn" onclick="shareEmail()" title="Email">📧</a>
+            <a href="#" class="share-btn" onclick="copyLink()" title="Copier le lien">🔗</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="politique-nougat.html" data-i18n="footer_charter">Charte éthique</a>
+            <a href="politique-nougat.html#juridique" data-i18n="footer_legal">Mentions légales</a>
+            <a href="anarcho-kernel.html" data-i18n="footer_manifesto">Manifeste</a>
+            <a href="#" data-i18n="footer_contribute">Contribuer</a>
+        </div>
+        <p>
+            🦠 <span data-i18n="footer_copy">Copyleft 2024 — Code source libre — AGPL-3.0</span><br>
+            <em data-i18n="footer_quote">"The revolution will not be televised. It will be forked."</em>
+        </p>
+    </footer>
+
+    <script>
+        // ==================== TRANSLATIONS ====================
+        const translations = {
+            fr: {
+                hero_title: "VIRUS DÉMOCRATIQUE",
+                hero_subtitle: "<strong>Un seul fichier HTML.</strong><br>Des millions d'actions citoyennes.<br><em>Le jeu dont les conséquences sont réelles.</em>",
+                cta_play: "▶ JOUER MAINTENANT",
+                cta_learn: "Comment ça marche ? ↓",
+                stat_players: "Joueur·euses",
+                stat_actions: "Actions réelles",
+                stat_countries: "Pays",
+                scroll: "Défiler",
+                how_title: "Comment ça <span>marche</span> ?",
+                step1_title: "Tu joues",
+                step1_desc: "Crée ton profil en 30 secondes. Choisis ta cause. Reçois tes premières quêtes.",
+                step2_title: "Tu agis",
+                step2_desc: "Chaque quête est une action citoyenne réelle : veille, analyse, mobilisation, transmission.",
+                step3_title: "Tu propages",
+                step3_desc: "Partage le fichier. Chaque nouvelle infection renforce le réseau. Le virus se répand.",
+                feat1_title: "100% Hors-ligne",
+                feat1_desc: "Fonctionne sans internet. Un fichier, c'est tout.",
+                feat2_title: "Zéro tracking",
+                feat2_desc: "Tes données restent sur TON appareil. Toujours.",
+                feat3_title: "Gratuit & libre",
+                feat3_desc: "Open source. Fork it. Améliore-le. Partage-le.",
+                feat4_title: "Impact réel",
+                feat4_desc: "Chaque XP gagné correspond à une action concrète.",
+                impact_title: "Trois niveaux d'<span>impact</span>",
+                impact_micro: "Toi. Tes compétences. Ton éveil citoyen. Ta santé militante.",
+                impact_meso: "Ton collectif. Ton quartier. Tes allié·es. L'entraide locale.",
+                impact_macro: "Le système. Les institutions. Le monde. Le changement structurel.",
+                warning_title: "ATTENTION",
+                warning_text: "Ceci n'est pas un jeu vidéo ordinaire. Les quêtes que tu accompliras auront des conséquences réelles. Tu vas vraiment lire des articles, vraiment contacter des élu·es, vraiment participer à des actions. <strong>Tu joues, mais c'est pour de vrai.</strong>",
+                testimonials_title: "Iels <span>jouent</span> déjà",
+                test1_text: "J'ai commencé par curiosité. Trois mois plus tard, j'ai organisé ma première action citoyenne dans mon quartier. Le jeu m'a donné les outils ET la motivation.",
+                test1_role: "Niveau 12 — Architecte",
+                test2_text: "En tant que prof, j'utilise l'ARG avec mes élèves. C'est la première fois qu'ils s'intéressent vraiment à l'éducation civique. Ils ne veulent plus s'arrêter.",
+                test2_role: "Enseignante, Marseille",
+                test3_text: "Le système de guilde nous a permis de coordonner notre collectif comme jamais. On a gagné notre premier plaidoyer local grâce aux outils.",
+                test3_role: "Bruxelles — 47 membres",
+                final_title: "Prêt·e à changer le monde ?",
+                final_subtitle: "Un fichier. Ton appareil. Zéro excuse.",
+                cta_start: "🦠 COMMENCER L'INFECTION",
+                dl_html: "Télécharger HTML",
+                dl_hub: "Hub complet",
+                dl_doc: "Documentation",
+                footer_charter: "Charte éthique",
+                footer_legal: "Mentions légales",
+                footer_manifesto: "Manifeste",
+                footer_contribute: "Contribuer",
+                footer_copy: "Copyleft 2024 — Code source libre — AGPL-3.0",
+                footer_quote: "\"The revolution will not be televised. It will be forked.\""
+            },
+            en: {
+                hero_title: "DEMOCRATIC VIRUS",
+                hero_subtitle: "<strong>One HTML file.</strong><br>Millions of citizen actions.<br><em>The game with real consequences.</em>",
+                cta_play: "▶ PLAY NOW",
+                cta_learn: "How does it work? ↓",
+                stat_players: "Players",
+                stat_actions: "Real actions",
+                stat_countries: "Countries",
+                scroll: "Scroll",
+                how_title: "How does it <span>work</span>?",
+                step1_title: "You play",
+                step1_desc: "Create your profile in 30 seconds. Choose your cause. Get your first quests.",
+                step2_title: "You act",
+                step2_desc: "Each quest is a real citizen action: monitoring, analysis, mobilization, transmission.",
+                step3_title: "You spread",
+                step3_desc: "Share the file. Each new infection strengthens the network. The virus spreads.",
+                feat1_title: "100% Offline",
+                feat1_desc: "Works without internet. One file, that's it.",
+                feat2_title: "Zero tracking",
+                feat2_desc: "Your data stays on YOUR device. Always.",
+                feat3_title: "Free & open",
+                feat3_desc: "Open source. Fork it. Improve it. Share it.",
+                feat4_title: "Real impact",
+                feat4_desc: "Each XP earned corresponds to a concrete action.",
+                impact_title: "Three levels of <span>impact</span>",
+                impact_micro: "You. Your skills. Your civic awakening. Your activist health.",
+                impact_meso: "Your collective. Your neighborhood. Your allies. Local solidarity.",
+                impact_macro: "The system. Institutions. The world. Structural change.",
+                warning_title: "WARNING",
+                warning_text: "This is not an ordinary video game. The quests you complete will have real consequences. You will actually read articles, actually contact officials, actually participate in actions. <strong>You play, but it's for real.</strong>",
+                testimonials_title: "They're already <span>playing</span>",
+                test1_text: "I started out of curiosity. Three months later, I organized my first citizen action in my neighborhood. The game gave me the tools AND the motivation.",
+                test1_role: "Level 12 — Architect",
+                test2_text: "As a teacher, I use the ARG with my students. It's the first time they've really been interested in civic education. They don't want to stop.",
+                test2_role: "Teacher, Marseille",
+                test3_text: "The guild system allowed us to coordinate our collective like never before. We won our first local advocacy thanks to the tools.",
+                test3_role: "Brussels — 47 members",
+                final_title: "Ready to change the world?",
+                final_subtitle: "One file. Your device. Zero excuses.",
+                cta_start: "🦠 START THE INFECTION",
+                dl_html: "Download HTML",
+                dl_hub: "Full hub",
+                dl_doc: "Documentation",
+                footer_charter: "Ethical charter",
+                footer_legal: "Legal notice",
+                footer_manifesto: "Manifesto",
+                footer_contribute: "Contribute",
+                footer_copy: "Copyleft 2024 — Free source code — AGPL-3.0",
+                footer_quote: "\"The revolution will not be televised. It will be forked.\""
+            },
+            es: {
+                hero_title: "VIRUS DEMOCRÁTICO",
+                hero_subtitle: "<strong>Un solo archivo HTML.</strong><br>Millones de acciones ciudadanas.<br><em>El juego con consecuencias reales.</em>",
+                cta_play: "▶ JUGAR AHORA",
+                cta_learn: "¿Cómo funciona? ↓",
+                stat_players: "Jugadores",
+                stat_actions: "Acciones reales",
+                stat_countries: "Países",
+                scroll: "Desplazar",
+                how_title: "¿Cómo <span>funciona</span>?",
+                step1_title: "Juegas",
+                step1_desc: "Crea tu perfil en 30 segundos. Elige tu causa. Recibe tus primeras misiones.",
+                step2_title: "Actúas",
+                step2_desc: "Cada misión es una acción ciudadana real: vigilancia, análisis, movilización, transmisión.",
+                step3_title: "Propagas",
+                step3_desc: "Comparte el archivo. Cada nueva infección fortalece la red. El virus se propaga.",
+                impact_title: "Tres niveles de <span>impacto</span>",
+                warning_title: "ATENCIÓN",
+                final_title: "¿Listo para cambiar el mundo?",
+                final_subtitle: "Un archivo. Tu dispositivo. Cero excusas.",
+                cta_start: "🦠 COMENZAR LA INFECCIÓN"
+            },
+            de: {
+                hero_title: "DEMOKRATISCHER VIRUS",
+                hero_subtitle: "<strong>Eine HTML-Datei.</strong><br>Millionen von Bürgeraktionen.<br><em>Das Spiel mit echten Konsequenzen.</em>",
+                cta_play: "▶ JETZT SPIELEN",
+                cta_learn: "Wie funktioniert es? ↓",
+                stat_players: "Spieler",
+                stat_actions: "Echte Aktionen",
+                stat_countries: "Länder",
+                scroll: "Scrollen",
+                how_title: "Wie <span>funktioniert</span> es?",
+                step1_title: "Du spielst",
+                step2_title: "Du handelst",
+                step3_title: "Du verbreitest",
+                final_title: "Bereit, die Welt zu verändern?",
+                cta_start: "🦠 INFEKTION STARTEN"
+            },
+            ar: {
+                hero_title: "الفيروس الديمقراطي",
+                hero_subtitle: "<strong>ملف HTML واحد.</strong><br>ملايين الإجراءات المدنية.<br><em>اللعبة ذات العواقب الحقيقية.</em>",
+                cta_play: "▶ العب الآن",
+                stat_players: "اللاعبون",
+                stat_actions: "إجراءات حقيقية",
+                stat_countries: "البلدان",
+                final_title: "مستعد لتغيير العالم؟",
+                cta_start: "🦠 ابدأ العدوى"
+            }
+        };
+
+        let currentLang = 'fr';
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Update RTL for Arabic
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                const trans = translations[lang]?.[key] || translations.fr[key];
+                if (trans) {
+                    el.innerHTML = trans;
+                }
+            });
+
+            // Save preference
+            localStorage.setItem('virus_lang', lang);
+        }
+
+        // ==================== PARTICLES ====================
+        function createParticles() {
+            const container = document.getElementById('bg-animation');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== COUNTERS ====================
+        function animateCounters() {
+            document.querySelectorAll('.counter').forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                const duration = 2000;
+                const start = Date.now();
+                
+                function update() {
+                    const elapsed = Date.now() - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    counter.textContent = Math.floor(target * eased).toLocaleString();
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                
+                update();
+            });
+        }
+
+        // ==================== SCROLL ANIMATIONS ====================
+        function handleScroll() {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.85) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+
+        // ==================== SHARE FUNCTIONS ====================
+        function shareTwitter() {
+            const text = encodeURIComponent("🦠 J'ai découvert le Virus Démocratique — un jeu qui transforme chaque citoyen·ne en agent·e du changement. Tu joues ?");
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(location.href)}`, '_blank');
+        }
+
+        function shareFacebook() {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}`, '_blank');
+        }
+
+        function shareWhatsapp() {
+            const text = encodeURIComponent("🦠 Virus Démocratique — Le jeu dont les conséquences sont réelles. Tu joues ? " + location.href);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function shareEmail() {
+            const subject = encodeURIComponent("🦠 Virus Démocratique — Le jeu qui change le monde");
+            const body = encodeURIComponent(`Salut,\n\nJ'ai découvert ce truc incroyable : un fichier HTML qui transforme des citoyens en agents du changement.\n\nC'est gratuit, open source, et les actions ont des conséquences réelles.\n\nRegarde : ${location.href}\n\nTu joues ?`);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(location.href).then(() => {
+                alert('Lien copié ! 🦠');
+            });
+        }
+
+        // ==================== INIT ====================
+        function init() {
+            createParticles();
+            
+            // Load saved language
+            const savedLang = localStorage.getItem('virus_lang');
+            if (savedLang && translations[savedLang]) {
+                setLang(savedLang);
+            }
+            
+            // Animate counters when visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.disconnect();
+                    }
+                });
+            });
+            observer.observe(document.querySelector('.stats-bar'));
+            
+            // Scroll animations
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+        }
+
+        init();
+
+        // Console easter egg
+        console.log(`
+%c🦠 VIRUS DÉMOCRATIQUE
+%c
+Tu inspectes le code ? Bien joué, futur·e contributeur·rice.
+
+Ce fichier est conçu pour être :
+- Léger (une seule page)
+- Viral (facile à partager)
+- Subversif (il transforme les joueurs en citoyens actifs)
+
+Fork it. Hack it. Spread it.
+
+git clone your-revolution
+cd democracy
+./infect --target=world
+
+— Le Collectif
+        `,
+        'color: #00ff88; font-size: 24px; font-weight: bold;',
+        'color: #888; font-size: 12px;'
+        );
+    </script>
+</body>
+</html>

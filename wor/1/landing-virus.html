@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Landing — Virus démocratique (safe)</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    .stage{padding:26px 0 10px}
+    .big{font-size: clamp(1.6rem, 3.4vw, 3rem); margin:0 0 8px; line-height:1.05}
+    .glow{
+      background: radial-gradient(800px 280px at 20% 0%, rgba(124,92,255,.35), transparent 60%),
+                  radial-gradient(800px 280px at 90% 20%, rgba(0,212,255,.22), transparent 55%);
+      border:1px solid var(--line);
+      border-radius: 24px;
+      padding:16px;
+      overflow:hidden;
+      position:relative;
+    }
+    .pulse{
+      position:absolute; inset:-80px;
+      background: conic-gradient(from 180deg, rgba(124,92,255,.0), rgba(124,92,255,.28), rgba(0,212,255,.22), rgba(124,92,255,.0));
+      filter: blur(30px);
+      animation: spin 6s linear infinite;
+      opacity:.65;
+      pointer-events:none;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .meter{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin-top:10px}
+    .bar{height:10px;border-radius:999px;border:1px solid var(--line);overflow:hidden;background: color-mix(in oklab, var(--bg) 65%, var(--card))}
+    .fill{height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 800ms ease}
+    .mini{font-family: var(--mono); color: var(--muted); font-size:.85rem}
+    .two{display:grid; gap:10px; grid-template-columns:1fr; margin-top:14px}
+    @media(min-width:860px){.two{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <main class="wrap stage">
+    <section class="glow">
+      <div class="pulse" aria-hidden="true"></div>
+      <div style="position:relative">
+        <div class="kicker">landing / impact &lt; 5s</div>
+        <h1 class="big">Ce n’est pas un site.<br/>C’est une <em>instruction</em>.</h1>
+        <p class="lead" style="margin:10px 0 0">
+          <strong>JOUER = AGIR = APPRENDRE = TRANSMETTRE</strong>. :contentReference[oaicite:21]{index=21}
+        </p>
+
+        <div class="meter">
+          <div class="bar"><div class="fill" id="fill"></div></div>
+          <div class="mini" id="m">charge: 0%</div>
+        </div>
+
+        <div class="two">
+          <a class="btn primary" href="./index.html">Entrer (offline)</a>
+          <button class="btn" id="copy">Copier le lien à partager</button>
+        </div>
+
+        <details class="details" style="margin-top:12px; position:relative">
+          <summary>Script “vidéo courte” (60s) à lire face caméra</summary>
+          <pre class="pre" id="script">0-10s — “On te fatigue. On t’isole. On te vend des faux choix.”
+10-25s — “Ici, on fait l’inverse : on documente, on outille, on relie.”
+25-45s — “Tu prends une quête simple. Tu la fais. Tu la postes. Tu la rends copiable.”
+45-60s — “Si tu veux respirer hors des bulles : prends la page, mets-la sur une clé USB, partage dans ton cercle de confiance.”
+(Le lien est dans la description / commentaire.)</pre>
+        </details>
+
+        <p class="muted small" style="margin-top:12px; position:relative">
+          Note : Facebook est un vecteur, l’hébergement doit rester ailleurs (GitHub Pages / itch / clé USB). :contentReference[oaicite:22]{index=22}
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const fill = document.getElementById("fill");
+    const m = document.getElementById("m");
+    let p = 0;
+    const t = setInterval(() => {
+      p += Math.max(1, Math.round((100 - p) * 0.12));
+      if (p > 100) p = 100;
+      fill.style.width = p + "%";
+      m.textContent = "charge: " + p + "%";
+      if (p === 100) clearInterval(t);
+    }, 120);
+
+    document.getElementById("copy").addEventListener("click", async () => {
+      const url = location.href.replace(/\/[^\/]*$/, "/landing-virus.html");
+      try { await navigator.clipboard.writeText(url); alert("Lien copié."); }
+      catch { prompt("Copie ce lien :", url); }
+    });
+  </script>
+</body>
+</html>

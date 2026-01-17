@@ -1,0 +1,1372 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>miHonyPOT — Fan-Club (NON OFFICIEL) / ARG Layer</title>
+  <meta name="description" content="Fan-club non officiel + couche ARG forkable pour miHonyPOT. Offline, mobile-first, export/import JSON, journal, missions, terminal." />
+  <meta name="theme-color" content="#0a0a0f" />
+  <style>
+    :root{
+      --bg:#0a0a0f; --card:#12121a; --card2:#171723; --input:#0d0d14;
+      --txt:#f0f0f5; --mut:#a0a0b0; --dim:#606070;
+      --g:#7fff7f; --g2:#5fe65f; --glowg:rgba(127,255,127,.35); --subg:rgba(127,255,127,.10);
+      --l:#c8b6ff; --l2:#a78bfa; --glowl:rgba(200,182,255,.35); --subl:rgba(200,182,255,.10);
+      --c:#60d8c4; --glowc:rgba(96,216,196,.35); --subc:rgba(96,216,196,.10);
+      --o:#ffb347; --go:#ffd700; --glowo:rgba(255,179,71,.35);
+      --r:#ff6b6b; --subr:rgba(255,107,107,.10);
+      --b:rgba(127,255,127,.22); --bl:rgba(200,182,255,.22);
+      --rad:16px; --rad2:22px;
+      --shg:0 0 18px rgba(127,255,127,.25),0 0 40px rgba(127,255,127,.08);
+      --shl:0 0 18px rgba(200,182,255,.25),0 0 40px rgba(200,182,255,.08);
+      --shc:0 0 18px rgba(96,216,196,.25),0 0 40px rgba(96,216,196,.08);
+      --sho:0 0 18px rgba(255,179,71,.25),0 0 40px rgba(255,179,71,.08);
+      --fast:.14s ease; --med:.28s cubic-bezier(.4,0,.2,1);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea,select{font:inherit}
+    .bgfx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .grid{position:absolute;inset:0;background-image:
+      linear-gradient(var(--b) 1px, transparent 1px),
+      linear-gradient(90deg, var(--b) 1px, transparent 1px);
+      background-size:52px 52px;opacity:.18}
+    .orb{position:absolute;width:560px;height:560px;border-radius:50%;filter:blur(130px);opacity:.12;animation:float 22s ease-in-out infinite}
+    .o1{background:var(--g);top:-220px;left:-220px}
+    .o2{background:var(--l);bottom:-220px;right:-220px;animation-delay:-11s}
+    .o3{background:var(--go);top:50%;left:55%;transform:translate(-50%,-50%);width:420px;height:420px;opacity:.08;animation-delay:-7s}
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(28px,-22px) scale(1.05)}66%{transform:translate(-18px,20px) scale(.96)}}
+
+    .app{position:relative;z-index:1;padding-top:60px;min-height:100vh}
+    .header{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      background:rgba(10,10,15,.92);backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--b);padding:.5rem .9rem
+    }
+    .hwrap{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:.55rem;min-width:220px}
+    .logo{
+      width:36px;height:36px;border-radius:10px;
+      background:linear-gradient(135deg,var(--g),var(--go));
+      display:grid;place-items:center;
+      box-shadow:var(--shg);animation:pulse 4s ease-in-out infinite
+    }
+    @keyframes pulse{0%,100%{box-shadow:var(--shg)}50%{box-shadow:var(--sho)}}
+    .btxt{display:flex;flex-direction:column;line-height:1.05}
+    .btxt b{font-family:var(--mono);letter-spacing:.6px;font-size:.88rem;
+      background:linear-gradient(135deg,var(--g),var(--go));
+      -webkit-background-clip:text;background-clip:text;color:transparent}
+    .btxt small{color:var(--mut);font-size:.68rem}
+    .pill{font-size:.62rem;font-weight:800;padding:.15rem .45rem;border-radius:999px;background:linear-gradient(135deg,var(--go),var(--o));color:#111}
+    .actions{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap}
+    .btn{
+      border:1px solid transparent;background:transparent;color:var(--txt);
+      border-radius:12px;padding:.48rem .7rem;cursor:pointer;
+      transition:transform var(--med),box-shadow var(--med),background var(--med),border-color var(--med);
+      display:flex;align-items:center;gap:.45rem;font-weight:700;font-size:.78rem;position:relative;overflow:hidden
+    }
+    .btn::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.08),transparent);
+      transform:translateX(-100%);transition:transform var(--med)}
+    .btn:hover::before{transform:translateX(100%)}
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .b-ghost{border-color:transparent;color:var(--mut)}
+    .b-ghost:hover{background:var(--subg);color:var(--g)}
+    .b-g{background:linear-gradient(135deg,var(--g),var(--g2));color:#0b0b10}
+    .b-g:hover{box-shadow:var(--shg);transform:translateY(-2px)}
+    .b-l{background:linear-gradient(135deg,var(--l),var(--l2));color:#0b0b10}
+    .b-l:hover{box-shadow:var(--shl);transform:translateY(-2px)}
+    .b-o{background:linear-gradient(135deg,var(--go),var(--o));color:#0b0b10}
+    .b-o:hover{box-shadow:var(--sho);transform:translateY(-2px)}
+    .b-c{background:linear-gradient(135deg,var(--c),#4fc3b0);color:#0b0b10}
+    .b-c:hover{box-shadow:var(--shc);transform:translateY(-2px)}
+    .tag{
+      padding:.22rem .5rem;border-radius:999px;font-size:.62rem;font-weight:800;
+      border:1px solid var(--b);color:var(--mut);background:rgba(255,255,255,.03)
+    }
+
+    .tabs{
+      position:sticky;top:60px;z-index:120;
+      background:rgba(10,10,15,.96);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--b);overflow-x:auto;scrollbar-width:none
+    }
+    .tabs::-webkit-scrollbar{display:none}
+    .twrap{max-width:1200px;margin:0 auto;display:flex;gap:0;min-width:max-content;padding:0 .35rem}
+    .tab{
+      border:none;background:none;color:var(--mut);cursor:pointer;
+      padding:.72rem .9rem;font-weight:900;font-size:.78rem;position:relative;white-space:nowrap
+    }
+    .tab::after{content:"";position:absolute;left:50%;bottom:0;height:3px;width:0;border-radius:3px 3px 0 0;
+      background:linear-gradient(90deg,var(--g),var(--l));transform:translateX(-50%);transition:width var(--med);box-shadow:none}
+    .tab:hover{color:var(--txt)}
+    .tab:hover::after{width:18px}
+    .tab.active{color:var(--g)}
+    .tab.active::after{width:100%;box-shadow:0 0 10px var(--glowg)}
+    .tab.gold{color:var(--go)}
+    .tab.gold.active::after{background:linear-gradient(90deg,var(--go),var(--o));box-shadow:0 0 10px var(--glowo)}
+    .tab.cyan{color:var(--c)}
+    .tab.cyan.active::after{background:linear-gradient(90deg,var(--c),var(--l));box-shadow:0 0 10px var(--glowc)}
+
+    main{max-width:1200px;margin:0 auto;padding:1.1rem .9rem 5.5rem}
+    .hero{padding:1.2rem 0 1rem;text-align:center}
+    .h1{
+      font-family:var(--mono);font-weight:900;font-size:1.35rem;letter-spacing:.6px;
+      background:linear-gradient(135deg,var(--g),var(--l),var(--go));
+      -webkit-background-clip:text;background-clip:text;color:transparent
+    }
+    .sub{color:var(--mut);font-size:.86rem;max-width:780px;margin:.55rem auto 0}
+    .disclaimer{
+      margin:.9rem auto 0;max-width:820px;padding:.7rem .8rem;border-radius:14px;
+      border:1px dashed rgba(255,215,0,.55);background:rgba(255,215,0,.06);color:var(--mut);font-size:.78rem
+    }
+
+    .grid2{display:grid;grid-template-columns:1fr;gap:.9rem}
+    @media(min-width:860px){.grid2{grid-template-columns:1.15fr .85fr}}
+    .card{
+      background:var(--card);border:1px solid var(--b);border-radius:var(--rad2);
+      padding:1rem;transition:transform var(--med),box-shadow var(--med),border-color var(--med);
+      position:relative;overflow:hidden
+    }
+    .card::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--l));opacity:.0;transition:opacity var(--med)}
+    .card:hover{border-color:var(--g);transform:translateY(-3px);box-shadow:var(--shg)}
+    .card:hover::before{opacity:1}
+    .card.gold{border-color:rgba(255,215,0,.45)}
+    .card.gold::before{background:linear-gradient(90deg,var(--go),var(--o))}
+    .card.gold:hover{border-color:var(--go);box-shadow:var(--sho)}
+    .card.cyan{border-color:rgba(96,216,196,.45)}
+    .card.cyan::before{background:linear-gradient(90deg,var(--c),var(--l))}
+    .card.cyan:hover{border-color:var(--c);box-shadow:var(--shc)}
+
+    .ctitle{display:flex;align-items:center;gap:.55rem;margin-bottom:.65rem}
+    .ctitle h2{font-family:var(--mono);font-size:.95rem;letter-spacing:.45px}
+    .ctitle .n{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--g),var(--l));color:#0b0b10;font-weight:900;font-family:var(--mono);font-size:.7rem}
+    .ctitle .n.gold{background:linear-gradient(135deg,var(--go),var(--o))}
+    .ctitle .n.cyan{background:linear-gradient(135deg,var(--c),var(--l))}
+    .p{color:var(--mut);font-size:.84rem;line-height:1.55}
+    .mini{color:var(--dim);font-size:.72rem;margin-top:.45rem}
+
+    .field{margin-top:.75rem}
+    label{display:block;font-size:.74rem;color:var(--txt);font-weight:800;margin-bottom:.35rem}
+    input[type="text"], input[type="url"], textarea, select{
+      width:100%;background:var(--input);border:1px solid var(--b);color:var(--txt);
+      border-radius:12px;padding:.72rem .72rem;font-size:.86rem;outline:none;transition:border-color var(--fast),box-shadow var(--fast)
+    }
+    textarea{min-height:92px;resize:vertical}
+    input:focus,textarea:focus,select:focus{border-color:var(--g);box-shadow:0 0 0 3px var(--subg)}
+    .row{display:grid;grid-template-columns:1fr;gap:.7rem}
+    @media(min-width:700px){.row{grid-template-columns:1fr 1fr}}
+    .row3{display:grid;grid-template-columns:1fr;gap:.7rem}
+    @media(min-width:900px){.row3{grid-template-columns:1fr 1fr 1fr}}
+    .chipbar{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.6rem}
+
+    .list{display:flex;flex-direction:column;gap:.55rem;margin-top:.7rem}
+    .item{
+      background:var(--card2);border:1px solid rgba(127,255,127,.14);border-radius:14px;
+      padding:.7rem .7rem;display:flex;gap:.65rem;align-items:flex-start
+    }
+    .dot{width:10px;height:10px;border-radius:50%;margin-top:.35rem;background:var(--g);box-shadow:0 0 10px var(--glowg)}
+    .dot.l{background:var(--l);box-shadow:0 0 10px var(--glowl)}
+    .dot.c{background:var(--c);box-shadow:0 0 10px var(--glowc)}
+    .dot.o{background:var(--go);box-shadow:0 0 10px rgba(255,215,0,.35)}
+    .itxt{flex:1;min-width:0}
+    .itxt b{display:block;font-size:.86rem}
+    .itxt small{display:block;color:var(--mut);font-size:.72rem;margin-top:.1rem}
+    .meta{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.35rem}
+    .badge{
+      font-family:var(--mono);font-size:.62rem;font-weight:900;padding:.18rem .45rem;border-radius:999px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--mut)
+    }
+    .badge.g{border-color:rgba(127,255,127,.25);color:var(--g)}
+    .badge.l{border-color:rgba(200,182,255,.25);color:var(--l)}
+    .badge.c{border-color:rgba(96,216,196,.25);color:var(--c)}
+    .badge.o{border-color:rgba(255,215,0,.25);color:var(--go)}
+    .badge.r{border-color:rgba(255,107,107,.25);color:var(--r)}
+    .x{border:none;background:transparent;color:var(--mut);cursor:pointer;font-weight:900}
+    .x:hover{color:var(--r)}
+
+    .footerbar{
+      position:fixed;left:0;right:0;bottom:0;z-index:1500;
+      background:rgba(10,10,15,.94);backdrop-filter:blur(18px);
+      border-top:1px solid var(--b);padding:.55rem .8rem
+    }
+    .fwrap{max-width:1200px;margin:0 auto;display:flex;gap:.45rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .warn{color:var(--mut);font-size:.74rem}
+    .kpi{display:flex;gap:.45rem;flex-wrap:wrap}
+    .kpi .tag{border-color:rgba(255,255,255,.09)}
+
+    .blink{animation:blink 3.2s ease-in-out infinite}
+    @keyframes blink{0%,100%{filter:saturate(1);transform:translateY(0)}50%{filter:saturate(1.35);transform:translateY(-1px)}}
+
+    .modalback{
+      position:fixed;inset:0;background:rgba(0,0,0,.84);backdrop-filter:blur(10px);
+      display:none;align-items:center;justify-content:center;z-index:3000;padding:1rem
+    }
+    .modalback.on{display:flex}
+    .modal{
+      width:min(720px,100%);max-height:88vh;overflow:auto;
+      background:var(--card);border:1px solid var(--b);border-radius:22px
+    }
+    .mhead{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:1rem 1rem;border-bottom:1px solid var(--b)}
+    .mhead h3{font-family:var(--mono);font-size:.92rem}
+    .mbody{padding:1rem}
+    .term{
+      background:#06060b;border:1px solid rgba(127,255,127,.22);border-radius:16px;padding:.9rem;
+      font-family:var(--mono);font-size:.78rem;color:var(--g);min-height:240px
+    }
+    .term .line{white-space:pre-wrap;word-break:break-word}
+    .term input{
+      width:100%;margin-top:.6rem;background:transparent;border:1px solid rgba(127,255,127,.22);
+      color:var(--g);border-radius:12px;padding:.55rem .6rem;outline:none
+    }
+    .toastwrap{position:fixed;right:12px;bottom:76px;z-index:4000;display:flex;flex-direction:column;gap:.5rem}
+    .toast{
+      min-width:260px;max-width:320px;
+      background:var(--card);border:1px solid var(--g);border-radius:14px;padding:.65rem .8rem;
+      box-shadow:var(--shg);animation:in .22s ease;display:flex;gap:.55rem;align-items:flex-start
+    }
+    .toast b{font-size:.8rem}
+    .toast small{display:block;color:var(--mut);font-size:.72rem;margin-top:.12rem}
+    .toast.i{border-color:var(--c);box-shadow:var(--shc)}
+    .toast.w{border-color:var(--go);box-shadow:var(--sho)}
+    .toast.e{border-color:var(--r);box-shadow:0 0 18px rgba(255,107,107,.18)}
+    @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    .hidden{display:none!important}
+  </style>
+</head>
+
+<body>
+  <div class="bgfx">
+    <div class="grid"></div>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+  </div>
+
+  <header class="header">
+    <div class="hwrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">⚡</div>
+        <div class="btxt">
+          <b>miHonyPOT / FAN-CLUB</b>
+          <small>NON OFFICIEL • ARG Layer • Offline • Forkable</small>
+        </div>
+        <span class="pill">v0.9</span>
+      </div>
+
+      <div class="actions">
+        <span class="tag" id="stateTag">autosave: ON</span>
+        <button class="btn b-ghost" id="btnTerminal" title="Terminal">⌨️ Terminal</button>
+        <button class="btn b-c" id="btnImport" title="Importer JSON">📥 Import</button>
+        <button class="btn b-l blink" id="btnExport" title="Exporter JSON">📤 Export</button>
+        <button class="btn b-g" id="btnSave" title="Sauver maintenant">💾 Sauver</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Navigation">
+    <div class="twrap">
+      <button class="tab active" data-tab="home">🏠 Accueil</button>
+      <button class="tab" data-tab="lore">🧩 Lore</button>
+      <button class="tab gold" data-tab="missions">🎯 Missions</button>
+      <button class="tab" data-tab="journal">📓 Journal</button>
+      <button class="tab cyan" data-tab="vault">🗄️ Vault</button>
+      <button class="tab" data-tab="credits">⚙️ Crédit/Disclaimer</button>
+    </div>
+  </nav>
+
+  <div class="app">
+    <main>
+      <!-- HOME -->
+      <section id="home" class="view">
+        <div class="hero">
+          <div class="h1">UNE PORTE • UN POT • UN BRUIT DE PAS</div>
+          <p class="sub">
+            Fan-club non officiel + couche ARG. Tu ajoutes du contenu, tu structures, tu exportes, tu forks.
+          </p>
+          <div class="disclaimer">
+            ⚠️ Ceci est un fan-site NON affilié. Aucun tracking. Tout reste local (LocalStorage). Exporte souvent.
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="ctitle"><div class="n">01</div><h2>Le pitch (rapide et efficace)</h2></div>
+            <p class="p">
+              miHonyPOT est un nom qui appelle le mythe. Ce fan-club transforme le dépôt en <b>univers</b> :
+              récits, missions, preuves, artefacts, timeline, lexique. Tout en restant <b>forkable</b>.
+            </p>
+            <div class="chipbar">
+              <span class="badge g">offline</span>
+              <span class="badge l">neon</span>
+              <span class="badge c">arg-ready</span>
+              <span class="badge o">export/import</span>
+              <span class="badge">mobile-first</span>
+            </div>
+
+            <div class="field">
+              <label for="fanTitle">Nom du fan-club</label>
+              <input id="fanTitle" type="text" placeholder="ex: miHonyPOT — Le Cercle du Pot" />
+            </div>
+            <div class="field">
+              <label for="fanTagline">Slogan</label>
+              <input id="fanTagline" type="text" placeholder="ex: not DEAD… (YET!)" />
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="repoUrl">URL repo (optionnel)</label>
+                <input id="repoUrl" type="url" placeholder="https://github.com/ouaisfieu/miHonyPOT/" />
+              </div>
+              <div class="field">
+                <label for="siteUrl">URL site (optionnel)</label>
+                <input id="siteUrl" type="url" placeholder="https://ouaisfieu.github.io/miHonyPOT/" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card gold">
+            <div class="ctitle"><div class="n gold">⚠</div><h2>Règle d’or (anti-chaos)</h2></div>
+            <p class="p">
+              Le dépôt peut contenir des textes “pièges”. Ici, on impose une règle : <b>tout ce qui compte</b> doit
+              être structuré dans le Vault (missions, preuves, notes). Ensuite seulement : mise en scène.
+            </p>
+            <div class="list" id="kpis">
+              <!-- injected by JS -->
+            </div>
+            <p class="mini">Astuce : clique sur “Terminal”, tape <span class="badge">help</span>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LORE -->
+      <section id="lore" class="view hidden">
+        <div class="card">
+          <div class="ctitle"><div class="n">02</div><h2>Lore / Canon / Forks</h2></div>
+          <p class="p">
+            Écris un canon minimal, puis des forks narratifs. Objectif : que n’importe qui puisse reprendre l’univers sans se perdre.
+          </p>
+
+          <div class="field">
+            <label for="canon">Canon (version courte)</label>
+            <textarea id="canon" placeholder="Le minimum officiel du fan-club…"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="lexicon">Lexique (mots-clés)</label>
+              <textarea id="lexicon" placeholder="Termes, codes, noms, lieux…"></textarea>
+            </div>
+            <div class="field">
+              <label for="rules">Règles ARG (sécurité / consentement)</label>
+              <textarea id="rules" placeholder="Carte zéro, safe word, sortie, pas de harcèlement…"></textarea>
+            </div>
+          </div>
+
+          <div class="chipbar" style="margin-top:.75rem">
+            <button class="btn b-l" id="btnSeedLore">✨ Générer un seed</button>
+            <button class="btn b-ghost" id="btnClearLore">🧽 Nettoyer</button>
+          </div>
+
+          <div class="mini">
+            Seed = une base “propre” : 1 incipit, 3 factions, 9 artefacts, 1 secret. Tu modifies ensuite.
+          </div>
+        </div>
+      </section>
+
+      <!-- MISSIONS -->
+      <section id="missions" class="view hidden">
+        <div class="grid2">
+          <div class="card gold">
+            <div class="ctitle"><div class="n gold">03</div><h2>Tableau de missions</h2></div>
+            <p class="p">Crée des missions, mets un statut, ajoute un “indice” et une “preuve”.</p>
+
+            <div class="row">
+              <div class="field">
+                <label for="mTitle">Titre mission</label>
+                <input id="mTitle" type="text" placeholder="ex: Ouvrir le pot sans laisser d’empreintes" />
+              </div>
+              <div class="field">
+                <label for="mStatus">Statut</label>
+                <select id="mStatus">
+                  <option value="todo">À faire</option>
+                  <option value="wip">En cours</option>
+                  <option value="done">Validée</option>
+                  <option value="fail">Fausse piste</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="mHint">Indice</label>
+                <input id="mHint" type="text" placeholder="ex: 'DRINKME' n’est pas une boisson." />
+              </div>
+              <div class="field">
+                <label for="mProof">Preuve (lien/texte)</label>
+                <input id="mProof" type="text" placeholder="ex: capture, URL, citation courte" />
+              </div>
+            </div>
+
+            <div class="chipbar">
+              <button class="btn b-o" id="btnAddMission">➕ Ajouter</button>
+              <button class="btn b-ghost" id="btnSeedMissions">🎲 Seed 5 missions</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ctitle"><div class="n">⇣</div><h2>Liste</h2></div>
+            <div class="list" id="missionList"></div>
+            <p class="mini">Tap sur une mission pour la passer au statut suivant.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- JOURNAL -->
+      <section id="journal" class="view hidden">
+        <div class="grid2">
+          <div class="card">
+            <div class="ctitle"><div class="n">04</div><h2>Journal de bord</h2></div>
+            <p class="p">Chaque entrée est datée. Utilise-le comme “preuve” narrative.</p>
+
+            <div class="field">
+              <label for="jText">Nouvelle entrée</label>
+              <textarea id="jText" placeholder="Ce que tu as observé, tenté, compris…"></textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="jTags">Tags</label>
+                <input id="jTags" type="text" placeholder="ex: #piste #bruxelles #pot" />
+              </div>
+              <div class="field">
+                <label for="jMood">Humeur</label>
+                <select id="jMood">
+                  <option value="neutral">Neutre</option>
+                  <option value="hype">🔥 Hype</option>
+                  <option value="fear">😶‍🌫️ Tension</option>
+                  <option value="aha">💡 Aha</option>
+                  <option value="lol">🤣 Lol</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="chipbar">
+              <button class="btn b-g" id="btnAddJournal">🖊️ Ajouter</button>
+              <button class="btn b-ghost" id="btnClearJournal">🧽 Purger</button>
+            </div>
+          </div>
+
+          <div class="card cyan">
+            <div class="ctitle"><div class="n cyan">⏱</div><h2>Timeline</h2></div>
+            <div class="list" id="journalList"></div>
+            <p class="mini">Astuce : exporte ton Vault après une grosse session.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VAULT -->
+      <section id="vault" class="view hidden">
+        <div class="grid2">
+          <div class="card cyan">
+            <div class="ctitle"><div class="n cyan">05</div><h2>Vault (preuves / artefacts)</h2></div>
+            <p class="p">
+              Les artefacts = tout ce qui peut être partagé: liens, textes, mini-dossiers, citations.
+            </p>
+            <div class="row">
+              <div class="field">
+                <label for="vType">Type</label>
+                <select id="vType">
+                  <option value="link">🔗 Lien</option>
+                  <option value="text">🧾 Texte</option>
+                  <option value="quote">❝ Citation</option>
+                  <option value="file">📄 Nom de fichier</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vTitle">Titre</label>
+                <input id="vTitle" type="text" placeholder="ex: 'WorkFutures' est un masque" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="vBody">Contenu</label>
+              <textarea id="vBody" placeholder="URL / note / extrait (court)"></textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="vTags">Tags</label>
+                <input id="vTags" type="text" placeholder="ex: #index #rapport #leurre" />
+              </div>
+              <div class="field">
+                <label for="vRisk">Niveau de risque</label>
+                <select id="vRisk">
+                  <option value="low">🟢 bas</option>
+                  <option value="med">🟠 moyen</option>
+                  <option value="high">🔴 élevé</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="chipbar">
+              <button class="btn b-c" id="btnAddVault">➕ Ajouter</button>
+              <button class="btn b-ghost" id="btnSeedVault">🎲 Seed</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="ctitle"><div class="n">⇣</div><h2>Inventaire</h2></div>
+            <div class="field">
+              <label for="vSearch">Rechercher</label>
+              <input id="vSearch" type="text" placeholder="filtre par titre, tags, type…" />
+            </div>
+            <div class="list" id="vaultList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CREDITS -->
+      <section id="credits" class="view hidden">
+        <div class="card">
+          <div class="ctitle"><div class="n">06</div><h2>Disclaimer / Licence / Sécurité</h2></div>
+          <p class="p">
+            1) Fan-club non officiel. 2) Pas de harcèlement. 3) Safe-zone obligatoire. 4) Tout est local.
+          </p>
+          <div class="list">
+            <div class="item">
+              <div class="dot o"></div>
+              <div class="itxt">
+                <b>Pas de collecte</b>
+                <small>Ce fichier ne contacte aucun serveur. Tu gères tes données.</small>
+              </div>
+            </div>
+            <div class="item">
+              <div class="dot l"></div>
+              <div class="itxt">
+                <b>Export souvent</b>
+                <small>LocalStorage peut être effacé. Export JSON = ta sauvegarde durable.</small>
+              </div>
+            </div>
+            <div class="item">
+              <div class="dot c"></div>
+              <div class="itxt">
+                <b>Forkable</b>
+                <small>Tu peux publier ce fan-site sur GitHub Pages en 1 fichier.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="chipbar" style="margin-top:.8rem">
+            <button class="btn b-l" id="btnCopyPitch">📋 Copier pitch</button>
+            <button class="btn b-ghost" id="btnResetAll">☢️ RESET (tout effacer)</button>
+          </div>
+
+          <p class="mini">Konami code = surprise. Terminal = commandes rapides.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="footerbar">
+      <div class="fwrap">
+        <div class="warn" id="warnText">⚠️ Données locales. Exporte pour éviter les pertes.</div>
+        <div class="kpi">
+          <span class="tag" id="kpiM">missions: 0</span>
+          <span class="tag" id="kpiJ">journal: 0</span>
+          <span class="tag" id="kpiV">vault: 0</span>
+          <button class="btn b-o blink" id="btnExport2">📤 EXPORTER</button>
+          <button class="btn b-g" id="btnPause">⏸ PAUSE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TERMINAL -->
+  <div class="modalback" id="modalBack" role="dialog" aria-modal="true" aria-label="Terminal">
+    <div class="modal">
+      <div class="mhead">
+        <h3>⌨️ Terminal miHonyPOT</h3>
+        <button class="x" id="btnCloseModal" title="Fermer">✕</button>
+      </div>
+      <div class="mbody">
+        <div class="term" id="term">
+          <div class="line">miHonyPOT$ boot… ok</div>
+          <div class="line">Tape: help</div>
+        </div>
+        <input id="termInput" autocomplete="off" spellcheck="false" placeholder="help | export | import | seed | wipe | stats | goto missions | goto vault" />
+        <div class="mini" style="margin-top:.55rem">Astuce: <span class="badge">Ctrl+S</span> = sauver. <span class="badge">Ctrl+E</span> = exporter.</div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="fileImport" accept="application/json" class="hidden" />
+
+  <div class="toastwrap" id="toastWrap" aria-live="polite"></div>
+
+  <script>
+    (()=>{
+      // ---------------------------
+      // State
+      // ---------------------------
+      const KEY = "mihonypot_fanclub_v09";
+      const nowISO = ()=> new Date().toISOString();
+      const fmt = (iso)=>{
+        const d = new Date(iso);
+        const pad = (n)=> String(n).padStart(2,"0");
+        return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      };
+
+      const defaults = {
+        meta: {
+          title: "miHonyPOT — Le Cercle du Pot",
+          tagline: "not DEAD… (YET!)",
+          repoUrl: "https://github.com/ouaisfieu/miHonyPOT/",
+          siteUrl: "",
+          createdAt: nowISO(),
+          updatedAt: nowISO(),
+          pausedUntil: null
+        },
+        lore: { canon:"", lexicon:"", rules:"" },
+        missions: [],
+        journal: [],
+        vault: [],
+        stats: { saves:0, exports:0, imports:0, commands:0, konami:0 }
+      };
+
+      let S = load();
+
+      // ---------------------------
+      // Elements
+      // ---------------------------
+      const $ = (q, el=document)=> el.querySelector(q);
+      const $$ = (q, el=document)=> Array.from(el.querySelectorAll(q));
+
+      const views = $$(".view");
+      const tabs = $$(".tab");
+      const modalBack = $("#modalBack");
+      const term = $("#term");
+      const termInput = $("#termInput");
+      const fileImport = $("#fileImport");
+      const toastWrap = $("#toastWrap");
+
+      // inputs
+      const fanTitle = $("#fanTitle");
+      const fanTagline = $("#fanTagline");
+      const repoUrl = $("#repoUrl");
+      const siteUrl = $("#siteUrl");
+
+      const canon = $("#canon");
+      const lexicon = $("#lexicon");
+      const rules = $("#rules");
+
+      const mTitle = $("#mTitle");
+      const mStatus = $("#mStatus");
+      const mHint = $("#mHint");
+      const mProof = $("#mProof");
+
+      const jText = $("#jText");
+      const jTags = $("#jTags");
+      const jMood = $("#jMood");
+
+      const vType = $("#vType");
+      const vTitle = $("#vTitle");
+      const vBody = $("#vBody");
+      const vTags = $("#vTags");
+      const vRisk = $("#vRisk");
+      const vSearch = $("#vSearch");
+
+      // lists
+      const missionList = $("#missionList");
+      const journalList = $("#journalList");
+      const vaultList = $("#vaultList");
+      const kpis = $("#kpis");
+
+      // kpi tags
+      const kpiM = $("#kpiM"), kpiJ = $("#kpiJ"), kpiV = $("#kpiV");
+      const stateTag = $("#stateTag");
+
+      // buttons
+      const btnTerminal = $("#btnTerminal");
+      const btnCloseModal = $("#btnCloseModal");
+      const btnSave = $("#btnSave");
+      const btnExport = $("#btnExport");
+      const btnExport2 = $("#btnExport2");
+      const btnImport = $("#btnImport");
+      const btnPause = $("#btnPause");
+
+      const btnSeedLore = $("#btnSeedLore");
+      const btnClearLore = $("#btnClearLore");
+      const btnAddMission = $("#btnAddMission");
+      const btnSeedMissions = $("#btnSeedMissions");
+      const btnAddJournal = $("#btnAddJournal");
+      const btnClearJournal = $("#btnClearJournal");
+      const btnAddVault = $("#btnAddVault");
+      const btnSeedVault = $("#btnSeedVault");
+      const btnCopyPitch = $("#btnCopyPitch");
+      const btnResetAll = $("#btnResetAll");
+
+      // ---------------------------
+      // Safety: pause mode
+      // ---------------------------
+      function isPaused(){
+        const u = S.meta.pausedUntil;
+        if(!u) return false;
+        return new Date(u).getTime() > Date.now();
+      }
+      function setPaused(minutes=50){
+        const until = new Date(Date.now() + minutes*60*1000).toISOString();
+        S.meta.pausedUntil = until;
+        save(true);
+        toast("PAUSE activée", `Reprise automatique à ${fmt(until)}`, "i");
+        stateTag.textContent = "autosave: PAUSE";
+      }
+      function refreshPauseUI(){
+        if(isPaused()){
+          stateTag.textContent = "autosave: PAUSE";
+          btnPause.classList.add("blink");
+        }else{
+          stateTag.textContent = "autosave: ON";
+          btnPause.classList.remove("blink");
+        }
+      }
+
+      // ---------------------------
+      // Storage
+      // ---------------------------
+      function load(){
+        try{
+          const raw = localStorage.getItem(KEY);
+          if(!raw) return structuredClone(defaults);
+          const obj = JSON.parse(raw);
+          return deepMerge(structuredClone(defaults), obj);
+        }catch(e){
+          return structuredClone(defaults);
+        }
+      }
+      function deepMerge(a,b){
+        for(const k in b){
+          if(b[k] && typeof b[k]==="object" && !Array.isArray(b[k])) a[k]=deepMerge(a[k]||{}, b[k]);
+          else a[k]=b[k];
+        }
+        return a;
+      }
+      function save(silent=false){
+        if(isPaused()) return;
+        S.meta.updatedAt = nowISO();
+        S.stats.saves++;
+        localStorage.setItem(KEY, JSON.stringify(S));
+        if(!silent) toast("Sauvé", "LocalStorage mis à jour", "i");
+        refreshKPI();
+      }
+
+      // ---------------------------
+      // Export / Import
+      // ---------------------------
+      function exportJSON(){
+        S.meta.updatedAt = nowISO();
+        S.stats.exports++;
+        const data = JSON.stringify(S, null, 2);
+        const blob = new Blob([data], {type:"application/json"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `mihonypot-fanclub_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toast("Export prêt", "Fichier JSON téléchargé", "w");
+        refreshKPI();
+      }
+      function importJSONText(txt){
+        try{
+          const obj = JSON.parse(txt);
+          S = deepMerge(structuredClone(defaults), obj);
+          S.stats.imports++;
+          localStorage.setItem(KEY, JSON.stringify(S));
+          hydrate();
+          toast("Import OK", "Données chargées", "i");
+        }catch(e){
+          toast("Import KO", "JSON invalide", "e");
+        }
+      }
+
+      // ---------------------------
+      // UI
+      // ---------------------------
+      function switchTab(id){
+        views.forEach(v=> v.classList.toggle("hidden", v.id!==id));
+        tabs.forEach(t=> t.classList.toggle("active", t.dataset.tab===id));
+        window.scrollTo({top:0,behavior:"smooth"});
+      }
+
+      function toast(title, msg, type="i"){
+        const t = document.createElement("div");
+        t.className = `toast ${type}`;
+        const icon = type==="e"?"⛔":(type==="w"?"⚠️":"ℹ️");
+        t.innerHTML = `<div>${icon}</div><div><b>${escapeHtml(title)}</b><small>${escapeHtml(msg)}</small></div>`;
+        toastWrap.appendChild(t);
+        setTimeout(()=>{ t.style.opacity="0"; t.style.transform="translateY(6px)"; }, 2800);
+        setTimeout(()=> t.remove(), 3300);
+      }
+
+      function escapeHtml(s){
+        return String(s).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+      }
+
+      function refreshKPI(){
+        kpiM.textContent = `missions: ${S.missions.length}`;
+        kpiJ.textContent = `journal: ${S.journal.length}`;
+        kpiV.textContent = `vault: ${S.vault.length}`;
+        const v = S.meta.title || "Fan-club";
+        document.title = `${v} — miHonyPOT (NON OFFICIEL)`;
+        refreshPauseUI();
+
+        // sidebar kpis
+        const done = S.missions.filter(m=>m.status==="done").length;
+        const wip = S.missions.filter(m=>m.status==="wip").length;
+        const todo = S.missions.filter(m=>m.status==="todo").length;
+        const fail = S.missions.filter(m=>m.status==="fail").length;
+
+        kpis.innerHTML = `
+          <div class="item"><div class="dot o"></div><div class="itxt"><b>Progression</b><small>${done} validées • ${wip} en cours • ${todo} à faire • ${fail} fausses pistes</small></div></div>
+          <div class="item"><div class="dot c"></div><div class="itxt"><b>Dernière sauvegarde</b><small>${fmt(S.meta.updatedAt)}</small></div></div>
+          <div class="item"><div class="dot l"></div><div class="itxt"><b>Exports / Imports</b><small>${S.stats.exports} exports • ${S.stats.imports} imports</small></div></div>
+        `;
+      }
+
+      function renderMissions(){
+        if(!S.missions.length){
+          missionList.innerHTML = `<div class="mini">Aucune mission. Ajoute-en une ou seed.</div>`;
+          return;
+        }
+        missionList.innerHTML = S.missions
+          .slice()
+          .sort((a,b)=> b.createdAt.localeCompare(a.createdAt))
+          .map(m=>{
+            const dot = m.status==="done"?"g":(m.status==="wip"?"c":(m.status==="fail"?"r":"l"));
+            const badge = m.status==="todo"?"À faire":(m.status==="wip"?"En cours":(m.status==="done"?"Validée":"Fausse piste"));
+            const bclass = m.status==="done"?"g":(m.status==="wip"?"c":(m.status==="fail"?"r":"l"));
+            return `
+              <div class="item" data-id="${m.id}">
+                <div class="dot ${dot}"></div>
+                <div class="itxt">
+                  <b>${escapeHtml(m.title)}</b>
+                  <small>${escapeHtml(m.hint||"")}</small>
+                  <div class="meta">
+                    <span class="badge ${bclass}">${badge}</span>
+                    <span class="badge">${fmt(m.createdAt)}</span>
+                    ${m.proof?`<span class="badge o">preuve</span>`:""}
+                  </div>
+                  ${m.proof?`<small style="margin-top:.35rem;color:var(--dim)">${escapeHtml(m.proof)}</small>`:""}
+                </div>
+                <button class="x" data-x="1" title="Supprimer">✕</button>
+              </div>
+            `;
+          }).join("");
+
+        // click behavior
+        $$("#missionList .item").forEach(el=>{
+          el.addEventListener("click",(e)=>{
+            if(e.target && e.target.dataset && e.target.dataset.x){ return; }
+            const id = el.dataset.id;
+            cycleMission(id);
+          });
+          const x = el.querySelector(".x");
+          x.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const id = el.dataset.id;
+            S.missions = S.missions.filter(m=>m.id!==id);
+            save(true);
+            renderMissions();
+            refreshKPI();
+          });
+        });
+      }
+
+      function cycleMission(id){
+        const idx = S.missions.findIndex(m=>m.id===id);
+        if(idx<0) return;
+        const order = ["todo","wip","done","fail"];
+        const cur = S.missions[idx].status;
+        const next = order[(order.indexOf(cur)+1)%order.length];
+        S.missions[idx].status = next;
+        save(true);
+        renderMissions();
+        refreshKPI();
+      }
+
+      function renderJournal(){
+        if(!S.journal.length){
+          journalList.innerHTML = `<div class="mini">Aucune entrée. Ajoute une note.</div>`;
+          return;
+        }
+        journalList.innerHTML = S.journal
+          .slice()
+          .sort((a,b)=> b.at.localeCompare(a.at))
+          .map(j=>{
+            const dot = j.mood==="hype"?"o":(j.mood==="aha"?"g":(j.mood==="fear"?"r":(j.mood==="lol"?"c":"l")));
+            const mood = j.mood==="hype"?"🔥":(j.mood==="aha"?"💡":(j.mood==="fear"?"😶‍🌫️":(j.mood==="lol"?"🤣":"•")));
+            const tags = (j.tags||"").trim();
+            const tbadges = tags? tags.split(/\s+/).slice(0,6).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("") : "";
+            return `
+              <div class="item" data-id="${j.id}">
+                <div class="dot ${dot}"></div>
+                <div class="itxt">
+                  <b>${mood} ${fmt(j.at)}</b>
+                  <small>${escapeHtml(j.text)}</small>
+                  <div class="meta">${tbadges}</div>
+                </div>
+                <button class="x" data-x="1" title="Supprimer">✕</button>
+              </div>
+            `;
+          }).join("");
+
+        $$("#journalList .item").forEach(el=>{
+          const x = el.querySelector(".x");
+          x.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const id = el.dataset.id;
+            S.journal = S.journal.filter(j=>j.id!==id);
+            save(true);
+            renderJournal();
+            refreshKPI();
+          });
+        });
+      }
+
+      function renderVault(){
+        const q = (vSearch.value||"").trim().toLowerCase();
+        const items = S.vault.filter(v=>{
+          if(!q) return true;
+          return (v.title||"").toLowerCase().includes(q)
+            || (v.body||"").toLowerCase().includes(q)
+            || (v.tags||"").toLowerCase().includes(q)
+            || (v.type||"").toLowerCase().includes(q);
+        }).slice().sort((a,b)=> b.at.localeCompare(a.at));
+
+        if(!items.length){
+          vaultList.innerHTML = `<div class="mini">Rien à afficher. Ajoute un artefact ou change le filtre.</div>`;
+          return;
+        }
+
+        vaultList.innerHTML = items.map(v=>{
+          const dot = v.risk==="high"?"r":(v.risk==="med"?"o":"g");
+          const t = v.type==="link"?"🔗":(v.type==="text"?"🧾":(v.type==="quote"?"❝":"📄"));
+          const riskB = v.risk==="high"?"r":(v.risk==="med"?"o":"g");
+          const tags = (v.tags||"").trim();
+          const tbadges = tags? tags.split(/\s+/).slice(0,6).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join("") : "";
+          return `
+            <div class="item" data-id="${v.id}">
+              <div class="dot ${dot}"></div>
+              <div class="itxt">
+                <b>${t} ${escapeHtml(v.title)}</b>
+                <small>${escapeHtml(v.body)}</small>
+                <div class="meta">
+                  <span class="badge ${riskB}">${v.risk==="high"?"risque élevé":(v.risk==="med"?"risque moyen":"risque bas")}</span>
+                  <span class="badge">${fmt(v.at)}</span>
+                  <span class="badge">${escapeHtml(v.type)}</span>
+                  ${tbadges}
+                </div>
+              </div>
+              <button class="x" data-x="1" title="Supprimer">✕</button>
+            </div>
+          `;
+        }).join("");
+
+        $$("#vaultList .item").forEach(el=>{
+          const x = el.querySelector(".x");
+          x.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const id = el.dataset.id;
+            S.vault = S.vault.filter(v=>v.id!==id);
+            save(true);
+            renderVault();
+            refreshKPI();
+          });
+        });
+      }
+
+      // ---------------------------
+      // Seeds
+      // ---------------------------
+      function seedLore(){
+        const incipits = [
+          "On a trouvé un pot. Vide. Mais il sonnait.",
+          "Le rapport est un masque. La vraie donnée est ailleurs.",
+          "Trois fichiers. Trois injonctions. Aucun contexte.",
+          "Chaque fork laisse une empreinte. Chaque empreinte est une piste."
+        ];
+        const factions = [
+          "Les Apiculteurs Noirs (gardent le miel, jamais le pot)",
+          "Le Bureau des Bruits de Pas (surveille les retours)",
+          "Les Archivistes de l’Index (fabriquent des évidences)"
+        ];
+        const artefacts = [
+          "DRINKME.md", "EATME.md", "SMOKEME.md", "index.html", "poli-kao/", "pdfs/",
+          "un timestamp 42", "un code '273'", "un faux README"
+        ];
+        const secret = [
+          "Le pot n’est pas une chose. C’est un protocole.",
+          "La clé est dans la contradiction, pas dans le fichier.",
+          "Le leurre est utile: il révèle le chasseur.",
+          "Tu ne cherches pas un sens. Tu construis un système."
+        ];
+        const pick = (arr)=> arr[Math.floor(Math.random()*arr.length)];
+        canon.value = `INCIPIT: ${pick(incipits)}\n\nFACTIONS:\n- ${factions[0]}\n- ${factions[1]}\n- ${factions[2]}\n\nSECRET:\n- ${pick(secret)}\n`;
+        lexicon.value = `POT\nMIEL\nLEURRE\nFORK\nPREUVE\nINDEX\nBRUIT-DE-PAS\n`;
+        rules.value = `SAFE-ZONE: oui\nSORTIE: mot-clé "PAUSE"\nCONSENTEMENT: explicite\nPAS DE HARCELEMENT: tolérance zéro\n`;
+        S.lore.canon = canon.value;
+        S.lore.lexicon = lexicon.value;
+        S.lore.rules = rules.value;
+        save(true);
+        toast("Seed lore", "Canon minimal généré", "i");
+      }
+
+      function seedMissions(n=5){
+        const seeds = [
+          ["Identifier le leurre principal", "todo", "Cherche ce qui ne colle pas.", "Le 'rapport' cite des données synthétiques."],
+          ["Cartographier les fichiers-signes", "wip", "Les injonctions sont des portes.", "DRINKME/EATME/SMOKEME sont des clés."],
+          ["Créer 1 artefact partageable", "todo", "Un résumé qui claque.", "Export JSON + capture d’écran."],
+          ["Écrire la règle d’or", "done", "Tout doit être structuré.", "Vault > mise en scène."],
+          ["Trouver le premier bruit de pas", "todo", "Une action laisse une trace.", "Journal + timestamp."]
+        ];
+        for(let i=0;i<n;i++){
+          const s = seeds[i%seeds.length];
+          S.missions.push({
+            id: crypto.randomUUID(),
+            title: s[0],
+            status: s[1],
+            hint: s[2],
+            proof: s[3],
+            createdAt: nowISO()
+          });
+        }
+        save(true);
+        renderMissions();
+        toast("Seed missions", `${n} missions ajoutées`, "w");
+      }
+
+      function seedVault(){
+        const seeds = [
+          {type:"file", title:"DRINKME.md", body:"Fichier-injonction: porte narrative", tags:"#fichier #porte", risk:"med"},
+          {type:"file", title:"EATME.md", body:"Fichier-injonction: test d’obéissance", tags:"#rituel #test", risk:"med"},
+          {type:"link", title:"index.html", body:"Leurres possibles: un rapport 'WorkFutures'", tags:"#index #leurre", risk:"high"},
+          {type:"text", title:"Règle d’or", body:"Le contenu qui compte doit être dans le Vault.", tags:"#principe", risk:"low"},
+          {type:"quote", title:"Secret", body:"Le pot n’est pas une chose. C’est un protocole.", tags:"#secret #canon", risk:"low"}
+        ];
+        seeds.forEach(s=>{
+          S.vault.push({ id: crypto.randomUUID(), ...s, at: nowISO() });
+        });
+        save(true);
+        renderVault();
+        toast("Seed vault", "Artefacts ajoutés", "i");
+      }
+
+      // ---------------------------
+      // Terminal
+      // ---------------------------
+      function tprint(s){
+        const line = document.createElement("div");
+        line.className = "line";
+        line.textContent = s;
+        term.appendChild(line);
+        term.scrollTop = term.scrollHeight;
+      }
+      function openTerminal(){
+        modalBack.classList.add("on");
+        setTimeout(()=> termInput.focus(), 50);
+      }
+      function closeTerminal(){
+        modalBack.classList.remove("on");
+      }
+      function runCmd(cmd){
+        S.stats.commands++;
+        save(true);
+        const c = cmd.trim();
+        if(!c) return;
+        tprint(`miHonyPOT$ ${c}`);
+        const low = c.toLowerCase();
+
+        const goto = (name)=>{
+          const id = name.trim().toLowerCase();
+          const map = {home:"home",accueil:"home",lore:"lore",missions:"missions",journal:"journal",vault:"vault",credits:"credits"};
+          if(map[id]) { switchTab(map[id]); tprint(`→ goto ${map[id]}`); return; }
+          tprint("Commande goto inconnue.");
+        };
+
+        if(low==="help"){
+          tprint("Commandes: help, stats, save, export, import, seed, seed missions, seed vault, seed lore, wipe, goto <home|lore|missions|journal|vault|credits>");
+          return;
+        }
+        if(low==="stats"){
+          tprint(`missions=${S.missions.length} journal=${S.journal.length} vault=${S.vault.length}`);
+          tprint(`saves=${S.stats.saves} exports=${S.stats.exports} imports=${S.stats.imports} konami=${S.stats.konami}`);
+          return;
+        }
+        if(low==="save"){ save(); return; }
+        if(low==="export"){ exportJSON(); return; }
+        if(low==="import"){ fileImport.click(); return; }
+        if(low==="seed"){ seedLore(); seedMissions(3); seedVault(); return; }
+        if(low==="seed missions"){ seedMissions(5); return; }
+        if(low==="seed vault"){ seedVault(); return; }
+        if(low==="seed lore"){ seedLore(); return; }
+        if(low==="wipe"){
+          tprint("⚠️ Confirmation: tape EXACTEMENT 'wipe yes'");
+          return;
+        }
+        if(low==="wipe yes"){
+          localStorage.removeItem(KEY);
+          S = structuredClone(defaults);
+          hydrate();
+          tprint("OK. Reset complet.");
+          toast("Reset", "Tout a été effacé", "e");
+          return;
+        }
+        if(low.startsWith("goto ")){
+          goto(low.slice(5));
+          return;
+        }
+        tprint("Inconnu. Tape: help");
+      }
+
+      // ---------------------------
+      // Konami
+      // ---------------------------
+      const konami = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+      let kpos = 0;
+      function konamiHit(){
+        S.stats.konami++;
+        save(true);
+        toast("Konami", "Le pot s’est ouvert… un instant.", "w");
+        tprint(">>> SECRET: Le leurre est utile: il révèle le chasseur.");
+        // visual spike
+        document.documentElement.style.setProperty("--bg", "#07070c");
+        setTimeout(()=> document.documentElement.style.setProperty("--bg", "#0a0a0f"), 1200);
+      }
+
+      // ---------------------------
+      // Hydrate
+      // ---------------------------
+      function hydrate(){
+        fanTitle.value = S.meta.title || "";
+        fanTagline.value = S.meta.tagline || "";
+        repoUrl.value = S.meta.repoUrl || "";
+        siteUrl.value = S.meta.siteUrl || "";
+        canon.value = S.lore.canon || "";
+        lexicon.value = S.lore.lexicon || "";
+        rules.value = S.lore.rules || "";
+
+        renderMissions();
+        renderJournal();
+        renderVault();
+        refreshKPI();
+        refreshPauseUI();
+      }
+
+      // ---------------------------
+      // Events: tabs
+      // ---------------------------
+      tabs.forEach(t=>{
+        t.addEventListener("click",()=> switchTab(t.dataset.tab));
+      });
+
+      // ---------------------------
+      // Events: meta inputs
+      // ---------------------------
+      function bindMeta(){
+        const upd = ()=>{ 
+          S.meta.title = fanTitle.value.trim();
+          S.meta.tagline = fanTagline.value.trim();
+          S.meta.repoUrl = repoUrl.value.trim();
+          S.meta.siteUrl = siteUrl.value.trim();
+          save(true);
+          refreshKPI();
+        };
+        [fanTitle, fanTagline, repoUrl, siteUrl].forEach(el=>{
+          el.addEventListener("change", upd);
+          el.addEventListener("blur", upd);
+        });
+      }
+
+      // lore
+      function bindLore(){
+        const upd = ()=>{
+          S.lore.canon = canon.value;
+          S.lore.lexicon = lexicon.value;
+          S.lore.rules = rules.value;
+          save(true);
+        };
+        [canon,lexicon,rules].forEach(el=>{
+          el.addEventListener("change", upd);
+          el.addEventListener("blur", upd);
+        });
+      }
+
+      // missions
+      btnAddMission.addEventListener("click",()=>{
+        const title = mTitle.value.trim();
+        if(!title) return toast("Mission", "Titre requis", "e");
+        S.missions.push({
+          id: crypto.randomUUID(),
+          title,
+          status: mStatus.value,
+          hint: mHint.value.trim(),
+          proof: mProof.value.trim(),
+          createdAt: nowISO()
+        });
+        mTitle.value=""; mHint.value=""; mProof.value="";
+        save(true);
+        renderMissions();
+        toast("Mission ajoutée", "OK", "i");
+      });
+      btnSeedMissions.addEventListener("click",()=> seedMissions(5));
+
+      // journal
+      btnAddJournal.addEventListener("click",()=>{
+        const text = jText.value.trim();
+        if(!text) return toast("Journal", "Texte requis", "e");
+        S.journal.push({
+          id: crypto.randomUUID(),
+          at: nowISO(),
+          text,
+          tags: jTags.value.trim(),
+          mood: jMood.value
+        });
+        jText.value=""; jTags.value=""; jMood.value="neutral";
+        save(true);
+        renderJournal();
+        toast("Entrée ajoutée", "Journal mis à jour", "i");
+      });
+      btnClearJournal.addEventListener("click",()=>{
+        S.journal = [];
+        save(true);
+        renderJournal();
+        toast("Journal", "Purgé", "w");
+      });
+
+      // vault
+      btnAddVault.addEventListener("click",()=>{
+        const title = vTitle.value.trim();
+        const body = vBody.value.trim();
+        if(!title || !body) return toast("Vault", "Titre + contenu requis", "e");
+        S.vault.push({
+          id: crypto.randomUUID(),
+          at: nowISO(),
+          type: vType.value,
+          title,
+          body,
+          tags: vTags.value.trim(),
+          risk: vRisk.value
+        });
+        vTitle.value=""; vBody.value=""; vTags.value=""; vRisk.value="low"; vType.value="link";
+        save(true);
+        renderVault();
+        toast("Artefact ajouté", "Vault mis à jour", "i");
+      });
+      btnSeedVault.addEventListener("click", seedVault);
+      vSearch.addEventListener("input", renderVault);
+
+      // lore buttons
+      btnSeedLore.addEventListener("click", seedLore);
+      btnClearLore.addEventListener("click",()=>{
+        canon.value=""; lexicon.value=""; rules.value="";
+        S.lore.canon=""; S.lore.lexicon=""; S.lore.rules="";
+        save(true);
+        toast("Lore", "Nettoyé", "i");
+      });
+
+      // copy pitch
+      btnCopyPitch.addEventListener("click", async ()=>{
+        const pitch =
+`Fan-club NON OFFICIEL — miHonyPOT.
+But: structurer un univers forkable (missions / preuves / lore / timeline).
+Zéro tracking. Offline. Export JSON.
+Repo: ${S.meta.repoUrl||""}`.trim();
+        try{ await navigator.clipboard.writeText(pitch); toast("Copié", "Pitch dans le presse-papiers", "i"); }
+        catch(e){ toast("Copie KO", "Permission refusée", "e"); }
+      });
+
+      // reset
+      btnResetAll.addEventListener("click",()=>{
+        if(!confirm("RESET total ? (efface LocalStorage)")) return;
+        localStorage.removeItem(KEY);
+        S = structuredClone(defaults);
+        hydrate();
+        toast("Reset", "OK", "e");
+      });
+
+      // save/export/import/pause
+      btnSave.addEventListener("click",()=> save());
+      btnExport.addEventListener("click", exportJSON);
+      btnExport2.addEventListener("click", exportJSON);
+      btnImport.addEventListener("click",()=> fileImport.click());
+      btnPause.addEventListener("click",()=> setPaused(50));
+
+      fileImport.addEventListener("change", async (e)=>{
+        const f = e.target.files && e.target.files[0];
+        if(!f) return;
+        const txt = await f.text();
+        importJSONText(txt);
+        fileImport.value = "";
+      });
+
+      // terminal open/close
+      btnTerminal.addEventListener("click", openTerminal);
+      btnCloseModal.addEventListener("click", closeTerminal);
+      modalBack.addEventListener("click",(e)=>{ if(e.target===modalBack) closeTerminal(); });
+      document.addEventListener("keydown",(e)=>{
+        // konami
+        const key = e.key;
+        if(key === konami[kpos]){ kpos++; if(kpos===konami.length){ kpos=0; konamiHit(); } }
+        else { kpos = (key===konami[0])?1:0; }
+
+        // shortcuts
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==="s"){ e.preventDefault(); save(); }
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==="e"){ e.preventDefault(); exportJSON(); }
+        if(e.key==="Escape" && modalBack.classList.contains("on")) closeTerminal();
+      });
+
+      termInput.addEventListener("keydown",(e)=>{
+        if(e.key==="Enter"){
+          const c = termInput.value;
+          termInput.value="";
+          runCmd(c);
+        }
+      });
+
+      // blinking export every 3 minutes (mauve vibe) + reminder
+      setInterval(()=>{
+        btnExport.classList.add("blink");
+        btnExport2.classList.add("blink");
+        toast("Rappel", "EXPORT conseillé (pérénnité)", "w");
+        setTimeout(()=>{
+          btnExport.classList.remove("blink");
+          btnExport2.classList.remove("blink");
+        }, 5500);
+      }, 3*60*1000);
+
+      // auto save every 20s
+      setInterval(()=> save(true), 20000);
+
+      // initial hydrate
+      bindMeta();
+      bindLore();
+      hydrate();
+
+      // default tab
+      switchTab("home");
+
+      // one-time seed if totally empty
+      const empty = !S.missions.length && !S.journal.length && !S.vault.length && !S.lore.canon && !S.lore.lexicon && !S.lore.rules;
+      if(empty){
+        seedLore();
+        seedMissions(3);
+        seedVault();
+        save(true);
+      }
+
+      // terminal hint
+      setTimeout(()=> toast("Tip", "Terminal: tape 'help'", "i"), 800);
+    })();
+  </script>
+</body>
+</html>

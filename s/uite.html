@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 EXTRAPOLATION — Stratégie de Conquête Mondiale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #0a0a0f;
+            --surface: #12121a;
+            --card: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-dim: #8888aa;
+            --heart: #ff006e;
+            --mind: #8338ec;
+            --world: #06d6a0;
+            --gold: #ffd60a;
+            --danger: #ef476f;
+            --info: #118ab2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(131,56,236,0.1), transparent);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--heart), var(--mind), var(--world));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.6rem 1.25rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--mind);
+        }
+
+        .nav-btn.active {
+            background: var(--mind);
+            border-color: var(--mind);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section styling */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Phase indicators */
+        .phase-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .phase-heart { background: rgba(255,0,110,0.2); color: var(--heart); }
+        .phase-mind { background: rgba(131,56,236,0.2); color: var(--mind); }
+        .phase-world { background: rgba(6,214,160,0.2); color: var(--world); }
+
+        /* Diagnostic Grid */
+        .diagnostic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .diagnostic-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagnostic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .diagnostic-card.strength::before { background: var(--world); }
+        .diagnostic-card.weakness::before { background: var(--danger); }
+        .diagnostic-card.opportunity::before { background: var(--gold); }
+        .diagnostic-card.threat::before { background: var(--info); }
+
+        .diagnostic-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .diagnostic-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .diagnostic-card p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--heart), var(--mind), var(--world));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            background: var(--card);
+            border: 3px solid;
+            border-radius: 50%;
+        }
+
+        .timeline-item.heart::before { border-color: var(--heart); }
+        .timeline-item.mind::before { border-color: var(--mind); }
+        .timeline-item.world::before { border-color: var(--world); }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-date {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* Conquest Map */
+        .conquest-map {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 900px) {
+            .conquest-map {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .conquest-phase {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .conquest-phase:hover {
+            transform: translateY(-5px);
+        }
+
+        .conquest-phase.heart { border-color: var(--heart); }
+        .conquest-phase.mind { border-color: var(--mind); }
+        .conquest-phase.world { border-color: var(--world); }
+
+        .conquest-phase .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .conquest-phase h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .conquest-phase.heart h3 { color: var(--heart); }
+        .conquest-phase.mind h3 { color: var(--mind); }
+        .conquest-phase.world h3 { color: var(--world); }
+
+        .conquest-phase .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .conquest-phase .progress-ring {
+            width: 100px;
+            height: 100px;
+            margin: 1rem auto;
+        }
+
+        .conquest-phase .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .metric-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        /* Gap Analysis */
+        .gap-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gap-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .gap-status.critical { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+        .gap-status.important { background: var(--gold); }
+        .gap-status.nice { background: var(--info); }
+        .gap-status.done { background: var(--world); }
+
+        .gap-content {
+            flex: 1;
+        }
+
+        .gap-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .gap-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .gap-impact {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+
+        /* Strategy Cards */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .strategy-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .strategy-header {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .strategy-header.heart { background: linear-gradient(135deg, rgba(255,0,110,0.2), transparent); }
+        .strategy-header.mind { background: linear-gradient(135deg, rgba(131,56,236,0.2), transparent); }
+        .strategy-header.world { background: linear-gradient(135deg, rgba(6,214,160,0.2), transparent); }
+
+        .strategy-icon {
+            font-size: 2rem;
+        }
+
+        .strategy-title {
+            font-weight: 600;
+        }
+
+        .strategy-content {
+            padding: 1.25rem;
+        }
+
+        .strategy-list {
+            list-style: none;
+        }
+
+        .strategy-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .strategy-list li:last-child {
+            border-bottom: none;
+        }
+
+        .strategy-list li::before {
+            content: '→';
+            color: var(--mind);
+        }
+
+        /* Simulation */
+        .simulator {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .simulator-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--card);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--mind);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .control-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            color: var(--mind);
+            margin-top: 0.5rem;
+        }
+
+        .projection-chart {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 250px;
+        }
+
+        /* Manifeste */
+        .manifeste {
+            background: linear-gradient(135deg, var(--card), var(--surface));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manifeste::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-size: 8rem;
+            color: var(--mind);
+            opacity: 0.1;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .manifeste h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--mind);
+        }
+
+        .manifeste p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            max-width: 800px;
+        }
+
+        .manifeste strong {
+            color: var(--heart);
+        }
+
+        .manifeste em {
+            color: var(--world);
+            font-style: normal;
+        }
+
+        /* Action buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--heart), var(--mind));
+            color: white;
+            font-weight: 600;
+        }
+
+        .action-btn.primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(131,56,236,0.4);
+        }
+
+        .action-btn.secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn.secondary:hover {
+            border-color: var(--mind);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Progress circles */
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle .bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .progress-circle .progress {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .progress-circle .heart { stroke: var(--heart); }
+        .progress-circle .mind { stroke: var(--mind); }
+        .progress-circle .world { stroke: var(--world); }
+
+        .progress-circle .value {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .conquest-map {
+                grid-template-columns: 1fr;
+            }
+
+            .manifeste {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Export Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            margin-bottom: 1rem;
+        }
+
+        .modal pre {
+            background: var(--card);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-icon">🔮</div>
+        <h1>EXTRAPOLATION</h1>
+        <p>Analyse stratégique de conquête mondiale — Cœurs → Esprits → Monde</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-btn active" data-section="diagnostic" onclick="showSection('diagnostic')">
+            🔍 Diagnostic
+        </button>
+        <button class="nav-btn" data-section="strategy" onclick="showSection('strategy')">
+            🎯 Stratégie
+        </button>
+        <button class="nav-btn" data-section="gaps" onclick="showSection('gaps')">
+            ⚠️ Gaps
+        </button>
+        <button class="nav-btn" data-section="roadmap" onclick="showSection('roadmap')">
+            🗺️ Roadmap
+        </button>
+        <button class="nav-btn" data-section="simulation" onclick="showSection('simulation')">
+            📊 Simulation
+        </button>
+        <button class="nav-btn" data-section="manifeste" onclick="showSection('manifeste')">
+            📜 Manifeste
+        </button>
+    </nav>
+
+    <div class="container">
+        <!-- SECTION: DIAGNOSTIC -->
+        <section id="diagnostic" class="section active">
+            <h2 class="section-title">🔍 Diagnostic Stratégique</h2>
+
+            <!-- Conquest Map -->
+            <div class="conquest-map">
+                <div class="conquest-phase heart">
+                    <div class="icon">❤️</div>
+                    <h3>PHASE 1: CŒURS</h3>
+                    <p class="subtitle">Émotion • Adhésion • Désir</p>
+                    <div class="progress-circle">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="50"/>
+                            <circle class="progress heart" cx="60" cy="60" r="50" 
+                                stroke-dasharray="314" stroke-dashoffset="220"/>
+                        </svg>
+                        <span class="value" style="color: var(--heart)">30%</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--heart)">✓</div>
+                            <div class="metric-label">Design émotionnel</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Vidéo / Storytelling</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Témoignages</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--heart)">✓</div>
+                            <div class="metric-label">Gamification</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conquest-phase mind">
+                    <div class="icon">🧠</div>
+                    <h3>PHASE 2: ESPRITS</h3>
+                    <p class="subtitle">Raison • Compréhension • Conviction</p>
+                    <div class="progress-circle">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="50"/>
+                            <circle class="progress mind" cx="60" cy="60" r="50" 
+                                stroke-dasharray="314" stroke-dashoffset="94"/>
+                        </svg>
+                        <span class="value" style="color: var(--mind)">70%</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--world)">✓</div>
+                            <div class="metric-label">Documentation</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--world)">✓</div>
+                            <div class="metric-label">Méthodologie</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--world)">✓</div>
+                            <div class="metric-label">Cadre éthique</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Preuves d'impact</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conquest-phase world">
+                    <div class="icon">🌍</div>
+                    <h3>PHASE 3: MONDE</h3>
+                    <p class="subtitle">Action • Propagation • Transformation</p>
+                    <div class="progress-circle">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="50"/>
+                            <circle class="progress world" cx="60" cy="60" r="50" 
+                                stroke-dasharray="314" stroke-dashoffset="282"/>
+                        </svg>
+                        <span class="value" style="color: var(--world)">10%</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Distribution</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Communauté</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger)">✗</div>
+                            <div class="metric-label">Internationalisation</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--gold)">~</div>
+                            <div class="metric-label">Viralité</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SWOT Analysis -->
+            <h3 style="margin: 2rem 0 1rem; font-size: 1.25rem;">Analyse SWOT</h3>
+            <div class="diagnostic-grid">
+                <div class="diagnostic-card strength">
+                    <div class="diagnostic-label">💪 Forces</div>
+                    <h3>Produit solide & différenciant</h3>
+                    <p>Architecture technique robuste, philosophie claire, outils fonctionnels, récursivité méthodologique, zéro tracking = argument massue.</p>
+                </div>
+                <div class="diagnostic-card weakness">
+                    <div class="diagnostic-label">😰 Faiblesses</div>
+                    <h3>Distribution quasi-inexistante</h3>
+                    <p>Pas d'hébergement public, pas de communauté, français only, pas de social proof, pas de vidéo, trop de texte.</p>
+                </div>
+                <div class="diagnostic-card opportunity">
+                    <div class="diagnostic-label">🌟 Opportunités</div>
+                    <h3>Timing parfait</h3>
+                    <p>Défiance massive envers les GAFAM, montée de l'activisme citoyen, succès des approches gamifiées, appétit pour les outils éthiques.</p>
+                </div>
+                <div class="diagnostic-card threat">
+                    <div class="diagnostic-label">⚡ Menaces</div>
+                    <h3>Fenêtre de tir limitée</h3>
+                    <p>Concurrence potentielle, fatigue de l'engagement, récupération par des acteurs moins éthiques, invisibilité algorithmique.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: STRATEGY -->
+        <section id="strategy" class="section">
+            <h2 class="section-title">🎯 Stratégie de Conquête</h2>
+
+            <div class="manifeste" style="margin-bottom: 2rem;">
+                <h2>La Théorie des 3C</h2>
+                <p>
+                    Pour conquérir le monde, il faut conquérir dans l'ordre :<br><br>
+                    <strong>1. Les CŒURS</strong> — Par l'émotion, le design, l'histoire. Les gens doivent RESSENTIR avant de comprendre.<br><br>
+                    <strong>2. Les ESPRITS</strong> — Par la raison, la preuve, la méthode. Les gens doivent COMPRENDRE pour s'engager durablement.<br><br>
+                    <em>3. Le MONDE</em> — Par l'action, la propagation, l'effet réseau. Les gens doivent AGIR et faire agir.
+                </p>
+            </div>
+
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <div class="strategy-header heart">
+                        <span class="strategy-icon">❤️</span>
+                        <span class="strategy-title">Conquérir les Cœurs</span>
+                    </div>
+                    <div class="strategy-content">
+                        <ul class="strategy-list">
+                            <li><strong>Vidéo teaser 60s</strong> — Hook émotionnel, pas explicatif</li>
+                            <li><strong>Origin story</strong> — Pourquoi ce projet existe, l'humain derrière</li>
+                            <li><strong>Visuels partageables</strong> — Cartes, memes, infographies</li>
+                            <li><strong>Témoignages vidéo</strong> — Visages réels, histoires vraies</li>
+                            <li><strong>Musique / ambiance</strong> — Identité sonore reconnaissable</li>
+                            <li><strong>Mascotte / personnage</strong> — Le virus 🦠 comme figure attachante</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <div class="strategy-header mind">
+                        <span class="strategy-icon">🧠</span>
+                        <span class="strategy-title">Conquérir les Esprits</span>
+                    </div>
+                    <div class="strategy-content">
+                        <ul class="strategy-list">
+                            <li><strong>Cas d'usage documentés</strong> — Avant/après, métriques</li>
+                            <li><strong>Comparatifs</strong> — Nous vs. alternatives (tableau clair)</li>
+                            <li><strong>Preuves d'impact</strong> — Dashboard public de résultats</li>
+                            <li><strong>Validation externe</strong> — Partenariats, prix, couverture presse</li>
+                            <li><strong>FAQ exhaustive</strong> — Réponse à chaque objection</li>
+                            <li><strong>Transparence totale</strong> — Finances, décisions, roadmap publiques</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <div class="strategy-header world">
+                        <span class="strategy-icon">🌍</span>
+                        <span class="strategy-title">Conquérir le Monde</span>
+                    </div>
+                    <div class="strategy-content">
+                        <ul class="strategy-list">
+                            <li><strong>Anglais d'abord</strong> — Puis ES, PT, AR, ZH</li>
+                            <li><strong>Communauté active</strong> — Discord/Matrix avec modération</li>
+                            <li><strong>Ambassadeurs locaux</strong> — 1 référent par pays/région</li>
+                            <li><strong>Effets de réseau</strong> — Guildes, challenges collectifs</li>
+                            <li><strong>Distribution multi-canal</strong> — IPFS, GitHub, Torrent, USB</li>
+                            <li><strong>Événements IRL</strong> — Meetups, ateliers, conférences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formule virale -->
+            <div class="card" style="margin-top: 2rem; background: linear-gradient(135deg, var(--surface), var(--card));">
+                <h3 style="font-family: 'Orbitron', monospace; margin-bottom: 1rem;">📐 La Formule de Viralité</h3>
+                <pre style="background: var(--void); padding: 1.5rem; border-radius: 8px; overflow-x: auto;">
+VIRALITÉ = (Émotion × Utilité × Facilité) / Friction
+
+Où :
+  Émotion   = WOW factor + Storytelling + Design    [actuellement: 6/10]
+  Utilité   = Résout un vrai problème               [actuellement: 8/10]  
+  Facilité  = Temps pour premier succès             [actuellement: 7/10]
+  Friction  = Obstacles à l'adoption                [actuellement: 8/10 😬]
+
+Score actuel : (6 × 8 × 7) / 8 = 42 → INSUFFISANT
+
+Cible pour viralité : > 100
+
+Actions prioritaires :
+  ↑ Émotion  : Vidéo + Témoignages         (+3 points)
+  ↓ Friction : Hébergement + Anglais       (-5 points)
+  
+Score projeté : (9 × 8 × 7) / 3 = 168 → VIRAL 🚀
+                </pre>
+            </div>
+        </section>
+
+        <!-- SECTION: GAPS -->
+        <section id="gaps" class="section">
+            <h2 class="section-title">⚠️ Analyse des Gaps</h2>
+
+            <p style="color: var(--text-dim); margin-bottom: 2rem;">
+                Ce qui manque, classé par impact sur la conquête mondiale.
+            </p>
+
+            <h3 style="color: var(--danger); margin-bottom: 1rem;">🔴 BLOQUANTS (Sans ça, échec garanti)</h3>
+            
+            <div class="gap-item">
+                <div class="gap-status critical"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Hébergement public accessible</div>
+                    <div class="gap-desc">Personne ne peut utiliser le projet sans URL publique. GitHub Pages = 5 minutes.</div>
+                </div>
+                <div class="gap-impact">Impact: ∞</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status critical"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Version anglaise complète</div>
+                    <div class="gap-desc">95% de la planète exclue. L'anglais ouvre 1.5 milliard de personnes.</div>
+                </div>
+                <div class="gap-impact">Impact: ×20</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status critical"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Espace communautaire</div>
+                    <div class="gap-desc">Sans lieu d'échange, pas de rétention, pas de bouche-à-oreille, pas de contributions.</div>
+                </div>
+                <div class="gap-impact">Impact: ×10</div>
+            </div>
+
+            <h3 style="color: var(--gold); margin: 2rem 0 1rem;">🟡 ACCÉLÉRATEURS (Multiplient l'impact)</h3>
+
+            <div class="gap-item">
+                <div class="gap-status important"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Vidéo teaser 60 secondes</div>
+                    <div class="gap-desc">Le format viral par excellence. Screen recording + voix off = budget 0€.</div>
+                </div>
+                <div class="gap-impact">Impact: ×5</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status important"></div>
+                <div class="gap-content">
+                    <div class="gap-title">10 témoignages utilisateurs</div>
+                    <div class="gap-desc">Social proof = crédibilité. Texte + photo minimum, vidéo idéal.</div>
+                </div>
+                <div class="gap-impact">Impact: ×3</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status important"></div>
+                <div class="gap-content">
+                    <div class="gap-title">3-5 partenariats associations</div>
+                    <div class="gap-desc">Co-branding = légitimité + accès à leurs audiences.</div>
+                </div>
+                <div class="gap-impact">Impact: ×3</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status important"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Structure juridique finalisée</div>
+                    <div class="gap-desc">AISBL enregistrée = possibilité de recevoir dons et subventions.</div>
+                </div>
+                <div class="gap-impact">Impact: ×2</div>
+            </div>
+
+            <h3 style="color: var(--info); margin: 2rem 0 1rem;">🔵 AMPLIFICATEURS (Nice to have)</h3>
+
+            <div class="gap-item">
+                <div class="gap-status nice"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Dashboard d'impact public</div>
+                    <div class="gap-desc">Métriques en temps réel = preuve que ça marche.</div>
+                </div>
+                <div class="gap-impact">Impact: ×1.5</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status nice"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Système de guildes/équipes</div>
+                    <div class="gap-desc">Compétition amicale = engagement + rétention.</div>
+                </div>
+                <div class="gap-impact">Impact: ×1.5</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status nice"></div>
+                <div class="gap-content">
+                    <div class="gap-title">PWA installable</div>
+                    <div class="gap-desc">Icône sur l'écran d'accueil = présence permanente.</div>
+                </div>
+                <div class="gap-impact">Impact: ×1.2</div>
+            </div>
+
+            <h3 style="color: var(--world); margin: 2rem 0 1rem;">🟢 DÉJÀ FAIT</h3>
+
+            <div class="gap-item">
+                <div class="gap-status done"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Outils de plaidoyer complets</div>
+                    <div class="gap-desc">15+ outils fonctionnels et documentés.</div>
+                </div>
+                <div class="gap-impact">✓</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status done"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Système de gamification</div>
+                    <div class="gap-desc">XP, niveaux, quêtes, achievements, journal.</div>
+                </div>
+                <div class="gap-impact">✓</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status done"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Documentation juridique</div>
+                    <div class="gap-desc">Politique du Nougat, charte éthique, licences.</div>
+                </div>
+                <div class="gap-impact">✓</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status done"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Landing page multilingue</div>
+                    <div class="gap-desc">FR/EN/ES/DE/AR avec structure i18n.</div>
+                </div>
+                <div class="gap-impact">✓</div>
+            </div>
+
+            <div class="gap-item">
+                <div class="gap-status done"></div>
+                <div class="gap-content">
+                    <div class="gap-title">Module de diffusion</div>
+                    <div class="gap-desc">V!VE la Flemme avec 96 contacts.</div>
+                </div>
+                <div class="gap-impact">✓</div>
+            </div>
+        </section>
+
+        <!-- SECTION: ROADMAP -->
+        <section id="roadmap" class="section">
+            <h2 class="section-title">🗺️ Roadmap de Conquête</h2>
+
+            <div class="timeline">
+                <!-- Semaine 1 -->
+                <div class="timeline-item heart">
+                    <div class="timeline-header">
+                        <span class="timeline-date">SEMAINE 1</span>
+                        <span class="phase-indicator phase-heart">❤️ CŒURS</span>
+                    </div>
+                    <div class="timeline-title">Fondations de distribution</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>Héberger sur GitHub Pages (J+1)</li>
+                            <li>Acheter nom de domaine virus-democratique.org (J+1)</li>
+                            <li>Créer serveur Discord + Matrix (J+2)</li>
+                            <li>Enregistrer vidéo teaser 60s (J+3 à J+5)</li>
+                            <li>Recruter 10 beta-testeurs (J+3 à J+7)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Semaine 2 -->
+                <div class="timeline-item heart">
+                    <div class="timeline-header">
+                        <span class="timeline-date">SEMAINE 2</span>
+                        <span class="phase-indicator phase-heart">❤️ CŒURS</span>
+                    </div>
+                    <div class="timeline-title">Émotion & Social Proof</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>Collecter 5 premiers témoignages beta-testeurs</li>
+                            <li>Créer 10 visuels partageables (cartes, infographies)</li>
+                            <li>Publier vidéo teaser sur réseaux</li>
+                            <li>Lancer campagne Discord pour premiers membres</li>
+                            <li>Contacter 20 premiers contacts (V!VE la Flemme)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Semaine 3-4 -->
+                <div class="timeline-item mind">
+                    <div class="timeline-header">
+                        <span class="timeline-date">SEMAINES 3-4</span>
+                        <span class="phase-indicator phase-mind">🧠 ESPRITS</span>
+                    </div>
+                    <div class="timeline-title">Internationalisation & Preuves</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>Traduction complète EN (tous modules)</li>
+                            <li>Documenter 3 cas d'usage complets</li>
+                            <li>Créer dashboard d'impact public</li>
+                            <li>Contacter 3 associations pour partenariat</li>
+                            <li>Finaliser enregistrement AISBL</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Mois 2 -->
+                <div class="timeline-item mind">
+                    <div class="timeline-header">
+                        <span class="timeline-date">MOIS 2</span>
+                        <span class="phase-indicator phase-mind">🧠 ESPRITS</span>
+                    </div>
+                    <div class="timeline-title">Validation & Légitimité</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>10+ témoignages (dont 3 vidéo)</li>
+                            <li>1er partenariat officiel annoncé</li>
+                            <li>Traductions ES + PT lancées</li>
+                            <li>100 membres Discord actifs</li>
+                            <li>1er article de presse / couverture média</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Mois 3 -->
+                <div class="timeline-item world">
+                    <div class="timeline-header">
+                        <span class="timeline-date">MOIS 3</span>
+                        <span class="phase-indicator phase-world">🌍 MONDE</span>
+                    </div>
+                    <div class="timeline-title">Lancement public</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>Annonce officielle coordonnée (Product Hunt, Hacker News, Reddit)</li>
+                            <li>Campagne de presse simultanée</li>
+                            <li>1er événement IRL (meetup lancement)</li>
+                            <li>Objectif : 1000 utilisateurs actifs</li>
+                            <li>Lancement système de guildes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Mois 4-6 -->
+                <div class="timeline-item world">
+                    <div class="timeline-header">
+                        <span class="timeline-date">MOIS 4-6</span>
+                        <span class="phase-indicator phase-world">🌍 MONDE</span>
+                    </div>
+                    <div class="timeline-title">Scaling & Propagation</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>5000 utilisateurs actifs</li>
+                            <li>Présence dans 10+ pays</li>
+                            <li>5 langues disponibles</li>
+                            <li>Réseau d'ambassadeurs actif</li>
+                            <li>Premiers impacts IRL documentés</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Année 1 -->
+                <div class="timeline-item world">
+                    <div class="timeline-header">
+                        <span class="timeline-date">FIN ANNÉE 1</span>
+                        <span class="phase-indicator phase-world">🌍 MONDE</span>
+                    </div>
+                    <div class="timeline-title">Pandémie Démocratique</div>
+                    <div class="timeline-desc">
+                        <strong>Objectifs :</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-dim);">
+                            <li>50 000 utilisateurs actifs</li>
+                            <li>Présence dans 50+ pays</li>
+                            <li>Impact mesurable sur des campagnes citoyennes</li>
+                            <li>Auto-financement atteint</li>
+                            <li>Le projet se propage sans nous</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: SIMULATION -->
+        <section id="simulation" class="section">
+            <h2 class="section-title">📊 Simulation de Propagation</h2>
+
+            <div class="simulator">
+                <h3 style="margin-bottom: 1.5rem;">Paramètres de propagation virale</h3>
+                
+                <div class="simulator-controls">
+                    <div class="control-group">
+                        <label>Coefficient viral (K)</label>
+                        <input type="range" id="k-factor" min="0.5" max="3" step="0.1" value="1.2" oninput="updateSimulation()">
+                        <div class="control-value" id="k-value">1.2</div>
+                        <small style="color: var(--text-dim);">Combien de personnes chaque utilisateur convertit</small>
+                    </div>
+                    <div class="control-group">
+                        <label>Temps de cycle (jours)</label>
+                        <input type="range" id="cycle-time" min="1" max="30" step="1" value="7" oninput="updateSimulation()">
+                        <div class="control-value" id="cycle-value">7</div>
+                        <small style="color: var(--text-dim);">Temps moyen avant qu'un utilisateur en convertisse d'autres</small>
+                    </div>
+                    <div class="control-group">
+                        <label>Utilisateurs initiaux</label>
+                        <input type="range" id="seed-users" min="10" max="500" step="10" value="50" oninput="updateSimulation()">
+                        <div class="control-value" id="seed-value">50</div>
+                        <small style="color: var(--text-dim);">Nombre d'utilisateurs au lancement</small>
+                    </div>
+                    <div class="control-group">
+                        <label>Taux de rétention (%)</label>
+                        <input type="range" id="retention" min="10" max="90" step="5" value="40" oninput="updateSimulation()">
+                        <div class="control-value" id="retention-value">40%</div>
+                        <small style="color: var(--text-dim);">Pourcentage d'utilisateurs qui restent actifs</small>
+                    </div>
+                </div>
+
+                <div class="projection-chart">
+                    <canvas id="growth-chart" class="chart-canvas"></canvas>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                    <div class="metric" style="text-align: center; padding: 1rem;">
+                        <div class="metric-value" style="color: var(--heart); font-size: 1.5rem;" id="proj-1m">--</div>
+                        <div class="metric-label">À 1 mois</div>
+                    </div>
+                    <div class="metric" style="text-align: center; padding: 1rem;">
+                        <div class="metric-value" style="color: var(--mind); font-size: 1.5rem;" id="proj-3m">--</div>
+                        <div class="metric-label">À 3 mois</div>
+                    </div>
+                    <div class="metric" style="text-align: center; padding: 1rem;">
+                        <div class="metric-value" style="color: var(--world); font-size: 1.5rem;" id="proj-6m">--</div>
+                        <div class="metric-label">À 6 mois</div>
+                    </div>
+                    <div class="metric" style="text-align: center; padding: 1rem;">
+                        <div class="metric-value" style="color: var(--gold); font-size: 1.5rem;" id="proj-12m">--</div>
+                        <div class="metric-label">À 12 mois</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1.5rem; background: var(--void);">
+                    <h4 style="margin-bottom: 0.5rem;">📈 Interprétation</h4>
+                    <p id="interpretation" style="color: var(--text-dim); font-size: 0.9rem;">
+                        Ajustez les paramètres pour voir les projections...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scénarios -->
+            <h3 style="margin: 2rem 0 1rem;">Scénarios de référence</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Scénario</th>
+                        <th>K</th>
+                        <th>Cycle</th>
+                        <th>Rétention</th>
+                        <th>À 6 mois</th>
+                        <th>Probabilité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="cursor: pointer;" onclick="setScenario(0.8, 14, 30)">
+                        <td>😞 Pessimiste</td>
+                        <td>0.8</td>
+                        <td>14j</td>
+                        <td>30%</td>
+                        <td>~200</td>
+                        <td>Si pas d'effort distribution</td>
+                    </tr>
+                    <tr style="cursor: pointer;" onclick="setScenario(1.2, 7, 40)">
+                        <td>😐 Réaliste</td>
+                        <td>1.2</td>
+                        <td>7j</td>
+                        <td>40%</td>
+                        <td>~5 000</td>
+                        <td>Avec efforts modérés</td>
+                    </tr>
+                    <tr style="cursor: pointer;" onclick="setScenario(1.8, 5, 50)">
+                        <td>🙂 Optimiste</td>
+                        <td>1.8</td>
+                        <td>5j</td>
+                        <td>50%</td>
+                        <td>~50 000</td>
+                        <td>Si tout se passe bien</td>
+                    </tr>
+                    <tr style="cursor: pointer;" onclick="setScenario(2.5, 3, 60)">
+                        <td>🚀 Viral</td>
+                        <td>2.5</td>
+                        <td>3j</td>
+                        <td>60%</td>
+                        <td>~500 000</td>
+                        <td>Buzz massif + timing parfait</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION: MANIFESTE -->
+        <section id="manifeste" class="section">
+            <h2 class="section-title">📜 Manifeste de Conquête</h2>
+
+            <div class="manifeste">
+                <h2>Ce qu'il manque vraiment</h2>
+                <p>
+                    Après analyse complète, voici la vérité nue :
+                </p>
+                <p>
+                    <strong>Le produit est prêt.</strong> Les outils fonctionnent. La philosophie est claire. 
+                    L'architecture est solide. La documentation existe. La gamification engage.
+                </p>
+                <p>
+                    <strong>Ce qui manque, c'est le COURAGE de lancer.</strong>
+                </p>
+                <p>
+                    On peut toujours ajouter une feature, peaufiner un design, écrire une doc de plus. 
+                    Mais à un moment, il faut <em>appuyer sur le bouton</em>.
+                </p>
+                <p>
+                    Les 3 actions qui séparent ce projet de son destin :
+                </p>
+                <p>
+                    <strong>1. HÉBERGER</strong> — Mettre en ligne. Maintenant. Aujourd'hui. 
+                    GitHub Pages, 5 minutes, gratuit, c'est fait.
+                </p>
+                <p>
+                    <strong>2. COMMUNIQUER</strong> — Créer le Discord. Poster la première annonce. 
+                    Envoyer le premier mail aux 96 contacts. La flemme n'est plus une excuse.
+                </p>
+                <p>
+                    <em>3. ITÉRER</em> — Le reste viendra. Les témoignages, les partenariats, 
+                    les traductions, les vidéos. Mais seulement si le projet EXISTE d'abord.
+                </p>
+                <p style="font-size: 1.25rem; margin-top: 2rem; text-align: center;">
+                    <strong>"Un projet parfait qui n'existe pas<br>
+                    vaut moins qu'un projet imparfait qui se propage."</strong>
+                </p>
+            </div>
+
+            <div class="action-grid">
+                <button class="action-btn primary" onclick="generateLaunchChecklist()">
+                    🚀 Générer checklist de lancement
+                </button>
+                <button class="action-btn secondary" onclick="exportStrategy()">
+                    📄 Exporter la stratégie
+                </button>
+                <button class="action-btn secondary" onclick="window.open('vive-la-flemme.html')">
+                    🛋️ Ouvrir V!VE la Flemme
+                </button>
+                <button class="action-btn secondary" onclick="window.open('checklist-mondiale.html')">
+                    📋 Voir la checklist complète
+                </button>
+            </div>
+
+            <!-- Final verdict -->
+            <div class="card" style="margin-top: 2rem; border-color: var(--gold); background: linear-gradient(135deg, rgba(255,214,10,0.1), transparent);">
+                <h3 style="color: var(--gold); margin-bottom: 1rem;">🎯 VERDICT FINAL</h3>
+                <table class="data-table" style="margin-bottom: 1rem;">
+                    <tr>
+                        <td>Produit</td>
+                        <td style="color: var(--world); font-weight: bold;">PRÊT ✓</td>
+                    </tr>
+                    <tr>
+                        <td>Documentation</td>
+                        <td style="color: var(--world); font-weight: bold;">PRÊTE ✓</td>
+                    </tr>
+                    <tr>
+                        <td>Distribution</td>
+                        <td style="color: var(--danger); font-weight: bold;">MANQUANTE ✗</td>
+                    </tr>
+                    <tr>
+                        <td>Communauté</td>
+                        <td style="color: var(--danger); font-weight: bold;">MANQUANTE ✗</td>
+                    </tr>
+                    <tr>
+                        <td>Internationalisation</td>
+                        <td style="color: var(--gold); font-weight: bold;">PARTIELLE ~</td>
+                    </tr>
+                </table>
+                <p style="font-size: 1.1rem;">
+                    <strong>Temps estimé pour être prêt au lancement : 48-72 heures</strong><br>
+                    <span style="color: var(--text-dim);">Hébergement (1h) + Discord (30min) + Premiers contacts (2h) + Vidéo basique (4h)</span>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            🔮 EXTRAPOLATION — Module de stratégie pour conquête mondiale<br>
+            <span style="color: var(--mind);">"Analyze. Strategize. Conquer."</span>
+        </p>
+    </footer>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal">
+            <h3>📄 Export de la stratégie</h3>
+            <pre id="export-content"></pre>
+            <div style="display: flex; gap: 1rem;">
+                <button class="action-btn secondary" style="flex: 1;" onclick="copyExport()">📋 Copier</button>
+                <button class="action-btn secondary" style="flex: 1;" onclick="closeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelector(`[data-section="${id}"]`).classList.add('active');
+        }
+
+        // Simulation
+        let chart = null;
+
+        function updateSimulation() {
+            const k = parseFloat(document.getElementById('k-factor').value);
+            const cycle = parseInt(document.getElementById('cycle-time').value);
+            const seed = parseInt(document.getElementById('seed-users').value);
+            const retention = parseInt(document.getElementById('retention').value) / 100;
+
+            document.getElementById('k-value').textContent = k.toFixed(1);
+            document.getElementById('cycle-value').textContent = cycle;
+            document.getElementById('seed-value').textContent = seed;
+            document.getElementById('retention-value').textContent = Math.round(retention * 100) + '%';
+
+            // Calculate projections
+            const days = 365;
+            const data = [];
+            let users = seed;
+            
+            for (let d = 0; d <= days; d++) {
+                data.push({ day: d, users: Math.round(users) });
+                if (d % cycle === 0 && d > 0) {
+                    const newUsers = users * k * retention;
+                    users += newUsers;
+                }
+            }
+
+            // Update projections
+            const proj1m = data.find(d => d.day >= 30)?.users || seed;
+            const proj3m = data.find(d => d.day >= 90)?.users || seed;
+            const proj6m = data.find(d => d.day >= 180)?.users || seed;
+            const proj12m = data.find(d => d.day >= 365)?.users || seed;
+
+            document.getElementById('proj-1m').textContent = formatNumber(proj1m);
+            document.getElementById('proj-3m').textContent = formatNumber(proj3m);
+            document.getElementById('proj-6m').textContent = formatNumber(proj6m);
+            document.getElementById('proj-12m').textContent = formatNumber(proj12m);
+
+            // Interpretation
+            let interp = '';
+            if (k < 1) {
+                interp = `⚠️ Avec K=${k}, le projet DÉCLINE. Chaque utilisateur n'en convertit pas assez pour maintenir la croissance. Il faut améliorer le coefficient viral (meilleure émotion, moins de friction).`;
+            } else if (k < 1.5) {
+                interp = `📈 Croissance LINÉAIRE. Le projet grandit mais lentement. Pour accélérer : améliorer le K (plus d'émotion), réduire le cycle (faciliter le partage), augmenter la rétention (communauté).`;
+            } else if (k < 2) {
+                interp = `🚀 Croissance EXPONENTIELLE modérée. Le projet se propage bien. Avec ${formatNumber(proj6m)} utilisateurs à 6 mois, c'est un succès. Maintenir les efforts de distribution.`;
+            } else {
+                interp = `🔥 VIRALITÉ ! Avec K=${k}, le projet explose. ${formatNumber(proj6m)} à 6 mois est atteignable si les serveurs suivent. Préparer l'infrastructure et la modération communautaire.`;
+            }
+            document.getElementById('interpretation').textContent = interp;
+
+            // Draw chart
+            drawChart(data.filter((_, i) => i % 7 === 0)); // Weekly data points
+        }
+
+        function formatNumber(n) {
+            if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+            if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+            return n.toString();
+        }
+
+        function drawChart(data) {
+            const canvas = document.getElementById('growth-chart');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = canvas.parentElement.clientWidth - 48;
+            canvas.height = 250;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 50;
+            const width = canvas.width - padding * 2;
+            const height = canvas.height - padding * 2;
+            
+            const maxUsers = Math.max(...data.map(d => d.users));
+            const maxDay = Math.max(...data.map(d => d.day));
+            
+            // Grid
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (height / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(padding + width, y);
+                ctx.stroke();
+            }
+            
+            // Line
+            ctx.beginPath();
+            ctx.strokeStyle = '#8338ec';
+            ctx.lineWidth = 3;
+            data.forEach((d, i) => {
+                const x = padding + (d.day / maxDay) * width;
+                const y = padding + height - (d.users / maxUsers) * height;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            
+            // Fill
+            ctx.lineTo(padding + width, padding + height);
+            ctx.lineTo(padding, padding + height);
+            ctx.closePath();
+            const gradient = ctx.createLinearGradient(0, padding, 0, padding + height);
+            gradient.addColorStop(0, 'rgba(131, 56, 236, 0.3)');
+            gradient.addColorStop(1, 'rgba(131, 56, 236, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#8888aa';
+            ctx.font = '12px Fira Code';
+            ctx.fillText('0', padding - 30, padding + height);
+            ctx.fillText(formatNumber(maxUsers), padding - 45, padding + 15);
+            ctx.fillText('Jour 0', padding, padding + height + 20);
+            ctx.fillText(`Jour ${maxDay}`, padding + width - 40, padding + height + 20);
+        }
+
+        function setScenario(k, cycle, retention) {
+            document.getElementById('k-factor').value = k;
+            document.getElementById('cycle-time').value = cycle;
+            document.getElementById('retention').value = retention;
+            updateSimulation();
+        }
+
+        // Export
+        function exportStrategy() {
+            const content = `# STRATÉGIE DE CONQUÊTE MONDIALE
+## Virus Démocratique
+
+### DIAGNOSTIC
+- Phase Cœurs: 30%
+- Phase Esprits: 70%
+- Phase Monde: 10%
+
+### GAPS CRITIQUES
+1. Hébergement public (GitHub Pages)
+2. Version anglaise complète
+3. Communauté Discord/Matrix
+
+### ROADMAP
+- Semaine 1: Fondations distribution
+- Semaine 2: Émotion & Social Proof
+- Semaines 3-4: Internationalisation
+- Mois 2: Validation & Légitimité
+- Mois 3: Lancement public
+
+### PROCHAINES ACTIONS
+[ ] Héberger sur GitHub Pages
+[ ] Créer serveur Discord
+[ ] Enregistrer vidéo teaser
+[ ] Contacter 20 premiers contacts
+[ ] Recruter 10 beta-testeurs
+
+Généré le ${new Date().toLocaleDateString('fr-FR')}
+`;
+            document.getElementById('export-content').textContent = content;
+            document.getElementById('export-modal').classList.add('show');
+        }
+
+        function generateLaunchChecklist() {
+            const content = `# CHECKLIST DE LANCEMENT - 48H
+
+## HEURE 0-2: Infrastructure
+[ ] Créer repo GitHub
+[ ] Activer GitHub Pages
+[ ] Acheter domaine (optionnel)
+[ ] Configurer DNS
+
+## HEURE 2-4: Communauté
+[ ] Créer serveur Discord
+[ ] Configurer canaux de base
+[ ] Rédiger message de bienvenue
+[ ] Inviter 5 personnes de confiance
+
+## HEURE 4-8: Contenu
+[ ] Enregistrer vidéo teaser (screen + voix)
+[ ] Créer 5 visuels partageables
+[ ] Rédiger 3 posts réseaux sociaux
+[ ] Préparer email type pour contacts
+
+## HEURE 8-24: Distribution
+[ ] Poster sur réseaux persos
+[ ] Envoyer 20 premiers emails (V!VE la Flemme)
+[ ] Partager lien Discord
+[ ] Créer fil Twitter/Mastodon
+
+## HEURE 24-48: Suivi
+[ ] Répondre aux premiers retours
+[ ] Collecter premiers témoignages
+[ ] Itérer sur feedback
+[ ] Planifier semaine 2
+
+GO TIME: ${new Date(Date.now() + 48*60*60*1000).toLocaleDateString('fr-FR')}
+`;
+            document.getElementById('export-content').textContent = content;
+            document.getElementById('export-modal').classList.add('show');
+        }
+
+        function copyExport() {
+            const content = document.getElementById('export-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Copié !');
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('export-modal').classList.remove('show');
+        }
+
+        // Init
+        window.addEventListener('resize', updateSimulation);
+        updateSimulation();
+
+        // Console
+        console.log(`
+%c🔮 EXTRAPOLATION
+%c
+Module de stratégie pour conquête mondiale.
+
+Résumé exécutif:
+- Produit: PRÊT
+- Distribution: MANQUANTE
+- Action requise: LANCER
+
+Temps jusqu'au lancement: 48h
+        `,
+        'color: #8338ec; font-size: 24px; font-weight: bold;',
+        'color: #888; font-size: 12px;'
+        );
+    </script>
+</body>
+</html>

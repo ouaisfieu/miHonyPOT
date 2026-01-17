@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auderghem Démocratie Directe - Proof of Concept</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.3/Recharts.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a2e;
+      --accent-1: #FF6B6B;
+      --accent-2: #4ECDC4;
+      --accent-3: #45B7D1;
+      --accent-4: #96CEB4;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.4);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+    
+    #root { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+    const { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } = Recharts;
+
+    // ══════════════════════════════════════════════════════════════════════════════
+    // 🏛️ AUDERGHEM DÉMOCRATIE DIRECTE - PROOF OF CONCEPT ULTIME
+    // ══════════════════════════════════════════════════════════════════════════════
+
+    const QUARTIERS = [
+      { id: 1, nom: 'Transvaal', population: 4200, participation: 8.2, color: '#FF6B6B' },
+      { id: 2, nom: 'Blankedelle', population: 3800, participation: 7.5, color: '#4ECDC4' },
+      { id: 3, nom: 'Valduchesse', population: 2900, participation: 9.1, color: '#45B7D1' },
+      { id: 4, nom: 'Petite Espinette', population: 3100, participation: 6.8, color: '#96CEB4' },
+      { id: 5, nom: 'Pinoy', population: 4500, participation: 7.2, color: '#FFEAA7' },
+      { id: 6, nom: 'Herrmann-Debroux', population: 3600, participation: 5.9, color: '#DDA0DD' },
+      { id: 7, nom: 'Chant d\'Oiseau', population: 4100, participation: 8.8, color: '#98D8C8' },
+      { id: 8, nom: 'Trois Tilleuls', population: 3400, participation: 7.9, color: '#F7DC6F' },
+      { id: 9, nom: 'Tenreuken', population: 2800, participation: 6.5, color: '#BB8FCE' },
+      { id: 10, nom: 'Rouge-Cloître', population: 3300, participation: 8.4, color: '#85C1E9' }
+    ];
+
+    const PROPOSITIONS = [
+      { id: 1, titre: 'Piste cyclable Avenue des Nerviens', votes: 456, budget: 85000, statut: 'approved', categorie: 'mobilité', sentiment: 0.87 },
+      { id: 2, titre: 'Potager collectif Parc Seny', votes: 342, budget: 45000, statut: 'voting', categorie: 'environnement', sentiment: 0.92 },
+      { id: 3, titre: 'Zone 30 autour des écoles', votes: 389, budget: 95000, statut: 'approved', categorie: 'sécurité', sentiment: 0.78 },
+      { id: 4, titre: 'Fontaines à eau potable', votes: 287, budget: 35000, statut: 'voting', categorie: 'équipement', sentiment: 0.95 },
+      { id: 5, titre: 'Rénovation Place Pinoy', votes: 523, budget: 250000, statut: 'voting', categorie: 'urbanisme', sentiment: 0.84 },
+      { id: 6, titre: 'Composteurs de quartier', votes: 198, budget: 15000, statut: 'approved', categorie: 'environnement', sentiment: 0.96 },
+    ];
+
+    const AIR_DATA = [
+      { time: '00h', PM25: 12, aqi: 42 },
+      { time: '04h', PM25: 10, aqi: 38 },
+      { time: '08h', PM25: 28, aqi: 72 },
+      { time: '12h', PM25: 22, aqi: 61 },
+      { time: '16h', PM25: 25, aqi: 67 },
+      { time: '20h', PM25: 18, aqi: 52 },
+      { time: 'Now', PM25: 15, aqi: 45 },
+    ];
+
+    const CLUSTERS = [
+      { id: 'A', name: 'Mobilité douce', pct: 34, color: '#FF6B6B', members: 423 },
+      { id: 'B', name: 'Équilibre pragmatique', pct: 38, color: '#4ECDC4', members: 475 },
+      { id: 'C', name: 'Préservation capacité', pct: 28, color: '#45B7D1', members: 350 },
+    ];
+
+    // Particules animées Canvas
+    const ParticleCanvas = () => {
+      const canvasRef = useRef(null);
+      
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+        
+        const resize = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        
+        for (let i = 0; i < 100; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: Math.random() * 2 + 1,
+            opacity: Math.random() * 0.5 + 0.1
+          });
+        }
+        
+        const animate = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          particles.forEach((p, i) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(78, 205, 196, ${p.opacity})`;
+            ctx.fill();
+            
+            particles.slice(i + 1).forEach(p2 => {
+              const dx = p.x - p2.x;
+              const dy = p.y - p2.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.strokeStyle = `rgba(78, 205, 196, ${0.15 * (1 - dist / 120)})`;
+                ctx.stroke();
+              }
+            });
+          });
+          
+          animationId = requestAnimationFrame(animate);
+        };
+        animate();
+        
+        return () => {
+          window.removeEventListener('resize', resize);
+          cancelAnimationFrame(animationId);
+        };
+      }, []);
+      
+      return <canvas ref={canvasRef} style={{
+        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+        pointerEvents: 'none', zIndex: 0
+      }} />;
+    };
+
+    // Compteur animé
+    const AnimatedNumber = ({ value, duration = 2000 }) => {
+      const [count, setCount] = useState(0);
+      
+      useEffect(() => {
+        const start = Date.now();
+        const tick = () => {
+          const elapsed = Date.now() - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          setCount(Math.floor(value * ease));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        tick();
+      }, [value, duration]);
+      
+      return <span>{count.toLocaleString()}</span>;
+    };
+
+    // Composant Vote Quadratique
+    const QuadraticVote = ({ proposition, credits, onVote }) => {
+      const [votes, setVotes] = useState(0);
+      const cost = votes * votes;
+      const maxVotes = Math.floor(Math.sqrt(credits));
+      
+      return (
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '20px',
+          padding: '24px',
+          border: '1px solid rgba(255,255,255,0.05)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-4px)';
+          e.currentTarget.style.borderColor = 'rgba(78,205,196,0.3)';
+          e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+          e.currentTarget.style.boxShadow = 'none';
+        }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <span style={{
+              padding: '4px 12px',
+              borderRadius: '100px',
+              fontSize: '11px',
+              fontWeight: '600',
+              background: proposition.statut === 'voting' ? 'rgba(155,89,182,0.2)' : 'rgba(78,205,196,0.2)',
+              color: proposition.statut === 'voting' ? '#bb8fce' : '#4ECDC4'
+            }}>
+              {proposition.statut === 'voting' ? '🗳️ EN VOTE' : '✅ APPROUVÉ'}
+            </span>
+            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' }}>
+              {proposition.categorie}
+            </span>
+          </div>
+          
+          <h3 style={{ fontFamily: 'Space Grotesk', fontSize: '18px', marginBottom: '16px' }}>
+            {proposition.titre}
+          </h3>
+          
+          <div style={{ display: 'flex', gap: '24px', marginBottom: '20px' }}>
+            <div>
+              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '20px', color: '#4ECDC4' }}>{proposition.votes}</span>
+              <span style={{ display: 'block', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>VOTES</span>
+            </div>
+            <div>
+              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '20px', color: '#4ECDC4' }}>€{(proposition.budget/1000)}K</span>
+              <span style={{ display: 'block', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>BUDGET</span>
+            </div>
+            <div>
+              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '20px', color: '#4ECDC4' }}>{Math.round(proposition.sentiment*100)}%</span>
+              <span style={{ display: 'block', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>SENTIMENT</span>
+            </div>
+          </div>
+          
+          {proposition.statut === 'voting' && (
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '20px' }}>
+              <input
+                type="range"
+                min="0"
+                max={maxVotes}
+                value={votes}
+                onChange={e => setVotes(parseInt(e.target.value))}
+                style={{
+                  width: '100%',
+                  height: '8px',
+                  borderRadius: '4px',
+                  background: 'rgba(255,255,255,0.1)',
+                  WebkitAppearance: 'none',
+                  marginBottom: '12px'
+                }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '16px' }}>
+                <span style={{ color: 'rgba(255,255,255,0.4)' }}>Votes: <strong style={{ color: '#4ECDC4' }}>{votes}</strong></span>
+                <span style={{ color: 'rgba(255,255,255,0.4)' }}>Coût: <strong style={{ color: '#FF6B6B' }}>{cost}</strong> crédits</span>
+              </div>
+              <button
+                disabled={cost > credits}
+                onClick={() => onVote(proposition.id, votes)}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: cost > credits ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #4ECDC4, #45B7D1)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: 'white',
+                  fontWeight: '600',
+                  cursor: cost > credits ? 'not-allowed' : 'pointer',
+                  opacity: cost > credits ? 0.5 : 1
+                }}
+              >
+                Voter {votes} fois ({votes}² = {cost} crédits)
+              </button>
+            </div>
+          )}
+          
+          <div style={{
+            height: '4px',
+            background: 'rgba(255,255,255,0.1)',
+            borderRadius: '2px',
+            marginTop: '16px',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              width: `${proposition.sentiment * 100}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, #FF6B6B, #4ECDC4)',
+              borderRadius: '2px'
+            }} />
+          </div>
+        </div>
+      );
+    };
+
+    // Composant Délibération Pol.is
+    const DeliberationPanel = () => {
+      const [activeCluster, setActiveCluster] = useState(null);
+      
+      return (
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '20px',
+          padding: '32px',
+          border: '1px solid rgba(255,255,255,0.05)'
+        }}>
+          <div style={{ marginBottom: '32px', textAlign: 'center' }}>
+            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: '24px', marginBottom: '8px' }}>
+              🗣️ PAD Herrmann-Debroux
+            </h3>
+            <p style={{ color: 'rgba(255,255,255,0.5)' }}>
+              1,248 participants • 3,892 opinions • 12 consensus identifiés
+            </p>
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '32px' }}>
+            {CLUSTERS.map(c => (
+              <div
+                key={c.id}
+                onClick={() => setActiveCluster(activeCluster === c.id ? null : c.id)}
+                style={{
+                  width: `${c.pct * 2.5}px`,
+                  minWidth: '120px',
+                  height: `${c.pct * 2.5}px`,
+                  minHeight: '120px',
+                  borderRadius: '50%',
+                  background: c.color,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  transform: activeCluster === c.id ? 'scale(1.15)' : 'scale(1)',
+                  boxShadow: activeCluster === c.id ? `0 20px 60px ${c.color}50` : 'none'
+                }}
+              >
+                <span style={{ fontSize: '10px', opacity: 0.7 }}>Groupe {c.id}</span>
+                <span style={{ fontFamily: 'Space Grotesk', fontSize: '32px', fontWeight: '700' }}>{c.pct}%</span>
+                <span style={{ fontSize: '10px', textAlign: 'center', maxWidth: '80px' }}>{c.name}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div style={{
+            background: 'rgba(78,205,196,0.05)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid rgba(78,205,196,0.2)'
+          }}>
+            <h4 style={{ color: '#4ECDC4', marginBottom: '16px' }}>✅ Points de consensus ({'>'}75%)</h4>
+            {[
+              { text: 'Parkings relais opérationnels AVANT démolition', pct: 92 },
+              { text: 'Transports en commun à renforcer', pct: 87 },
+              { text: 'Protection des riverains contre le transit', pct: 79 }
+            ].map((item, i) => (
+              <div key={i} style={{
+                position: 'relative',
+                padding: '12px 16px',
+                background: 'rgba(255,255,255,0.03)',
+                borderRadius: '8px',
+                marginBottom: '8px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  left: 0, top: 0, height: '100%',
+                  width: `${item.pct}%`,
+                  background: 'rgba(78,205,196,0.1)'
+                }} />
+                <span style={{ position: 'relative', zIndex: 1 }}>{item.text}</span>
+                <span style={{ position: 'relative', zIndex: 1, fontFamily: 'JetBrains Mono', color: '#4ECDC4' }}>{item.pct}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // Composant Science Citoyenne
+    const SciencePanel = () => {
+      const currentAQI = AIR_DATA[AIR_DATA.length - 1].aqi;
+      const aqiColor = currentAQI <= 50 ? '#27ae60' : currentAQI <= 100 ? '#f39c12' : '#e74c3c';
+      
+      return (
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '20px',
+          padding: '32px',
+          border: '1px solid rgba(255,255,255,0.05)'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: '24px' }}>🔬 Science Citoyenne Live</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>12 capteurs actifs</span>
+              <div style={{
+                width: '8px', height: '8px',
+                background: '#4ECDC4',
+                borderRadius: '50%',
+                animation: 'pulse 1s ease infinite'
+              }} />
+            </div>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '32px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <svg viewBox="0 0 120 120" style={{ width: '160px' }}>
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                <circle
+                  cx="60" cy="60" r="54"
+                  fill="none"
+                  stroke={aqiColor}
+                  strokeWidth="8"
+                  strokeDasharray={`${(currentAQI / 200) * 339} 339`}
+                  strokeLinecap="round"
+                  transform="rotate(-90 60 60)"
+                  style={{ transition: 'stroke-dasharray 1s ease' }}
+                />
+                <text x="60" y="55" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">{currentAQI}</text>
+                <text x="60" y="75" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="10">Indice Qualité Air</text>
+              </svg>
+              <div style={{ marginTop: '16px', color: aqiColor, fontWeight: '600' }}>
+                {currentAQI <= 50 ? '🟢 Bon' : currentAQI <= 100 ? '🟡 Modéré' : '🟠 Dégradé'}
+              </div>
+            </div>
+            
+            <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '16px' }}>
+              <ResponsiveContainer width="100%" height={150}>
+                <AreaChart data={AIR_DATA}>
+                  <defs>
+                    <linearGradient id="airGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4ECDC4" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#4ECDC4" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="time" stroke="rgba(255,255,255,0.3)" tick={{ fontSize: 10 }} />
+                  <YAxis stroke="rgba(255,255,255,0.3)" tick={{ fontSize: 10 }} />
+                  <Tooltip contentStyle={{ background: '#1a1a2e', border: 'none', borderRadius: '8px' }} />
+                  <Area type="monotone" dataKey="PM25" stroke="#4ECDC4" fill="url(#airGrad)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Application principale
+    const App = () => {
+      const [section, setSection] = useState('hero');
+      const [credits, setCredits] = useState(100);
+      const [showOnboarding, setShowOnboarding] = useState(true);
+      const [stats, setStats] = useState({ participants: 2847, votes: 18923, propositions: 147 });
+      
+      // Live updates
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setStats(s => ({
+            participants: s.participants + Math.floor(Math.random() * 2),
+            votes: s.votes + Math.floor(Math.random() * 4),
+            propositions: s.propositions + (Math.random() > 0.98 ? 1 : 0)
+          }));
+        }, 3000);
+        return () => clearInterval(interval);
+      }, []);
+      
+      const handleVote = (id, numVotes) => {
+        const cost = numVotes * numVotes;
+        if (cost <= credits) {
+          setCredits(c => c - cost);
+          setStats(s => ({ ...s, votes: s.votes + numVotes }));
+        }
+      };
+      
+      return (
+        <div style={{ minHeight: '100vh', position: 'relative' }}>
+          <ParticleCanvas />
+          
+          {/* Onboarding */}
+          {showOnboarding && (
+            <div style={{
+              position: 'fixed',
+              top: 0, left: 0, width: '100%', height: '100%',
+              background: 'rgba(0,0,0,0.95)',
+              zIndex: 10000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <div style={{
+                width: '90%',
+                maxWidth: '600px',
+                background: 'linear-gradient(180deg, #1a1a2e, #12121a)',
+                borderRadius: '24px',
+                padding: '60px',
+                textAlign: 'center',
+                border: '1px solid rgba(255,255,255,0.1)'
+              }}>
+                <div style={{ fontSize: '64px', marginBottom: '24px', animation: 'pulse 2s ease infinite' }}>◈</div>
+                <h1 style={{
+                  fontFamily: 'Space Grotesk',
+                  fontSize: '32px',
+                  marginBottom: '16px',
+                  background: 'linear-gradient(90deg, #fff, #4ECDC4)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>
+                  Bienvenue dans le futur
+                </h1>
+                <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '32px', lineHeight: 1.6 }}>
+                  Auderghem devient la première commune francophone à déployer une plateforme intégrée de démocratie directe.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '40px' }}>
+                  {[
+                    { icon: '🗳️', label: 'Vote quadratique' },
+                    { icon: '🔬', label: 'Science citoyenne' },
+                    { icon: '🗣️', label: 'Délibération' },
+                    { icon: '🔐', label: 'Souveraineté' }
+                  ].map((f, i) => (
+                    <div key={i} style={{
+                      padding: '16px',
+                      background: 'rgba(255,255,255,0.03)',
+                      borderRadius: '12px',
+                      border: '1px solid rgba(255,255,255,0.05)'
+                    }}>
+                      <div style={{ fontSize: '24px', marginBottom: '8px' }}>{f.icon}</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{f.label}</div>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setShowOnboarding(false)}
+                  style={{
+                    padding: '16px 48px',
+                    background: 'linear-gradient(135deg, #4ECDC4, #45B7D1)',
+                    border: 'none',
+                    borderRadius: '100px',
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Découvrir la plateforme →
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Navigation */}
+          <nav style={{
+            position: 'fixed',
+            top: 0, left: 0, width: '100%',
+            padding: '16px 32px',
+            background: 'rgba(10,10,15,0.9)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid rgba(255,255,255,0.05)',
+            zIndex: 1000,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '32px', color: '#4ECDC4' }}>◈</span>
+              <div>
+                <div style={{ fontFamily: 'Space Grotesk', fontSize: '18px', fontWeight: '700', letterSpacing: '2px' }}>AUDERGHEM</div>
+                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '3px' }}>DÉMOCRATIE DIRECTE</div>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {[
+                { id: 'hero', label: '🏠 Accueil' },
+                { id: 'vote', label: '🗳️ Voter' },
+                { id: 'deliberation', label: '🗣️ Délibérer' },
+                { id: 'science', label: '🔬 Science' }
+              ].map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setSection(item.id)}
+                  style={{
+                    padding: '10px 16px',
+                    background: section === item.id ? 'rgba(78,205,196,0.15)' : 'transparent',
+                    border: 'none',
+                    borderRadius: '100px',
+                    color: section === item.id ? '#4ECDC4' : 'rgba(255,255,255,0.6)',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '100px'
+              }}>
+                <span>💎</span>
+                <span style={{ fontFamily: 'JetBrains Mono', color: '#4ECDC4', fontWeight: '600' }}>{credits}</span>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>crédits</span>
+              </div>
+              <button style={{
+                padding: '10px 20px',
+                background: 'linear-gradient(135deg, #4ECDC4, #45B7D1)',
+                border: 'none',
+                borderRadius: '100px',
+                color: 'white',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}>
+                Connexion itsme®
+              </button>
+            </div>
+          </nav>
+          
+          {/* Hero Section */}
+          {section === 'hero' && (
+            <section style={{
+              minHeight: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '120px 32px',
+              textAlign: 'center',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              <div style={{
+                padding: '8px 20px',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '100px',
+                fontSize: '14px',
+                marginBottom: '32px'
+              }}>
+                🏛️ Première en Belgique francophone
+              </div>
+              
+              <h1 style={{
+                fontFamily: 'Space Grotesk',
+                fontSize: '72px',
+                fontWeight: '700',
+                lineHeight: 1.1,
+                marginBottom: '24px'
+              }}>
+                <span style={{ display: 'block' }}>La démocratie</span>
+                <span style={{
+                  display: 'block',
+                  background: 'linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>réinventée</span>
+              </h1>
+              
+              <p style={{ fontSize: '22px', color: 'rgba(255,255,255,0.6)', marginBottom: '48px' }}>
+                35,698 citoyens. Une plateforme. Zéro intermédiaire.
+              </p>
+              
+              <div style={{ display: 'flex', gap: '48px', marginBottom: '48px' }}>
+                {[
+                  { value: stats.participants, label: 'Participants', live: true },
+                  { value: stats.propositions, label: 'Propositions' },
+                  { value: stats.votes, label: 'Votes' },
+                  { value: 34, label: 'Réalisés' }
+                ].map((s, i) => (
+                  <div key={i} style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'Space Grotesk', fontSize: '48px', fontWeight: '700' }}>
+                      <AnimatedNumber value={s.value} />
+                    </div>
+                    <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)' }}>{s.label}</div>
+                    {s.live && <div style={{ fontSize: '10px', color: '#FF6B6B', marginTop: '4px' }}>● LIVE</div>}
+                  </div>
+                ))}
+              </div>
+              
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <button
+                  onClick={() => setSection('vote')}
+                  style={{
+                    padding: '16px 32px',
+                    background: 'linear-gradient(135deg, #4ECDC4, #45B7D1)',
+                    border: 'none',
+                    borderRadius: '100px',
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Commencer à voter
+                </button>
+                <button
+                  onClick={() => setSection('deliberation')}
+                  style={{
+                    padding: '16px 32px',
+                    background: 'transparent',
+                    border: '2px solid rgba(255,255,255,0.2)',
+                    borderRadius: '100px',
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Explorer les débats
+                </button>
+              </div>
+            </section>
+          )}
+          
+          {/* Vote Section */}
+          {section === 'vote' && (
+            <section style={{ padding: '120px 32px', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+              <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                <h2 style={{ fontFamily: 'Space Grotesk', fontSize: '42px', marginBottom: '12px' }}>💡 Propositions Citoyennes</h2>
+                <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '24px' }}>Vote quadratique : exprimez l'intensité de vos préférences</p>
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 24px',
+                  background: 'rgba(78,205,196,0.1)',
+                  borderRadius: '100px'
+                }}>
+                  <span>💎</span>
+                  <span>Vous avez <strong style={{ color: '#4ECDC4' }}>{credits} crédits</strong>. Coût = votes²</span>
+                </div>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '24px' }}>
+                {PROPOSITIONS.map(p => (
+                  <QuadraticVote key={p.id} proposition={p} credits={credits} onVote={handleVote} />
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {/* Délibération Section */}
+          {section === 'deliberation' && (
+            <section style={{ padding: '120px 32px', maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+              <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                <h2 style={{ fontFamily: 'Space Grotesk', fontSize: '42px', marginBottom: '12px' }}>🗣️ Espace Délibératif</h2>
+                <p style={{ color: 'rgba(255,255,255,0.6)' }}>Dialogue structuré inspiré de Pol.is et vTaiwan</p>
+              </div>
+              
+              <DeliberationPanel />
+            </section>
+          )}
+          
+          {/* Science Section */}
+          {section === 'science' && (
+            <section style={{ padding: '120px 32px', maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+              <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                <h2 style={{ fontFamily: 'Space Grotesk', fontSize: '42px', marginBottom: '12px' }}>🔬 Science Citoyenne</h2>
+                <p style={{ color: 'rgba(255,255,255,0.6)' }}>Données collectées par les habitants d'Auderghem</p>
+              </div>
+              
+              <SciencePanel />
+            </section>
+          )}
+          
+          {/* Footer */}
+          <footer style={{
+            background: 'rgba(18,18,26,0.9)',
+            padding: '48px 32px',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            textAlign: 'center',
+            position: 'relative',
+            zIndex: 1
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+              <span style={{ fontSize: '32px', color: '#4ECDC4' }}>◈</span>
+              <span style={{ fontFamily: 'Space Grotesk', fontSize: '18px', fontWeight: '700' }}>AUDERGHEM</span>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>
+              © 2025 Commune d'Auderghem • 100% Open Source • Propulsé par Decidim, Solid & Pol.is
+            </p>
+          </footer>
+          
+          <style>{`
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.5; }
+            }
+            
+            input[type="range"]::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: #4ECDC4;
+              cursor: pointer;
+              box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+            }
+          `}</style>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

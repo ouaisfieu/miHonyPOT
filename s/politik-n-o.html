@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📜 POLITIQUE DU NOUGAT — Documentation Juridique & Éthique</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #faf9f7;
+            --bg-alt: #f5f3ef;
+            --text: #1a1a1a;
+            --text-dim: #555;
+            --text-muted: #888;
+            --accent: #8b5a2b;
+            --accent-light: #d4a574;
+            --accent-dark: #5c3d1e;
+            --nougat: #e8d4b8;
+            --honey: #daa520;
+            --almond: #efdecd;
+            --border: #e0dcd4;
+            --success: #2d6a4f;
+            --warning: #b45309;
+            --danger: #991b1b;
+            --info: #1e40af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 0.75rem 2rem;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Main content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; margin-top: 0; }
+        h2 { font-size: 1.75rem; border-bottom: 2px solid var(--nougat); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.35rem; color: var(--accent-dark); }
+        h4 { font-size: 1.1rem; }
+
+        p { margin-bottom: 1.25rem; }
+
+        a { color: var(--accent); }
+
+        strong { font-weight: 600; }
+
+        em { font-style: italic; }
+
+        blockquote {
+            border-left: 4px solid var(--nougat);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--bg-alt);
+            font-style: italic;
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 0.5rem;
+            font-style: normal;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            background: var(--almond);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            background: var(--text);
+            color: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+
+        li { margin-bottom: 0.5rem; }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--nougat), transparent);
+            margin: 3rem 0;
+        }
+
+        /* Special boxes */
+        .box {
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .box-nougat {
+            background: linear-gradient(135deg, var(--nougat), var(--almond));
+            border: 1px solid var(--accent-light);
+        }
+
+        .box-legal {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--info);
+        }
+
+        .box-warning {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-left: 4px solid var(--warning);
+        }
+
+        .box-success {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            border-left: 4px solid var(--success);
+        }
+
+        .box-danger {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            border-left: 4px solid var(--danger);
+        }
+
+        .box h4 {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .box p:last-child { margin-bottom: 0; }
+
+        /* Table of contents */
+        .toc {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .toc h4 {
+            margin: 0 0 1rem 0;
+            font-size: 1rem;
+        }
+
+        .toc ol {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.4rem;
+        }
+
+        .toc a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover {
+            color: var(--accent);
+        }
+
+        /* Version badge */
+        .version {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* Article styling */
+        .article {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .article-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .article h4 {
+            margin-top: 0;
+        }
+
+        /* Signature block */
+        .signature {
+            background: var(--nougat);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .signature-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .signature-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .signature-checkbox input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+        }
+
+        .signature-checkbox label {
+            font-size: 0.95rem;
+        }
+
+        .signature-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .signature-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .signature-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Comparison table */
+        .comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison th, .comparison td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .comparison th {
+            background: var(--bg-alt);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        .comparison tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        .comparison .bad { color: var(--danger); }
+        .comparison .good { color: var(--success); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--nougat);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+
+        .timeline-item.done::before {
+            background: var(--success);
+        }
+
+        .timeline-item.current::before {
+            background: var(--warning);
+            box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.2);
+        }
+
+        .timeline-date {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .timeline-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--text);
+            color: var(--bg);
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: var(--nougat);
+        }
+
+        /* Print styles */
+        @media print {
+            .nav, .signature-btn { display: none; }
+            body { font-size: 12pt; }
+            .container { max-width: 100%; padding: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .container { padding: 5rem 1rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">🍯 Politique du Nougat</a>
+            <div class="nav-links">
+                <a href="#charte">Charte</a>
+                <a href="#juridique">Juridique</a>
+                <a href="#economie">Économie</a>
+                <a href="#technique">Technique</a>
+                <a href="#roadmap">Roadmap</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <p style="font-size: 4rem; margin-bottom: 1rem;">🍯</p>
+            <h1>POLITIQUE DU NOUGAT <span class="version">v1.0</span></h1>
+            <p style="font-size: 1.25rem; color: var(--text-dim);">
+                Documentation juridique, éthique et technique<br>
+                de l'écosystème ARG Citoyen / Plaidoyer Citoyen
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
+                Dernière mise à jour : <strong id="update-date"></strong><br>
+                Document vivant — contributif — récursif
+            </p>
+        </header>
+
+        <!-- INTRO -->
+        <div class="box box-nougat">
+            <h4>🍯 Pourquoi "Nougat" ?</h4>
+            <p>
+                Le nougat, c'est du <strong>miel</strong> (douceur), des <strong>amandes</strong> (substance), 
+                du <strong>blanc d'œuf</strong> (liant), et du <strong>temps</strong> (patience).<br><br>
+                Contrairement aux CGU que personne ne lit, cette politique est conçue pour être <em>lue, comprise et adoptée</em>. 
+                Elle lie sans contraindre. Elle protège sans enfermer. Elle nourrit au lieu d'extraire.<br><br>
+                <strong>Si tu lis ce document, tu fais déjà partie du projet.</strong>
+            </p>
+        </div>
+
+        <!-- TOC -->
+        <div class="toc">
+            <h4>📑 Table des matières</h4>
+            <ol>
+                <li><a href="#preambule">Préambule : Ce que ce document n'est pas</a></li>
+                <li><a href="#charte">Charte éthique fondamentale</a></li>
+                <li><a href="#juridique">Structure juridique & conformité</a></li>
+                <li><a href="#donnees">Politique des données (Anti-RGPD bullshit)</a></li>
+                <li><a href="#economie">Modèle économique éthique</a></li>
+                <li><a href="#fiscal">Stratégie fiscale & ruling</a></li>
+                <li><a href="#gouvernance">Gouvernance & décisions</a></li>
+                <li><a href="#technique">Documentation technique</a></li>
+                <li><a href="#contrib">Guide de contribution</a></li>
+                <li><a href="#roadmap">Roadmap & autotests</a></li>
+                <li><a href="#signature">Signature & engagement</a></li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <!-- SECTION 1: PRÉAMBULE -->
+        <section id="preambule">
+            <h2>1. Préambule : Ce que ce document n'est pas</h2>
+            
+            <p>
+                Avant de te dire ce que cette politique EST, clarifions ce qu'elle <strong>N'EST PAS</strong>.
+            </p>
+
+            <table class="comparison">
+                <thead>
+                    <tr>
+                        <th>CGU classiques</th>
+                        <th>Politique du Nougat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bad">Rédigées par des avocats pour des avocats</td>
+                        <td class="good">Rédigée par des humains pour des humains</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">Conçues pour ne pas être lues</td>
+                        <td class="good">Conçue pour être lue et comprise</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">"En utilisant ce service, vous acceptez..."</td>
+                        <td class="good">"En lisant ceci, tu participes déjà"</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">Protège l'entreprise contre l'utilisateur</td>
+                        <td class="good">Protège le commun, y compris toi</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">Modifiable unilatéralement</td>
+                        <td class="good">Modifiable collectivement (propositions)</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">Extrait de la valeur</td>
+                        <td class="good">Génère et redistribue de la valeur</td>
+                    </tr>
+                    <tr>
+                        <td class="bad">"Vos données peuvent être partagées..."</td>
+                        <td class="good">Tes données restent sur TA machine</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box box-legal">
+                <h4>⚖️ Valeur juridique</h4>
+                <p>
+                    Ce document a une valeur juridique réelle. Il constitue le <strong>règlement intérieur</strong> 
+                    de l'association internationale et le <strong>contrat social</strong> qui lie les participant·es.
+                    En cas de litige, ce document fait foi.
+                </p>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 2: CHARTE ÉTHIQUE -->
+        <section id="charte">
+            <h2>2. Charte éthique fondamentale</h2>
+
+            <p>
+                Cette charte définit les valeurs non-négociables du projet. 
+                Tout développement, toute décision, toute action doit être compatible avec ces principes.
+            </p>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 1</div>
+                <h4>Horizontalité radicale</h4>
+                <p>
+                    Aucun·e membre n'a de pouvoir permanent sur un·e autre. Les rôles sont fonctionnels et rotatifs.
+                    Les décisions sont collectives. La hiérarchie, si elle existe, est temporaire et consentie.
+                </p>
+                <pre>HIERARCHY_MODE = false
+ROLES = functional && temporary
+DECISIONS = collective || consensus</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 2</div>
+                <h4>Transparence totale</h4>
+                <p>
+                    Tout est public par défaut : code source, finances, décisions, délibérations.
+                    Seules exceptions : données personnelles des membres et informations de sécurité.
+                </p>
+                <pre>DEFAULT_VISIBILITY = public
+EXCEPTIONS = [personal_data, security_info]
+OPACITY = 0</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 3</div>
+                <h4>Souveraineté des données</h4>
+                <p>
+                    Chaque utilisateur·rice est propriétaire absolu·e de ses données.
+                    Aucune donnée n'est collectée, transmise ou monétisée sans consentement explicite.
+                    Les données restent sur l'appareil de l'utilisateur·rice (local-first).
+                </p>
+                <pre>DATA_OWNERSHIP = user
+DATA_LOCATION = user_device
+DATA_COLLECTION = none
+DATA_MONETIZATION = forbidden</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 4</div>
+                <h4>Non-lucrativité structurelle</h4>
+                <p>
+                    Le projet ne génère pas de profit extractif. Tout excédent financier est réinvesti 
+                    dans le projet ou redistribué équitablement aux contributeur·rices.
+                    Aucun·e actionnaire, aucun dividende.
+                </p>
+                <pre>PROFIT_MODE = false
+SURPLUS = reinvest || redistribute
+SHAREHOLDERS = none
+DIVIDENDS = forbidden</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 5</div>
+                <h4>Inclusivité active</h4>
+                <p>
+                    Le projet accueille tou·te·s sans discrimination. L'accessibilité (technique, linguistique, 
+                    cognitive, économique) est une priorité de conception. Le langage est inclusif.
+                </p>
+                <pre>DISCRIMINATION = forbidden
+ACCESSIBILITY = priority
+LANGUAGE = inclusive
+BARRIERS = actively_removed</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 6</div>
+                <h4>Auto-critique permanente</h4>
+                <p>
+                    Le système intègre sa propre remise en question. Les critiques sont encouragées, 
+                    documentées et traitées. Un projet qui ne se critique pas devient oppresseur.
+                </p>
+                <pre>while (true) {
+    critique(this);
+    document(critiques);
+    iterate(improvements);
+}</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 7</div>
+                <h4>Impact réel</h4>
+                <p>
+                    Le projet vise des conséquences concrètes dans le monde réel.
+                    Le numérique n'est qu'un moyen, pas une fin. L'action citoyenne est l'objectif.
+                </p>
+                <pre>PURPOSE = real_world_impact
+DIGITAL = means_not_end
+OUTCOME = citizen_action</pre>
+            </div>
+
+            <div class="article">
+                <div class="article-num">ARTICLE 8</div>
+                <h4>Récursivité méthodologique</h4>
+                <p>
+                    Le projet s'applique à lui-même ses propres méthodes. Nous utilisons le plaidoyer citoyen 
+                    pour défendre le plaidoyer citoyen. Nous sommes notre propre cas d'usage.
+                </p>
+                <pre>meta.apply(this, methods)
+// Le projet teste ses outils sur lui-même
+// La documentation EST un acte de plaidoyer</pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 3: JURIDIQUE -->
+        <section id="juridique">
+            <h2>3. Structure juridique & conformité</h2>
+
+            <h3>3.1. Forme juridique choisie</h3>
+            
+            <p>
+                Le projet adopte la forme d'une <strong>Association Internationale Sans But Lucratif (AISBL)</strong> 
+                de droit belge, complétée par des structures locales selon les besoins.
+            </p>
+
+            <div class="box box-legal">
+                <h4>🏛️ Pourquoi l'AISBL belge ?</h4>
+                <ul>
+                    <li><strong>Reconnaissance internationale</strong> : Personnalité juridique dans l'UE</li>
+                    <li><strong>Flexibilité</strong> : Statuts adaptables, gouvernance souple</li>
+                    <li><strong>Non-lucrativité</strong> : Cadre légal clair pour ASBL</li>
+                    <li><strong>Siège européen</strong> : Accès aux institutions UE (Bruxelles)</li>
+                    <li><strong>Fiscalité</strong> : Possibilité de ruling fiscal</li>
+                </ul>
+            </div>
+
+            <h3>3.2. Conformité réglementaire</h3>
+
+            <table class="comparison">
+                <thead>
+                    <tr>
+                        <th>Réglementation</th>
+                        <th>Notre conformité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>RGPD</strong> (UE)</td>
+                        <td class="good">✓ Surconformité — Aucune donnée collectée</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DSA</strong> (Digital Services Act)</td>
+                        <td class="good">✓ Non applicable — Pas une plateforme</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DMA</strong> (Digital Markets Act)</td>
+                        <td class="good">✓ Non applicable — Pas un gatekeeper</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loi 1901</strong> (France)</td>
+                        <td class="good">✓ Compatible via antenne locale</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Droit d'auteur</strong></td>
+                        <td class="good">✓ Copyleft — Licence libre</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fiscalité</strong></td>
+                        <td class="good">✓ Ruling en cours de demande</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.3. Licence du code et des contenus</h3>
+
+            <p>
+                Tout le code source et les contenus sont publiés sous double licence :
+            </p>
+
+            <ul>
+                <li><strong>Code</strong> : <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a> — Copyleft fort, garantit que les forks restent libres</li>
+                <li><strong>Contenus</strong> : <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> — Attribution, partage identique</li>
+            </ul>
+
+            <div class="box box-warning">
+                <h4>⚠️ Clause anti-récupération</h4>
+                <p>
+                    Toute entité à but lucratif souhaitant utiliser ce code ou ces contenus 
+                    à des fins commerciales doit contribuer à hauteur de 10% de ses revenus 
+                    générés au fonds commun du projet. Cette clause est contraignante.
+                </p>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 4: DONNÉES -->
+        <section id="donnees">
+            <h2>4. Politique des données (Anti-RGPD bullshit)</h2>
+
+            <p>
+                Contrairement aux politiques de confidentialité habituelles qui détaillent 
+                comment vos données sont collectées et exploitées, la nôtre est simple :
+            </p>
+
+            <div class="box box-success">
+                <h4>🔒 Notre politique en une phrase</h4>
+                <p style="font-size: 1.25rem; font-weight: 600;">
+                    Nous ne collectons AUCUNE donnée. Point.
+                </p>
+            </div>
+
+            <h3>4.1. Architecture "Local-First"</h3>
+
+            <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                     ARCHITECTURE DONNÉES                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   ┌──────────────┐                                              │
+│   │ TON APPAREIL │  ← Toutes tes données sont ICI              │
+│   │              │                                              │
+│   │ localStorage │  • Profil joueur                            │
+│   │ IndexedDB    │  • Progression                              │
+│   │ Fichiers     │  • Journal                                  │
+│   └──────────────┘  • Exports                                  │
+│          │                                                      │
+│          │ (optionnel, si TU le décides)                       │
+│          ▼                                                      │
+│   ┌──────────────┐                                              │
+│   │ SYNC P2P     │  ← Connexion directe entre appareils        │
+│   │ (WebRTC)     │  • Pas de serveur central                   │
+│   └──────────────┘  • Chiffrement bout-en-bout                 │
+│                                                                 │
+│   ┌──────────────┐                                              │
+│   │ NOS SERVEURS │  ← Zéro données personnelles                │
+│   │              │  • Code source (public)                     │
+│   │              │  • Documentation (publique)                 │
+│   └──────────────┘  • Stats agrégées anonymes (opt-in)         │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘</pre>
+
+            <h3>4.2. Ce que nous NE faisons PAS</h3>
+
+            <ul>
+                <li>❌ Pas de cookies (sauf technique localStorage)</li>
+                <li>❌ Pas de tracking (pas de Google Analytics, pas de pixels)</li>
+                <li>❌ Pas de collecte d'email (sauf si tu nous contactes)</li>
+                <li>❌ Pas de publicité</li>
+                <li>❌ Pas de vente de données (on n'en a pas)</li>
+                <li>❌ Pas de profilage</li>
+                <li>❌ Pas de dark patterns</li>
+            </ul>
+
+            <h3>4.3. Ce que nous POURRIONS faire (avec ton accord)</h3>
+
+            <ul>
+                <li>✓ Stats agrégées anonymes (nombre de téléchargements)</li>
+                <li>✓ Enquêtes volontaires (opt-in explicite)</li>
+                <li>✓ Liste de diffusion (si tu t'inscris)</li>
+            </ul>
+
+            <h3>4.4. Tes droits (même si on n'a rien)</h3>
+
+            <p>
+                Conformément au RGPD, tu as des droits. Chez nous, ils sont maximaux par défaut :
+            </p>
+
+            <table class="comparison">
+                <thead>
+                    <tr>
+                        <th>Droit RGPD</th>
+                        <th>Chez nous</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Accès</td>
+                        <td class="good">Tes données sont sur TON appareil, accès total</td>
+                    </tr>
+                    <tr>
+                        <td>Rectification</td>
+                        <td class="good">Tu modifies toi-même dans l'app</td>
+                    </tr>
+                    <tr>
+                        <td>Effacement</td>
+                        <td class="good">Tu supprimes toi-même (bouton Reset)</td>
+                    </tr>
+                    <tr>
+                        <td>Portabilité</td>
+                        <td class="good">Export JSON intégré</td>
+                    </tr>
+                    <tr>
+                        <td>Opposition</td>
+                        <td class="good">Rien à opposer (pas de traitement)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 5: ÉCONOMIE -->
+        <section id="economie">
+            <h2>5. Modèle économique éthique</h2>
+
+            <p>
+                Le projet peut générer de l'argent. C'est même souhaitable pour assurer sa pérennité.
+                Mais cet argent est géré selon des principes éthiques stricts.
+            </p>
+
+            <h3>5.1. Sources de revenus autorisées</h3>
+
+            <div class="box box-success">
+                <h4>✅ Revenus éthiques</h4>
+                <ul>
+                    <li><strong>Dons</strong> : Librement consentis, sans contrepartie attendue</li>
+                    <li><strong>Subventions</strong> : Fonds publics, fondations alignées avec nos valeurs</li>
+                    <li><strong>Formations</strong> : Ateliers d'éducation populaire (tarification solidaire)</li>
+                    <li><strong>Services</strong> : Accompagnement de collectifs (prix coûtant ou contribution libre)</li>
+                    <li><strong>Mécénat</strong> : Si le mécène respecte notre charte éthique</li>
+                </ul>
+            </div>
+
+            <div class="box box-danger">
+                <h4>❌ Revenus interdits</h4>
+                <ul>
+                    <li><strong>Publicité</strong> : Jamais, sous aucune forme</li>
+                    <li><strong>Vente de données</strong> : Impossible (on n'en a pas)</li>
+                    <li><strong>Sponsoring corporate</strong> : Si l'entreprise ne respecte pas notre charte</li>
+                    <li><strong>Spéculation</strong> : Pas de crypto-monnaie spéculative, pas d'investissement financier</li>
+                    <li><strong>Abonnement obligatoire</strong> : L'accès de base reste gratuit</li>
+                </ul>
+            </div>
+
+            <h3>5.2. Redistribution des excédents</h3>
+
+            <pre>
+REVENUS
+   │
+   ├── 40% → Fonctionnement
+   │         • Hébergement
+   │         • Outils
+   │         • Frais juridiques
+   │
+   ├── 30% → Contributeur·rices
+   │         • Rémunération équitable
+   │         • Indemnités bénévoles
+   │
+   ├── 20% → Réserve
+   │         • Sécurité financière
+   │         • Projets futurs
+   │
+   └── 10% → Solidarité
+             • Projets alliés
+             • Fonds d'urgence
+             • Subventions sortantes</pre>
+
+            <h3>5.3. Plaidoyer pour une économie éthique</h3>
+
+            <p>
+                Ce projet est lui-même un <strong>plaidoyer vivant</strong> pour une autre économie.
+                Nous documentons notre modèle comme preuve qu'une alternative est possible.
+            </p>
+
+            <blockquote>
+                "La meilleure façon de prouver qu'un autre monde est possible, c'est de le construire."
+                <cite>— Principe de la propagande par le fait technologique</cite>
+            </blockquote>
+
+            <div class="box box-nougat">
+                <h4>🎯 Objectifs du plaidoyer économique</h4>
+                <ol>
+                    <li>Documenter chaque euro entrant et sortant (transparence)</li>
+                    <li>Publier un rapport financier annuel lisible par tou·te·s</li>
+                    <li>Démontrer la viabilité du modèle non-lucratif</li>
+                    <li>Créer un précédent juridique et fiscal reproductible</li>
+                    <li>Inspirer d'autres projets à adopter ce modèle</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 6: FISCAL -->
+        <section id="fiscal">
+            <h2>6. Stratégie fiscale & ruling</h2>
+
+            <h3>6.1. Objectif : obtenir un ruling fiscal</h3>
+
+            <p>
+                Un <strong>ruling fiscal</strong> est une décision anticipée de l'administration fiscale 
+                qui confirme le traitement fiscal d'une opération. C'est essentiel pour sécuriser le projet.
+            </p>
+
+            <div class="box box-legal">
+                <h4>📋 Ce que nous demandons au ruling</h4>
+                <ul>
+                    <li>Confirmation du statut non-lucratif</li>
+                    <li>Exonération d'impôt sur les sociétés pour les activités associatives</li>
+                    <li>Éligibilité des dons à la déductibilité fiscale (pour les donateur·rices)</li>
+                    <li>Traitement des contributions internationales</li>
+                    <li>Statut fiscal des contributeur·rices rémunéré·es</li>
+                </ul>
+            </div>
+
+            <h3>6.2. Étapes vers le ruling</h3>
+
+            <div class="timeline">
+                <div class="timeline-item done">
+                    <div class="timeline-date">Phase 1 — Préparation</div>
+                    <div class="timeline-title">Structuration juridique</div>
+                    <div class="timeline-desc">Rédaction des statuts, charte, documentation</div>
+                </div>
+                <div class="timeline-item current">
+                    <div class="timeline-date">Phase 2 — En cours</div>
+                    <div class="timeline-title">Constitution de l'AISBL</div>
+                    <div class="timeline-desc">Dépôt au Moniteur Belge, obtention personnalité juridique</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 3 — Q2 2024</div>
+                    <div class="timeline-title">Demande de ruling</div>
+                    <div class="timeline-desc">Dossier au Service des Décisions Anticipées (SDA)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 4 — Q3 2024</div>
+                    <div class="timeline-title">Obtention du ruling</div>
+                    <div class="timeline-desc">Sécurisation fiscale complète</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 5 — Q4 2024</div>
+                    <div class="timeline-title">Documentation publique</div>
+                    <div class="timeline-desc">Publication du ruling anonymisé comme ressource pour d'autres projets</div>
+                </div>
+            </div>
+
+            <h3>6.3. Engagements fiscaux</h3>
+
+            <ul>
+                <li><strong>Comptabilité transparente</strong> : Comptes publiés annuellement</li>
+                <li><strong>Pas d'optimisation agressive</strong> : On paie ce qu'on doit</li>
+                <li><strong>Déclarations complètes</strong> : Revenus internationaux inclus</li>
+                <li><strong>Traçabilité</strong> : Chaque transaction documentée</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 7: GOUVERNANCE -->
+        <section id="gouvernance">
+            <h2>7. Gouvernance & décisions</h2>
+
+            <h3>7.1. Principes de gouvernance</h3>
+
+            <ul>
+                <li><strong>Horizontalité</strong> : Pas de président permanent, rôles tournants</li>
+                <li><strong>Subsidiarité</strong> : Décisions au niveau le plus proche de l'impact</li>
+                <li><strong>Consentement</strong> : Pas d'objection majeure = adoption</li>
+                <li><strong>Transparence</strong> : Toutes les décisions sont documentées publiquement</li>
+            </ul>
+
+            <h3>7.2. Cercles de décision</h3>
+
+            <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                    GOUVERNANCE EN CERCLES                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│                    ┌─────────────────┐                          │
+│                    │  CERCLE CŒUR    │                          │
+│                    │  Stratégie      │                          │
+│                    │  Charte         │                          │
+│                    │  Finances       │                          │
+│                    └────────┬────────┘                          │
+│                             │                                   │
+│          ┌──────────────────┼──────────────────┐                │
+│          │                  │                  │                │
+│   ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐        │
+│   │ CERCLE DEV  │    │ CERCLE COM  │    │ CERCLE EDU  │        │
+│   │ Technique   │    │ Communication│   │ Formation   │        │
+│   │ Code        │    │ Plaidoyer   │    │ Animation   │        │
+│   └─────────────┘    └─────────────┘    └─────────────┘        │
+│                                                                 │
+│   Tout le monde peut participer à n'importe quel cercle.       │
+│   Les rôles tournent tous les 6 mois.                          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘</pre>
+
+            <h3>7.3. Processus de décision</h3>
+
+            <ol>
+                <li><strong>Proposition</strong> : N'importe qui peut proposer</li>
+                <li><strong>Discussion</strong> : Clarifications et améliorations</li>
+                <li><strong>Objections</strong> : Identification des risques</li>
+                <li><strong>Intégration</strong> : Modification si nécessaire</li>
+                <li><strong>Consentement</strong> : Adoption si pas d'objection majeure</li>
+            </ol>
+
+            <div class="box box-warning">
+                <h4>⚠️ Droit de veto</h4>
+                <p>
+                    Toute décision qui contredit la charte éthique (section 2) peut être bloquée 
+                    par n'importe quel·le membre. Ce veto doit être argumenté et documenté.
+                </p>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 8: TECHNIQUE -->
+        <section id="technique">
+            <h2>8. Documentation technique</h2>
+
+            <h3>8.1. Architecture globale</h3>
+
+            <pre>
+ÉCOSYSTÈME PLAIDOYER CITOYEN
+│
+├── hub-central.html        # Portail unifié
+│   └── Orchestration des modules
+│
+├── arg-citoyen.html        # Jeu/Outil gamifié
+│   ├── Système XP (Voir/Juger/Agir/Transmettre)
+│   ├── Quêtes (Micro/Méso/Macro)
+│   ├── Journal de bord
+│   └── Achievements
+│
+├── plaidoyer-citoyen-v2.html   # Outils méthodologiques
+│   ├── 15+ outils (Guide Justice & Paix)
+│   ├── Intelligence Civile
+│   ├── Power Mapping
+│   └── Veille citoyenne
+│
+├── anarcho-kernel.html     # Cadre idéologique
+│   ├── Manifeste
+│   ├── Références dystopiques
+│   ├── Médias tactiques
+│   └── Auto-critique
+│
+└── politique-nougat.html   # Ce document
+    ├── Charte éthique
+    ├── Juridique
+    ├── Économie
+    └── Roadmap</pre>
+
+            <h3>8.2. Stack technique</h3>
+
+            <table class="comparison">
+                <thead>
+                    <tr>
+                        <th>Composant</th>
+                        <th>Technologie</th>
+                        <th>Justification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>HTML/CSS/JS vanilla</td>
+                        <td>Zéro dépendance, maintenable, accessible</td>
+                    </tr>
+                    <tr>
+                        <td>Stockage</td>
+                        <td>localStorage / IndexedDB</td>
+                        <td>Local-first, aucun serveur requis</td>
+                    </tr>
+                    <tr>
+                        <td>Sync (optionnel)</td>
+                        <td>WebRTC</td>
+                        <td>P2P, pas de serveur central</td>
+                    </tr>
+                    <tr>
+                        <td>Exports</td>
+                        <td>JSON, Markdown, HTML, PDF</td>
+                        <td>Formats ouverts, interopérables</td>
+                    </tr>
+                    <tr>
+                        <td>Distribution</td>
+                        <td>Fichier unique / IPFS</td>
+                        <td>Décentralisé, résistant à la censure</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>8.3. Sécurité</h3>
+
+            <ul>
+                <li><strong>Pas de backend</strong> = Pas de surface d'attaque serveur</li>
+                <li><strong>Pas de données transmises</strong> = Pas de fuite possible</li>
+                <li><strong>Code auditable</strong> = Transparence totale</li>
+                <li><strong>CSP strict</strong> = Protection XSS</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 9: CONTRIBUTION -->
+        <section id="contrib">
+            <h2>9. Guide de contribution</h2>
+
+            <h3>9.1. Comment contribuer ?</h3>
+
+            <ul>
+                <li><strong>Code</strong> : Fork, améliore, propose (PR)</li>
+                <li><strong>Contenu</strong> : Rédaction, traduction, relecture</li>
+                <li><strong>Design</strong> : UX, accessibilité, visuels</li>
+                <li><strong>Tests</strong> : Utilisation, bugs, retours</li>
+                <li><strong>Animation</strong> : Ateliers, formations, diffusion</li>
+                <li><strong>Finances</strong> : Dons, recherche de subventions</li>
+                <li><strong>Juridique</strong> : Conseils, veille réglementaire</li>
+            </ul>
+
+            <h3>9.2. Code de conduite</h3>
+
+            <div class="box box-success">
+                <h4>✅ Comportements encouragés</h4>
+                <ul>
+                    <li>Bienveillance et respect</li>
+                    <li>Critiques constructives</li>
+                    <li>Entraide entre contributeur·rices</li>
+                    <li>Documentation de son travail</li>
+                    <li>Communication claire et inclusive</li>
+                </ul>
+            </div>
+
+            <div class="box box-danger">
+                <h4>❌ Comportements prohibés</h4>
+                <ul>
+                    <li>Discrimination sous toute forme</li>
+                    <li>Harcèlement ou intimidation</li>
+                    <li>Appropriation du travail d'autrui</li>
+                    <li>Sabotage ou mauvaise foi</li>
+                    <li>Violation de la charte éthique</li>
+                </ul>
+            </div>
+
+            <h3>9.3. Reconnaissance des contributions</h3>
+
+            <p>
+                Toute contribution est créditée. Les contributeur·rices régulier·es 
+                peuvent être rémunéré·es selon les capacités financières du projet.
+            </p>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 10: ROADMAP -->
+        <section id="roadmap">
+            <h2>10. Roadmap & autotests</h2>
+
+            <h3>10.1. Le méta-test : s'appliquer à soi-même</h3>
+
+            <div class="box box-nougat">
+                <h4>🔄 Récursivité en action</h4>
+                <p>
+                    Ce projet utilise ses propres outils pour se développer. 
+                    Nous sommes notre propre cas d'usage. Si ça fonctionne pour nous, ça fonctionnera pour d'autres.
+                </p>
+            </div>
+
+            <table class="comparison">
+                <thead>
+                    <tr>
+                        <th>Outil</th>
+                        <th>Application au projet</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>VOIR (Veille)</td>
+                        <td>Veille juridique, technique, concurrentielle</td>
+                        <td class="good">✓ Actif</td>
+                    </tr>
+                    <tr>
+                        <td>JUGER (Analyse)</td>
+                        <td>Analyse du modèle économique, des risques</td>
+                        <td class="good">✓ Actif</td>
+                    </tr>
+                    <tr>
+                        <td>AGIR (Plaidoyer)</td>
+                        <td>Demande de ruling, structuration AISBL</td>
+                        <td style="color: var(--warning);">⏳ En cours</td>
+                    </tr>
+                    <tr>
+                        <td>Power Mapping</td>
+                        <td>Cartographie des parties prenantes fiscales</td>
+                        <td class="good">✓ Fait</td>
+                    </tr>
+                    <tr>
+                        <td>Intelligence Civile</td>
+                        <td>Documentation des patterns de projets similaires</td>
+                        <td style="color: var(--warning);">⏳ En cours</td>
+                    </tr>
+                    <tr>
+                        <td>ARG Citoyen</td>
+                        <td>Gamification des contributions au projet</td>
+                        <td class="good">✓ Actif</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>10.2. Critères de déploiement (Go/No-Go)</h3>
+
+            <p>
+                Avant de déployer publiquement, ces conditions doivent être remplies :
+            </p>
+
+            <ul>
+                <li>☐ AISBL constituée et enregistrée</li>
+                <li>☐ Ruling fiscal obtenu ou en cours avec confirmation préliminaire</li>
+                <li>☐ Charte éthique validée par le cercle cœur</li>
+                <li>☐ 10+ beta-testeurs ayant complété le parcours ARG</li>
+                <li>☐ Documentation technique complète</li>
+                <li>☐ Processus de contribution documenté</li>
+                <li>☐ Au moins 3 langues disponibles (FR, EN, +1)</li>
+                <li>☐ Audit d'accessibilité passé (WCAG 2.1 AA)</li>
+            </ul>
+
+            <h3>10.3. Roadmap temporelle</h3>
+
+            <div class="timeline">
+                <div class="timeline-item done">
+                    <div class="timeline-date">T1 2024</div>
+                    <div class="timeline-title">Phase Alpha</div>
+                    <div class="timeline-desc">Développement des modules core, documentation initiale</div>
+                </div>
+                <div class="timeline-item current">
+                    <div class="timeline-date">T2 2024</div>
+                    <div class="timeline-title">Phase Beta</div>
+                    <div class="timeline-desc">Tests internes, constitution AISBL, demande ruling</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">T3 2024</div>
+                    <div class="timeline-title">Phase Gamma</div>
+                    <div class="timeline-desc">Beta publique, premiers ateliers, communauté</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">T4 2024</div>
+                    <div class="timeline-title">Phase Release</div>
+                    <div class="timeline-desc">Version 1.0, campagne de diffusion virale</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2025+</div>
+                    <div class="timeline-title">Phase Propagation</div>
+                    <div class="timeline-desc">Internationalisation, fédération, impact mesurable</div>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- SECTION 11: SIGNATURE -->
+        <section id="signature">
+            <h2>11. Signature & engagement</h2>
+
+            <p>
+                En signant cette politique, tu reconnais avoir lu et compris ce document, 
+                et tu t'engages à respecter ses principes. Cette signature est symbolique 
+                mais témoigne de ton adhésion au projet.
+            </p>
+
+            <div class="signature">
+                <div class="signature-title">🍯 J'adhère à la Politique du Nougat</div>
+                
+                <div class="signature-checkbox">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">J'ai lu et compris la charte éthique</label>
+                </div>
+                
+                <div class="signature-checkbox">
+                    <input type="checkbox" id="check2">
+                    <label for="check2">Je m'engage à respecter ces principes</label>
+                </div>
+                
+                <div class="signature-checkbox">
+                    <input type="checkbox" id="check3">
+                    <label for="check3">Je comprends que mes actions ont des conséquences réelles</label>
+                </div>
+
+                <p style="margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-dim);">
+                    Pseudo / Nom de code :
+                </p>
+                <input type="text" id="signature-name" placeholder="Ton pseudo..." 
+                    style="padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; width: 200px; text-align: center;">
+
+                <p style="margin-top: 1.5rem;">
+                    <button class="signature-btn" id="sign-btn" onclick="signDocument()" disabled>
+                        ✍️ Signer la Politique du Nougat
+                    </button>
+                </p>
+
+                <p id="signature-result" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></p>
+            </div>
+
+            <div class="box box-legal">
+                <h4>📋 Que se passe-t-il quand tu signes ?</h4>
+                <ul>
+                    <li>Ta signature est stockée localement (sur ton appareil uniquement)</li>
+                    <li>Tu peux afficher ton statut de signataire dans l'ARG</li>
+                    <li>Tu rejoins symboliquement le collectif</li>
+                    <li>Aucune donnée n'est envoyée nulle part</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- CONCLUSION -->
+        <section>
+            <h2>Épilogue : Le Nougat comme métaphore</h2>
+
+            <blockquote>
+                Le nougat, c'est du temps cristallisé. Du miel qui a pris forme. 
+                De la douceur qui résiste. Des amandes qui donnent de la substance.<br><br>
+                Cette politique est notre nougat : douce mais solide, 
+                nourrissante mais pas lourde, artisanale mais reproductible.<br><br>
+                Contrairement aux CGU qui te collent aux dents comme du mauvais caramel industriel,
+                la Politique du Nougat est faite pour être savourée, partagée, et refaite à ta sauce.<br><br>
+                <strong>Fork this. Taste this. Be the nougat.</strong>
+            </blockquote>
+
+            <p style="text-align: center; margin-top: 3rem;">
+                <strong>🍯 FIN DU DOCUMENT — DÉBUT DE L'AVENTURE 🍯</strong>
+            </p>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>
+            <strong>Politique du Nougat</strong> — v1.0 — 
+            <a href="#">CC BY-SA 4.0</a> — 
+            Document vivant, contributif, récursif
+        </p>
+        <p style="margin-top: 0.5rem;">
+            "La révolution sera documentée, ou ne sera pas."
+        </p>
+    </footer>
+
+    <script>
+        // Set current date
+        document.getElementById('update-date').textContent = new Date().toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Signature logic
+        const checks = [
+            document.getElementById('check1'),
+            document.getElementById('check2'),
+            document.getElementById('check3')
+        ];
+        const nameInput = document.getElementById('signature-name');
+        const signBtn = document.getElementById('sign-btn');
+        const signResult = document.getElementById('signature-result');
+
+        function updateSignBtn() {
+            const allChecked = checks.every(c => c.checked);
+            const hasName = nameInput.value.trim().length > 0;
+            signBtn.disabled = !(allChecked && hasName);
+        }
+
+        checks.forEach(c => c.addEventListener('change', updateSignBtn));
+        nameInput.addEventListener('input', updateSignBtn);
+
+        function signDocument() {
+            const name = nameInput.value.trim();
+            const signature = {
+                name: name,
+                date: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            // Store locally
+            localStorage.setItem('nougat_signature', JSON.stringify(signature));
+
+            // Update ARG if present
+            try {
+                const argData = localStorage.getItem('arg_citoyen');
+                if (argData) {
+                    const data = JSON.parse(argData);
+                    if (!data.achievements.includes('manual_critical')) {
+                        data.achievements.push('manual_critical');
+                        localStorage.setItem('arg_citoyen', JSON.stringify(data));
+                    }
+                }
+            } catch (e) {}
+
+            // Show result
+            signResult.style.display = 'block';
+            signResult.innerHTML = `
+                ✅ <strong>${name}</strong> a signé la Politique du Nougat<br>
+                le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}<br>
+                <em style="color: var(--text-dim);">Signature stockée localement</em>
+            `;
+
+            signBtn.textContent = '✓ Signé !';
+            signBtn.disabled = true;
+        }
+
+        // Check for existing signature
+        const existingSig = localStorage.getItem('nougat_signature');
+        if (existingSig) {
+            const sig = JSON.parse(existingSig);
+            signResult.style.display = 'block';
+            signResult.innerHTML = `
+                ✅ <strong>${sig.name}</strong> a déjà signé<br>
+                le ${new Date(sig.date).toLocaleDateString('fr-FR')}<br>
+                <em style="color: var(--text-dim);">Merci pour ton engagement !</em>
+            `;
+            signBtn.textContent = '✓ Déjà signé';
+            signBtn.disabled = true;
+            checks.forEach(c => c.checked = true);
+            nameInput.value = sig.name;
+        }
+
+        // Console message
+        console.log(`
+%c🍯 POLITIQUE DU NOUGAT
+%c
+Tu lis le code source ? Bien joué.
+
+Ce document est conçu pour être lu, compris, et forké.
+Contrairement aux CGU classiques, on n'a rien à cacher.
+
+Si tu veux contribuer :
+1. Fork le projet
+2. Améliore ce qui te semble améliorable
+3. Propose tes changements
+4. Ensemble, on fait du bon nougat.
+
+— Le Collectif
+        `,
+        'color: #8b5a2b; font-size: 20px; font-weight: bold;',
+        'color: #555; font-size: 12px;'
+        );
+    </script>
+</body>
+</html>

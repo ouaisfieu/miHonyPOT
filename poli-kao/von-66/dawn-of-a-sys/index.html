@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUX : Analyse de la Menace Asymétrique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Container Styling for Charts */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px; /* Constrain max width for readability */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a29e; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c; 
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans leading-relaxed selection:bg-amber-200 selection:text-stone-900">
+
+    <!-- 
+    Chosen Palette: Warm Neutrals & Tactical Accents
+    Background: Stone-100 (#f5f5f4)
+    Cards: White (#ffffff)
+    Primary Text: Stone-800 (#292524)
+    Accents: Amber-600 (#d97706) for highlights/actions
+    Data Colors: 
+      - "Nous" (Us): Steel Blue (#4682B4)
+      - "Eux" (Them): Brick Red (#991B1B)
+    -->
+
+    <!-- 
+    Application Structure Plan:
+    1. Header: Immersive title "EUX", setting the tone of a wargame after-action report.
+    2. Executive Summary (Dashboard): High-level stats comparing the two forces ("Nous" vs "Eux"). Goal: Inform.
+    3. The Conflict Timeline: Interactive section showing the progression of the battle (Turn by Turn). Goal: Change/Narrative.
+    4. Profile of the Enemy: Radar chart analyzing the qualitative stats of "Eux". Goal: Compare.
+    5. Tactical Analysis: Heatmap/Table showing weapon effectiveness. Goal: Organize/Relationships.
+    6. Conclusion: Final strategic takeaway.
+    
+    This structure guides the user from the "Who" and "What" (Stats) to the "When" (Timeline) and finally the "How" and "Why" (Analysis), facilitating a logical understanding of the defeat/victory.
+    -->
+
+    <!-- 
+    Visualization & Content Choices:
+    1. Force Ratio (Pie Chart): Shows the massive numerical advantage of "Eux". Goal: Inform. Interaction: None. Library: Chart.js.
+    2. Attrition Rates (Bar Chart): Compares kills/losses. Goal: Compare. Library: Chart.js.
+    3. Battle Progression (Line Chart): Casualties and Morale over turns. Goal: Change. Interaction: Toggle datasets. Library: Chart.js.
+    4. Unit Profile (Radar Chart): Compares stats (Speed, Armor, etc.). Goal: Compare characteristics. Library: Chart.js.
+    5. Sector Control (Stacked Bar): Shows territory loss over time. Goal: Change. Library: Chart.js.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header Section -->
+    <header class="bg-stone-800 text-stone-100 py-12 shadow-lg border-b-4 border-amber-600">
+        <div class="container mx-auto px-4 max-w-6xl text-center">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tighter mb-4 uppercase">EUX</h1>
+            <p class="text-xl md:text-2xl font-light text-stone-400">Rapport d'Engagement Asymétrique #404-B</p>
+            <div class="mt-8 flex justify-center space-x-4 text-sm font-mono text-amber-500">
+                <span>// CLASSIFIÉ</span>
+                <span>// ANALYSE POST-BATAILLE</span>
+                <span>// AUTEUR: OUAISFIEU</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-4 max-w-6xl py-12 space-y-16">
+
+        <!-- Section 1: Introduction & Context -->
+        <section>
+            <div class="bg-white rounded-xl shadow-md p-8 border-l-8 border-stone-600">
+                <h2 class="text-3xl font-bold mb-4 text-stone-800">Contexte de l'Affrontement</h2>
+                <p class="mb-4 text-lg text-stone-600">
+                    Ce rapport détaille les événements de la dernière incursion dans le secteur 7. Nos forces ("Nous"), composées de vétérans d'élite, ont été confrontées à une nouvelle menace biologique désignée sous le nom de "Eux".
+                </p>
+                <p class="text-lg text-stone-600">
+                    L'ennemi ne démontre aucune tactique conventionnelle. Ils ne cherchent pas à prendre position, mais à saturer l'espace. "Eux" représente une menace existentielle basée non pas sur la qualité, mais sur une quantité écrasante et une absence totale de peur. Ce document vise à analyser les données de l'engagement pour adapter nos futures doctrines.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: The Asymmetry (Data Overview) -->
+        <section>
+            <div class="mb-6 border-b border-stone-300 pb-2">
+                <h3 class="text-2xl font-bold text-stone-700 uppercase tracking-wide">I. L'Asymétrie des Forces</h3>
+                <p class="text-stone-500 mt-1">Comparaison initiale des ressources et effectifs déployés.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Chart 1: Troop Count Disparity -->
+                <div class="bg-white rounded-lg shadow-sm p-6 border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-stone-800">Disparité Numérique</h4>
+                    <p class="text-sm text-stone-500 mb-6">Pour chaque soldat déployé par nos soins, l'ennemi en a déployé quatre. Une supériorité numérique de 400%.</p>
+                    <div class="chart-container">
+                        <canvas id="forcesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Resource Investment -->
+                <div class="bg-white rounded-lg shadow-sm p-6 border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-stone-800">Investissement Tactique</h4>
+                    <p class="text-sm text-stone-500 mb-6">Répartition des points de commandement. Notre investissement se fait sur l'équipement (Tech), le leur sur la masse biologique.</p>
+                    <div class="chart-container">
+                        <canvas id="resourcesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Timeline (Interactive) -->
+        <section class="bg-stone-200 rounded-xl p-8 shadow-inner">
+            <div class="mb-6 flex flex-col md:flex-row justify-between items-end border-b border-stone-400 pb-2">
+                <div>
+                    <h3 class="text-2xl font-bold text-stone-800 uppercase tracking-wide">II. Chronologie du Conflit</h3>
+                    <p class="text-stone-600 mt-1">Analyse tour par tour de l'attrition et du moral.</p>
+                </div>
+                <!-- Interactive Controls -->
+                <div class="mt-4 md:mt-0 space-x-2">
+                    <button onclick="updateTimeline('casualties')" class="px-4 py-2 bg-stone-700 text-white rounded hover:bg-stone-900 transition focus:ring-2 focus:ring-amber-500 text-sm font-semibold shadow">Pertes</button>
+                    <button onclick="updateTimeline('morale')" class="px-4 py-2 bg-white text-stone-700 border border-stone-300 rounded hover:bg-stone-100 transition focus:ring-2 focus:ring-amber-500 text-sm font-semibold shadow">Moral</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Timeline Narrative Panel -->
+                <div class="bg-white rounded-lg p-6 shadow-md border-l-4 border-amber-600 h-full">
+                    <h4 class="text-xl font-bold mb-4 text-stone-800">Résumé Tactique</h4>
+                    <ul class="space-y-4 text-sm text-stone-600" id="turnLog">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <!-- Timeline Chart -->
+                <div class="lg:col-span-2 bg-white rounded-lg p-6 shadow-md">
+                    <div class="chart-container">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-xs text-center text-stone-400 italic">Données extraites des capteurs biométriques de l'Escouade Alpha.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Enemy Profile (Radar & Analysis) -->
+        <section>
+            <div class="mb-6 border-b border-stone-300 pb-2">
+                <h3 class="text-2xl font-bold text-stone-700 uppercase tracking-wide">III. Profil de la Menace "Eux"</h3>
+                <p class="text-stone-500 mt-1">Analyse comparative des capacités opérationnelles.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Text Analysis -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-red-800">
+                        <h4 class="font-bold text-red-900 mb-2">Psychologie de Ruche</h4>
+                        <p class="text-stone-600 text-sm">
+                            Contrairement à nos troupes qui souffrent du stress ("Suppression"), les unités "Eux" ignorent les tirs de suppression. Leur moral est absolu tant que la Reine Synaptique est active. Cela rend les tactiques de "Shock and Awe" inefficaces.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-800">
+                        <h4 class="font-bold text-blue-900 mb-2">Technologie vs Biologie</h4>
+                        <p class="text-stone-600 text-sm">
+                            Nos armures en céramite sont efficaces contre 80% de leurs attaques. Cependant, leur capacité de corps-à-corps (CàC) sature nos défenses par le simple poids du nombre. La portée est notre seul avantage.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6 border border-stone-200">
+                    <h4 class="text-xl font-bold mb-2 text-stone-800 text-center">Comparatif Unitaire</h4>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <!-- Section 5: Territory Control -->
+         <section>
+             <div class="bg-white rounded-xl shadow-md p-8">
+                 <h3 class="text-2xl font-bold mb-6 text-stone-800 border-b border-stone-200 pb-2">Contrôle du Secteur (Evolution)</h3>
+                 <p class="text-stone-600 mb-6">
+                     L'évolution du contrôle territorial démontre l'effet de "marée". Malgré des pertes massives infligées à l'ennemi (voir Section II), notre zone de contrôle s'est réduite tour après tour, forcée par la nécessité de regroupement.
+                 </p>
+                 <div class="chart-container">
+                     <canvas id="territoryChart"></canvas>
+                 </div>
+             </div>
+         </section>
+
+        <!-- Section 6: Conclusion -->
+        <section class="bg-stone-800 text-stone-200 rounded-xl p-8 md:p-12 text-center shadow-xl">
+            <h2 class="text-3xl font-bold mb-4 text-amber-500">Conclusion Stratégique</h2>
+            <div class="max-w-3xl mx-auto space-y-4">
+                <p class="text-lg">
+                    L'engagement contre "Eux" confirme que la qualité individuelle ne peut indéfiniment compenser une disparité numérique supérieure à 4:1 sans un appui d'artillerie lourde.
+                </p>
+                <p class="text-lg">
+                    <strong class="text-white">Recommandation :</strong> Abandonner les doctrines d'infanterie statique. Adopter une mobilité extrême. L'ennemi ne poursuit pas ; il s'étend. Il faut frapper les nœuds synaptiques, pas la masse.
+                </p>
+                <div class="mt-8 pt-8 border-t border-stone-600">
+                    <span class="text-4xl">☠</span>
+                    <p class="text-sm font-mono mt-2 text-stone-500">FIN DU RAPPORT</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-500 py-8 text-center text-xs">
+        <p>&copy; 2026 Archive Militaire Terraform. Document généré pour l'analyse tactique.</p>
+    </footer>
+
+    <!-- JavaScript Implementation -->
+    <script>
+        // --- 1. Label Wrapping Logic (Mandatory) ---
+        function wrapLabels(labels, maxLen = 16) {
+            return labels.map(label => {
+                if (label.length <= maxLen) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + " " + words[i]).length <= maxLen) {
+                        currentLine += " " + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            });
+        }
+
+        // --- 2. Tooltip Configuration (Mandatory) ---
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- Data Definitions ---
+        const colorNous = '#4682B4'; // Steel Blue
+        const colorEux = '#991B1B';  // Deep Red
+        const colorNeutral = '#D97706'; // Amber
+
+        // --- Chart 1: Forces (Doughnut) ---
+        const ctxForces = document.getElementById('forcesChart').getContext('2d');
+        new Chart(ctxForces, {
+            type: 'doughnut',
+            data: {
+                labels: wrapLabels(['Infanterie "Nous" (Elite)', 'Essaim "Eux" (Masse)']),
+                datasets: [{
+                    data: [50, 200],
+                    backgroundColor: [colorNous, colorEux],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: commonTooltipConfig,
+                    title: { display: true, text: 'Rapport de Force Initial' }
+                }
+            }
+        });
+
+        // --- Chart 2: Resources (Bar) ---
+        const ctxResources = document.getElementById('resourcesChart').getContext('2d');
+        new Chart(ctxResources, {
+            type: 'bar',
+            data: {
+                labels: wrapLabels(['Coût par Unité', 'Portée Efficace (m)', 'Vitesse de Déplacement']),
+                datasets: [
+                    { label: 'Nous', data: [50, 600, 15], backgroundColor: colorNous },
+                    { label: 'Eux', data: [10, 50, 25], backgroundColor: colorEux }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- Chart 3: Timeline (Line - Dynamic) ---
+        const timelineData = {
+            labels: ['Tour 1', 'Tour 2', 'Tour 3', 'Tour 4', 'Tour 5', 'Tour 6'],
+            casualties: {
+                nous: [0, 2, 5, 12, 20, 35], // Cumulative losses
+                eux: [10, 35, 70, 110, 140, 160]
+            },
+            morale: {
+                nous: [100, 95, 80, 60, 45, 30], // Dropping morale
+                eux: [100, 100, 100, 95, 95, 90] // Fearless
+            }
+        };
+
+        const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+        let timelineChart = new Chart(ctxTimeline, {
+            type: 'line',
+            data: {
+                labels: timelineData.labels,
+                datasets: [
+                    {
+                        label: 'Pertes Cumulées (Nous)',
+                        data: timelineData.casualties.nous,
+                        borderColor: colorNous,
+                        backgroundColor: colorNous,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Pertes Cumulées (Eux)',
+                        data: timelineData.casualties.eux,
+                        borderColor: colorEux,
+                        backgroundColor: colorEux,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: commonTooltipConfig,
+                    title: { display: true, text: 'Progression de l\'Attrition' }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Unités Perdues' } }
+                }
+            }
+        });
+
+        // --- Interaction Function for Timeline ---
+        function updateTimeline(mode) {
+            const logEl = document.getElementById('turnLog');
+            
+            if (mode === 'casualties') {
+                timelineChart.data.datasets[0].label = 'Pertes Cumulées (Nous)';
+                timelineChart.data.datasets[0].data = timelineData.casualties.nous;
+                timelineChart.data.datasets[1].label = 'Pertes Cumulées (Eux)';
+                timelineChart.data.datasets[1].data = timelineData.casualties.eux;
+                timelineChart.options.scales.y.title.text = 'Unités Perdues';
+                
+                // Update Log Text
+                logEl.innerHTML = `
+                    <li class="pb-2 border-b border-stone-200"><strong>Tour 1-2:</strong> Premier contact. Pertes ennemies massives dues aux tirs de barrage.</li>
+                    <li class="pb-2 border-b border-stone-200"><strong>Tour 3-4:</strong> "Eux" arrivent au contact. Nos pertes augmentent exponentiellement au corps-à-corps.</li>
+                    <li><strong>Tour 5-6:</strong> La ligne de front se brise. Retraite tactique ordonnée.</li>
+                `;
+            } else {
+                timelineChart.data.datasets[0].label = 'Intégrité du Moral (Nous)';
+                timelineChart.data.datasets[0].data = timelineData.morale.nous;
+                timelineChart.data.datasets[1].label = 'Cohésion Synaptique (Eux)';
+                timelineChart.data.datasets[1].data = timelineData.morale.eux;
+                timelineChart.options.scales.y.title.text = '% Efficacité';
+
+                // Update Log Text
+                logEl.innerHTML = `
+                    <li class="pb-2 border-b border-stone-200"><strong>Tour 1-2:</strong> Moral stable. Confiance élevée grâce à la puissance de feu.</li>
+                    <li class="pb-2 border-b border-stone-200"><strong>Tour 3-4:</strong> Chute brutale du moral ("Nous") face à l'absence de peur de l'ennemi.</li>
+                    <li><strong>Tour 5-6:</strong> Panique évitée de justesse grâce aux officiers. "Eux" restent imperturbables.</li>
+                `;
+            }
+            timelineChart.update();
+        }
+        
+        // Initialize log
+        updateTimeline('casualties');
+
+        // --- Chart 4: Radar Profile ---
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: wrapLabels(['Puissance de Feu', 'Corps-à-Corps', 'Blindage', 'Mobilité', 'Discipline', 'Nombre']),
+                datasets: [
+                    {
+                        label: 'Nous',
+                        data: [90, 40, 80, 50, 70, 20],
+                        fill: true,
+                        backgroundColor: 'rgba(70, 130, 180, 0.2)',
+                        borderColor: colorNous,
+                        pointBackgroundColor: colorNous
+                    },
+                    {
+                        label: 'Eux',
+                        data: [20, 95, 30, 80, 100, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(153, 27, 27, 0.2)',
+                        borderColor: colorEux,
+                        pointBackgroundColor: colorEux
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- Chart 5: Territory (Stacked Bar) ---
+        const ctxTerritory = document.getElementById('territoryChart').getContext('2d');
+        new Chart(ctxTerritory, {
+            type: 'bar',
+            data: {
+                labels: ['Tour 1', 'Tour 2', 'Tour 3', 'Tour 4', 'Tour 5', 'Tour 6'],
+                datasets: [
+                    {
+                        label: 'Contrôle "Nous"',
+                        data: [100, 90, 75, 50, 30, 15],
+                        backgroundColor: colorNous,
+                    },
+                    {
+                        label: 'Contrôle "Eux"',
+                        data: [0, 10, 25, 50, 70, 85],
+                        backgroundColor: colorEux,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true, max: 100 }
+                },
+                plugins: {
+                    tooltip: commonTooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

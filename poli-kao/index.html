@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fan‑Club miHonyPOT — Non officiel</title>
+    <style>
+        :root {
+            --color-bg: #f7f9fb;
+            --color-primary: #2c3e50;
+            --color-secondary: #e74c3c;
+            --color-accent: #3498db;
+            --color-text: #333333;
+            --color-muted: #888888;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s ease-in-out;
+        }
+        nav a:hover {
+            color: var(--color-secondary);
+        }
+        .hero {
+            padding: 60px 20px;
+            text-align: center;
+            background-image: url("https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?fit=crop&w=1200&q=80");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
+        .section p {
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h3 {
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: var(--color-muted);
+        }
+        footer {
+            background-color: var(--color-primary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--color-secondary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fan‑Club miHonyPOT</h1>
+        <p>Un espace communautaire créé par les fans pour célébrer l'univers de miHonyPOT</p>
+        <nav>
+            <a href="#home">Accueil</a>
+            <a href="#about">À propos</a>
+            <a href="#gallery">Galerie</a>
+            <a href="#news">Actualités</a>
+            <a href="#join">Rejoindre</a>
+        </nav>
+    </header>
+    <section class="hero" id="home">
+        <h1>Bienvenue dans notre fan‑club non officiel</h1>
+        <p>Découvrez les dernières nouvelles, partagez vos créations et connectez‑vous avec d'autres passionnés autour de miHonyPOT !</p>
+    </section>
+    <section class="section" id="about">
+        <h2>À propos de miHonyPOT</h2>
+        <p>miHonyPOT est un projet open source mystérieux et intrigant. Bien qu'il commence comme un petit dépôt GitHub, la communauté s'est inspirée pour imaginer des histoires, des jeux et des expériences créatives à partir de son nom. Ce site est dédié à rassembler ces créations et encourager l'imagination collective.</p>
+    </section>
+    <section class="section" id="gallery">
+        <h2>Galerie</h2>
+        <p>Admirez les œuvres artistiques, captures d'écran et photos inspirées par miHonyPOT. Utilisez ce segment pour mettre en avant vos contributions visuelles !</p>
+        <div class="card-container">
+            <div class="card">
+                <h3>Artwork #1</h3>
+                <p>Description courte de l’œuvre.</p>
+            </div>
+            <div class="card">
+                <h3>Artwork #2</h3>
+                <p>Description courte de l’œuvre.</p>
+            </div>
+            <div class="card">
+                <h3>Artwork #3</h3>
+                <p>Description courte de l’œuvre.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="news">
+        <h2>Actualités & Blog</h2>
+        <p>Restez informé des dernières nouvelles, mises à jour et évènements concernant le projet et la communauté. Vous pouvez transformer cette section en un blog dynamique avec Joomla ou une autre plateforme CMS.</p>
+        <div class="card-container">
+            <div class="card">
+                <h3>Nouveauté du jour</h3>
+                <p>Le dépôt a reçu une mise à jour majeure ! Découvrez les nouvelles fonctionnalités et contributeurs.</p>
+            </div>
+            <div class="card">
+                <h3>Événement à venir</h3>
+                <p>Rejoignez notre prochain livestream où nous discuterons du futur du projet et partagerons des idées.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="join">
+        <h2>Rejoindre la communauté</h2>
+        <p>Envie de participer ? Rejoignez notre serveur Discord, suivez‑nous sur les réseaux sociaux et contribuez au dépôt GitHub. Ensemble, nous pouvons enrichir cet univers fascinant.</p>
+        <div class="card-container">
+            <div class="card">
+                <h3>Discord</h3>
+                <p>Rejoignez notre salon pour discuter et collaborer.</p>
+            </div>
+            <div class="card">
+                <h3>GitHub</h3>
+                <p>Proposez vos idées, signalez des bugs et partagez vos contributions.</p>
+            </div>
+            <div class="card">
+                <h3>Newsletter</h3>
+                <p>Abonnez‑vous à notre newsletter pour recevoir des mises à jour hebdomadaires.</p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2026 Fan‑Club miHonyPOT — Créé par la communauté. Ce site n'est pas affilié au créateur du dépôt original.</p>
+    </footer>
+    <!-- Bouton de bascule de thème (à étendre avec du JavaScript si besoin) -->
+    <button class="toggle-button" onclick="toggleTheme()">🌙</button>
+    <script>
+        function toggleTheme() {
+            // Définir un thème sombre en invertissant les couleurs principales
+            const dark = document.body.dataset.theme !== 'dark';
+            document.body.dataset.theme = dark ? 'dark' : 'light';
+            if (dark) {
+                document.documentElement.style.setProperty('--color-bg', '#1a1a1a');
+                document.documentElement.style.setProperty('--color-primary', '#2980b9');
+                document.documentElement.style.setProperty('--color-secondary', '#c0392b');
+                document.documentElement.style.setProperty('--color-accent', '#8e44ad');
+                document.documentElement.style.setProperty('--color-text', '#f5f5f5');
+                document.documentElement.style.setProperty('--color-muted', '#aaaaaa');
+            } else {
+                document.documentElement.style.setProperty('--color-bg', '#f7f9fb');
+                document.documentElement.style.setProperty('--color-primary', '#2c3e50');
+                document.documentElement.style.setProperty('--color-secondary', '#e74c3c');
+                document.documentElement.style.setProperty('--color-accent', '#3498db');
+                document.documentElement.style.setProperty('--color-text', '#333333');
+                document.documentElement.style.setProperty('--color-muted', '#888888');
+            }
+        }
+    </script>
+</body>
+</html>

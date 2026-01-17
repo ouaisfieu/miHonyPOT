@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse du Portfolio Tech - Ouais Fieu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutral Tech (Slate/Zinc bases with Blue/Indigo accents) -->
+    <!-- Application Structure Plan: 
+         - Layout: Dashboard style with a persistent sidebar (desktop) / bottom nav (mobile) and a dynamic main content area.
+         - Logic: The 'activeSection' state drives the DOM updates. 
+         - Sections:
+           1. Vue d'ensemble (Dashboard): High-level KPIs and a Radar chart for skill balance.
+           2. Écosystème Projets (Projects): A Bubble chart comparing project complexity vs. impact, plus a filterable list.
+           3. Matrice de Compétences (Skills): Detailed breakdown of tech stack usage.
+           4. Contenu & Blog (Content): Analysis of writing topics and frequency.
+         - Justification: Allows users to digest the "developer profile" analytically rather than just reading a resume.
+    -->
+
+    <!-- Visualization & Content Choices:
+         - Radar Chart (Chart.js): Shows the balance between Frontend, Backend, DevOps, UX, etc. Goal: Inform/Shape.
+         - Bubble Chart (Chart.js): Projects mapped by Technical Complexity (X) vs User Impact (Y), size = Codebase size. Goal: Compare/Relationships.
+         - Doughnut Chart (Chart.js): Tech stack distribution in blog posts. Goal: Inform.
+         - Interactive Cards: For project details. Goal: Organize.
+         - Confirming NO SVG/Mermaid. Pure HTML/CSS/Canvas.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
+            color: #334155; /* Slate 700 */
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Constraint for large screens */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 450px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Utility for transitions */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff; /* Blue 50 */
+            color: #2563eb; /* Blue 600 */
+            border-right: 3px solid #2563eb;
+        }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR NAVIGATION (Desktop) -->
+    <aside class="hidden md:flex md:w-64 flex-col bg-white border-r border-slate-200 shadow-sm z-10">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Ouais Fieu<span class="text-blue-600">.tech</span></h1>
+                <p class="text-xs text-slate-500 mt-1">Analyseur de Portfolio</p>
+            </div>
+            <div class="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <button onclick="app.navigate('dashboard')" id="nav-dashboard" class="nav-item w-full text-left px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors flex items-center group">
+                <span class="mr-3 text-lg opacity-70 group-hover:opacity-100">📊</span> Vue d'ensemble
+            </button>
+            <button onclick="app.navigate('projects')" id="nav-projects" class="nav-item w-full text-left px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors flex items-center group">
+                <span class="mr-3 text-lg opacity-70 group-hover:opacity-100">🚀</span> Écosystème Projets
+            </button>
+            <button onclick="app.navigate('skills')" id="nav-skills" class="nav-item w-full text-left px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors flex items-center group">
+                <span class="mr-3 text-lg opacity-70 group-hover:opacity-100">🧠</span> Matrice Compétences
+            </button>
+            <button onclick="app.navigate('blog')" id="nav-blog" class="nav-item w-full text-left px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors flex items-center group">
+                <span class="mr-3 text-lg opacity-70 group-hover:opacity-100">✍️</span> Analyse Contenu
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <div class="bg-slate-50 rounded-lg p-3">
+                <p class="text-xs text-slate-500 font-medium mb-2">Statut du Profil</p>
+                <div class="w-full bg-slate-200 rounded-full h-2">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: 85%"></div>
+                </div>
+                <div class="flex justify-between mt-1">
+                    <span class="text-[10px] text-slate-400">Junior</span>
+                    <span class="text-[10px] text-blue-600 font-bold">Senior</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-[#f8fafc]">
+        
+        <!-- MOBILE HEADER -->
+        <div class="md:hidden bg-white border-b border-slate-200 p-4 flex items-center justify-between">
+            <h1 class="text-lg font-bold text-slate-800">Ouais Fieu<span class="text-blue-600">.tech</span></h1>
+            <button onclick="app.toggleMobileMenu()" class="text-slate-500 hover:text-blue-600 focus:outline-none">
+                <span class="text-2xl">☰</span>
+            </button>
+        </div>
+
+        <!-- MOBILE MENU OVERLAY -->
+        <div id="mobile-menu" class="fixed inset-0 bg-slate-900/50 z-50 hidden" onclick="app.toggleMobileMenu()">
+            <div class="absolute right-0 top-0 bottom-0 w-64 bg-white shadow-xl flex flex-col" onclick="event.stopPropagation()">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+                    <span class="font-bold text-slate-700">Menu</span>
+                    <button onclick="app.toggleMobileMenu()" class="text-slate-400 hover:text-red-500">✕</button>
+                </div>
+                <nav class="flex-1 py-4">
+                    <button onclick="app.navigate('dashboard'); app.toggleMobileMenu()" class="w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50">Vue d'ensemble</button>
+                    <button onclick="app.navigate('projects'); app.toggleMobileMenu()" class="w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50">Écosystème Projets</button>
+                    <button onclick="app.navigate('skills'); app.toggleMobileMenu()" class="w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50">Compétences</button>
+                    <button onclick="app.navigate('blog'); app.toggleMobileMenu()" class="w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50">Blog</button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- SCROLLABLE CONTENT AREA -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8">
+            <!-- Dynamic Content Injected Here -->
+        </div>
+
+    </main>
+
+    <script>
+        // --- DATA STORE ---
+        // Simulating the content of https://ouaisfieu.github.io/tech/
+        const portfolioData = {
+            profile: {
+                name: "Ouais Fieu",
+                role: "Développeur Full Stack & Créatif",
+                location: "Bruxelles, Belgique",
+                bio: "Passionné par l'intersection entre design minimaliste et code robuste. Je construis des outils web modernes et j'écris sur mes découvertes.",
+                stats: {
+                    years: 6,
+                    repos: 42,
+                    articles: 28,
+                    coffee: 1024
+                }
+            },
+            skills: {
+                categories: ["Frontend", "Backend", "DevOps", "UI/UX", "Mobile"],
+                scores: [90, 75, 60, 85, 50], // 0-100
+                details: [
+                    { name: "React / Next.js", level: 95, category: "Frontend" },
+                    { name: "Tailwind CSS", level: 90, category: "Frontend" },
+                    { name: "Node.js", level: 80, category: "Backend" },
+                    { name: "Python", level: 70, category: "Backend" },
+                    { name: "Docker", level: 65, category: "DevOps" },
+                    { name: "Figma", level: 85, category: "UI/UX" }
+                ]
+            },
+            projects: [
+                { id: 1, name: "TaskMaster CLI", type: "Tooling", impact: 85, complexity: 70, description: "Outil en ligne de commande pour la gestion de tâches asynchrones.", stack: ["Node", "Commander.js"] },
+                { id: 2, name: "E-Shop Starter", type: "Web", impact: 60, complexity: 90, description: "Boilerplate complet pour e-commerce avec Next.js et Stripe.", stack: ["Next.js", "Stripe", "Tailwind"] },
+                { id: 3, name: "Portfolio V3", type: "Personal", impact: 95, complexity: 50, description: "Site personnel axé sur l'accessibilité et la performance (Lighthouse 100).", stack: ["HTML", "CSS", "Vanilla JS"] },
+                { id: 4, name: "CryptoWatch", type: "Web", impact: 40, complexity: 80, description: "Dashboard temps réel de suivi de crypto-monnaies via WebSockets.", stack: ["React", "D3.js", "Socket.io"] },
+                { id: 5, name: "Design System", type: "UI Library", impact: 75, complexity: 65, description: "Bibliothèque de composants UI réutilisables.", stack: ["Storybook", "React"] }
+            ],
+            blog: {
+                topics: ["Frontend", "Carrière", "Tutoriels", "Opinion", "Backend"],
+                counts: [12, 5, 8, 2, 1],
+                latest: [
+                    { title: "Pourquoi j'ai quitté React pour Vanilla JS", date: "2023-10-15", readTime: "5 min" },
+                    { title: "Comprendre le CSS Grid une fois pour toutes", date: "2023-09-22", readTime: "8 min" },
+                    { title: "Débuter avec Docker en 2024", date: "2023-08-10", readTime: "12 min" }
+                ]
+            }
+        };
+
+        // --- APPLICATION LOGIC ---
+        const app = {
+            state: {
+                currentSection: 'dashboard',
+                charts: {} // Store chart instances to destroy them before re-rendering
+            },
+
+            init: function() {
+                this.navigate('dashboard');
+                this.setupGlobalListeners();
+            },
+
+            setupGlobalListeners: function() {
+                // Resize listener for charts if needed
+                window.addEventListener('resize', () => {
+                    // Chart.js handles most resizing, but we can add custom logic here
+                });
+            },
+
+            toggleMobileMenu: function() {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            },
+
+            // --- NAVIGATION CONTROLLER ---
+            navigate: function(sectionId) {
+                this.state.currentSection = sectionId;
+                
+                // Update Sidebar UI
+                document.querySelectorAll('.nav-item').forEach(el => {
+                    el.classList.remove('active');
+                    el.classList.remove('border-r-4');
+                });
+                const activeNav = document.getElementById(`nav-${sectionId}`);
+                if(activeNav) activeNav.classList.add('active');
+
+                // Render Content
+                const contentArea = document.getElementById('content-area');
+                contentArea.innerHTML = ''; // Clear current content
+                
+                // Destroy old charts to prevent memory leaks/canvas reuse errors
+                Object.values(this.state.charts).forEach(chart => chart.destroy());
+                this.state.charts = {};
+
+                // Load new section
+                switch(sectionId) {
+                    case 'dashboard':
+                        this.renderDashboard(contentArea);
+                        break;
+                    case 'projects':
+                        this.renderProjects(contentArea);
+                        break;
+                    case 'skills':
+                        this.renderSkills(contentArea);
+                        break;
+                    case 'blog':
+                        this.renderBlog(contentArea);
+                        break;
+                }
+
+                // Scroll to top
+                contentArea.scrollTop = 0;
+            },
+
+            // --- RENDERERS ---
+
+            renderDashboard: function(container) {
+                const p = portfolioData.profile;
+                
+                const html = `
+                    <div class="fade-in max-w-5xl mx-auto space-y-8">
+                        <!-- Intro Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-2">👋 Bonjour, je suis <span class="text-blue-600">${p.name}</span></h2>
+                            <p class="text-slate-600 leading-relaxed max-w-2xl mb-6">${p.bio}</p>
+                            
+                            <!-- KPI Grid -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-center hover:shadow-md transition-shadow">
+                                    <div class="text-3xl font-bold text-slate-800">${p.stats.years}</div>
+                                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Années d'Exp.</div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-center hover:shadow-md transition-shadow">
+                                    <div class="text-3xl font-bold text-blue-600">${p.stats.repos}</div>
+                                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Repos Git</div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-center hover:shadow-md transition-shadow">
+                                    <div class="text-3xl font-bold text-emerald-600">${p.stats.articles}</div>
+                                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Articles</div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-center hover:shadow-md transition-shadow">
+                                    <div class="text-3xl font-bold text-orange-500">${p.stats.coffee}</div>
+                                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Cafés bus</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Radar Chart Section -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Équilibre Technique</h3>
+                                <p class="text-sm text-slate-500 mb-6">Visualisation de la répartition de mes compétences techniques par domaine.</p>
+                                <div class="chart-container">
+                                    <canvas id="radarChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col justify-center">
+                                <h3 class="text-lg font-bold text-slate-800 mb-4">Dernières Actualités</h3>
+                                <div class="space-y-4">
+                                    ${portfolioData.blog.latest.map(post => `
+                                        <div class="group cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors border-l-2 border-transparent hover:border-blue-500">
+                                            <h4 class="font-medium text-slate-700 group-hover:text-blue-600 transition-colors">${post.title}</h4>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <span class="text-xs text-slate-400">${post.date}</span>
+                                                <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">⏱️ ${post.readTime}</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <button onclick="app.navigate('blog')" class="mt-6 text-sm font-medium text-blue-600 hover:text-blue-800 self-start">Voir tous les articles →</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+
+                // Init Radar Chart
+                const ctx = document.getElementById('radarChart').getContext('2d');
+                this.state.charts.radar = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: portfolioData.skills.categories,
+                        datasets: [{
+                            label: 'Niveau de maîtrise',
+                            data: portfolioData.skills.scores,
+                            backgroundColor: 'rgba(37, 99, 235, 0.2)', // Blue-600 with opacity
+                            borderColor: '#2563eb',
+                            pointBackgroundColor: '#2563eb',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#2563eb'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: '#e2e8f0' },
+                                grid: { color: '#e2e8f0' },
+                                pointLabels: {
+                                    font: { size: 12, family: "'Inter', sans-serif" },
+                                    color: '#64748b'
+                                },
+                                ticks: { display: false, maxTicksLimit: 5 }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            },
+
+            renderProjects: function(container) {
+                // Prepare data for Bubble Chart
+                const bubbleData = portfolioData.projects.map(p => ({
+                    x: p.complexity,
+                    y: p.impact,
+                    r: 10 + (Math.random() * 10), // Random size for visual variety or link to codebase size
+                    project: p // Store full object for tooltip
+                }));
+
+                const html = `
+                    <div class="fade-in max-w-6xl mx-auto">
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-slate-800">Écosystème Projets</h2>
+                            <p class="text-slate-600 mt-2 max-w-3xl">Analyse des projets open-source et professionnels. Ce graphique compare la <strong class="text-slate-800">Complexité Technique</strong> (Axe X) à l'<strong class="text-slate-800">Impact Utilisateur</strong> (Axe Y).</p>
+                        </div>
+
+                        <!-- Charts & Filters Layout -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                            <!-- Chart Section -->
+                            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-bold text-slate-700">Matrice Impact vs Complexité</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="projectChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Filter/Details Section -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col h-full">
+                                <h3 class="font-bold text-slate-700 mb-4">Détails Sélection</h3>
+                                <div id="project-detail-panel" class="flex-1 bg-slate-50 rounded-lg p-4 border border-slate-200 flex items-center justify-center text-center">
+                                    <p class="text-sm text-slate-400">Survolez un projet sur le graphique pour voir les détails.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Grid -->
+                        <h3 class="text-xl font-bold text-slate-800 mb-6">Liste des Réalisations</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${portfolioData.projects.map(p => `
+                                <div class="bg-white rounded-lg border border-slate-200 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded uppercase">${p.type}</div>
+                                        <span class="text-slate-300">#${p.id}</span>
+                                    </div>
+                                    <h4 class="text-lg font-bold text-slate-800 mb-2">${p.name}</h4>
+                                    <p class="text-sm text-slate-600 mb-4 h-10 overflow-hidden text-ellipsis">${p.description}</p>
+                                    
+                                    <div class="flex flex-wrap gap-2 mt-auto">
+                                        ${p.stack.map(tech => `
+                                            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200">${tech}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+
+                // Init Bubble Chart
+                const ctx = document.getElementById('projectChart').getContext('2d');
+                this.state.charts.projectBubble = new Chart(ctx, {
+                    type: 'bubble',
+                    data: {
+                        datasets: [{
+                            label: 'Projets',
+                            data: bubbleData,
+                            backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                            borderColor: 'rgba(37, 99, 235, 1)',
+                            hoverBackgroundColor: '#f97316', // Orange on hover
+                            hoverBorderColor: '#f97316'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: { display: true, text: 'Complexité Technique (0-100)' },
+                                min: 0, max: 100,
+                                grid: { color: '#f1f5f9' }
+                            },
+                            y: {
+                                title: { display: true, text: 'Impact Utilisateur (0-100)' },
+                                min: 0, max: 100,
+                                grid: { color: '#f1f5f9' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const project = context.raw.project;
+                                        // Update side panel on hover
+                                        app.updateProjectDetail(project);
+                                        return `${project.name} (Comp: ${project.complexity}, Imp: ${project.impact})`;
+                                    }
+                                }
+                            }
+                        },
+                        onHover: (event, chartElement) => {
+                            event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                        }
+                    }
+                });
+            },
+
+            updateProjectDetail: function(project) {
+                const panel = document.getElementById('project-detail-panel');
+                if(!panel) return;
+                
+                panel.innerHTML = `
+                    <div class="w-full text-left fade-in">
+                        <h4 class="text-xl font-bold text-blue-600 mb-1">${project.name}</h4>
+                        <span class="text-xs font-semibold bg-slate-200 px-2 py-1 rounded text-slate-600 mb-3 inline-block">${project.type}</span>
+                        <p class="text-sm text-slate-700 mb-4">${project.description}</p>
+                        
+                        <div class="mb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase">Stack Technique</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${project.stack.map(s => `<span class="text-xs bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-600">${s}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderSkills: function(container) {
+                const html = `
+                    <div class="fade-in max-w-4xl mx-auto">
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl font-bold text-slate-800">Matrice de Compétences</h2>
+                            <p class="text-slate-600 mt-2">Inventaire détaillé des langages, frameworks et outils maîtrisés.</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                                
+                                <!-- Skill List Column -->
+                                <div class="p-6 md:p-8">
+                                    <h3 class="font-bold text-lg text-slate-800 mb-6">Technologies Principales</h3>
+                                    <div class="space-y-6">
+                                        ${portfolioData.skills.details.map(skill => `
+                                            <div>
+                                                <div class="flex justify-between mb-1">
+                                                    <span class="text-sm font-medium text-slate-700">${skill.name}</span>
+                                                    <span class="text-sm text-slate-500">${skill.level}%</span>
+                                                </div>
+                                                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                                    <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-1000" style="width: ${skill.level}%"></div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <!-- Context Column -->
+                                <div class="p-6 md:p-8 bg-slate-50">
+                                    <h3 class="font-bold text-lg text-slate-800 mb-4">Philosophie Technique</h3>
+                                    <ul class="space-y-4">
+                                        <li class="flex items-start">
+                                            <span class="text-green-500 mr-2">✔</span>
+                                            <p class="text-sm text-slate-600"><strong>Performance First:</strong> Optimisation critique du chemin de rendu et minimisation des bundles.</p>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-500 mr-2">✔</span>
+                                            <p class="text-sm text-slate-600"><strong>Accessibilité (a11y):</strong> Le web doit être utilisable par tous. Conformité WCAG AA visée par défaut.</p>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-500 mr-2">✔</span>
+                                            <p class="text-sm text-slate-600"><strong>Simplicité:</strong> "Keep it simple, stupid". Je préfère le code lisible à l'intelligence obscure.</p>
+                                        </li>
+                                    </ul>
+
+                                    <div class="mt-8 p-4 bg-blue-100 rounded-lg border border-blue-200">
+                                        <p class="text-xs text-blue-800 font-semibold uppercase mb-1">En cours d'apprentissage</p>
+                                        <p class="text-sm text-blue-900">Rust, WebAssembly, et les architectures micro-frontends.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+            },
+
+            renderBlog: function(container) {
+                const html = `
+                    <div class="fade-in max-w-5xl mx-auto">
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-bold text-slate-800">Analyse de Contenu</h2>
+                            <p class="text-slate-600">Répartition thématique des publications et articles de veille technologique.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <!-- Doughnut Chart -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col items-center">
+                                <h3 class="font-bold text-slate-700 mb-4 w-full text-left">Sujets de Prédilection</h3>
+                                <div class="chart-container" style="height: 300px; max-width: 300px;">
+                                    <canvas id="topicChart"></canvas>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <p class="text-sm text-slate-500">Total Articles: <span class="font-bold text-slate-800">${portfolioData.blog.counts.reduce((a, b) => a + b, 0)}</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Search/Filter Interface -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                                <h3 class="font-bold text-slate-700 mb-4">Explorer les Articles</h3>
+                                <div class="mb-4">
+                                    <input type="text" placeholder="Rechercher un article..." class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                </div>
+                                <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                                    ${portfolioData.blog.latest.map(post => `
+                                        <div class="p-3 bg-slate-50 rounded border border-slate-100 hover:border-blue-300 transition-colors cursor-pointer">
+                                            <h4 class="text-sm font-semibold text-slate-700">${post.title}</h4>
+                                            <div class="flex justify-between mt-2 text-xs text-slate-400">
+                                                <span>${post.date}</span>
+                                                <span>${post.readTime} de lecture</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                    <div class="p-3 bg-slate-50 rounded border border-slate-100 opacity-60">
+                                        <h4 class="text-sm font-semibold text-slate-700">Comprendre le Virtual DOM</h4>
+                                        <div class="flex justify-between mt-2 text-xs text-slate-400">
+                                            <span>2023-05-12</span>
+                                            <span>10 min de lecture</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-slate-50 rounded border border-slate-100 opacity-60">
+                                        <h4 class="text-sm font-semibold text-slate-700">Guide CSS Flexbox</h4>
+                                        <div class="flex justify-between mt-2 text-xs text-slate-400">
+                                            <span>2023-03-01</span>
+                                            <span>6 min de lecture</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+
+                // Init Doughnut Chart
+                const ctx = document.getElementById('topicChart').getContext('2d');
+                this.state.charts.topicChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: portfolioData.blog.topics,
+                        datasets: [{
+                            data: portfolioData.blog.counts,
+                            backgroundColor: [
+                                '#3b82f6', // Blue
+                                '#10b981', // Emerald
+                                '#f59e0b', // Amber
+                                '#6366f1', // Indigo
+                                '#ef4444'  // Red
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, font: { size: 11 } }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
+    </script>
+</body>
+</html>

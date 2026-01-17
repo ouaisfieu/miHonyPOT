@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚑ PLAIDOYER CITOYEN 2.1 — ANARCHO_KERNEL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --dark: #0d0d0d;
+            --darker: #121212;
+            --terminal-green: #00ff41;
+            --terminal-green-dim: #00cc33;
+            --matrix-green: #003b00;
+            --glitch-red: #ff0040;
+            --glitch-cyan: #00fff9;
+            --warning-orange: #ff6600;
+            --anarchist-red: #cc0000;
+            --text: #c0c0c0;
+            --text-dim: #606060;
+            --border: #1a1a1a;
+            --glow-green: 0 0 10px #00ff41, 0 0 20px #00ff4180, 0 0 40px #00ff4140;
+            --glow-red: 0 0 10px #ff0040, 0 0 20px #ff004080;
+            --scanline: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.8; }
+            94% { opacity: 1; }
+            97% { opacity: 0.9; }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        body {
+            font-family: 'Fira Code', 'Share Tech Mono', monospace;
+            background: var(--black);
+            color: var(--terminal-green);
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: flicker 5s infinite;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: var(--scanline);
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--terminal-green), transparent);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 1001;
+            opacity: 0.5;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-size: 14px;
+            line-height: 1;
+            color: var(--terminal-green);
+            animation: matrix-rain 10s linear infinite;
+            writing-mode: vertical-rl;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(180deg, var(--darker), transparent);
+            border-bottom: 1px solid var(--terminal-green);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--glow-green);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-symbol {
+            font-size: 1.5rem;
+            animation: glitch 3s infinite;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .logo-text .version {
+            color: var(--glitch-red);
+            font-size: 0.6rem;
+            vertical-align: super;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--terminal-green);
+            animation: blink 1s infinite;
+        }
+
+        .status-dot.warning { background: var(--warning-orange); }
+        .status-dot.critical { background: var(--glitch-red); }
+
+        /* NAV */
+        .nav {
+            display: flex;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            overflow: hidden;
+            background: var(--dark);
+        }
+
+        .nav-btn {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.6rem 1rem;
+            background: transparent;
+            border: none;
+            border-right: 1px solid var(--border);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn:last-child { border-right: none; }
+
+        .nav-btn:hover {
+            background: var(--matrix-green);
+            color: var(--terminal-green);
+        }
+
+        .nav-btn.active {
+            background: var(--terminal-green);
+            color: var(--black);
+            text-shadow: none;
+        }
+
+        .nav-btn.danger {
+            color: var(--glitch-red);
+        }
+
+        .nav-btn.danger.active {
+            background: var(--glitch-red);
+            color: var(--black);
+        }
+
+        /* MAIN */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TERMINAL */
+        .terminal {
+            background: var(--dark);
+            border: 1px solid var(--terminal-green);
+            border-radius: 0;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: var(--terminal-green);
+            color: var(--black);
+            padding: 0.4rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .terminal-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--black);
+            opacity: 0.5;
+        }
+
+        .terminal-body {
+            padding: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .terminal-body pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .prompt {
+            color: var(--glitch-cyan);
+        }
+
+        .prompt::before {
+            content: '> ';
+            color: var(--terminal-green);
+        }
+
+        .output {
+            color: var(--text);
+            margin-left: 1rem;
+        }
+
+        .comment {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .highlight {
+            color: var(--terminal-green);
+            text-shadow: var(--glow-green);
+        }
+
+        .danger {
+            color: var(--glitch-red);
+        }
+
+        .warning {
+            color: var(--warning-orange);
+        }
+
+        .cyan {
+            color: var(--glitch-cyan);
+        }
+
+        /* MANIFESTO */
+        .manifesto {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            border: 2px solid var(--anarchist-red);
+            margin-bottom: 2rem;
+        }
+
+        .manifesto::before {
+            content: 'Ⓐ';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 2.5rem;
+            color: var(--anarchist-red);
+            text-shadow: var(--glow-red);
+        }
+
+        .manifesto-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--glitch-red);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .manifesto-text {
+            color: var(--text);
+            line-height: 2;
+            font-size: 0.9rem;
+        }
+
+        .manifesto-text strong {
+            color: var(--terminal-green);
+        }
+
+        .manifesto-text em {
+            color: var(--glitch-cyan);
+            font-style: normal;
+        }
+
+        /* QUOTES */
+        .quote-block {
+            background: var(--darker);
+            border-left: 3px solid var(--glitch-red);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 3rem;
+            color: var(--glitch-red);
+            opacity: 0.3;
+        }
+
+        .quote-text {
+            font-style: italic;
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .quote-author {
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .quote-author span {
+            color: var(--glitch-cyan);
+        }
+
+        /* CARDS */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--terminal-green), var(--glitch-cyan));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .card-meta {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+
+        /* REFERENCE LIST */
+        .ref-list {
+            list-style: none;
+            font-size: 0.8rem;
+        }
+
+        .ref-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .ref-list li:last-child { border-bottom: none; }
+
+        .ref-title {
+            color: var(--glitch-cyan);
+            font-weight: 600;
+        }
+
+        .ref-type {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            background: var(--darker);
+            padding: 0.2rem 0.5rem;
+            white-space: nowrap;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--black);
+            border: 1px solid var(--border);
+            color: var(--terminal-green);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* BUTTONS */
+        .btn {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--terminal-green);
+            background: transparent;
+            color: var(--terminal-green);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--terminal-green);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn:hover {
+            color: var(--black);
+        }
+
+        .btn-danger {
+            border-color: var(--glitch-red);
+            color: var(--glitch-red);
+        }
+
+        .btn-danger::before {
+            background: var(--glitch-red);
+        }
+
+        /* CRITIQUE MODULE */
+        .critique-panel {
+            background: var(--darker);
+            border: 1px dashed var(--warning-orange);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .critique-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--warning-orange);
+            font-size: 0.9rem;
+        }
+
+        .critique-list {
+            list-style: none;
+        }
+
+        .critique-item {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text);
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .critique-item:last-child { border-bottom: none; }
+
+        .critique-item::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            color: var(--warning-orange);
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--glitch-red), var(--terminal-green), var(--glitch-cyan));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            width: 10px;
+            height: 10px;
+            background: var(--terminal-green);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: var(--glow-green);
+        }
+
+        .timeline-date {
+            font-size: 0.65rem;
+            color: var(--glitch-red);
+            letter-spacing: 1px;
+        }
+
+        .timeline-title {
+            font-size: 0.9rem;
+            color: var(--terminal-green);
+            margin: 0.25rem 0;
+        }
+
+        .timeline-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* PROGRESS */
+        .virus-meter {
+            margin: 1.5rem 0;
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .meter-label {
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meter-value {
+            color: var(--terminal-green);
+            font-weight: 700;
+        }
+
+        .meter-bar {
+            height: 4px;
+            background: var(--darker);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--glitch-red), var(--warning-orange), var(--terminal-green));
+            transition: width 0.5s;
+            position: relative;
+        }
+
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--terminal-green));
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* GLITCH TEXT */
+        .glitch {
+            position: relative;
+            animation: glitch 2s infinite;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            color: var(--glitch-red);
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch-clip 3s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            color: var(--glitch-cyan);
+            clip: rect(0, 0, 900px, 0);
+            animation: glitch-clip 2s infinite linear alternate;
+        }
+
+        @keyframes glitch-clip {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .footer .anarcho-symbol {
+            font-size: 2rem;
+            color: var(--anarchist-red);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; }
+            .nav { flex-wrap: wrap; }
+            .nav-btn { flex: 1; min-width: 80px; text-align: center; }
+            .manifesto { padding: 1.5rem; }
+            .manifesto::before { font-size: 1.5rem; top: -15px; }
+        }
+
+        /* ASCII Art */
+        .ascii-art {
+            font-size: 0.5rem;
+            line-height: 1.2;
+            color: var(--terminal-green);
+            text-align: center;
+            white-space: pre;
+            overflow-x: auto;
+            padding: 1rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrix-bg"></div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-symbol">⚑</span>
+                <span class="logo-text">
+                    ANARCHO_KERNEL <span class="version">v2.1</span>
+                </span>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-dot"></span>
+                    <span>SYSTÈME_INFILTRÉ</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot warning"></span>
+                    <span>CRITIQUE_ACTIVE</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot critical"></span>
+                    <span id="virus-status">PROPAGATION: 0%</span>
+                </div>
+            </div>
+        </div>
+        <nav class="nav" style="margin-top: 1rem;">
+            <button class="nav-btn active" data-section="manifesto">Manifeste</button>
+            <button class="nav-btn" data-section="references">Dystopies</button>
+            <button class="nav-btn" data-section="tactiques">Médias Tactiques</button>
+            <button class="nav-btn" data-section="propagande">Propagande</button>
+            <button class="nav-btn danger" data-section="critique">Auto-Critique</button>
+            <button class="nav-btn" data-section="kernel">Kernel</button>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- MANIFESTE -->
+        <section id="manifesto" class="section active">
+            <div class="ascii-art">
+    ██╗   ██╗██╗██████╗ ██╗   ██╗███████╗    ██████╗ ███████╗███╗   ███╗ ██████╗  ██████╗██████╗  █████╗ ████████╗██╗ ██████╗ ██╗   ██╗███████╗
+    ██║   ██║██║██╔══██╗██║   ██║██╔════╝    ██╔══██╗██╔════╝████╗ ████║██╔═══██╗██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██║██╔═══██╗██║   ██║██╔════╝
+    ██║   ██║██║██████╔╝██║   ██║███████╗    ██║  ██║█████╗  ██╔████╔██║██║   ██║██║     ██████╔╝███████║   ██║   ██║██║   ██║██║   ██║█████╗  
+    ╚██╗ ██╔╝██║██╔══██╗██║   ██║╚════██║    ██║  ██║██╔══╝  ██║╚██╔╝██║██║   ██║██║     ██╔══██╗██╔══██║   ██║   ██║██║   ██║██║   ██║██╔══╝  
+     ╚████╔╝ ██║██║  ██║╚██████╔╝███████║    ██████╔╝███████╗██║ ╚═╝ ██║╚██████╔╝╚██████╗██║  ██║██║  ██║   ██║   ██║╚██████╔╝╚██████╔╝███████╗
+      ╚═══╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚══════╝╚═╝     ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
+            </div>
+
+            <div class="manifesto">
+                <h1 class="manifesto-title glitch" data-text="MANIFESTE DU VIRUS DÉMOCRATIQUE">MANIFESTE DU VIRUS DÉMOCRATIQUE</h1>
+                <div class="manifesto-text">
+                    <p>Nous sommes le <strong>bug</strong> dans leur système parfait.</p>
+                    <p>Nous sommes l'<strong>erreur 418</strong> dans leur machine à broyer l'humain.</p>
+                    <p>Nous sommes le <em>kernel panic</em> de leur capitalisme de surveillance.</p>
+                    <br>
+                    <p>Ce logiciel est une <strong>arme de construction massive</strong>.</p>
+                    <p>Un <em>cheval de Troie démocratique</em> dans les forteresses du pouvoir.</p>
+                    <p>Une <strong>boucle infinie</strong> : humain → machine → humain → machine → ∞</p>
+                    <br>
+                    <p>Nous ne hackerons pas leurs serveurs — nous <strong>hackerons les imaginaires</strong>.</p>
+                    <p>Nous ne volerons pas leurs données — nous <strong>libérerons les nôtres</strong>.</p>
+                    <p>Nous n'écraserons pas le système — nous en <strong>proposerons un autre</strong>.</p>
+                    <br>
+                    <p><span class="danger">PROPAGANDE PAR LE FAIT TECHNOLOGIQUE.</span></p>
+                    <p><span class="cyan">ANARCHIE COMME MÉTHODE, PAS COMME CHAOS.</span></p>
+                    <p><span class="highlight">PACIFISME COMME STRATÉGIE, PAS COMME FAIBLESSE.</span></p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <p class="quote-text">"We are all connected. And like the electrical current that flows through everything, we are powerful because we are all connected."</p>
+                <p class="quote-author">— <span>Elliot Alderson</span>, Mr. Robot S01E01</p>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>SYSTÈME://principes_fondateurs.sh</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="prompt">./load_principles.sh</span>
+<span class="output">Chargement des principes anarcho-technologiques...</span>
+
+<span class="comment"># PRINCIPE 1 : HORIZONTALITÉ</span>
+<span class="highlight">HIERARCHY_MODE=false</span>
+<span class="output">Pas de chef. Pas de leader. Intelligence collective distribuée.</span>
+<span class="output">Comme un réseau P2P : chaque nœud est égal.</span>
+
+<span class="comment"># PRINCIPE 2 : TRANSPARENCE RADICALE</span>
+<span class="highlight">OPACITY=0</span>
+<span class="output">Code ouvert. Méthodes ouvertes. Critiques ouvertes.</span>
+<span class="output">"Surveillance is the business model of the Internet" — B. Schneier</span>
+<span class="output">Nous inversons le panoptique : nous surveillons les surveillants.</span>
+
+<span class="comment"># PRINCIPE 3 : BOUCLE CRITIQUE INFINIE</span>
+<span class="highlight">while (true) { critique(this); iterate(); }</span>
+<span class="output">Auto-critique permanente. Aucune vérité figée.</span>
+<span class="output">L'outil qui ne se remet pas en question devient l'oppresseur.</span>
+
+<span class="comment"># PRINCIPE 4 : PROPAGANDE PAR LE FAIT</span>
+<span class="highlight">ACTION > DISCOURS</span>
+<span class="output">Démontrer par l'exemple, pas par le sermon.</span>
+<span class="output">Ce logiciel existe : c'est déjà un acte politique.</span>
+
+<span class="comment"># PRINCIPE 5 : INTERNATIONALE SANS FRONTIÈRES</span>
+<span class="highlight">BORDERS=null; PROFIT=null; ASBL_MODE=true;</span>
+<span class="output">Association internationale sans but lucratif.</span>
+<span class="output">Le code n'a pas de passeport. La solidarité non plus.</span>
+
+<span class="prompt">./status</span>
+<span class="output"><span class="danger">[CRITIQUE]</span> Système capitaliste détecté.</span>
+<span class="output"><span class="warning">[WARNING]</span> Démocratie représentative en mode dégradé.</span>
+<span class="output"><span class="highlight">[INFO]</span> Virus démocratique en propagation...</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="virus-meter">
+                <div class="meter-header">
+                    <span class="meter-label">Niveau de contamination démocratique</span>
+                    <span class="meter-value" id="contamination-value">0%</span>
+                </div>
+                <div class="meter-bar">
+                    <div class="meter-fill" id="contamination-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RÉFÉRENCES DYSTOPIQUES -->
+        <section id="references" class="section">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>BIBLIOTHÈQUE://dystopies_tactiques.db</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="prompt">SELECT * FROM references WHERE genre='dystopia' AND useful=true;</span>
+<span class="output">Récupération des œuvres subversives...</span>
+<span class="comment">// Ces fictions sont des manuels de survie déguisés.</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">MR. ROBOT</h3>
+                    <p class="card-desc">
+                        "Is any of it real? I mean, look at this. Look at it! A world built on fantasy."<br><br>
+                        <strong>Leçon:</strong> L'effondrement du système peut commencer par une commande rm -rf.
+                        La révolution est un acte de <em>débuggage</em> social.
+                    </p>
+                    <div class="card-meta">Sam Esmail • 2015-2019 • Hacktivisme, Dissociation, Crypto-anarchisme</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💊</div>
+                    <h3 class="card-title">THE MATRIX</h3>
+                    <p class="card-desc">
+                        "I'm trying to free your mind, Neo. But I can only show you the door. You're the one that has to walk through it."<br><br>
+                        <strong>Leçon:</strong> La pilule rouge n'est pas une réponse, c'est le début d'un processus.
+                        Le glitch dans la matrice, c'est nous.
+                    </p>
+                    <div class="card-meta">Wachowski Sisters • 1999 • Simulacre, Éveil, Résistance</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎭</div>
+                    <h3 class="card-title">V FOR VENDETTA</h3>
+                    <p class="card-desc">
+                        "People shouldn't be afraid of their government. Governments should be afraid of their people."<br><br>
+                        <strong>Leçon:</strong> L'anonymat comme arme. Le masque comme égalisateur.
+                        L'idée est à l'épreuve des balles.
+                    </p>
+                    <div class="card-meta">Alan Moore • 1982 • Anarchisme, Terrorisme symbolique, 5 novembre</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">👁️</div>
+                    <h3 class="card-title">1984</h3>
+                    <p class="card-desc">
+                        "War is peace. Freedom is slavery. Ignorance is strength."<br><br>
+                        <strong>Leçon:</strong> Le novlangue est partout. "Flexibilité" = précarité.
+                        "Smart city" = ville panoptique. Décoder le langage du pouvoir.
+                    </p>
+                    <div class="card-meta">George Orwell • 1949 • Totalitarisme, Surveillance, Double-pensée</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌧️</div>
+                    <h3 class="card-title">BLADE RUNNER</h3>
+                    <p class="card-desc">
+                        "I've seen things you people wouldn't believe... All those moments will be lost in time, like tears in rain."<br><br>
+                        <strong>Leçon:</strong> Qui est le monstre ? Le réplicant qui veut vivre ou la corporation qui l'exploite ?
+                        L'humanité n'est pas dans l'ADN.
+                    </p>
+                    <div class="card-meta">Ridley Scott / Philip K. Dick • 1982 • Post-humanisme, Mémoire, Capitalisme</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📺</div>
+                    <h3 class="card-title">BLACK MIRROR</h3>
+                    <p class="card-desc">
+                        "If you can't stand the reflection, don't look in the mirror."<br><br>
+                        <strong>Leçon:</strong> Chaque épisode est un bug report de notre société.
+                        Le futur dystopique est déjà là, juste mal distribué.
+                    </p>
+                    <div class="card-meta">Charlie Brooker • 2011+ • Technophobie, Crédits sociaux, Mémoire</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔥</div>
+                    <h3 class="card-title">FAHRENHEIT 451</h3>
+                    <p class="card-desc">
+                        "A book is a loaded gun in the house next door. Burn it."<br><br>
+                        <strong>Leçon:</strong> Ils n'ont plus besoin de brûler les livres.
+                        L'infobésité fait le travail. Sauvegarder = résister.
+                    </p>
+                    <div class="card-meta">Ray Bradbury • 1953 • Censure, Mémoire collective, Résistance par la culture</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🐁</div>
+                    <h3 class="card-title">FIGHT CLUB</h3>
+                    <p class="card-desc">
+                        "We buy things we don't need with money we don't have to impress people we don't like."<br><br>
+                        <strong>Leçon:</strong> Project Mayhem sans la violence.
+                        Détruire son crédit = libération. Minimalisme radical.
+                    </p>
+                    <div class="card-meta">Chuck Palahniuk • 1996 • Anti-consumérisme, Identité, Chaos organisé</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🧬</div>
+                    <h3 class="card-title">GATTACA</h3>
+                    <p class="card-desc">
+                        "There is no gene for the human spirit."<br><br>
+                        <strong>Leçon:</strong> L'eugénisme 2.0 arrive via les algorithmes.
+                        Le "potentiel" est une construction sociale. Hack your destiny.
+                    </p>
+                    <div class="card-meta">Andrew Niccol • 1997 • Eugénisme, Déterminisme, Volonté</div>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <p class="quote-text">"The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion."</p>
+                <p class="quote-author">— <span>Albert Camus</span></p>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>ANALYSE://patterns_récurrents.sh</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="prompt">./analyze_patterns.sh --dystopia-dataset</span>
+<span class="output">Extraction des patterns récurrents...</span>
+
+<span class="highlight">PATTERN_001: SURVEILLANCE_OMNIPRESENTE</span>
+<span class="output">→ 1984, Black Mirror, Mr. Robot, The Circle</span>
+<span class="output">→ Réalité 2024: NSA, GAFAM, reconnaissance faciale, Pegasus</span>
+<span class="danger">→ STATUS: DÉJÀ_DÉPLOYÉ</span>
+
+<span class="highlight">PATTERN_002: CRÉDIT_SOCIAL</span>
+<span class="output">→ Black Mirror "Nosedive", Psycho-Pass, Minority Report</span>
+<span class="output">→ Réalité 2024: Scoring bancaire, notation Uber, LinkedIn karma</span>
+<span class="warning">→ STATUS: EN_COURS_DÉPLOIEMENT</span>
+
+<span class="highlight">PATTERN_003: MÉMOIRE_MANIPULÉE</span>
+<span class="output">→ Blade Runner, Total Recall, Eternal Sunshine</span>
+<span class="output">→ Réalité 2024: Fake news, deepfakes, révisionnisme algorithmique</span>
+<span class="danger">→ STATUS: ACTIF</span>
+
+<span class="highlight">PATTERN_004: CORPORATION_SOUVERAINE</span>
+<span class="output">→ Blade Runner, Alien, Robocop, Continuum</span>
+<span class="output">→ Réalité 2024: GAFAM PIB > États, lobbying, portes tournantes</span>
+<span class="danger">→ STATUS: QUASI_COMPLET</span>
+
+<span class="highlight">PATTERN_005: RÉSISTANCE_VIRALE</span>
+<span class="output">→ V for Vendetta, Mr. Robot, The Matrix, Hunger Games</span>
+<span class="output">→ Réalité 2024: Anonymous, WikiLeaks, lanceurs d'alerte, hacktivisme</span>
+<span class="cyan">→ STATUS: NOUS</span>
+
+<span class="prompt">./conclusion</span>
+<span class="output">La science-fiction n'est pas prophétique.</span>
+<span class="output">Elle est diagnostique.</span>
+<span class="output">Les dystopies sont des documentaires du présent.</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- MÉDIAS TACTIQUES -->
+        <section id="tactiques" class="section">
+            <div class="manifesto" style="border-color: var(--glitch-cyan);">
+                <h2 class="manifesto-title" style="color: var(--glitch-cyan);">TACTICAL MEDIA TOOLKIT</h2>
+                <div class="manifesto-text">
+                    <p>"<strong>Tactical media</strong> are media of crisis, criticism and opposition."</p>
+                    <p>— Critical Art Ensemble, <em>Electronic Civil Disobedience</em>, 1996</p>
+                    <br>
+                    <p>Les médias tactiques sont des <em>guérillas informationnelles</em> temporaires.</p>
+                    <p>Ils surgissent, frappent, disparaissent. <strong>Hit and run sémiotique.</strong></p>
+                    <p>Pas de permanence — la permanence est récupération.</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">📡</div>
+                    <h3 class="card-title">CULTURE JAMMING</h3>
+                    <p class="card-desc">
+                        Détournement des codes dominants. Adbusters, Billboard Liberation Front, Banksy.
+                        <br><br>
+                        Retourner la publicité contre elle-même. Le virus entre par la porte principale.
+                    </p>
+                    <div class="card-meta">Technique: Subvertising, Détournement, Mème warfare</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎪</div>
+                    <h3 class="card-title">COMMUNICATION GUERILLA</h3>
+                    <p class="card-desc">
+                        Actions symboliques à fort impact médiatique. Yes Men, Reclaim the Streets.
+                        <br><br>
+                        Fake news inversées : mentir pour dire la vérité. Canular révélateur.
+                    </p>
+                    <div class="card-meta">Technique: Fake press releases, Identity correction, Pranks</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💾</div>
+                    <h3 class="card-title">HACKTIVISME</h3>
+                    <p class="card-desc">
+                        Action directe numérique. Anonymous, WikiLeaks, Telecomix.
+                        <br><br>
+                        DDoS comme sit-in virtuel. Leak comme transparence forcée. Code comme manifeste.
+                    </p>
+                    <div class="card-meta">Technique: Defacement, Leak, Mirror, Bypass</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📻</div>
+                    <h3 class="card-title">MÉDIAS LIBRES</h3>
+                    <p class="card-desc">
+                        Infrastructures autonomes. Indymedia, radios pirates, PirateBox.
+                        <br><br>
+                        Produire ses propres moyens de production médiatique. Don't hate the media, become the media.
+                    </p>
+                    <div class="card-meta">Technique: DIY media, Mesh networks, Fediverse</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎭</div>
+                    <h3 class="card-title">THÉÂTRE INVISIBLE</h3>
+                    <p class="card-desc">
+                        Augusto Boal. Performance dans l'espace public sans annonce.
+                        <br><br>
+                        Les passants deviennent acteurs involontaires. La réalité devient fiction qui devient réalité.
+                    </p>
+                    <div class="card-meta">Technique: Flash mob, Happening, Situationnisme</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔓</div>
+                    <h3 class="card-title">OPEN SOURCE EVERYTHING</h3>
+                    <p class="card-desc">
+                        Démocratiser les moyens. GNU, Creative Commons, Wikipedia.
+                        <br><br>
+                        L'information veut être libre. Le savoir est un bien commun. Copyleft > Copyright.
+                    </p>
+                    <div class="card-meta">Technique: Fork, Libre, Peer-to-peer</div>
+                </div>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>BIBLIOTHÈQUE://tactiques_historiques.log</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="prompt">cat /var/log/tactical_media_history.log</span>
+
+<span class="highlight">[1957] INTERNATIONALE SITUATIONNISTE</span>
+<span class="output">Guy Debord, Société du Spectacle. Détournement. Dérive.</span>
+<span class="output">"Dans le monde réellement renversé, le vrai est un moment du faux."</span>
+
+<span class="highlight">[1984] CRITICAL ART ENSEMBLE</span>
+<span class="output">Electronic Civil Disobedience. Flesh Machine. Digital Resistance.</span>
+<span class="output">Premier théoriciens du hacktivisme. Bioart subversif.</span>
+
+<span class="highlight">[1989] ADBUSTERS</span>
+<span class="output">Buy Nothing Day. Blackspot Shoes. Occupy Wall Street.</span>
+<span class="output">Le magazine anti-pub financé par les pubs qu'il détourne.</span>
+
+<span class="highlight">[1994] RTMARK / THE YES MEN</span>
+<span class="output">Fausses conférences. Faux sites. Vraie critique.</span>
+<span class="output">Se faire passer pour Dow Chemical et s'excuser pour Bhopal.</span>
+
+<span class="highlight">[1999] INDYMEDIA</span>
+<span class="output">"Don't hate the media, become the media."</span>
+<span class="output">Premier réseau global de journalisme citoyen. Open publishing.</span>
+
+<span class="highlight">[2003] ANONYMOUS</span>
+<span class="output">"We are Legion. We do not forgive. We do not forget."</span>
+<span class="output">Essaim sans leader. Masque de Guy Fawkes. OpPayback.</span>
+
+<span class="highlight">[2010] WIKILEAKS</span>
+<span class="output">Collateral Murder. Cablegate. Vault 7.</span>
+<span class="output">La transparence comme arme de destruction massive du secret.</span>
+
+<span class="highlight">[2013] SNOWDEN</span>
+<span class="output">PRISM. XKeyscore. "I don't want to live in a world where everything is recorded."</span>
+<span class="output">Un seul homme, des millions de documents. Asymétrie radicale.</span>
+
+<span class="highlight">[2024] VOUS</span>
+<span class="output">Ce logiciel. Cette action. Cette lecture.</span>
+<span class="output">La propagande par le fait commence maintenant.</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROPAGANDE PAR LE FAIT -->
+        <section id="propagande" class="section">
+            <div class="manifesto" style="border-color: var(--terminal-green);">
+                <h2 class="manifesto-title" style="color: var(--terminal-green);">PROPAGANDE PAR LE FAIT 2.0</h2>
+                <div class="manifesto-text">
+                    <p>La <strong>propagande par le fait</strong> historique était violente.</p>
+                    <p>Notre version est <em>technologique</em> et <strong>pacifiste</strong>.</p>
+                    <br>
+                    <p>Pas d'attentats — des <strong>commits</strong>.</p>
+                    <p>Pas de bombes — des <strong>forks</strong>.</p>
+                    <p>Pas de martyrs — des <strong>contributeurs</strong>.</p>
+                    <br>
+                    <p>La meilleure réponse à l'injustice n'est pas la destruction du vieux monde.</p>
+                    <p>C'est la <strong>construction du nouveau</strong>. Maintenant. Ici. En acte.</p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <p class="quote-text">"Be the change you wish to see in the world." — Mais vraiment. Pas en t-shirt. En code. En action. En structure.</p>
+                <p class="quote-author">— <span>Détournement de Gandhi</span></p>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>MODULE://propagande_technologique.rs</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="comment">// PROPAGANDE PAR LE FAIT TECHNOLOGIQUE</span>
+<span class="comment">// Version pacifiste et constructive</span>
+
+<span class="highlight">struct PropagandeFait {</span>
+    <span class="cyan">mode: "démonstration_par_existence",</span>
+    <span class="cyan">violence: false,</span>
+    <span class="cyan">but_lucratif: false,</span>
+    <span class="cyan">frontières: null,</span>
+<span class="highlight">}</span>
+
+<span class="comment">// PRINCIPE 1: L'EXISTENCE EST SUBVERSIVE</span>
+<span class="output">
+Ce logiciel existe.
+Il fonctionne.
+Il est libre.
+Sa simple existence prouve qu'un autre modèle est possible.
+C'est ça, la propagande par le fait.
+</span>
+
+<span class="comment">// PRINCIPE 2: PRÉFIGURATION</span>
+<span class="output">
+Ne pas attendre la révolution pour vivre autrement.
+L'organisation horizontale commence maintenant.
+L'entraide commence maintenant.
+La transparence commence maintenant.
+On ne revendique pas le changement — on le pratique.
+</span>
+
+<span class="comment">// PRINCIPE 3: CONTAMINATION POSITIVE</span>
+<span class="output">
+Un logiciel libre inspire un autre logiciel libre.
+Une association sans hiérarchie inspire une autre.
+Une action réussie en inspire dix.
+Le virus se propage par l'exemple, pas par la force.
+</span>
+
+<span class="comment">// PRINCIPE 4: DOCUMENTATION RADICALE</span>
+<span class="output">
+Tout est documenté. Tout est reproductible.
+Les échecs comme les succès.
+Le savoir-faire est un bien commun.
+Fork-me on GitHub de la révolution.
+</span>
+
+<span class="prompt">./deploy_propagande()</span>
+<span class="output">Déploiement de l'alternative...</span>
+<span class="output">Le meilleur argument contre le capitalisme n'est pas un livre.</span>
+<span class="output">C'est une coopérative qui fonctionne.</span>
+<span class="output">C'est un logiciel libre qui marche.</span>
+<span class="output">C'est une communauté qui s'entraide.</span>
+<span class="highlight">[SUCCESS] La propagande par le fait est en cours.</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔧</div>
+                    <h3 class="card-title">CONSTRUIRE</h3>
+                    <p class="card-desc">
+                        Créer des outils libres. Développer des alternatives.
+                        Chaque ligne de code est un acte politique.
+                        <br><br>
+                        <strong>Action:</strong> Ce logiciel. Votre prochain projet.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌱</div>
+                    <h3 class="card-title">PLANTER</h3>
+                    <p class="card-desc">
+                        Essaimer les pratiques. Former. Documenter.
+                        Un savoir partagé est un savoir multiplié.
+                        <br><br>
+                        <strong>Action:</strong> Ateliers, tutoriels, pair-à-pair.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔗</div>
+                    <h3 class="card-title">RELIER</h3>
+                    <p class="card-desc">
+                        Fédérer les initiatives. Créer des réseaux.
+                        L'isolement est la mort du mouvement.
+                        <br><br>
+                        <strong>Action:</strong> Fediverse, fédérations, alliances.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">♻️</div>
+                    <h3 class="card-title">ITÉRER</h3>
+                    <p class="card-desc">
+                        Améliorer en continu. Accepter l'échec comme donnée.
+                        Agile révolutionnaire.
+                        <br><br>
+                        <strong>Action:</strong> Retrospectives, critiques, versions.
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 2rem;">
+                <label class="form-label">📝 VOTRE ACTE DE PROPAGANDE</label>
+                <textarea class="form-textarea" id="propagande-input" placeholder="Décrivez un projet, une action, une initiative que vous construisez ou voulez construire. Pas des revendications — des actes."></textarea>
+            </div>
+            <button class="btn" onclick="addPropagande()">ENREGISTRER L'ACTE</button>
+            <div id="propagande-list" style="margin-top: 1rem;"></div>
+        </section>
+
+        <!-- AUTO-CRITIQUE -->
+        <section id="critique" class="section">
+            <div class="manifesto" style="border-color: var(--warning-orange); background: linear-gradient(135deg, #1a1000, var(--darker));">
+                <h2 class="manifesto-title" style="color: var(--warning-orange);">⚠️ MODULE D'AUTO-CRITIQUE PERMANENTE</h2>
+                <div class="manifesto-text">
+                    <p>Ce système contient un <strong>virus auto-immune</strong>.</p>
+                    <p>Il est <em>programmé pour se remettre en question</em>.</p>
+                    <br>
+                    <p><span class="danger">AVERTISSEMENT:</span> Tout outil peut devenir oppresseur.</p>
+                    <p>Tout mouvement peut se scléroser.</p>
+                    <p>Toute idée peut devenir dogme.</p>
+                    <br>
+                    <p><strong>La critique interne n'est pas une faiblesse.</strong></p>
+                    <p><strong>C'est le système immunitaire de la révolution.</strong></p>
+                </div>
+            </div>
+
+            <div class="critique-panel">
+                <div class="critique-header">
+                    <span>⚠️</span>
+                    <span>VULNÉRABILITÉS CONNUES DE CE PROJET</span>
+                </div>
+                <ul class="critique-list">
+                    <li class="critique-item">
+                        <strong>Techno-solutionnisme latent:</strong> Un logiciel ne résout pas les problèmes sociaux. 
+                        Il peut les accompagner, pas les remplacer. Méfiance envers le "y'a qu'à coder".
+                    </li>
+                    <li class="critique-item">
+                        <strong>Fracture numérique:</strong> Cet outil exclut ceux qui n'ont pas accès au numérique.
+                        L'anarcho-geek ne doit pas devenir une élite technique.
+                    </li>
+                    <li class="critique-item">
+                        <strong>Esthétique du cool:</strong> Le design cyberpunk peut masquer le vide politique.
+                        La forme ne doit pas écraser le fond. Style ≠ Substance.
+                    </li>
+                    <li class="critique-item">
+                        <strong>Récupération possible:</strong> Tout outil libre peut être détourné.
+                        Le capitalisme digère tout. Rester vigilant.
+                    </li>
+                    <li class="critique-item">
+                        <strong>Entre-soi militant:</strong> Le jargon anarcho-geek crée des barrières.
+                        L'éducation populaire doit rester populaire.
+                    </li>
+                    <li class="critique-item">
+                        <strong>Illusion d'horizontalité:</strong> Les structures "sans chef" ont souvent des chefs informels.
+                        Jo Freeman, "La tyrannie de l'absence de structure" (1972).
+                    </li>
+                    <li class="critique-item">
+                        <strong>Burnout militant:</strong> L'engagement permanent épuise.
+                        Le care et le repos sont aussi des actes politiques.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>CRITIQUE://questions_inconfortables.sh</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="prompt">./run_uncomfortable_questions.sh</span>
+
+<span class="warning">[QUESTION_001]</span>
+<span class="output">Ce logiciel est-il vraiment utile ou juste satisfaisant à faire ?</span>
+<span class="output">Le plaisir du code n'est pas une preuve d'impact social.</span>
+
+<span class="warning">[QUESTION_002]</span>
+<span class="output">Qui utilise réellement cet outil ?</span>
+<span class="output">Des militants déjà convaincus ou des personnes en voie d'émancipation ?</span>
+
+<span class="warning">[QUESTION_003]</span>
+<span class="output">L'esthétique anarcho-punk n'est-elle pas aussi une forme de brand ?</span>
+<span class="output">Rébellion esthétisée = rébellion neutralisée ?</span>
+
+<span class="warning">[QUESTION_004]</span>
+<span class="output">Un logiciel peut-il vraiment être apolitique ou neutre ?</span>
+<span class="output">Nos choix techniques sont des choix politiques.</span>
+
+<span class="warning">[QUESTION_005]</span>
+<span class="output">Comment éviter que ce projet devienne un CV militant ?</span>
+<span class="output">L'engagement sincère vs la posture valorisable.</span>
+
+<span class="warning">[QUESTION_006]</span>
+<span class="output">Et si on avait tort sur tout ?</span>
+<span class="output">L'humilité épistémique comme pratique quotidienne.</span>
+
+<span class="prompt">./response</span>
+<span class="highlight">Ces questions n'ont pas de réponses définitives.</span>
+<span class="highlight">Elles doivent être posées régulièrement.</span>
+<span class="highlight">L'auto-critique est un processus, pas un état.</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 2rem;">
+                <label class="form-label">💬 AJOUTEZ VOTRE CRITIQUE</label>
+                <textarea class="form-textarea" id="critique-input" placeholder="Qu'est-ce qui ne va pas dans ce projet ? Quelles sont ses failles ? Soyez impitoyable — c'est le but."></textarea>
+            </div>
+            <button class="btn btn-danger" onclick="addCritique()">SOUMETTRE LA CRITIQUE</button>
+            <div id="critique-list" style="margin-top: 1rem;"></div>
+
+            <div class="quote-block" style="margin-top: 2rem; border-color: var(--warning-orange);">
+                <p class="quote-text">"La révolution est un frein d'urgence." — Elle ne construit pas nécessairement. Elle peut juste arrêter la catastrophe en cours. Ne pas confondre les deux.</p>
+                <p class="quote-author">— <span>Walter Benjamin</span>, détourné</p>
+            </div>
+        </section>
+
+        <!-- KERNEL -->
+        <section id="kernel" class="section">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>KERNEL://anarcho_core_v2.1.sys</span>
+                    <div class="terminal-dots">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <pre>
+<span class="comment">/*
+ * ANARCHO_KERNEL v2.1
+ * Système d'exploitation du système
+ * 
+ * "We are the virus in their perfect machine."
+ * 
+ * LICENCE: Copyleft - Ⓐll rights reversed
+ * AUTEUR: Collectif anonyme et décentralisé
+ * DÉPENDANCES: Courage, Solidarité, Café
+ */</span>
+
+<span class="prompt">./boot_anarcho_kernel</span>
+
+<span class="output">Initialisation du kernel anarcho-démocratique...</span>
+<span class="output">Loading modules...</span>
+
+<span class="highlight">[OK]</span> <span class="output">MODULE_VOIR: Analyse critique de la société</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_JUGER: Élaboration stratégique</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_AGIR: Action directe non-violente</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_IC: Intelligence Civile distribuée</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_VEILLE: Surveillance des surveillants</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_CRITIQUE: Auto-immune system</span>
+<span class="highlight">[OK]</span> <span class="output">MODULE_PROPAGANDE: Démonstration par l'existence</span>
+
+<span class="output">Configuration réseau...</span>
+<span class="highlight">[OK]</span> <span class="output">TOPOLOGY: Mesh décentralisé (P2P)</span>
+<span class="highlight">[OK]</span> <span class="output">PROTOCOL: Entraide mutuelle (RFC 1871)</span>
+<span class="highlight">[OK]</span> <span class="output">ENCRYPTION: Transparence totale (paradoxe assumé)</span>
+
+<span class="output">Vérification de l'intégrité...</span>
+<span class="warning">[WARN]</span> <span class="output">VULNÉRABILITÉS: Nombreuses (voir MODULE_CRITIQUE)</span>
+<span class="warning">[WARN]</span> <span class="output">CERTITUDE: 0% (c'est normal)</span>
+<span class="highlight">[OK]</span> <span class="output">DOUTE: Opérationnel</span>
+
+<span class="output">Kernel anarcho_v2.1 démarré.</span>
+<span class="output">PID: ∞ (processus immortel)</span>
+<span class="output">UPTIME: depuis les communards de 1871</span>
+
+<span class="danger">
+    ___    _   _____    ____  ________  ______
+   /   |  / | / /   |  / __ \/ ____/ / / / __ \
+  / /| | /  |/ / /| | / /_/ / /   / /_/ / / / /
+ / ___ |/ /|  / ___ |/ _, _/ /___/ __  / /_/ /
+/_/  |_/_/ |_/_/  |_/_/ |_|\____/_/ /_/\____/
+                                              
+    KERNEL OPERATIONAL — WELCOME TO THE RESISTANCE
+</span>
+
+<span class="prompt">root@anarcho:~# _</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3 class="card-title">INTERNATIONAL</h3>
+                    <p class="card-desc">
+                        Association sans frontières. Le code n'a pas de passeport.
+                        La solidarité est transnationale par nature.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🚫</div>
+                    <h3 class="card-title">SANS BUT LUCRATIF</h3>
+                    <p class="card-desc">
+                        Par le fait. Pas d'actionnaires. Pas de profit.
+                        Les ressources servent le projet, pas l'inverse.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3 class="card-title">BOUCLE HYBRIDE</h3>
+                    <p class="card-desc">
+                        Humain → Machine → Humain → Machine → ∞
+                        L'outil amplifie l'humain, ne le remplace pas.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🧬</div>
+                    <h3 class="card-title">VIRUS DÉMOCRATIQUE</h3>
+                    <p class="card-desc">
+                        Nous sommes le bug dans leur système.
+                        L'anomalie qui se propage. Le glitch qui persiste.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline" style="margin-top: 2rem;">
+                <div class="timeline-item">
+                    <div class="timeline-date">1871</div>
+                    <div class="timeline-title">Commune de Paris</div>
+                    <div class="timeline-desc">72 jours d'auto-gestion. Premier upload révolutionnaire.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1936</div>
+                    <div class="timeline-title">Révolution espagnole</div>
+                    <div class="timeline-desc">Collectivisations anarchistes. Proof of concept à grande échelle.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1968</div>
+                    <div class="timeline-title">Mai 68 / Situationnisme</div>
+                    <div class="timeline-desc">"Sous les pavés, la plage." Détournement comme méthode.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1984</div>
+                    <div class="timeline-title">GNU / Free Software</div>
+                    <div class="timeline-desc">Stallman lance le copyleft. L'anarchisme devient code.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1994</div>
+                    <div class="timeline-title">Zapatistes</div>
+                    <div class="timeline-desc">Premier mouvement révolutionnaire post-Internet. "Un monde où plusieurs mondes ont leur place."</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2011</div>
+                    <div class="timeline-title">Occupy / Indignés / Printemps arabe</div>
+                    <div class="timeline-desc">Réseaux sociaux + occupation physique. Tactiques hybrides.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2024+</div>
+                    <div class="timeline-title">Maintenant</div>
+                    <div class="timeline-desc">Ce logiciel. Cette action. Vous. La suite s'écrit ensemble.</div>
+                </div>
+            </div>
+
+            <div class="quote-block" style="margin-top: 2rem;">
+                <p class="quote-text">"Another world is not only possible, she is on her way. On a quiet day, I can hear her breathing."</p>
+                <p class="quote-author">— <span>Arundhati Roy</span></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span class="anarcho-symbol">Ⓐ</span>
+        <p>PLAIDOYER CITOYEN 2.1 — ANARCHO_KERNEL</p>
+        <p>Copyleft 🄯 — Ⓐll rights reversed</p>
+        <p style="margin-top: 0.5rem;">Ce logiciel est un virus. Sa propagation est souhaitée.</p>
+        <p style="margin-top: 1rem; color: var(--terminal-green);">
+            "The revolution will not be televised. It will be forked."
+        </p>
+    </footer>
+
+    <script>
+        // Matrix rain background
+        function createMatrixRain() {
+            const container = document.getElementById('matrix-bg');
+            const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+            
+            for (let i = 0; i < 30; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = (i * 3.5) + '%';
+                column.style.animationDelay = (Math.random() * 10) + 's';
+                column.style.animationDuration = (8 + Math.random() * 10) + 's';
+                
+                let text = '';
+                for (let j = 0; j < 50; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + ' ';
+                }
+                column.textContent = text;
+                container.appendChild(column);
+            }
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.section).classList.add('active');
+            });
+        });
+
+        // Virus meter / contamination
+        let contamination = 0;
+
+        function updateContamination() {
+            contamination = Math.min(100, contamination + Math.random() * 0.5);
+            document.getElementById('contamination-value').textContent = Math.round(contamination) + '%';
+            document.getElementById('contamination-fill').style.width = contamination + '%';
+            document.getElementById('virus-status').textContent = 'PROPAGATION: ' + Math.round(contamination) + '%';
+        }
+
+        setInterval(updateContamination, 2000);
+
+        // Add critique
+        function addCritique() {
+            const input = document.getElementById('critique-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const list = document.getElementById('critique-list');
+            const item = document.createElement('div');
+            item.className = 'critique-panel';
+            item.innerHTML = `
+                <div class="critique-header">
+                    <span>⚠️</span>
+                    <span>CRITIQUE #${Date.now()}</span>
+                </div>
+                <p style="color: var(--text); font-size: 0.85rem;">${text}</p>
+                <small style="color: var(--text-dim);">${new Date().toLocaleString('fr-FR')}</small>
+            `;
+            list.insertBefore(item, list.firstChild);
+            input.value = '';
+            contamination += 5;
+        }
+
+        // Add propagande
+        function addPropagande() {
+            const input = document.getElementById('propagande-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const list = document.getElementById('propagande-list');
+            const item = document.createElement('div');
+            item.className = 'card';
+            item.innerHTML = `
+                <div class="card-icon">✊</div>
+                <h3 class="card-title">ACTE #${Date.now()}</h3>
+                <p class="card-desc">${text}</p>
+                <div class="card-meta">${new Date().toLocaleString('fr-FR')}</div>
+            `;
+            list.insertBefore(item, list.firstChild);
+            input.value = '';
+            contamination += 10;
+        }
+
+        // Init
+        createMatrixRain();
+
+        // Console easter egg
+        console.log(`
+%c⚑ ANARCHO_KERNEL v2.1
+%c
+"Hello, friend."
+
+Si tu lis ça, tu es probablement l'un des nôtres.
+Bienvenue dans la résistance.
+
+Le code source est ouvert.
+Fork it. Hack it. Improve it.
+
+La révolution ne sera pas centralisée.
+Elle sera distribuée.
+
+— Collectif Anonyme
+        `, 
+        'color: #00ff41; font-size: 20px; font-weight: bold;',
+        'color: #c0c0c0; font-size: 12px;'
+        );
+    </script>
+</body>
+</html>

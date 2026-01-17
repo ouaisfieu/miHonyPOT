@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaidoyer Citoyen 4.0 — POD Solid & Économie Éthique</title>
+    <meta name="description" content="Plateforme de plaidoyer citoyen avec souveraineté des données (Solid POD) et système économique éthique">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Quicksand:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.3/docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0f; --bg-card: #12121a; --bg-card-hover: #1a1a25; --bg-input: #0d0d14;
+            --green-soft: #7fff7f; --green-medium: #5fe65f; --green-dark: #3da83d;
+            --green-glow: rgba(127, 255, 127, 0.4); --green-subtle: rgba(127, 255, 127, 0.1);
+            --lilac-soft: #c8b6ff; --lilac-medium: #a78bfa; --lilac-dark: #8b5cf6;
+            --lilac-glow: rgba(200, 182, 255, 0.4); --lilac-subtle: rgba(200, 182, 255, 0.1);
+            --cyan: #60d8c4; --cyan-glow: rgba(96, 216, 196, 0.4); --cyan-subtle: rgba(96, 216, 196, 0.1);
+            --orange: #ffb347; --orange-glow: rgba(255, 179, 71, 0.4); --orange-subtle: rgba(255, 179, 71, 0.1);
+            --gold: #ffd700; --gold-glow: rgba(255, 215, 0, 0.4); --gold-subtle: rgba(255, 215, 0, 0.1);
+            --red: #ff6b6b; --red-subtle: rgba(255, 107, 107, 0.1);
+            --text-primary: #f0f0f5; --text-secondary: #a0a0b0; --text-muted: #606070;
+            --border-color: rgba(127, 255, 127, 0.2); --border-lilac: rgba(200, 182, 255, 0.2);
+            --shadow-neon-green: 0 0 20px rgba(127, 255, 127, 0.3), 0 0 40px rgba(127, 255, 127, 0.1);
+            --shadow-neon-lilac: 0 0 20px rgba(200, 182, 255, 0.3), 0 0 40px rgba(200, 182, 255, 0.1);
+            --shadow-neon-cyan: 0 0 20px rgba(96, 216, 196, 0.3), 0 0 40px rgba(96, 216, 196, 0.1);
+            --shadow-neon-gold: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 215, 0, 0.1);
+            --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px;
+            --transition-fast: 0.15s ease; --transition-med: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Quicksand', sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; line-height: 1.6; overflow-x: hidden; }
+        .bg-effects { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-gradient { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(120px); opacity: 0.12; animation: float 25s ease-in-out infinite; }
+        .bg-gradient-1 { background: var(--green-soft); top: -200px; left: -200px; }
+        .bg-gradient-2 { background: var(--lilac-soft); bottom: -200px; right: -200px; animation-delay: -12s; }
+        .bg-gradient-3 { background: var(--gold); top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; opacity: 0.08; animation-delay: -6s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -30px) scale(1.05); } 66% { transform: translate(-20px, 20px) scale(0.95); } }
+        .grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.2; }
+        
+        .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); padding: 0.4rem 1rem; }
+        .header-content { max-width: 1600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 0.5rem; }
+        .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--green-soft), var(--gold)); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: var(--shadow-neon-green); animation: pulse-glow 4s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: var(--shadow-neon-green); } 50% { box-shadow: var(--shadow-neon-gold); } }
+        .logo-text { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.85rem; background: linear-gradient(135deg, var(--green-soft), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-version { font-size: 0.55rem; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--bg-dark); padding: 2px 6px; border-radius: 10px; font-weight: 700; }
+        
+        .wallet-widget { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-card); border: 1px solid var(--gold); border-radius: var(--radius-md); padding: 0.4rem 0.8rem; cursor: pointer; transition: all var(--transition-med); }
+        .wallet-widget:hover { box-shadow: var(--shadow-neon-gold); transform: translateY(-2px); }
+        .wallet-balance { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--gold); font-weight: 700; }
+        .wallet-icon { font-size: 1.1rem; }
+        .wallet-details { display: flex; gap: 0.3rem; font-size: 0.6rem; }
+        .wallet-micro, .wallet-meso, .wallet-macro { padding: 2px 5px; border-radius: 8px; font-weight: 600; }
+        .wallet-micro { background: var(--green-subtle); color: var(--green-soft); }
+        .wallet-meso { background: var(--lilac-subtle); color: var(--lilac-soft); }
+        .wallet-macro { background: var(--cyan-subtle); color: var(--cyan); }
+        
+        .solid-status { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all var(--transition-med); }
+        .solid-status.disconnected { background: var(--red-subtle); color: var(--red); border: 1px solid var(--red); }
+        .solid-status.connected { background: var(--green-subtle); color: var(--green-soft); border: 1px solid var(--green-soft); }
+        .solid-status:hover { transform: scale(1.05); }
+        .solid-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 2s infinite; }
+        .solid-status.disconnected .solid-dot { background: var(--red); }
+        .solid-status.connected .solid-dot { background: var(--green-soft); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        
+        .header-actions { display: flex; gap: 0.3rem; }
+        .btn { font-family: 'Quicksand', sans-serif; font-weight: 600; padding: 0.45rem 0.9rem; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: all var(--transition-med); display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent); transform: translateX(-100%); transition: transform var(--transition-med); }
+        .btn:hover::before { transform: translateX(100%); }
+        .btn-primary { background: linear-gradient(135deg, var(--green-soft), var(--green-medium)); color: var(--bg-dark); }
+        .btn-primary:hover { box-shadow: var(--shadow-neon-green); transform: translateY(-2px); }
+        .btn-secondary { background: var(--bg-card); color: var(--lilac-soft); border: 1px solid var(--border-lilac); }
+        .btn-secondary:hover { background: var(--bg-card-hover); box-shadow: var(--shadow-neon-lilac); }
+        .btn-ghost { background: transparent; color: var(--text-secondary); padding: 0.4rem 0.6rem; }
+        .btn-ghost:hover { color: var(--green-soft); background: var(--green-subtle); }
+        .btn-gold { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--bg-dark); }
+        .btn-gold:hover { box-shadow: var(--shadow-neon-gold); transform: translateY(-2px); }
+        .btn-cyan { background: linear-gradient(135deg, var(--cyan), #4fc3b0); color: var(--bg-dark); }
+        .btn-cyan:hover { box-shadow: var(--shadow-neon-cyan); transform: translateY(-2px); }
+        
+        .main-container { position: relative; z-index: 1; padding-top: 52px; min-height: 100vh; }
+        .nav-tabs { position: sticky; top: 52px; z-index: 100; background: rgba(10, 10, 15, 0.98); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .nav-tabs-inner { display: flex; gap: 0; padding: 0 0.5rem; min-width: max-content; }
+        .nav-tab { font-family: 'Quicksand', sans-serif; font-weight: 600; padding: 0.7rem 0.9rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); position: relative; white-space: nowrap; font-size: 0.75rem; }
+        .nav-tab::after { content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px; background: linear-gradient(90deg, var(--green-soft), var(--lilac-soft)); border-radius: 3px 3px 0 0; transition: all var(--transition-med); transform: translateX(-50%); }
+        .nav-tab:hover { color: var(--text-primary); }
+        .nav-tab:hover::after { width: 20px; }
+        .nav-tab.active { color: var(--green-soft); }
+        .nav-tab.active::after { width: 100%; box-shadow: 0 0 10px var(--green-glow); }
+        .nav-tab.highlight { color: var(--gold); }
+        .nav-tab.highlight.active::after { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+        .nav-tab.solid { color: var(--cyan); }
+        .nav-tab.solid.active::after { background: linear-gradient(90deg, var(--cyan), var(--lilac-soft)); }
+        
+        .section { display: none; padding: 1.5rem 1rem; max-width: 1400px; margin: 0 auto; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .section-header { margin-bottom: 1.5rem; text-align: center; }
+        .section-title { font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--green-soft), var(--lilac-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .section-subtitle { color: var(--text-secondary); font-size: 0.85rem; max-width: 600px; margin: 0 auto; }
+        
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.2rem; margin-bottom: 1.2rem; transition: all var(--transition-med); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--green-soft), var(--lilac-soft)); opacity: 0; transition: opacity var(--transition-med); }
+        .card:hover { border-color: var(--green-soft); transform: translateY(-3px); box-shadow: var(--shadow-neon-green); }
+        .card:hover::before { opacity: 1; }
+        .card.gold { border-color: var(--gold); }
+        .card.gold::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+        .card.gold:hover { box-shadow: var(--shadow-neon-gold); }
+        .card.solid { border-color: var(--cyan); }
+        .card.solid::before { background: linear-gradient(90deg, var(--cyan), var(--lilac-soft)); }
+        .card.solid:hover { box-shadow: var(--shadow-neon-cyan); }
+        
+        .card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; cursor: pointer; }
+        .card-number { font-family: 'Orbitron', monospace; font-size: 0.65rem; font-weight: 700; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--green-soft), var(--lilac-soft)); color: var(--bg-dark); border-radius: var(--radius-sm); flex-shrink: 0; }
+        .card-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); flex: 1; }
+        .card-toggle { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: transform var(--transition-med); font-size: 0.65rem; }
+        .card.expanded .card-toggle { transform: rotate(180deg); }
+        .card-content { display: none; padding-top: 0.75rem; border-top: 1px solid var(--border-color); }
+        .card.expanded .card-content { display: block; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .card-description { color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.8rem; }
+        
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem; font-size: 0.8rem; }
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.7rem; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-family: 'Quicksand', sans-serif; font-size: 0.85rem; transition: all var(--transition-fast); }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--green-soft); box-shadow: 0 0 0 3px var(--green-subtle); }
+        .form-textarea { min-height: 90px; resize: vertical; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        @media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+        
+        .quick-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+        @media (min-width: 640px) { .quick-stats { grid-template-columns: repeat(4, 1fr); } }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.9rem; text-align: center; transition: all var(--transition-med); }
+        .stat-card:hover { border-color: var(--green-soft); box-shadow: var(--shadow-neon-green); transform: translateY(-3px); }
+        .stat-card.gold { border-color: var(--gold); }
+        .stat-card.gold:hover { box-shadow: var(--shadow-neon-gold); }
+        .stat-value { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, var(--green-soft), var(--lilac-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-value.gold { background: linear-gradient(135deg, var(--gold), var(--orange)); -webkit-background-clip: text; background-clip: text; }
+        .stat-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.2rem; }
+        
+        .economy-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .tier-card { background: var(--bg-input); border-radius: var(--radius-md); padding: 1.2rem; text-align: center; border: 2px solid transparent; transition: all var(--transition-med); }
+        .tier-card:hover { transform: translateY(-5px); }
+        .tier-card.micro { border-color: var(--green-soft); }
+        .tier-card.micro:hover { box-shadow: var(--shadow-neon-green); }
+        .tier-card.meso { border-color: var(--lilac-soft); }
+        .tier-card.meso:hover { box-shadow: var(--shadow-neon-lilac); }
+        .tier-card.macro { border-color: var(--cyan); }
+        .tier-card.macro:hover { box-shadow: var(--shadow-neon-cyan); }
+        .tier-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .tier-name { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .tier-card.micro .tier-name { color: var(--green-soft); }
+        .tier-card.meso .tier-name { color: var(--lilac-soft); }
+        .tier-card.macro .tier-name { color: var(--cyan); }
+        .tier-percent { font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 700; }
+        .tier-card.micro .tier-percent { color: var(--green-soft); }
+        .tier-card.meso .tier-percent { color: var(--lilac-soft); }
+        .tier-card.macro .tier-percent { color: var(--cyan); }
+        .tier-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; }
+        .tier-credits { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin-top: 0.5rem; padding: 0.3rem 0.6rem; background: var(--bg-dark); border-radius: var(--radius-sm); display: inline-block; }
+        
+        .transaction-list { max-height: 300px; overflow-y: auto; }
+        .transaction-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-bottom: 1px solid var(--border-color); transition: background var(--transition-fast); }
+        .transaction-item:last-child { border-bottom: none; }
+        .transaction-item:hover { background: var(--bg-input); }
+        .transaction-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .transaction-icon.income { background: var(--green-subtle); }
+        .transaction-icon.expense { background: var(--red-subtle); }
+        .transaction-icon.transfer { background: var(--lilac-subtle); }
+        .transaction-details { flex: 1; }
+        .transaction-label { font-weight: 600; font-size: 0.85rem; }
+        .transaction-date { font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+        .transaction-amount { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.9rem; }
+        .transaction-amount.positive { color: var(--green-soft); }
+        .transaction-amount.negative { color: var(--red); }
+        .transaction-tier { font-size: 0.6rem; padding: 2px 6px; border-radius: 8px; margin-left: 0.5rem; }
+        
+        .solid-card { background: linear-gradient(135deg, rgba(96,216,196,0.1), rgba(200,182,255,0.1)); border: 2px solid var(--cyan); }
+        .solid-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .solid-logo { width: 50px; height: 50px; background: linear-gradient(135deg, var(--cyan), var(--lilac-soft)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .solid-info h3 { font-family: 'Orbitron', monospace; color: var(--cyan); font-size: 1.1rem; }
+        .solid-info p { font-size: 0.8rem; color: var(--text-secondary); }
+        .solid-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+        .solid-feature { background: var(--bg-input); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center; }
+        .solid-feature-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+        .solid-feature-name { font-size: 0.75rem; font-weight: 600; color: var(--text-primary); }
+        
+        .pod-browser { background: var(--bg-input); border-radius: var(--radius-md); padding: 1rem; margin-top: 1rem; }
+        .pod-path { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-dark); border-radius: var(--radius-sm); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--cyan); }
+        .pod-files { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.75rem; }
+        .pod-file { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center; cursor: pointer; transition: all var(--transition-med); }
+        .pod-file:hover { border-color: var(--cyan); box-shadow: var(--shadow-neon-cyan); transform: translateY(-2px); }
+        .pod-file-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+        .pod-file-name { font-size: 0.7rem; color: var(--text-primary); word-break: break-all; }
+        .pod-file-size { font-size: 0.6rem; color: var(--text-muted); }
+        
+        .fork-banner { background: linear-gradient(135deg, var(--gold-subtle), var(--orange-subtle)); border: 2px dashed var(--gold); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin: 1.5rem 0; }
+        .fork-banner h3 { font-family: 'Orbitron', monospace; color: var(--gold); margin-bottom: 0.5rem; }
+        .fork-banner p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; }
+        
+        .pricing-card { background: linear-gradient(135deg, var(--gold-subtle), rgba(255,179,71,0.1)); border: 2px solid var(--gold); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; position: relative; overflow: hidden; }
+        .pricing-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent); animation: shine 3s infinite; }
+        @keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 100% { transform: translateX(100%) rotate(45deg); } }
+        .pricing-amount { font-family: 'Orbitron', monospace; font-size: 3rem; font-weight: 900; color: var(--gold); }
+        .pricing-period { font-size: 1rem; color: var(--text-secondary); }
+        .pricing-features { list-style: none; margin: 1.5rem 0; text-align: left; }
+        .pricing-features li { padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+        .pricing-features li::before { content: '✓'; color: var(--gold); font-weight: 700; }
+        
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem; border-bottom: 1px solid var(--border-color); }
+        .modal-title { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, var(--green-soft), var(--lilac-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; padding: 0.25rem; line-height: 1; transition: color var(--transition-fast); }
+        .modal-close:hover { color: var(--red); }
+        .modal-body { padding: 1.5rem; }
+        
+        .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 3000; display: flex; flex-direction: column; gap: 0.5rem; }
+        .toast { background: var(--bg-card); border: 1px solid var(--green-soft); border-radius: var(--radius-sm); padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.5rem; box-shadow: var(--shadow-neon-green); animation: slideInRight 0.3s ease; min-width: 260px; font-size: 0.8rem; }
+        .toast.error { border-color: var(--red); }
+        .toast.info { border-color: var(--cyan); }
+        .toast.gold { border-color: var(--gold); box-shadow: var(--shadow-neon-gold); }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .badge { display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.12rem 0.4rem; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--bg-dark); font-size: 0.55rem; font-weight: 700; border-radius: 8px; margin-left: 0.4rem; }
+        
+        .swot-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        @media (min-width: 640px) { .swot-grid { grid-template-columns: 1fr 1fr; } }
+        .swot-cell { background: var(--bg-input); border-radius: var(--radius-md); padding: 1rem; border: 1px solid var(--border-color); }
+        .swot-cell.strengths { border-color: var(--green-soft); }
+        .swot-cell.weaknesses { border-color: var(--lilac-soft); }
+        .swot-cell.opportunities { border-color: var(--cyan); }
+        .swot-cell.threats { border-color: var(--red); }
+        .swot-label { font-family: 'Orbitron', monospace; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .swot-cell.strengths .swot-label { color: var(--green-soft); }
+        .swot-cell.weaknesses .swot-label { color: var(--lilac-soft); }
+        .swot-cell.opportunities .swot-label { color: var(--cyan); }
+        .swot-cell.threats .swot-label { color: var(--red); }
+        
+        .power-map-container { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin: 1rem 0; }
+        .power-map { position: relative; width: 100%; aspect-ratio: 1.5; max-height: 350px; background: linear-gradient(135deg, rgba(127,255,127,0.03), rgba(200,182,255,0.03)); border-radius: var(--radius-sm); overflow: hidden; }
+        .power-map-axis { position: absolute; background: var(--border-color); }
+        .power-map-axis.horizontal { left: 10%; right: 10%; top: 50%; height: 1px; }
+        .power-map-axis.vertical { top: 10%; bottom: 10%; left: 50%; width: 1px; }
+        .power-map-label { position: absolute; font-size: 0.6rem; color: var(--text-muted); font-weight: 600; }
+        .power-map-label.top { top: 2%; left: 50%; transform: translateX(-50%); }
+        .power-map-label.bottom { bottom: 2%; left: 50%; transform: translateX(-50%); }
+        .power-map-label.left { left: 2%; top: 50%; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); }
+        .power-map-label.right { right: 2%; top: 50%; writing-mode: vertical-rl; transform: translateY(-50%); }
+        .power-actor { position: absolute; min-width: 50px; padding: 3px 7px; background: var(--bg-card); border: 2px solid var(--green-soft); border-radius: 15px; font-size: 0.6rem; font-weight: 600; color: var(--text-primary); cursor: move; transform: translate(-50%, -50%); transition: box-shadow var(--transition-fast); text-align: center; white-space: nowrap; z-index: 10; user-select: none; }
+        .power-actor:hover { box-shadow: var(--shadow-neon-green); }
+        .power-actor.ally { border-color: var(--green-soft); }
+        .power-actor.neutral { border-color: var(--orange); }
+        .power-actor.opponent { border-color: var(--red); }
+        
+        .progress-container { margin-bottom: 1rem; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+        .progress-label { font-size: 0.75rem; color: var(--text-secondary); }
+        .progress-value { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--green-soft); }
+        .progress-bar { height: 5px; background: var(--bg-input); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green-soft), var(--lilac-soft)); border-radius: 3px; transition: width var(--transition-med); }
+        
+        .checklist-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); }
+        .checklist-item:last-child { border-bottom: none; }
+        .checkbox { width: 18px; height: 18px; border: 2px solid var(--border-color); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast); flex-shrink: 0; margin-top: 2px; }
+        .checkbox:hover { border-color: var(--green-soft); }
+        .checkbox.checked { background: linear-gradient(135deg, var(--green-soft), var(--green-medium)); border-color: var(--green-soft); }
+        .checkbox.checked::after { content: '✓'; color: var(--bg-dark); font-weight: 700; font-size: 0.7rem; }
+        .checklist-text { flex: 1; color: var(--text-secondary); font-size: 0.8rem; }
+        .checklist-item.completed .checklist-text { color: var(--text-muted); text-decoration: line-through; }
+        
+        .timeline { position: relative; padding-left: 1.5rem; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--green-soft), var(--lilac-soft)); }
+        .timeline-item { position: relative; padding-bottom: 1rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -1.5rem; top: 0.2rem; width: 8px; height: 8px; background: var(--green-soft); border-radius: 50%; transform: translateX(-50%); }
+        .timeline-date { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--lilac-soft); }
+        .timeline-content { background: var(--bg-input); padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem; margin-top: 0.2rem; }
+        
+        .veille-feed { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1rem; max-height: 350px; overflow-y: auto; }
+        .veille-item { padding: 0.6rem; border-bottom: 1px solid var(--border-color); transition: background var(--transition-fast); }
+        .veille-item:last-child { border-bottom: none; }
+        .veille-item:hover { background: var(--bg-input); }
+        .veille-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.2rem; }
+        .veille-item-title { font-weight: 600; font-size: 0.8rem; color: var(--text-primary); }
+        .veille-item-date { font-size: 0.6rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+        .veille-item-content { font-size: 0.75rem; color: var(--text-secondary); }
+        .veille-tag { font-size: 0.55rem; padding: 2px 5px; background: var(--green-subtle); color: var(--green-soft); border-radius: 8px; }
+        
+        .export-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 0.6rem; }
+        .export-card { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.9rem; text-align: center; cursor: pointer; transition: all var(--transition-med); }
+        .export-card:hover { border-color: var(--green-soft); box-shadow: var(--shadow-neon-green); transform: translateY(-3px); }
+        .export-card.protocol { border-color: var(--cyan); }
+        .export-card.protocol:hover { box-shadow: var(--shadow-neon-cyan); }
+        .export-card-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+        .export-card-name { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 700; color: var(--text-primary); }
+        .export-card-desc { font-size: 0.6rem; color: var(--text-muted); }
+        
+        .dropzone { border: 2px dashed var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; transition: all var(--transition-med); cursor: pointer; }
+        .dropzone:hover, .dropzone.dragover { border-color: var(--green-soft); background: var(--green-subtle); }
+        .dropzone-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-muted); }
+        .dropzone-text { color: var(--text-secondary); font-size: 0.85rem; }
+        .dropzone-hint { font-size: 0.7rem; color: var(--text-muted); }
+        
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--green-soft); }
+        
+        @media (max-width: 640px) { 
+            .header-actions .btn span:not(:first-child) { display: none; } 
+            .section-title { font-size: 1.2rem; } 
+            .wallet-details { display: none; }
+            .economy-tiers { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-effects"><div class="grid-overlay"></div><div class="bg-gradient bg-gradient-1"></div><div class="bg-gradient bg-gradient-2"></div><div class="bg-gradient bg-gradient-3"></div></div>
+    
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <span class="logo-text">Plaidoyer Citoyen</span>
+                <span class="logo-version">4.0</span>
+            </div>
+            
+            <div class="wallet-widget" onclick="openModal('wallet-modal')" title="Mon portefeuille">
+                <span class="wallet-icon">💰</span>
+                <span class="wallet-balance" id="wallet-total">1250 ℂ</span>
+                <div class="wallet-details">
+                    <span class="wallet-micro" id="wallet-micro-badge">μ625</span>
+                    <span class="wallet-meso" id="wallet-meso-badge">M312</span>
+                    <span class="wallet-macro" id="wallet-macro-badge">Ω313</span>
+                </div>
+            </div>
+            
+            <div class="solid-status disconnected" id="solid-status" onclick="openModal('solid-modal')">
+                <div class="solid-dot"></div>
+                <span id="solid-status-text">POD non connecté</span>
+            </div>
+            
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="openModal('import-modal')" title="Importer">📥</button>
+                <button class="btn btn-ghost" onclick="openModal('export-modal')" title="Exporter">📤</button>
+                <button class="btn btn-primary" onclick="saveProject()"><span>💾</span><span>Sauver</span></button>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="nav-tabs">
+        <div class="nav-tabs-inner">
+            <button class="nav-tab active" data-section="accueil">🏠 Accueil</button>
+            <button class="nav-tab" data-section="voir">👁️ Voir</button>
+            <button class="nav-tab" data-section="juger">⚖️ Juger</button>
+            <button class="nav-tab" data-section="agir">🚀 Agir</button>
+            <button class="nav-tab highlight" data-section="economie">💰 Économie <span class="badge">NEW</span></button>
+            <button class="nav-tab solid" data-section="solid">🔗 Solid POD <span class="badge">NEW</span></button>
+            <button class="nav-tab" data-section="veille">📡 Veille</button>
+            <button class="nav-tab" data-section="suivi">📊 Dashboard</button>
+            <button class="nav-tab" data-section="export">📦 Export</button>
+        </div>
+    </nav>
+    <main class="main-container">
+        <!-- ACCUEIL -->
+        <section id="accueil" class="section active">
+            <div class="section-header" style="padding: 1.5rem 0;">
+                <h1 class="section-title" style="font-size: 1.8rem;">Plaidoyer Citoyen 4.0</h1>
+                <p class="section-subtitle">Souveraineté des données • Économie éthique • Forkable</p>
+            </div>
+            
+            <div class="quick-stats">
+                <div class="stat-card gold"><div class="stat-value gold" id="stat-credits">1250</div><div class="stat-label">Crédits ℂ</div></div>
+                <div class="stat-card"><div class="stat-value" id="stat-progress">0%</div><div class="stat-label">Progression</div></div>
+                <div class="stat-card"><div class="stat-value" id="stat-actors">0</div><div class="stat-label">Acteurs</div></div>
+                <div class="stat-card"><div class="stat-value" id="stat-veille">0</div><div class="stat-label">Veille</div></div>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <button class="btn btn-primary" onclick="switchSection('voir')" style="margin: 0.2rem;">🚀 Commencer</button>
+                <button class="btn btn-gold" onclick="switchSection('economie')" style="margin: 0.2rem;">💰 Économie</button>
+                <button class="btn btn-cyan" onclick="switchSection('solid')" style="margin: 0.2rem;">🔗 Solid POD</button>
+            </div>
+            
+            <!-- Pricing Card -->
+            <div class="pricing-card" style="max-width: 400px; margin: 0 auto 1.5rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">ABONNEMENT CITOYEN</div>
+                <div class="pricing-amount">12,50€</div>
+                <div class="pricing-period">/an/IBAN</div>
+                <ul class="pricing-features">
+                    <li>1250 crédits ℂ initiaux</li>
+                    <li>Stockage POD Solid illimité</li>
+                    <li>Export tous formats</li>
+                    <li>Économie micro/meso/macro</li>
+                    <li>Fork du modèle économique</li>
+                    <li>Zéro tracking, 100% souverain</li>
+                </ul>
+                <button class="btn btn-gold" onclick="subscribe()" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    🚀 S'abonner — Rejoindre le mouvement
+                </button>
+            </div>
+            
+            <div class="grid-3">
+                <div class="card" style="border-color: var(--green-soft);"><h3 style="color: var(--green-soft); font-family: 'Orbitron', monospace; margin-bottom: 0.5rem; font-size: 0.9rem;">👁️ VOIR</h3><p style="color: var(--text-secondary); font-size: 0.8rem;">Observer la réalité sociale</p></div>
+                <div class="card" style="border-color: var(--lilac-soft);"><h3 style="color: var(--lilac-soft); font-family: 'Orbitron', monospace; margin-bottom: 0.5rem; font-size: 0.9rem;">⚖️ JUGER</h3><p style="color: var(--text-secondary); font-size: 0.8rem;">Analyser les enjeux</p></div>
+                <div class="card" style="border-color: var(--cyan);"><h3 style="color: var(--cyan); font-family: 'Orbitron', monospace; margin-bottom: 0.5rem; font-size: 0.9rem;">🚀 AGIR</h3><p style="color: var(--text-secondary); font-size: 0.8rem;">Mettre en œuvre le changement</p></div>
+            </div>
+        </section>
+        
+        <!-- ÉCONOMIE -->
+        <section id="economie" class="section">
+            <div class="section-header">
+                <h2 class="section-title" style="background: linear-gradient(135deg, var(--gold), var(--orange)); -webkit-background-clip: text;">💰 Économie Éthique</h2>
+                <p class="section-subtitle">Un système économique transparent, forkable et au service du bien commun</p>
+            </div>
+            
+            <!-- Tiers économiques -->
+            <div class="economy-tiers">
+                <div class="tier-card micro">
+                    <div class="tier-icon">🧑</div>
+                    <div class="tier-name">MICRO</div>
+                    <div class="tier-percent">50%</div>
+                    <div class="tier-desc">Valeur individuelle<br>Temps, expertise, création</div>
+                    <div class="tier-credits" id="tier-micro-credits">625 ℂ</div>
+                </div>
+                <div class="tier-card meso">
+                    <div class="tier-icon">👥</div>
+                    <div class="tier-name">MESO</div>
+                    <div class="tier-percent">25%</div>
+                    <div class="tier-desc">Valeur collective<br>Organisations, réseaux</div>
+                    <div class="tier-credits" id="tier-meso-credits">312 ℂ</div>
+                </div>
+                <div class="tier-card macro">
+                    <div class="tier-icon">🌍</div>
+                    <div class="tier-name">MACRO</div>
+                    <div class="tier-percent">25%</div>
+                    <div class="tier-desc">Bien commun<br>Infrastructure, communs</div>
+                    <div class="tier-credits" id="tier-macro-credits">313 ℂ</div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <!-- Wallet détaillé -->
+                <div class="card gold">
+                    <h3 style="color: var(--gold); font-family: 'Orbitron', monospace; margin-bottom: 1rem; font-size: 1rem;">💳 Mon Portefeuille</h3>
+                    <div class="stat-card gold" style="margin-bottom: 1rem;">
+                        <div class="stat-value gold" style="font-size: 2rem;" id="wallet-balance-display">1250 ℂ</div>
+                        <div class="stat-label">Solde total</div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-header"><span class="progress-label">🧑 Micro</span><span class="progress-value" id="micro-value">625 ℂ</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="micro-fill" style="width: 50%; background: var(--green-soft);"></div></div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-header"><span class="progress-label">👥 Meso</span><span class="progress-value" id="meso-value">312 ℂ</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="meso-fill" style="width: 25%; background: var(--lilac-soft);"></div></div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-header"><span class="progress-label">🌍 Macro</span><span class="progress-value" id="macro-value">313 ℂ</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="macro-fill" style="width: 25%; background: var(--cyan);"></div></div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-gold" onclick="openModal('transfer-modal')">↔️ Transférer</button>
+                        <button class="btn btn-secondary" onclick="openModal('topup-modal')">➕ Recharger</button>
+                    </div>
+                </div>
+                
+                <!-- Transactions -->
+                <div class="card">
+                    <h3 style="color: var(--lilac-soft); font-family: 'Orbitron', monospace; margin-bottom: 1rem; font-size: 1rem;">📜 Historique</h3>
+                    <div class="transaction-list" id="transaction-list">
+                        <div class="transaction-item">
+                            <div class="transaction-icon income">✨</div>
+                            <div class="transaction-details">
+                                <div class="transaction-label">Abonnement initial</div>
+                                <div class="transaction-date">Aujourd'hui</div>
+                            </div>
+                            <div class="transaction-amount positive">+1250 ℂ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grille de valeurs -->
+            <div class="card">
+                <h3 style="color: var(--cyan); font-family: 'Orbitron', monospace; margin-bottom: 1rem; font-size: 1rem;">📊 Grille des Valeurs (coûts en ℂ)</h3>
+                <div class="grid-3">
+                    <div style="background: var(--green-subtle); padding: 1rem; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--green-soft); font-size: 0.8rem; margin-bottom: 0.5rem;">🧑 MICRO (individu)</h4>
+                        <ul style="font-size: 0.75rem; color: var(--text-secondary); list-style: none;">
+                            <li>• Sauvegarder projet: <b>1ℂ</b></li>
+                            <li>• Export PDF: <b>5ℂ</b></li>
+                            <li>• Export DOCX: <b>5ℂ</b></li>
+                            <li>• Ajout acteur: <b>2ℂ</b></li>
+                            <li>• Signalement veille: <b>1ℂ</b></li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--lilac-subtle); padding: 1rem; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--lilac-soft); font-size: 0.8rem; margin-bottom: 0.5rem;">👥 MESO (collectif)</h4>
+                        <ul style="font-size: 0.75rem; color: var(--text-secondary); list-style: none;">
+                            <li>• Partage projet: <b>10ℂ</b></li>
+                            <li>• Collaboration: <b>15ℂ</b></li>
+                            <li>• Export FHIR: <b>20ℂ</b></li>
+                            <li>• Sync POD: <b>5ℂ</b></li>
+                            <li>• RSS public: <b>10ℂ</b></li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--cyan-subtle); padding: 1rem; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--cyan); font-size: 0.8rem; margin-bottom: 0.5rem;">🌍 MACRO (communs)</h4>
+                        <ul style="font-size: 0.75rem; color: var(--text-secondary); list-style: none;">
+                            <li>• Fork modèle: <b>50ℂ</b></li>
+                            <li>• Contribution code: <b>+25ℂ</b></li>
+                            <li>• Don aux communs: <b>libre</b></li>
+                            <li>• Parrainage: <b>+100ℂ</b></li>
+                            <li>• Gouvernance: <b>1ℂ/vote</b></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fork Banner -->
+            <div class="fork-banner">
+                <h3>🍴 Forkez ce Modèle Économique</h3>
+                <p>Ce système économique est open source. Créez votre propre instance avec vos propres règles de distribution micro/meso/macro.</p>
+                <button class="btn btn-gold" onclick="forkEconomy()">🍴 Fork — Créer ma propre économie (50ℂ)</button>
+                <button class="btn btn-secondary" onclick="exportEconomyModel()" style="margin-left: 0.5rem;">📄 Voir le modèle JSON</button>
+            </div>
+        </section>
+        
+        <!-- SOLID POD -->
+        <section id="solid" class="section">
+            <div class="section-header">
+                <h2 class="section-title" style="background: linear-gradient(135deg, var(--cyan), var(--lilac-soft)); -webkit-background-clip: text;">🔗 Solid POD</h2>
+                <p class="section-subtitle">Souveraineté totale sur vos données — Protocole de Tim Berners-Lee</p>
+            </div>
+            
+            <div class="card solid-card">
+                <div class="solid-header">
+                    <div class="solid-logo">🔗</div>
+                    <div class="solid-info">
+                        <h3>Solid — Social Linked Data</h3>
+                        <p>Vos données vous appartiennent. Stockez-les dans votre POD personnel.</p>
+                    </div>
+                </div>
+                
+                <div class="solid-features">
+                    <div class="solid-feature"><div class="solid-feature-icon">🔐</div><div class="solid-feature-name">Chiffrement E2E</div></div>
+                    <div class="solid-feature"><div class="solid-feature-icon">🌐</div><div class="solid-feature-name">Décentralisé</div></div>
+                    <div class="solid-feature"><div class="solid-feature-icon">🔄</div><div class="solid-feature-name">Interopérable</div></div>
+                    <div class="solid-feature"><div class="solid-feature-icon">👤</div><div class="solid-feature-name">WebID</div></div>
+                    <div class="solid-feature"><div class="solid-feature-icon">📂</div><div class="solid-feature-name">Linked Data</div></div>
+                    <div class="solid-feature"><div class="solid-feature-icon">🛡️</div><div class="solid-feature-name">ACL Granulaire</div></div>
+                </div>
+                
+                <div id="solid-disconnected-view">
+                    <div class="form-group">
+                        <label class="form-label">URL de votre POD Solid</label>
+                        <input type="url" class="form-input" id="solid-pod-url" placeholder="https://votrepod.solidcommunity.net/">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WebID (optionnel)</label>
+                        <input type="url" class="form-input" id="solid-webid" placeholder="https://votrepod.solidcommunity.net/profile/card#me">
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-cyan" onclick="connectSolid()">🔗 Connecter mon POD</button>
+                        <button class="btn btn-secondary" onclick="createPodSimulation()">🆕 Simuler un POD local</button>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">
+                        Fournisseurs Solid recommandés: 
+                        <a href="https://solidcommunity.net" target="_blank" style="color: var(--cyan);">solidcommunity.net</a>, 
+                        <a href="https://inrupt.net" target="_blank" style="color: var(--cyan);">inrupt.net</a>,
+                        <a href="https://solidweb.org" target="_blank" style="color: var(--cyan);">solidweb.org</a>
+                    </p>
+                </div>
+                
+                <div id="solid-connected-view" style="display: none;">
+                    <div class="pod-browser">
+                        <div class="pod-path">
+                            <span>📁</span>
+                            <span id="current-pod-path">/plaidoyer-citoyen/</span>
+                        </div>
+                        <div class="pod-files" id="pod-files">
+                            <div class="pod-file" onclick="openPodFile('projet.json')"><div class="pod-file-icon">📄</div><div class="pod-file-name">projet.json</div><div class="pod-file-size">12 KB</div></div>
+                            <div class="pod-file" onclick="openPodFile('acteurs.ttl')"><div class="pod-file-icon">🔗</div><div class="pod-file-name">acteurs.ttl</div><div class="pod-file-size">3 KB</div></div>
+                            <div class="pod-file" onclick="openPodFile('veille/')"><div class="pod-file-icon">📁</div><div class="pod-file-name">veille/</div><div class="pod-file-size">—</div></div>
+                            <div class="pod-file" onclick="openPodFile('exports/')"><div class="pod-file-icon">📁</div><div class="pod-file-name">exports/</div><div class="pod-file-size">—</div></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-cyan" onclick="syncToPod()">☁️ Sync vers POD (5ℂ)</button>
+                        <button class="btn btn-secondary" onclick="syncFromPod()">⬇️ Restaurer depuis POD</button>
+                        <button class="btn btn-ghost" onclick="disconnectSolid()">🔌 Déconnecter</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Permissions ACL -->
+            <div class="card">
+                <h3 style="color: var(--lilac-soft); font-family: 'Orbitron', monospace; margin-bottom: 1rem; font-size: 1rem;">🛡️ Contrôle d'Accès (ACL)</h3>
+                <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 1rem;">Définissez qui peut voir et modifier vos données.</p>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Projet principal</label>
+                        <select class="form-select" id="acl-projet">
+                            <option value="private">🔒 Privé (moi seul)</option>
+                            <option value="friends">👥 Amis (WebID list)</option>
+                            <option value="public-read">👁️ Lecture publique</option>
+                            <option value="public">🌍 Public total</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Veille citoyenne</label>
+                        <select class="form-select" id="acl-veille">
+                            <option value="private">🔒 Privé</option>
+                            <option value="friends">👥 Amis</option>
+                            <option value="public-read" selected>👁️ Lecture publique</option>
+                            <option value="public">🌍 Public</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="saveACL()">💾 Sauvegarder les permissions</button>
+            </div>
+        </section>
+        
+        <!-- VOIR -->
+        <section id="voir" class="section">
+            <div class="section-header"><h2 class="section-title">👁️ Phase VOIR</h2><p class="section-subtitle">Observer et comprendre la réalité sociale</p></div>
+            <div class="card expanded"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">01</div><h3 class="card-title">Le Domino — Notre Identité</h3><div class="card-toggle">▼</div></div><div class="card-content"><p class="card-description">Définir qui nous sommes et pourquoi nous agissons.</p><div class="form-group"><label class="form-label">Pourquoi existons-nous ?</label><textarea class="form-textarea" data-field="domino_pourquoi" placeholder="Notre raison d'être..." onchange="recordAction('field_edit', 1, 'micro')"></textarea></div><div class="form-group"><label class="form-label">Nos valeurs fondamentales</label><textarea class="form-textarea" data-field="domino_valeurs" placeholder="Les principes qui nous guident..."></textarea></div><div class="form-group"><label class="form-label">Changements recherchés</label><textarea class="form-textarea" data-field="domino_changements" placeholder="Ce que nous voulons transformer..."></textarea></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">02</div><h3 class="card-title">Fleur du Pouvoir</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="grid-2"><div class="form-group"><label class="form-label">Pouvoir SUR</label><textarea class="form-textarea" data-field="fleur_sur" placeholder="Domination..."></textarea></div><div class="form-group"><label class="form-label">Pouvoir DE</label><textarea class="form-textarea" data-field="fleur_de" placeholder="Capacités..."></textarea></div><div class="form-group"><label class="form-label">Pouvoir AVEC</label><textarea class="form-textarea" data-field="fleur_avec" placeholder="Collectif..."></textarea></div><div class="form-group"><label class="form-label">Pouvoir INTÉRIEUR</label><textarea class="form-textarea" data-field="fleur_interieur" placeholder="Confiance..."></textarea></div></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">03</div><h3 class="card-title">Analyse du Contexte</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="grid-2"><div class="form-group"><label class="form-label">Contexte politique</label><textarea class="form-textarea" data-field="contexte_politique" placeholder="Situation politique..."></textarea></div><div class="form-group"><label class="form-label">Contexte économique</label><textarea class="form-textarea" data-field="contexte_economique" placeholder="Situation économique..."></textarea></div><div class="form-group"><label class="form-label">Contexte social</label><textarea class="form-textarea" data-field="contexte_social" placeholder="Dynamiques sociales..."></textarea></div><div class="form-group"><label class="form-label">Opportunités</label><textarea class="form-textarea" data-field="contexte_opportunites" placeholder="Fenêtres d'opportunité..."></textarea></div></div></div></div>
+        </section>
+        
+        <!-- JUGER -->
+        <section id="juger" class="section">
+            <div class="section-header"><h2 class="section-title">⚖️ Phase JUGER</h2><p class="section-subtitle">Analyser et prioriser les enjeux</p></div>
+            <div class="card expanded"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">04</div><h3 class="card-title">Analyse SWOT</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="swot-grid"><div class="swot-cell strengths"><div class="swot-label">💪 Forces</div><textarea class="form-textarea" data-field="swot_forces" placeholder="Nos atouts..."></textarea></div><div class="swot-cell weaknesses"><div class="swot-label">⚠️ Faiblesses</div><textarea class="form-textarea" data-field="swot_faiblesses" placeholder="Nos limites..."></textarea></div><div class="swot-cell opportunities"><div class="swot-label">🎯 Opportunités</div><textarea class="form-textarea" data-field="swot_opportunites" placeholder="Facteurs favorables..."></textarea></div><div class="swot-cell threats"><div class="swot-label">🚨 Menaces</div><textarea class="form-textarea" data-field="swot_menaces" placeholder="Risques..."></textarea></div></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">05</div><h3 class="card-title">Arbre à Problèmes</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="form-group"><label class="form-label">🌳 Problème central</label><input type="text" class="form-input" data-field="arbre_probleme" placeholder="Le problème principal..."></div><div class="grid-2"><div class="form-group"><label class="form-label">🔻 Causes</label><textarea class="form-textarea" data-field="arbre_causes" placeholder="Causes structurelles..."></textarea></div><div class="form-group"><label class="form-label">🔺 Conséquences</label><textarea class="form-textarea" data-field="arbre_consequences" placeholder="Effets observés..."></textarea></div></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">06</div><h3 class="card-title">5 Pourquoi</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="form-group"><label class="form-label">1. Pourquoi ?</label><input type="text" class="form-input" data-field="pourquoi_1" placeholder="Première réponse..."></div><div class="form-group"><label class="form-label">2. Pourquoi ?</label><input type="text" class="form-input" data-field="pourquoi_2"></div><div class="form-group"><label class="form-label">3. Pourquoi ?</label><input type="text" class="form-input" data-field="pourquoi_3"></div><div class="form-group"><label class="form-label">4. Pourquoi ?</label><input type="text" class="form-input" data-field="pourquoi_4"></div><div class="form-group"><label class="form-label">5. Cause racine</label><input type="text" class="form-input" data-field="pourquoi_5" placeholder="Cause racine..."></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">07</div><h3 class="card-title">Théorie du Changement</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="form-group"><label class="form-label">Vision long terme</label><textarea class="form-textarea" data-field="toc_vision" placeholder="Le monde que nous voulons..."></textarea></div><div class="form-group"><label class="form-label">Changements intermédiaires</label><textarea class="form-textarea" data-field="toc_intermediaires" placeholder="Étapes vers la vision..."></textarea></div></div></div>
+        </section>
+        
+        <!-- AGIR -->
+        <section id="agir" class="section">
+            <div class="section-header"><h2 class="section-title">🚀 Phase AGIR</h2><p class="section-subtitle">Planifier et mettre en œuvre le plaidoyer</p></div>
+            <div class="card expanded"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">08</div><h3 class="card-title">Objectifs SMART</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="form-group"><label class="form-label">Objectif principal</label><textarea class="form-textarea" data-field="smart_objectif" placeholder="D'ici [date], nous voulons que [cible] fasse [action]..."></textarea></div><div class="grid-2"><div class="form-group"><label class="form-label">Indicateurs</label><textarea class="form-textarea" data-field="smart_indicateurs" placeholder="Comment mesurer..."></textarea></div><div class="form-group"><label class="form-label">Échéance</label><input type="date" class="form-input" data-field="smart_echeance"></div></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">09</div><h3 class="card-title">Cibles</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="grid-2"><div class="form-group"><label class="form-label">🎯 Cible principale</label><input type="text" class="form-input" data-field="cible_principale" placeholder="Décideur..."></div><div class="form-group"><label class="form-label">🎯 Cibles secondaires</label><input type="text" class="form-input" data-field="cible_secondaires" placeholder="Influenceurs..."></div></div><div class="form-group"><label class="form-label">Motivations</label><textarea class="form-textarea" data-field="cible_motivations" placeholder="Qu'est-ce qui les motive ?"></textarea></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">10</div><h3 class="card-title">Power Mapping</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="grid-3" style="margin-bottom: 1rem;"><input type="text" class="form-input" id="actor-name" placeholder="Nom de l'acteur"><select class="form-select" id="actor-type"><option value="ally">🟢 Allié</option><option value="neutral">🟡 Neutre</option><option value="opponent">🔴 Opposant</option></select><button class="btn btn-primary" onclick="addActor()">+ Ajouter (2ℂ)</button></div><div class="power-map-container"><div class="power-map" id="power-map"><div class="power-map-axis horizontal"></div><div class="power-map-axis vertical"></div><div class="power-map-label top">POUVOIR ÉLEVÉ</div><div class="power-map-label bottom">POUVOIR FAIBLE</div><div class="power-map-label left">OPPOSÉ</div><div class="power-map-label right">FAVORABLE</div></div></div></div></div>
+            <div class="card"><div class="card-header" onclick="toggleCard(this.parentElement)"><div class="card-number">11</div><h3 class="card-title">Message Clé</h3><div class="card-toggle">▼</div></div><div class="card-content"><div class="grid-2"><div class="form-group"><label class="form-label">🎣 Accroche</label><input type="text" class="form-input" data-field="msg_accroche" placeholder="Phrase d'accroche..."></div><div class="form-group"><label class="form-label">😤 Problème</label><textarea class="form-textarea" data-field="msg_probleme" placeholder="Description..."></textarea></div><div class="form-group"><label class="form-label">💡 Importance</label><textarea class="form-textarea" data-field="msg_importance" placeholder="Enjeux..."></textarea></div><div class="form-group"><label class="form-label">✊ Action</label><textarea class="form-textarea" data-field="msg_action" placeholder="Ce que nous demandons..."></textarea></div></div><button class="btn btn-secondary" onclick="generateMessage()" style="margin-top: 1rem;">🔄 Générer message</button><div id="generated-message" style="display: none; margin-top: 1rem;"></div></div></div>
+        </section>
+        
+        <!-- VEILLE -->
+        <section id="veille" class="section">
+            <div class="section-header"><h2 class="section-title">📡 Veille Citoyenne</h2><p class="section-subtitle">Surveiller, collecter et organiser l'information</p></div>
+            <div class="grid-2">
+                <div>
+                    <div class="card"><h3 style="color: var(--green-soft); margin-bottom: 1rem; font-size: 0.9rem;">➕ Signalement (1ℂ)</h3><div class="form-group"><input type="text" class="form-input" id="veille-title" placeholder="Titre"></div><div class="form-group"><textarea class="form-textarea" id="veille-content" placeholder="Description, source..."></textarea></div><div class="form-group"><select class="form-select" id="veille-category"><option value="politique">🏛️ Politique</option><option value="social">👥 Social</option><option value="environnement">🌍 Environnement</option><option value="economie">💰 Économie</option><option value="droits">⚖️ Droits</option><option value="media">📰 Média</option></select></div><button class="btn btn-primary" onclick="addVeille()">📥 Enregistrer</button></div>
+                    <div class="veille-feed" id="veille-feed"><p style="color: var(--text-muted); text-align: center; padding: 1.5rem;">Aucun signalement.<br>Commencez votre veille !</p></div>
+                </div>
+                <div>
+                    <div class="card"><h3 style="color: var(--lilac-soft); margin-bottom: 1rem; font-size: 0.9rem;">📊 Stats</h3><div class="stat-card" style="margin-bottom: 0.5rem;"><div class="stat-value" id="veille-total">0</div><div class="stat-label">Signalements</div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">🏛️ Politique</span><span class="progress-value" id="veille-politique">0</span></div><div class="progress-bar"><div class="progress-fill" id="veille-politique-fill" style="width: 0%;"></div></div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">👥 Social</span><span class="progress-value" id="veille-social">0</span></div><div class="progress-bar"><div class="progress-fill" id="veille-social-fill" style="width: 0%;"></div></div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">🌍 Env</span><span class="progress-value" id="veille-env">0</span></div><div class="progress-bar"><div class="progress-fill" id="veille-env-fill" style="width: 0%;"></div></div></div></div>
+                    <div class="card" style="border-color: var(--cyan);"><h3 style="color: var(--cyan); margin-bottom: 0.5rem; font-size: 0.9rem;">📡 Export RSS (10ℂ)</h3><p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.75rem;">Générez un flux RSS de votre veille.</p><button class="btn btn-cyan" onclick="exportRSS()">📡 Générer RSS</button></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SUIVI/DASHBOARD -->
+        <section id="suivi" class="section">
+            <div class="section-header"><h2 class="section-title">📊 Dashboard</h2><p class="section-subtitle">Suivre l'avancement de votre plaidoyer</p></div>
+            <div class="quick-stats"><div class="stat-card"><div class="stat-value" id="dash-fields">0</div><div class="stat-label">Champs</div></div><div class="stat-card"><div class="stat-value" id="dash-actors">0</div><div class="stat-label">Acteurs</div></div><div class="stat-card"><div class="stat-value" id="dash-veille">0</div><div class="stat-label">Veille</div></div><div class="stat-card"><div class="stat-value" id="dash-checks">0</div><div class="stat-label">Étapes</div></div></div>
+            <div class="card"><h3 style="color: var(--green-soft); margin-bottom: 1rem; font-size: 0.9rem;">📈 Progression</h3><div class="progress-container"><div class="progress-header"><span class="progress-label">Complétude</span><span class="progress-value" id="global-progress">0%</span></div><div class="progress-bar" style="height: 10px;"><div class="progress-fill" id="global-progress-fill" style="width: 0%;"></div></div></div><div class="grid-4" style="margin-top: 1rem;"><div class="progress-container"><div class="progress-header"><span class="progress-label">👁️ Voir</span><span class="progress-value" id="prog-voir">0%</span></div><div class="progress-bar"><div class="progress-fill" id="prog-voir-fill" style="width: 0%;"></div></div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">⚖️ Juger</span><span class="progress-value" id="prog-juger">0%</span></div><div class="progress-bar"><div class="progress-fill" id="prog-juger-fill" style="width: 0%;"></div></div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">🚀 Agir</span><span class="progress-value" id="prog-agir">0%</span></div><div class="progress-bar"><div class="progress-fill" id="prog-agir-fill" style="width: 0%;"></div></div></div><div class="progress-container"><div class="progress-header"><span class="progress-label">💰 Éco</span><span class="progress-value" id="prog-eco">—</span></div><div class="progress-bar"><div class="progress-fill" id="prog-eco-fill" style="width: 100%; background: var(--gold);"></div></div></div></div></div>
+            <div class="card"><h3 style="color: var(--lilac-soft); margin-bottom: 1rem; font-size: 0.9rem;">✅ Checklist</h3><div id="checklist-container"><div class="checklist-item" data-check="0"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Définir identité (Domino)</div></div><div class="checklist-item" data-check="1"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Analyser contexte</div></div><div class="checklist-item" data-check="2"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">SWOT</div></div><div class="checklist-item" data-check="3"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Problème & causes</div></div><div class="checklist-item" data-check="4"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Objectifs SMART</div></div><div class="checklist-item" data-check="5"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Cibles</div></div><div class="checklist-item" data-check="6"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Power mapping</div></div><div class="checklist-item" data-check="7"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Message clé</div></div><div class="checklist-item" data-check="8"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Veille active</div></div><div class="checklist-item" data-check="9"><div class="checkbox" onclick="toggleCheck(this)"></div><div class="checklist-text">Actions lancées</div></div></div></div>
+            <div class="card"><h3 style="color: var(--cyan); margin-bottom: 1rem; font-size: 0.9rem;">📝 Journal</h3><div class="form-group"><textarea class="form-textarea" id="journal-entry" placeholder="Notez vos avancées..."></textarea></div><button class="btn btn-primary" onclick="addJournalEntry()">📝 Ajouter</button><div class="timeline" id="journal-timeline" style="margin-top: 1rem;"></div></div>
+        </section>
+        
+        <!-- EXPORT -->
+        <section id="export" class="section">
+            <div class="section-header"><h2 class="section-title">📦 Export Pro</h2><p class="section-subtitle">Exportez dans tous les formats</p></div>
+            <div class="card"><h3 style="color: var(--green-soft); margin-bottom: 1rem; font-size: 0.9rem;">📄 Documents (5ℂ chaque)</h3><div class="export-grid"><div class="export-card" onclick="exportPDF()"><div class="export-card-icon">📕</div><div class="export-card-name">PDF</div></div><div class="export-card" onclick="exportDOCX()"><div class="export-card-icon">📘</div><div class="export-card-name">DOCX</div></div><div class="export-card" onclick="exportPPTX()"><div class="export-card-icon">📙</div><div class="export-card-name">PPTX</div></div><div class="export-card" onclick="exportHTML()"><div class="export-card-icon">🌐</div><div class="export-card-name">HTML</div></div></div></div>
+            <div class="card"><h3 style="color: var(--lilac-soft); margin-bottom: 1rem; font-size: 0.9rem;">💾 Données (1ℂ)</h3><div class="export-grid"><div class="export-card" onclick="exportJSON()"><div class="export-card-icon">📋</div><div class="export-card-name">JSON</div></div><div class="export-card" onclick="exportMarkdown()"><div class="export-card-icon">📝</div><div class="export-card-name">MD</div></div><div class="export-card" onclick="exportCSV()"><div class="export-card-icon">📊</div><div class="export-card-name">CSV</div></div><div class="export-card" onclick="exportTXT()"><div class="export-card-icon">📃</div><div class="export-card-name">TXT</div></div></div></div>
+            <div class="card"><h3 style="color: var(--cyan); margin-bottom: 1rem; font-size: 0.9rem;">🔗 Protocoles (10-20ℂ)</h3><div class="export-grid"><div class="export-card protocol" onclick="exportFHIR()"><div class="export-card-icon">🏥</div><div class="export-card-name">FHIR</div><div class="export-card-desc">20ℂ</div></div><div class="export-card protocol" onclick="exportRSS()"><div class="export-card-icon">📡</div><div class="export-card-name">RSS</div><div class="export-card-desc">10ℂ</div></div><div class="export-card protocol" onclick="exportAtom()"><div class="export-card-icon">⚛️</div><div class="export-card-name">Atom</div><div class="export-card-desc">10ℂ</div></div><div class="export-card protocol" onclick="exportJSONLD()"><div class="export-card-icon">🔗</div><div class="export-card-name">JSON-LD</div><div class="export-card-desc">10ℂ</div></div></div></div>
+        </section>
+    </main>
+    
+    <!-- MODALS -->
+    <div class="modal-overlay" id="wallet-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">💰 Mon Portefeuille</h3><button class="modal-close" onclick="closeModal('wallet-modal')">&times;</button></div><div class="modal-body"><div class="stat-card gold" style="margin-bottom: 1rem;"><div class="stat-value gold" style="font-size: 2.5rem;" id="modal-wallet-total">1250 ℂ</div><div class="stat-label">Solde total</div></div><div class="economy-tiers" style="margin: 1rem 0;"><div class="tier-card micro"><div class="tier-name">MICRO</div><div class="tier-credits" id="modal-micro">625 ℂ</div></div><div class="tier-card meso"><div class="tier-name">MESO</div><div class="tier-credits" id="modal-meso">312 ℂ</div></div><div class="tier-card macro"><div class="tier-name">MACRO</div><div class="tier-credits" id="modal-macro">313 ℂ</div></div></div><h4 style="color: var(--text-primary); margin: 1rem 0 0.5rem;">Dernières transactions</h4><div class="transaction-list" id="modal-transactions" style="max-height: 200px;"></div></div></div></div>
+    
+    <div class="modal-overlay" id="solid-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">🔗 Connexion Solid</h3><button class="modal-close" onclick="closeModal('solid-modal')">&times;</button></div><div class="modal-body"><p style="color: var(--text-secondary); margin-bottom: 1rem;">Connectez-vous à votre POD Solid pour synchroniser vos données de manière souveraine.</p><div class="form-group"><label class="form-label">URL du POD</label><input type="url" class="form-input" id="modal-solid-url" placeholder="https://votrepod.solidcommunity.net/"></div><div class="form-group"><label class="form-label">WebID</label><input type="url" class="form-input" id="modal-solid-webid" placeholder="https://votrepod.solidcommunity.net/profile/card#me"></div><button class="btn btn-cyan" onclick="connectSolid(); closeModal('solid-modal');">🔗 Connecter</button></div></div></div>
+    
+    <div class="modal-overlay" id="transfer-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">↔️ Transférer des crédits</h3><button class="modal-close" onclick="closeModal('transfer-modal')">&times;</button></div><div class="modal-body"><div class="form-group"><label class="form-label">De quel niveau ?</label><select class="form-select" id="transfer-from"><option value="micro">🧑 Micro</option><option value="meso">👥 Meso</option><option value="macro">🌍 Macro</option></select></div><div class="form-group"><label class="form-label">Vers quel niveau ?</label><select class="form-select" id="transfer-to"><option value="micro">🧑 Micro</option><option value="meso" selected>👥 Meso</option><option value="macro">🌍 Macro</option></select></div><div class="form-group"><label class="form-label">Montant (ℂ)</label><input type="number" class="form-input" id="transfer-amount" min="1" value="10"></div><button class="btn btn-gold" onclick="transferCredits()">↔️ Transférer</button></div></div></div>
+    
+    <div class="modal-overlay" id="topup-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">➕ Recharger</h3><button class="modal-close" onclick="closeModal('topup-modal')">&times;</button></div><div class="modal-body"><div class="pricing-card" style="margin-bottom: 1rem;"><div class="pricing-amount">12,50€</div><div class="pricing-period">= 1250 ℂ</div></div><p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">L'abonnement annuel vous donne 1250 crédits répartis automatiquement en micro (50%), meso (25%) et macro (25%).</p><div class="form-group"><label class="form-label">IBAN (simulation)</label><input type="text" class="form-input" id="topup-iban" placeholder="BE00 0000 0000 0000"></div><button class="btn btn-gold" onclick="topupCredits()">💳 Payer 12,50€</button></div></div></div>
+    
+    <div class="modal-overlay" id="export-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">📤 Export Rapide</h3><button class="modal-close" onclick="closeModal('export-modal')">&times;</button></div><div class="modal-body"><div class="export-grid"><div class="export-card" onclick="exportJSON(); closeModal('export-modal');"><div class="export-card-icon">📋</div><div class="export-card-name">JSON</div></div><div class="export-card" onclick="exportPDF(); closeModal('export-modal');"><div class="export-card-icon">📕</div><div class="export-card-name">PDF</div></div><div class="export-card" onclick="exportDOCX(); closeModal('export-modal');"><div class="export-card-icon">📘</div><div class="export-card-name">DOCX</div></div><div class="export-card" onclick="exportMarkdown(); closeModal('export-modal');"><div class="export-card-icon">📝</div><div class="export-card-name">MD</div></div></div></div></div></div>
+    
+    <div class="modal-overlay" id="import-modal"><div class="modal"><div class="modal-header"><h3 class="modal-title">📥 Importer</h3><button class="modal-close" onclick="closeModal('import-modal')">&times;</button></div><div class="modal-body"><div class="dropzone" ondragover="event.preventDefault(); this.classList.add('dragover');" ondragleave="this.classList.remove('dragover');" ondrop="handleDrop(event)" onclick="document.getElementById('file-input').click();"><div class="dropzone-icon">📁</div><div class="dropzone-text">Glissez un fichier</div><div class="dropzone-hint">JSON, FHIR, RSS, Atom</div></div><input type="file" id="file-input" accept=".json,.xml,.rss,.atom" style="display: none;" onchange="importFile(event)"></div></div></div>
+    
+    <div class="toast-container" id="toast-container"></div>
+    <script>
+        // ============================================
+        // DATA STRUCTURE WITH ECONOMY
+        // ============================================
+        let data = {
+            meta: { version: '4.0', created: new Date().toISOString(), updated: new Date().toISOString(), title: 'Plaidoyer Citoyen' },
+            fields: {},
+            actors: [],
+            veille: [],
+            journal: [],
+            checks: {},
+            economy: {
+                total: 1250,
+                micro: 625,  // 50% - individuel
+                meso: 312,   // 25% - collectif
+                macro: 313,  // 25% - communs
+                transactions: [
+                    { id: 1, type: 'income', label: 'Abonnement initial', amount: 1250, tier: 'all', date: new Date().toISOString() }
+                ],
+                subscription: { active: true, iban: '', startDate: new Date().toISOString(), expiresAt: new Date(Date.now() + 365*24*60*60*1000).toISOString() }
+            },
+            solid: {
+                connected: false,
+                podUrl: '',
+                webId: '',
+                lastSync: null
+            }
+        };
+        
+        // Economy config (forkable)
+        const ECONOMY_MODEL = {
+            name: "Plaidoyer Citoyen Economy",
+            version: "1.0",
+            subscription: { amount: 12.50, currency: "EUR", period: "year", credits: 1250 },
+            distribution: { micro: 0.50, meso: 0.25, macro: 0.25 },
+            costs: {
+                micro: { save: 1, export_simple: 1, field_edit: 0, actor_add: 2, veille_add: 1 },
+                meso: { export_pdf: 5, export_docx: 5, export_pptx: 5, share: 10, collaborate: 15, sync_pod: 5, rss_public: 10 },
+                macro: { export_fhir: 20, fork: 50, governance_vote: 1 }
+            },
+            rewards: { contribution_code: 25, referral: 100, bug_report: 10 }
+        };
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProject();
+            initNavigation();
+            initFields();
+            initPowerMap();
+            updateDashboard();
+            updateWalletDisplay();
+            updateSolidStatus();
+        });
+        
+        function initNavigation() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchSection(tab.dataset.section));
+            });
+        }
+        
+        function switchSection(sectionId) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelector(`[data-section="${sectionId}"]`)?.classList.add('active');
+            document.getElementById(sectionId)?.classList.add('active');
+        }
+        
+        function initFields() {
+            document.querySelectorAll('[data-field]').forEach(el => {
+                el.addEventListener('input', debounce(() => {
+                    data.fields[el.dataset.field] = el.value;
+                    saveProject(false);
+                    updateDashboard();
+                }, 500));
+            });
+        }
+        
+        function toggleCard(card) { card.classList.toggle('expanded'); }
+        
+        // ============================================
+        // ECONOMY SYSTEM
+        // ============================================
+        function spendCredits(amount, tier, label) {
+            if (data.economy[tier] < amount) {
+                showToast(`Crédits ${tier} insuffisants ! (${data.economy[tier]}ℂ disponibles)`, 'error');
+                return false;
+            }
+            data.economy[tier] -= amount;
+            data.economy.total -= amount;
+            data.economy.transactions.unshift({
+                id: Date.now(),
+                type: 'expense',
+                label: label,
+                amount: -amount,
+                tier: tier,
+                date: new Date().toISOString()
+            });
+            updateWalletDisplay();
+            saveProject(false);
+            showToast(`-${amount}ℂ (${tier}) — ${label}`, 'gold');
+            return true;
+        }
+        
+        function earnCredits(amount, tier, label) {
+            data.economy[tier] += amount;
+            data.economy.total += amount;
+            data.economy.transactions.unshift({
+                id: Date.now(),
+                type: 'income',
+                label: label,
+                amount: amount,
+                tier: tier,
+                date: new Date().toISOString()
+            });
+            updateWalletDisplay();
+            saveProject(false);
+            showToast(`+${amount}ℂ (${tier}) — ${label}`, 'gold');
+        }
+        
+        function transferCredits() {
+            const from = document.getElementById('transfer-from').value;
+            const to = document.getElementById('transfer-to').value;
+            const amount = parseInt(document.getElementById('transfer-amount').value);
+            
+            if (from === to) { showToast('Choisissez des niveaux différents', 'error'); return; }
+            if (amount <= 0 || isNaN(amount)) { showToast('Montant invalide', 'error'); return; }
+            if (data.economy[from] < amount) { showToast('Solde insuffisant', 'error'); return; }
+            
+            data.economy[from] -= amount;
+            data.economy[to] += amount;
+            data.economy.transactions.unshift({
+                id: Date.now(),
+                type: 'transfer',
+                label: `Transfert ${from} → ${to}`,
+                amount: amount,
+                tier: `${from}→${to}`,
+                date: new Date().toISOString()
+            });
+            
+            updateWalletDisplay();
+            saveProject(false);
+            closeModal('transfer-modal');
+            showToast(`${amount}ℂ transférés de ${from} vers ${to}`, 'gold');
+        }
+        
+        function topupCredits() {
+            const iban = document.getElementById('topup-iban').value;
+            if (!iban || iban.length < 10) { showToast('IBAN invalide', 'error'); return; }
+            
+            // Simulation de paiement
+            const newCredits = ECONOMY_MODEL.subscription.credits;
+            const dist = ECONOMY_MODEL.distribution;
+            
+            data.economy.micro += Math.round(newCredits * dist.micro);
+            data.economy.meso += Math.round(newCredits * dist.meso);
+            data.economy.macro += Math.round(newCredits * dist.macro);
+            data.economy.total += newCredits;
+            
+            data.economy.subscription.iban = iban;
+            data.economy.subscription.active = true;
+            data.economy.subscription.startDate = new Date().toISOString();
+            data.economy.subscription.expiresAt = new Date(Date.now() + 365*24*60*60*1000).toISOString();
+            
+            data.economy.transactions.unshift({
+                id: Date.now(),
+                type: 'income',
+                label: 'Recharge abonnement 12,50€',
+                amount: newCredits,
+                tier: 'all',
+                date: new Date().toISOString()
+            });
+            
+            updateWalletDisplay();
+            saveProject(false);
+            closeModal('topup-modal');
+            showToast(`+${newCredits}ℂ ajoutés ! Merci pour votre soutien 🎉`, 'gold');
+        }
+        
+        function subscribe() {
+            openModal('topup-modal');
+        }
+        
+        function updateWalletDisplay() {
+            const e = data.economy;
+            document.getElementById('wallet-total').textContent = e.total + ' ℂ';
+            document.getElementById('wallet-micro-badge').textContent = 'μ' + e.micro;
+            document.getElementById('wallet-meso-badge').textContent = 'M' + e.meso;
+            document.getElementById('wallet-macro-badge').textContent = 'Ω' + e.macro;
+            
+            document.getElementById('stat-credits').textContent = e.total;
+            document.getElementById('wallet-balance-display').textContent = e.total + ' ℂ';
+            document.getElementById('micro-value').textContent = e.micro + ' ℂ';
+            document.getElementById('meso-value').textContent = e.meso + ' ℂ';
+            document.getElementById('macro-value').textContent = e.macro + ' ℂ';
+            
+            const total = e.total || 1;
+            document.getElementById('micro-fill').style.width = (e.micro / total * 100) + '%';
+            document.getElementById('meso-fill').style.width = (e.meso / total * 100) + '%';
+            document.getElementById('macro-fill').style.width = (e.macro / total * 100) + '%';
+            
+            document.getElementById('tier-micro-credits').textContent = e.micro + ' ℂ';
+            document.getElementById('tier-meso-credits').textContent = e.meso + ' ℂ';
+            document.getElementById('tier-macro-credits').textContent = e.macro + ' ℂ';
+            
+            // Modal
+            document.getElementById('modal-wallet-total').textContent = e.total + ' ℂ';
+            document.getElementById('modal-micro').textContent = e.micro + ' ℂ';
+            document.getElementById('modal-meso').textContent = e.meso + ' ℂ';
+            document.getElementById('modal-macro').textContent = e.macro + ' ℂ';
+            
+            // Transactions
+            const txList = document.getElementById('transaction-list');
+            const modalTx = document.getElementById('modal-transactions');
+            const txHTML = e.transactions.slice(0, 10).map(tx => `
+                <div class="transaction-item">
+                    <div class="transaction-icon ${tx.type}">${tx.type === 'income' ? '✨' : tx.type === 'expense' ? '💸' : '↔️'}</div>
+                    <div class="transaction-details">
+                        <div class="transaction-label">${tx.label}</div>
+                        <div class="transaction-date">${new Date(tx.date).toLocaleDateString('fr-FR')}</div>
+                    </div>
+                    <div class="transaction-amount ${tx.amount > 0 ? 'positive' : 'negative'}">${tx.amount > 0 ? '+' : ''}${tx.amount} ℂ</div>
+                </div>
+            `).join('');
+            txList.innerHTML = txHTML;
+            modalTx.innerHTML = txHTML;
+        }
+        
+        function forkEconomy() {
+            if (!spendCredits(50, 'macro', 'Fork modèle économique')) return;
+            
+            const forkedModel = {
+                ...ECONOMY_MODEL,
+                name: 'Mon Économie Forkée',
+                forkedFrom: 'Plaidoyer Citoyen Economy v1.0',
+                forkedAt: new Date().toISOString(),
+                customizable: true
+            };
+            
+            const content = JSON.stringify(forkedModel, null, 2);
+            const blob = new Blob([content], { type: 'application/json' });
+            downloadBlob(blob, 'economy-model-fork.json');
+            showToast('Modèle économique forké ! Personnalisez-le selon vos besoins.', 'gold');
+        }
+        
+        function exportEconomyModel() {
+            const content = JSON.stringify(ECONOMY_MODEL, null, 2);
+            const blob = new Blob([content], { type: 'application/json' });
+            downloadBlob(blob, 'economy-model.json');
+            showToast('Modèle économique exporté');
+        }
+        
+        // ============================================
+        // SOLID POD
+        // ============================================
+        function connectSolid() {
+            const url = document.getElementById('solid-pod-url')?.value || document.getElementById('modal-solid-url')?.value;
+            const webId = document.getElementById('solid-webid')?.value || document.getElementById('modal-solid-webid')?.value;
+            
+            if (!url) { showToast('Entrez l\'URL de votre POD', 'error'); return; }
+            
+            // Simulation de connexion (en prod: utiliser @inrupt/solid-client)
+            data.solid.connected = true;
+            data.solid.podUrl = url;
+            data.solid.webId = webId || url + 'profile/card#me';
+            data.solid.lastSync = new Date().toISOString();
+            
+            updateSolidStatus();
+            saveProject(false);
+            showToast('POD Solid connecté ! 🔗', 'info');
+        }
+        
+        function createPodSimulation() {
+            data.solid.connected = true;
+            data.solid.podUrl = 'local://plaidoyer-pod/';
+            data.solid.webId = 'local://plaidoyer-pod/profile/card#me';
+            data.solid.lastSync = new Date().toISOString();
+            
+            updateSolidStatus();
+            saveProject(false);
+            showToast('POD local simulé créé !', 'info');
+        }
+        
+        function disconnectSolid() {
+            data.solid.connected = false;
+            data.solid.podUrl = '';
+            data.solid.webId = '';
+            updateSolidStatus();
+            saveProject(false);
+            showToast('POD déconnecté');
+        }
+        
+        function updateSolidStatus() {
+            const statusEl = document.getElementById('solid-status');
+            const statusText = document.getElementById('solid-status-text');
+            const disconnectedView = document.getElementById('solid-disconnected-view');
+            const connectedView = document.getElementById('solid-connected-view');
+            
+            if (data.solid.connected) {
+                statusEl.classList.remove('disconnected');
+                statusEl.classList.add('connected');
+                statusText.textContent = 'POD connecté';
+                if (disconnectedView) disconnectedView.style.display = 'none';
+                if (connectedView) connectedView.style.display = 'block';
+                document.getElementById('current-pod-path').textContent = data.solid.podUrl + 'plaidoyer-citoyen/';
+            } else {
+                statusEl.classList.remove('connected');
+                statusEl.classList.add('disconnected');
+                statusText.textContent = 'POD non connecté';
+                if (disconnectedView) disconnectedView.style.display = 'block';
+                if (connectedView) connectedView.style.display = 'none';
+            }
+        }
+        
+        function syncToPod() {
+            if (!data.solid.connected) { showToast('Connectez d\'abord votre POD', 'error'); return; }
+            if (!spendCredits(5, 'meso', 'Sync vers POD')) return;
+            
+            // Simulation sync (en prod: écrire dans le POD avec solid-client)
+            data.solid.lastSync = new Date().toISOString();
+            saveProject(false);
+            showToast('Données synchronisées vers votre POD ! ☁️', 'info');
+        }
+        
+        function syncFromPod() {
+            if (!data.solid.connected) { showToast('Connectez d\'abord votre POD', 'error'); return; }
+            showToast('Restauration depuis POD (simulation)', 'info');
+        }
+        
+        function openPodFile(filename) {
+            showToast(`Ouverture de ${filename}...`, 'info');
+        }
+        
+        function saveACL() {
+            showToast('Permissions ACL sauvegardées', 'info');
+        }
+        
+        // ============================================
+        // POWER MAP
+        // ============================================
+        let draggedActor = null;
+        
+        function initPowerMap() {
+            const map = document.getElementById('power-map');
+            if (!map) return;
+            map.addEventListener('dragover', e => e.preventDefault());
+            map.addEventListener('drop', handleActorDrop);
+        }
+        
+        function addActor() {
+            const name = document.getElementById('actor-name').value.trim();
+            const type = document.getElementById('actor-type').value;
+            if (!name) { showToast('Entrez un nom', 'error'); return; }
+            if (!spendCredits(2, 'micro', `Ajout acteur: ${name}`)) return;
+            
+            const actor = { id: Date.now(), name, type, x: 50 + (Math.random() - 0.5) * 30, y: 50 + (Math.random() - 0.5) * 30 };
+            data.actors.push(actor);
+            renderActor(actor);
+            document.getElementById('actor-name').value = '';
+            saveProject(false);
+            updateDashboard();
+        }
+        
+        function renderActor(actor) {
+            const map = document.getElementById('power-map');
+            if (!map) return;
+            const el = document.createElement('div');
+            el.className = `power-actor ${actor.type}`;
+            el.textContent = actor.name;
+            el.dataset.id = actor.id;
+            el.style.left = actor.x + '%';
+            el.style.top = actor.y + '%';
+            el.draggable = true;
+            el.addEventListener('dragstart', e => { draggedActor = actor; e.dataTransfer.effectAllowed = 'move'; });
+            el.addEventListener('dblclick', () => { if (confirm(`Supprimer "${actor.name}" ?`)) { data.actors = data.actors.filter(a => a.id !== actor.id); el.remove(); saveProject(false); updateDashboard(); } });
+            map.appendChild(el);
+        }
+        
+        function handleActorDrop(e) {
+            e.preventDefault();
+            if (!draggedActor) return;
+            const map = document.getElementById('power-map');
+            const rect = map.getBoundingClientRect();
+            draggedActor.x = Math.max(5, Math.min(95, ((e.clientX - rect.left) / rect.width) * 100));
+            draggedActor.y = Math.max(5, Math.min(95, ((e.clientY - rect.top) / rect.height) * 100));
+            const el = map.querySelector(`[data-id="${draggedActor.id}"]`);
+            if (el) { el.style.left = draggedActor.x + '%'; el.style.top = draggedActor.y + '%'; }
+            saveProject(false);
+            draggedActor = null;
+        }
+        
+        // ============================================
+        // VEILLE
+        // ============================================
+        function addVeille() {
+            const title = document.getElementById('veille-title').value.trim();
+            const content = document.getElementById('veille-content').value.trim();
+            const category = document.getElementById('veille-category').value;
+            if (!title) { showToast('Entrez un titre', 'error'); return; }
+            if (!spendCredits(1, 'micro', `Veille: ${title.substring(0,20)}...`)) return;
+            
+            const item = { id: Date.now(), title, content, category, date: new Date().toISOString() };
+            data.veille.unshift(item);
+            renderVeilleItem(item);
+            document.getElementById('veille-title').value = '';
+            document.getElementById('veille-content').value = '';
+            saveProject(false);
+            updateDashboard();
+            showToast('Signalement ajouté !');
+        }
+        
+        function renderVeilleItem(item) {
+            const feed = document.getElementById('veille-feed');
+            if (feed.querySelector('p')) feed.innerHTML = '';
+            const icons = { politique: '🏛️', social: '👥', environnement: '🌍', economie: '💰', droits: '⚖️', media: '📰' };
+            const el = document.createElement('div');
+            el.className = 'veille-item';
+            el.innerHTML = `<div class="veille-item-header"><div class="veille-item-title">${icons[item.category] || '📌'} ${item.title}</div><div class="veille-item-date">${new Date(item.date).toLocaleDateString('fr-FR')}</div></div><div class="veille-item-content">${item.content || ''}</div><div style="margin-top:0.3rem;"><span class="veille-tag">${item.category}</span></div>`;
+            feed.insertBefore(el, feed.firstChild);
+        }
+        
+        // ============================================
+        // JOURNAL
+        // ============================================
+        function addJournalEntry() {
+            const text = document.getElementById('journal-entry').value.trim();
+            if (!text) { showToast('Écrivez quelque chose', 'error'); return; }
+            const entry = { id: Date.now(), text, date: new Date().toISOString() };
+            data.journal.unshift(entry);
+            renderJournalEntry(entry);
+            document.getElementById('journal-entry').value = '';
+            saveProject(false);
+            showToast('Entrée ajoutée !');
+        }
+        
+        function renderJournalEntry(entry) {
+            const timeline = document.getElementById('journal-timeline');
+            const el = document.createElement('div');
+            el.className = 'timeline-item';
+            el.innerHTML = `<div class="timeline-date">${new Date(entry.date).toLocaleString('fr-FR')}</div><div class="timeline-content">${entry.text}</div>`;
+            timeline.insertBefore(el, timeline.firstChild);
+        }
+        
+        function toggleCheck(checkbox) {
+            checkbox.classList.toggle('checked');
+            const item = checkbox.closest('.checklist-item');
+            item.classList.toggle('completed');
+            data.checks[`c${item.dataset.check}`] = checkbox.classList.contains('checked');
+            saveProject(false);
+            updateDashboard();
+        }
+        
+        function generateMessage() {
+            const f = data.fields;
+            const msg = `${f.msg_accroche || '[Accroche]'}\n\n${f.msg_probleme || '[Problème]'}\n\nPourquoi c'est important : ${f.msg_importance || '[Enjeux]'}\n\nNous demandons à ${f.cible_principale || '[Cible]'} de ${f.msg_action || '[Action]'}.`;
+            const el = document.getElementById('generated-message');
+            el.style.display = 'block';
+            el.innerHTML = `<div style="background: var(--bg-input); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--green-soft);"><pre style="white-space: pre-wrap; color: var(--text-primary); font-size: 0.8rem; margin: 0;">${msg}</pre><button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent); showToast('Copié !');" style="margin-top: 0.5rem; font-size: 0.75rem;">📋 Copier</button></div>`;
+        }
+        
+        function updateDashboard() {
+            const filled = Object.values(data.fields).filter(v => v && v.trim()).length;
+            const progress = Math.min(100, Math.round(filled / 25 * 100));
+            document.getElementById('stat-progress').textContent = progress + '%';
+            document.getElementById('stat-actors').textContent = data.actors.length;
+            document.getElementById('stat-veille').textContent = data.veille.length;
+            document.getElementById('dash-fields').textContent = filled;
+            document.getElementById('dash-actors').textContent = data.actors.length;
+            document.getElementById('dash-veille').textContent = data.veille.length;
+            document.getElementById('dash-checks').textContent = Object.values(data.checks).filter(v => v).length;
+            document.getElementById('global-progress').textContent = progress + '%';
+            document.getElementById('global-progress-fill').style.width = progress + '%';
+            
+            const total = data.veille.length || 1;
+            document.getElementById('veille-total').textContent = data.veille.length;
+            ['politique', 'social', 'environnement'].forEach((cat, i) => {
+                const id = ['politique', 'social', 'env'][i];
+                const count = data.veille.filter(v => v.category === cat).length;
+                document.getElementById(`veille-${id}`).textContent = count;
+                document.getElementById(`veille-${id}-fill`).style.width = (count / total * 100) + '%';
+            });
+            
+            const voirFields = ['domino_pourquoi', 'domino_valeurs', 'domino_changements', 'fleur_sur'];
+            const jugerFields = ['swot_forces', 'swot_faiblesses', 'arbre_probleme', 'toc_vision'];
+            const agirFields = ['smart_objectif', 'cible_principale', 'msg_accroche'];
+            const calcProg = fields => Math.round(fields.filter(f => data.fields[f] && data.fields[f].trim()).length / fields.length * 100);
+            ['voir', 'juger', 'agir'].forEach((phase, i) => {
+                const fields = [voirFields, jugerFields, agirFields][i];
+                const prog = calcProg(fields);
+                document.getElementById(`prog-${phase}`).textContent = prog + '%';
+                document.getElementById(`prog-${phase}-fill`).style.width = prog + '%';
+            });
+        }
+        
+        // ============================================
+        // SAVE / LOAD
+        // ============================================
+        function saveProject(notify = true) {
+            data.meta.updated = new Date().toISOString();
+            localStorage.setItem('plaidoyer_v4', JSON.stringify(data));
+            if (notify) { if (!spendCredits(1, 'micro', 'Sauvegarde')) { localStorage.setItem('plaidoyer_v4', JSON.stringify(data)); } showToast('Sauvegardé !'); }
+        }
+        
+        function loadProject() {
+            const saved = localStorage.getItem('plaidoyer_v4');
+            if (saved) {
+                try {
+                    data = JSON.parse(saved);
+                    // Ensure economy structure
+                    if (!data.economy) data.economy = { total: 1250, micro: 625, meso: 312, macro: 313, transactions: [], subscription: { active: true } };
+                    if (!data.solid) data.solid = { connected: false, podUrl: '', webId: '' };
+                    
+                    Object.entries(data.fields).forEach(([k, v]) => { const el = document.querySelector(`[data-field="${k}"]`); if (el) el.value = v; });
+                    data.actors.forEach(a => renderActor(a));
+                    data.veille.forEach(v => renderVeilleItem(v));
+                    data.journal.forEach(j => renderJournalEntry(j));
+                    Object.entries(data.checks).forEach(([k, v]) => {
+                        if (v) {
+                            const item = document.querySelector(`.checklist-item[data-check="${k.replace('c','')}"]`);
+                            if (item) { item.classList.add('completed'); item.querySelector('.checkbox').classList.add('checked'); }
+                        }
+                    });
+                } catch (e) { console.error('Load error:', e); }
+            }
+        }
+        
+        // ============================================
+        // EXPORTS
+        // ============================================
+        function getFilename() { return `plaidoyer_${new Date().toISOString().slice(0, 10)}`; }
+        function downloadBlob(blob, filename) { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
+        
+        function exportJSON() { if (!spendCredits(1, 'micro', 'Export JSON')) return; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); downloadBlob(blob, getFilename() + '.json'); showToast('Export JSON OK !'); }
+        function exportMarkdown() { if (!spendCredits(1, 'micro', 'Export MD')) return; let md = `# ${data.meta.title}\n\n*${new Date().toLocaleDateString('fr-FR')}*\n\n`; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) md += `## ${k.replace(/_/g, ' ')}\n\n${v}\n\n`; }); downloadBlob(new Blob([md], { type: 'text/markdown' }), getFilename() + '.md'); showToast('Export MD OK !'); }
+        function exportHTML() { if (!spendCredits(5, 'meso', 'Export HTML')) return; let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${data.meta.title}</title><style>body{font-family:system-ui;max-width:800px;margin:0 auto;padding:2rem;background:#0a0a0f;color:#f0f0f5}h1{color:#7fff7f}h2{color:#c8b6ff}.card{background:#12121a;border:1px solid rgba(127,255,127,.2);border-radius:12px;padding:1rem;margin:1rem 0}</style></head><body><h1>${data.meta.title}</h1>`; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) html += `<div class="card"><h2>${k}</h2><p>${v}</p></div>`; }); html += `</body></html>`; downloadBlob(new Blob([html], { type: 'text/html' }), getFilename() + '.html'); showToast('Export HTML OK !'); }
+        function exportCSV() { if (!spendCredits(1, 'micro', 'Export CSV')) return; let csv = 'Champ,Valeur\n'; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) csv += `"${k}","${v.replace(/"/g, '""')}"\n`; }); downloadBlob(new Blob([csv], { type: 'text/csv' }), getFilename() + '.csv'); showToast('Export CSV OK !'); }
+        function exportTXT() { if (!spendCredits(1, 'micro', 'Export TXT')) return; let txt = `PLAIDOYER CITOYEN\n${'='.repeat(40)}\n\n`; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) txt += `[${k.toUpperCase()}]\n${v}\n\n`; }); downloadBlob(new Blob([txt], { type: 'text/plain' }), getFilename() + '.txt'); showToast('Export TXT OK !'); }
+        
+        function exportPDF() { if (!spendCredits(5, 'meso', 'Export PDF')) return; const { jsPDF } = window.jspdf; const doc = new jsPDF(); let y = 20; doc.setFontSize(20); doc.setTextColor(100, 200, 100); doc.text('Plaidoyer Citoyen', 20, y); y += 15; doc.setFontSize(10); doc.setTextColor(100); doc.text(`Exporté le ${new Date().toLocaleDateString('fr-FR')}`, 20, y); y += 10; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) { if (y > 270) { doc.addPage(); y = 20; } doc.setFontSize(12); doc.setTextColor(180, 140, 255); doc.text(k.replace(/_/g, ' ').toUpperCase(), 20, y); y += 6; doc.setFontSize(10); doc.setTextColor(50); const lines = doc.splitTextToSize(v, 170); doc.text(lines, 20, y); y += lines.length * 5 + 8; } }); doc.save(getFilename() + '.pdf'); showToast('Export PDF OK !'); }
+        function exportDOCX() { if (!spendCredits(5, 'meso', 'Export DOCX')) return; const { Document, Packer, Paragraph, TextRun, HeadingLevel } = docx; const children = [new Paragraph({ children: [new TextRun({ text: 'Plaidoyer Citoyen', bold: true, size: 48, color: '7fff7f' })], heading: HeadingLevel.TITLE })]; Object.entries(data.fields).forEach(([k, v]) => { if (v && v.trim()) { children.push(new Paragraph({ children: [new TextRun({ text: k.replace(/_/g, ' '), bold: true, color: 'c8b6ff' })], heading: HeadingLevel.HEADING_2 })); children.push(new Paragraph({ text: v })); } }); Packer.toBlob(new Document({ sections: [{ children }] })).then(blob => { downloadBlob(blob, getFilename() + '.docx'); showToast('Export DOCX OK !'); }); }
+        function exportPPTX() { if (!spendCredits(5, 'meso', 'Export PPTX')) return; const pptx = new PptxGenJS(); let slide = pptx.addSlide(); slide.addText('Plaidoyer Citoyen', { x: 0.5, y: 2, w: 9, h: 1.5, fontSize: 44, bold: true, color: '7FFF7F', align: 'center' }); const sections = { 'VOIR': ['domino_pourquoi', 'domino_valeurs'], 'JUGER': ['swot_forces', 'arbre_probleme'], 'AGIR': ['smart_objectif', 'msg_accroche'] }; Object.entries(sections).forEach(([title, fields]) => { if (fields.some(f => data.fields[f])) { slide = pptx.addSlide(); slide.addText(title, { x: 0.5, y: 0.3, w: 9, h: 0.7, fontSize: 28, bold: true, color: 'C8B6FF' }); let y = 1.2; fields.forEach(f => { if (data.fields[f] && y < 5) { slide.addText(f, { x: 0.5, y, w: 9, h: 0.3, fontSize: 12, bold: true, color: '7FFF7F' }); y += 0.35; slide.addText(data.fields[f].substring(0, 200), { x: 0.5, y, w: 9, h: 0.8, fontSize: 11, color: '333333' }); y += 1; } }); } }); pptx.writeFile({ fileName: getFilename() + '.pptx' }); showToast('Export PPTX OK !'); }
+        
+        function exportFHIR() { if (!spendCredits(20, 'macro', 'Export FHIR')) return; const fhir = { resourceType: 'Bundle', id: `plaidoyer-${Date.now()}`, type: 'collection', entry: [{ resource: { resourceType: 'DocumentReference', status: 'current', description: data.meta.title, content: [{ attachment: { contentType: 'application/json', data: btoa(unescape(encodeURIComponent(JSON.stringify(data.fields)))) } }] } }] }; data.actors.forEach(a => { fhir.entry.push({ resource: { resourceType: 'Organization', name: a.name, type: [{ coding: [{ code: a.type }] }] } }); }); downloadBlob(new Blob([JSON.stringify(fhir, null, 2)], { type: 'application/fhir+json' }), getFilename() + '.fhir.json'); showToast('Export FHIR OK !'); }
+        function exportRSS() { if (!spendCredits(10, 'meso', 'Export RSS')) return; let rss = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>Veille Citoyenne</title><description>Flux de veille</description>\n`; data.veille.forEach(v => { rss += `<item><title><![CDATA[${v.title}]]></title><description><![CDATA[${v.content}]]></description><category>${v.category}</category><pubDate>${new Date(v.date).toUTCString()}</pubDate></item>\n`; }); rss += `</channel></rss>`; downloadBlob(new Blob([rss], { type: 'application/rss+xml' }), getFilename() + '.rss'); showToast('Export RSS OK !'); }
+        function exportAtom() { if (!spendCredits(10, 'meso', 'Export Atom')) return; let atom = `<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom"><title>Veille Citoyenne</title><updated>${new Date().toISOString()}</updated>\n`; data.veille.forEach(v => { atom += `<entry><title>${v.title}</title><summary>${v.content}</summary><updated>${v.date}</updated></entry>\n`; }); atom += `</feed>`; downloadBlob(new Blob([atom], { type: 'application/atom+xml' }), getFilename() + '.atom'); showToast('Export Atom OK !'); }
+        function exportJSONLD() { if (!spendCredits(10, 'meso', 'Export JSON-LD')) return; const jsonld = { '@context': 'https://schema.org/', '@type': 'CreativeWork', name: data.meta.title, dateModified: data.meta.updated, 'plaidoyer:economy': { balance: data.economy.total, micro: data.economy.micro, meso: data.economy.meso, macro: data.economy.macro } }; downloadBlob(new Blob([JSON.stringify(jsonld, null, 2)], { type: 'application/ld+json' }), getFilename() + '.jsonld'); showToast('Export JSON-LD OK !'); }
+        
+        // ============================================
+        // IMPORT
+        // ============================================
+        function handleDrop(e) { e.preventDefault(); e.target.classList.remove('dragover'); const file = e.dataTransfer?.files[0]; if (file) processImportFile(file); }
+        function importFile(e) { const file = e.target.files[0]; if (file) processImportFile(file); }
+        function processImportFile(file) { const reader = new FileReader(); reader.onload = (e) => { try { const content = e.target.result; if (file.name.endsWith('.json')) { const imported = JSON.parse(content); if (imported.resourceType === 'Bundle') { showToast('Import FHIR détecté', 'info'); } else { data = { ...data, ...imported }; } } localStorage.setItem('plaidoyer_v4', JSON.stringify(data)); location.reload(); } catch (err) { showToast('Erreur import', 'error'); } }; reader.readAsText(file); closeModal('import-modal'); }
+        
+        // ============================================
+        // UTILS
+        // ============================================
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', (e) => { if (e.target === o) o.classList.remove('active'); }));
+        
+        function showToast(msg, type = 'success') { const container = document.getElementById('toast-container'); const toast = document.createElement('div'); toast.className = `toast ${type}`; const icons = { success: '✅', error: '❌', info: 'ℹ️', gold: '💰' }; toast.innerHTML = `<span>${icons[type] || '✅'}</span><span>${msg}</span>`; container.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000); }
+        function debounce(fn, ms) { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }; }
+        
+        document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveProject(); } if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); });
+        
+        setInterval(() => { data.meta.updated = new Date().toISOString(); localStorage.setItem('plaidoyer_v4', JSON.stringify(data)); }, 60000);
+        
+        console.log('🚀 Plaidoyer Citoyen v4.0');
+        console.log('💰 Économie éthique: micro/meso/macro');
+        console.log('🔗 Solid POD: souveraineté des données');
+        console.log('🍴 Modèle forkable');
+    </script>
+</body>
+</html>

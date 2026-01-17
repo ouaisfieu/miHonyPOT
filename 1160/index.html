@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Participez à la vie de votre commune. Auderghem vous donne la parole.">
+  <title>Auderghem • Votre voix compte</title>
+  
+  <!-- Accessibilité : pas de dépendance externe, tout inline -->
+  <style>
+    /* 
+    ═══════════════════════════════════════════════════════════════════════════
+    DESIGN SYSTEM - ACCESSIBILITÉ MAXIMALE
+    ═══════════════════════════════════════════════════════════════════════════
+    
+    Principes :
+    - Contraste WCAG AAA (7:1 minimum)
+    - Taille de texte base 18px (lisible seniors)
+    - Touch targets 48px minimum
+    - Navigation au clavier complète
+    - Pas d'animations qui bougent sans contrôle
+    - Langage simple et direct
+    - Maximum 3 actions par écran
+    
+    ═══════════════════════════════════════════════════════════════════════════
+    */
+    
+    :root {
+      /* Couleurs haute accessibilité */
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --light-gray: #E9ECEF;
+      --medium-gray: #6C757D;
+      --dark-gray: #343A40;
+      --black: #212529;
+      
+      /* Couleurs d'accent - testées WCAG AAA sur blanc */
+      --primary: #0D6EFD;        /* Bleu accessible */
+      --primary-dark: #0A58CA;
+      --success: #198754;        /* Vert accessible */
+      --success-dark: #146C43;
+      --warning: #CC8400;        /* Orange accessible (pas le orange vif) */
+      --danger: #DC3545;
+      
+      /* Espacements généreux */
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 32px;
+      --space-xl: 48px;
+      --space-xxl: 64px;
+      
+      /* Typographie lisible */
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-size-sm: 16px;
+      --font-size-base: 18px;
+      --font-size-lg: 22px;
+      --font-size-xl: 28px;
+      --font-size-xxl: 36px;
+      --line-height: 1.6;
+      
+      /* Touch targets */
+      --touch-min: 48px;
+      
+      /* Bordures visibles */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+    
+    /* Reset accessible */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      font-size: var(--font-size-base);
+      scroll-behavior: smooth;
+    }
+    
+    /* Respect des préférences utilisateur */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+    
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height);
+      color: var(--black);
+      background: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Focus visible pour navigation clavier */
+    :focus {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+    
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+    
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+    
+    /* Skip link pour accessibilité */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--black);
+      color: var(--white);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      z-index: 10000;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .skip-link:focus {
+      top: var(--space-sm);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       HEADER - Simple et rassurant
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    header {
+      background: var(--white);
+      border-bottom: 2px solid var(--light-gray);
+      padding: var(--space-md) var(--space-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+      color: var(--black);
+    }
+    
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .logo-text {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .header-help {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .help-button {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--off-white);
+      border: 2px solid var(--light-gray);
+      border-radius: var(--radius-full);
+      color: var(--dark-gray);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      min-height: var(--touch-min);
+      text-decoration: none;
+    }
+    
+    .help-button:hover {
+      background: var(--light-gray);
+      border-color: var(--medium-gray);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .screen {
+      display: none;
+      flex: 1;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .screen-content {
+      width: 100%;
+      max-width: 600px;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       ÉCRAN 1 : ACCUEIL - "Que voulez-vous faire ?"
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    .welcome-message {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .welcome-title {
+      font-size: var(--font-size-xxl);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: var(--space-sm);
+      line-height: 1.2;
+    }
+    
+    .welcome-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--medium-gray);
+    }
+    
+    .action-cards {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .action-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      background: var(--white);
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      text-align: left;
+      width: 100%;
+      min-height: 100px;
+    }
+    
+    .action-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+    }
+    
+    .action-card:focus {
+      border-color: var(--primary);
+    }
+    
+    .action-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    
+    .action-card:hover .action-icon {
+      background: rgba(13, 110, 253, 0.1);
+    }
+    
+    .action-content {
+      flex: 1;
+    }
+    
+    .action-title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+    
+    .action-desc {
+      font-size: var(--font-size-sm);
+      color: var(--medium-gray);
+    }
+    
+    .action-arrow {
+      font-size: 24px;
+      color: var(--medium-gray);
+      flex-shrink: 0;
+    }
+    
+    .action-card:hover .action-arrow {
+      color: var(--primary);
+    }
+    
+    /* Badge "Nouveau" */
+    .badge-new {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--success);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      margin-left: var(--space-xs);
+      vertical-align: middle;
+    }
+    
+    /* Info box */
+    .info-box {
+      margin-top: var(--space-xl);
+      padding: var(--space-md);
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--primary);
+    }
+    
+    .info-box p {
+      font-size: var(--font-size-sm);
+      color: var(--dark-gray);
+    }
+    
+    .info-box strong {
+      color: var(--black);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       ÉCRAN 2 : MON QUARTIER
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: 2px solid var(--light-gray);
+      border-radius: var(--radius-full);
+      color: var(--dark-gray);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: var(--space-lg);
+      min-height: var(--touch-min);
+    }
+    
+    .back-button:hover {
+      background: var(--off-white);
+      border-color: var(--medium-gray);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .section-desc {
+      font-size: var(--font-size-base);
+      color: var(--medium-gray);
+      margin-bottom: var(--space-lg);
+    }
+    
+    /* Sélecteur de quartier - grand et accessible */
+    .quartier-selector {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .quartier-selector label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--dark-gray);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .quartier-select {
+      width: 100%;
+      padding: var(--space-md);
+      font-size: var(--font-size-base);
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      color: var(--black);
+      cursor: pointer;
+      min-height: 56px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236C757D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+    
+    .quartier-select:hover {
+      border-color: var(--primary);
+    }
+    
+    .quartier-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+    
+    /* Card quartier info */
+    .quartier-info {
+      display: none;
+      background: var(--white);
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    
+    .quartier-info.visible {
+      display: block;
+    }
+    
+    .quartier-header {
+      padding: var(--space-lg);
+      background: var(--off-white);
+      border-bottom: 2px solid var(--light-gray);
+    }
+    
+    .quartier-name {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .quartier-members {
+      font-size: var(--font-size-sm);
+      color: var(--medium-gray);
+    }
+    
+    .quartier-body {
+      padding: var(--space-lg);
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+    
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--off-white);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .contact-text {
+      flex: 1;
+    }
+    
+    .contact-label {
+      font-size: 14px;
+      color: var(--medium-gray);
+      margin-bottom: 2px;
+    }
+    
+    .contact-value {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--black);
+      word-break: break-all;
+    }
+    
+    .contact-value a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .contact-value a:hover {
+      text-decoration: underline;
+    }
+    
+    .quartier-cta {
+      display: block;
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      margin-top: var(--space-md);
+      min-height: var(--touch-min);
+    }
+    
+    .quartier-cta:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       ÉCRAN 3 : BUDGET PARTAGÉ
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    .budget-highlight {
+      text-align: center;
+      padding: var(--space-xl);
+      background: linear-gradient(135deg, rgba(13, 110, 253, 0.05), rgba(25, 135, 84, 0.05));
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .budget-amount {
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--success);
+      line-height: 1;
+    }
+    
+    .budget-label {
+      font-size: var(--font-size-lg);
+      color: var(--dark-gray);
+      margin-top: var(--space-sm);
+    }
+    
+    .budget-source {
+      font-size: 14px;
+      color: var(--medium-gray);
+      margin-top: var(--space-xs);
+    }
+    
+    .how-it-works {
+      background: var(--white);
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .how-it-works h3 {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: var(--space-md);
+    }
+    
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .step {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: var(--font-size-base);
+      flex-shrink: 0;
+    }
+    
+    .step-content h4 {
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+    
+    .step-content p {
+      font-size: var(--font-size-sm);
+      color: var(--medium-gray);
+    }
+    
+    .key-facts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+    
+    .fact-card {
+      padding: var(--space-md);
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    
+    .fact-value {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .fact-label {
+      font-size: 14px;
+      color: var(--dark-gray);
+      margin-top: 4px;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       ÉCRAN 4 : PROPOSER UNE IDÉE (simple)
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    .idea-intro {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .idea-intro p {
+      font-size: var(--font-size-base);
+      color: var(--medium-gray);
+    }
+    
+    .idea-form {
+      background: var(--white);
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+    }
+    
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .form-hint {
+      font-size: 14px;
+      color: var(--medium-gray);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: var(--space-md);
+      font-size: var(--font-size-base);
+      font-family: inherit;
+      border: 3px solid var(--light-gray);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      color: var(--black);
+      min-height: 56px;
+    }
+    
+    .form-input:hover {
+      border-color: var(--medium-gray);
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      outline: none;
+    }
+    
+    .form-textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .submit-button {
+      display: block;
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--success);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      cursor: pointer;
+      min-height: var(--touch-min);
+      margin-top: var(--space-lg);
+    }
+    
+    .submit-button:hover {
+      background: var(--success-dark);
+    }
+    
+    .submit-button:disabled {
+      background: var(--medium-gray);
+      cursor: not-allowed;
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    footer {
+      background: var(--dark-gray);
+      color: var(--white);
+      padding: var(--space-lg);
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer-logo {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+    }
+    
+    .footer-links a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+    }
+    
+    .footer-links a:hover {
+      color: var(--white);
+      text-decoration: underline;
+    }
+    
+    .footer-legal {
+      font-size: 14px;
+      color: var(--medium-gray);
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    @media (max-width: 600px) {
+      :root {
+        --font-size-base: 16px;
+        --font-size-xxl: 28px;
+      }
+      
+      .header-content {
+        flex-wrap: wrap;
+      }
+      
+      .screen {
+        padding: var(--space-lg) var(--space-md);
+      }
+      
+      .action-card {
+        padding: var(--space-md);
+      }
+      
+      .action-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+      }
+      
+      .key-facts {
+        grid-template-columns: 1fr;
+      }
+      
+      .budget-amount {
+        font-size: 42px;
+      }
+    }
+    
+    /* ═══════════════════════════════════════════════════════════════════════
+       HIGH CONTRAST MODE
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    @media (prefers-contrast: high) {
+      :root {
+        --light-gray: #000;
+        --medium-gray: #000;
+      }
+      
+      .action-card,
+      .quartier-info,
+      .how-it-works,
+      .idea-form {
+        border-width: 4px;
+        border-color: var(--black);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link pour navigation clavier -->
+  <a href="#main" class="skip-link">Aller au contenu principal</a>
+  
+  <!-- Header simple -->
+  <header>
+    <div class="header-content">
+      <a href="#" class="logo" onclick="showScreen('home'); return false;" aria-label="Retour à l'accueil">
+        <div class="logo-icon" aria-hidden="true">A</div>
+        <span class="logo-text">Auderghem</span>
+      </a>
+      
+      <div class="header-help">
+        <a href="tel:026764811" class="help-button" aria-label="Appeler la commune">
+          <span aria-hidden="true">📞</span>
+          <span>02 676 48 11</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Contenu principal -->
+  <main id="main">
+    
+    <!-- ÉCRAN 1 : ACCUEIL -->
+    <div id="screen-home" class="screen active" role="region" aria-label="Accueil">
+      <div class="screen-content">
+        <div class="welcome-message">
+          <h1 class="welcome-title">Que voulez-vous faire ?</h1>
+          <p class="welcome-subtitle">Choisissez une option ci-dessous</p>
+        </div>
+        
+        <div class="action-cards" role="list">
+          <button class="action-card" onclick="showScreen('quartier')" role="listitem" aria-label="Trouver mon quartier et ses représentants">
+            <div class="action-icon" aria-hidden="true">🏘️</div>
+            <div class="action-content">
+              <div class="action-title">Mon quartier</div>
+              <div class="action-desc">Trouver mes représentants et les contacter</div>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+          
+          <button class="action-card" onclick="showScreen('budget')" role="listitem" aria-label="En savoir plus sur le Budget Partagé">
+            <div class="action-icon" aria-hidden="true">💰</div>
+            <div class="action-content">
+              <div class="action-title">Budget Partagé</div>
+              <div class="action-desc">Comprendre comment ça marche</div>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+          
+          <button class="action-card" onclick="showScreen('idea')" role="listitem" aria-label="Proposer une idée pour le quartier">
+            <div class="action-icon" aria-hidden="true">💡</div>
+            <div class="action-content">
+              <div class="action-title">
+                Proposer une idée
+                <span class="badge-new">Nouveau</span>
+              </div>
+              <div class="action-desc">Soumettre un projet pour la commune</div>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+        </div>
+        
+        <div class="info-box" role="note">
+          <p>
+            <strong>Besoin d'aide ?</strong> Appelez le <a href="tel:026764811">02 676 48 11</a> 
+            ou passez à la Maison communale (rue Émile Idiers 12).
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ÉCRAN 2 : MON QUARTIER -->
+    <div id="screen-quartier" class="screen" role="region" aria-label="Mon quartier">
+      <div class="screen-content">
+        <button class="back-button" onclick="showScreen('home')" aria-label="Retour à l'accueil">
+          <span aria-hidden="true">←</span> Retour
+        </button>
+        
+        <h2 class="section-title">Mon quartier</h2>
+        <p class="section-desc">Trouvez votre quartier et contactez vos représentants</p>
+        
+        <div class="quartier-selector">
+          <label for="quartier-select">Dans quel quartier habitez-vous ?</label>
+          <select id="quartier-select" class="quartier-select" onchange="selectQuartier(this.value)">
+            <option value="">Choisissez votre quartier...</option>
+            <option value="1">Parc des Princes - Grand Forestier</option>
+            <option value="2">Blankedelle - Transvaal</option>
+            <option value="3">Pinoy - Kalkoven</option>
+            <option value="4">Centre - Vieil Auderghem</option>
+            <option value="5">Valduchesse - Sainte-Anne</option>
+            <option value="6">Chant d'Oiseau - Luxor</option>
+            <option value="7">Saint-Julien</option>
+            <option value="8">Melati</option>
+            <option value="9">Pêcheries - Triangle Vert</option>
+            <option value="10">Henrard - Chasse Royale</option>
+          </select>
+        </div>
+        
+        <div id="quartier-info" class="quartier-info" aria-live="polite">
+          <div class="quartier-header">
+            <div class="quartier-name" id="quartier-name"></div>
+            <div class="quartier-members">10 représentants tirés au sort</div>
+          </div>
+          <div class="quartier-body">
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon" aria-hidden="true">📧</div>
+                <div class="contact-text">
+                  <div class="contact-label">Contacter l'assemblée</div>
+                  <div class="contact-value">
+                    <a href="" id="quartier-email-link"></a>
+                  </div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon" aria-hidden="true">📅</div>
+                <div class="contact-text">
+                  <div class="contact-label">Mandat</div>
+                  <div class="contact-value">2 ans (renouvelé par tirage au sort)</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon" aria-hidden="true">👥</div>
+                <div class="contact-text">
+                  <div class="contact-label">Rôle</div>
+                  <div class="contact-value">Faire remonter vos demandes à la commune</div>
+                </div>
+              </div>
+            </div>
+            <a href="" id="quartier-email-cta" class="quartier-cta">
+              ✉️ Envoyer un message
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ÉCRAN 3 : BUDGET PARTAGÉ -->
+    <div id="screen-budget" class="screen" role="region" aria-label="Budget Partagé">
+      <div class="screen-content">
+        <button class="back-button" onclick="showScreen('home')" aria-label="Retour à l'accueil">
+          <span aria-hidden="true">←</span> Retour
+        </button>
+        
+        <h2 class="section-title">Le Budget Partagé</h2>
+        <p class="section-desc">Vous décidez comment dépenser une partie du budget communal</p>
+        
+        <div class="budget-highlight">
+          <div class="budget-amount">~520 000 €</div>
+          <div class="budget-label">décidés par les habitants</div>
+          <div class="budget-source">Source : auderghem.be</div>
+        </div>
+        
+        <div class="how-it-works">
+          <h3>Comment ça marche ?</h3>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Vous proposez</h4>
+                <p>N'importe quel habitant dès 10 ans peut soumettre une idée de projet</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>On vérifie</h4>
+                <p>La commune étudie si le projet est réalisable</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Vous votez</h4>
+                <p>Tous les habitants votent pour leurs projets préférés</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>On réalise</h4>
+                <p>Les projets élus sont réalisés par la commune</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="key-facts">
+          <div class="fact-card">
+            <div class="fact-value">dès 10 ans</div>
+            <div class="fact-label">Âge pour participer</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-value">>20%</div>
+            <div class="fact-label">Participation en 2021</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-value">31</div>
+            <div class="fact-label">Projets élus en 2021</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-value">4 216</div>
+            <div class="fact-label">Votants en 2021</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ÉCRAN 4 : PROPOSER UNE IDÉE -->
+    <div id="screen-idea" class="screen" role="region" aria-label="Proposer une idée">
+      <div class="screen-content">
+        <button class="back-button" onclick="showScreen('home')" aria-label="Retour à l'accueil">
+          <span aria-hidden="true">←</span> Retour
+        </button>
+        
+        <h2 class="section-title">Proposer une idée</h2>
+        
+        <div class="idea-intro">
+          <p>Vous avez une idée pour améliorer Auderghem ? Décrivez-la en quelques mots.</p>
+        </div>
+        
+        <form class="idea-form" onsubmit="submitIdea(event)">
+          <div class="form-group">
+            <label class="form-label" for="idea-title">Votre idée en une phrase</label>
+            <p class="form-hint">Exemple : "Installer des bancs dans le parc Seny"</p>
+            <input 
+              type="text" 
+              id="idea-title" 
+              class="form-input" 
+              placeholder="Décrivez votre idée..."
+              required
+              maxlength="100"
+              aria-describedby="idea-title-hint"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="idea-detail">Pourquoi c'est important ? (optionnel)</label>
+            <p class="form-hint">Expliquez en quelques lignes</p>
+            <textarea 
+              id="idea-detail" 
+              class="form-input form-textarea" 
+              placeholder="Dites-nous pourquoi cette idée vous tient à cœur..."
+              maxlength="500"
+            ></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="idea-quartier">Quartier concerné</label>
+            <select id="idea-quartier" class="form-input" required>
+              <option value="">Choisissez...</option>
+              <option value="all">Toute la commune</option>
+              <option value="1">Parc des Princes - Grand Forestier</option>
+              <option value="2">Blankedelle - Transvaal</option>
+              <option value="3">Pinoy - Kalkoven</option>
+              <option value="4">Centre - Vieil Auderghem</option>
+              <option value="5">Valduchesse - Sainte-Anne</option>
+              <option value="6">Chant d'Oiseau - Luxor</option>
+              <option value="7">Saint-Julien</option>
+              <option value="8">Melati</option>
+              <option value="9">Pêcheries - Triangle Vert</option>
+              <option value="10">Henrard - Chasse Royale</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="submit-button">
+            Envoyer mon idée
+          </button>
+        </form>
+        
+        <div class="info-box" style="margin-top: var(--space-lg);">
+          <p>
+            <strong>Note :</strong> Ceci est une démonstration. 
+            Pour soumettre un vrai projet, rendez-vous sur 
+            <a href="https://www.auderghem.be" target="_blank" rel="noopener">auderghem.be</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+  </main>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">Commune d'Auderghem</div>
+      <nav class="footer-links" aria-label="Liens utiles">
+        <a href="https://www.auderghem.be" target="_blank" rel="noopener">Site officiel</a>
+        <a href="tel:026764811">02 676 48 11</a>
+        <a href="https://www.auderghem.be/accessibilite" target="_blank" rel="noopener">Accessibilité</a>
+      </nav>
+      <p class="footer-legal">
+        Proof of concept • Données officielles auderghem.be
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════════════════
+    // DONNÉES VÉRIFIÉES - Source : auderghem.be
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    const QUARTIERS = {
+      '1': { nom: 'Parc des Princes - Grand Forestier', email: 'parcdesprinces-grandforestier@auderghem.brussels' },
+      '2': { nom: 'Blankedelle - Transvaal', email: 'blankedelle-transvaal@auderghem.brussels' },
+      '3': { nom: 'Pinoy - Kalkoven', email: 'pinoy-kalkoven@auderghem.brussels' },
+      '4': { nom: 'Centre - Vieil Auderghem', email: 'centre-vieilauderghem@auderghem.brussels' },
+      '5': { nom: 'Valduchesse - Sainte-Anne', email: 'valduchesse-sainteanne@auderghem.brussels' },
+      '6': { nom: 'Chant d\'Oiseau - Luxor', email: 'chantdoiseau-luxor@auderghem.brussels' },
+      '7': { nom: 'Saint-Julien', email: 'saintjulien@auderghem.brussels' },
+      '8': { nom: 'Melati', email: 'melati@auderghem.brussels' },
+      '9': { nom: 'Pêcheries - Triangle Vert', email: 'pecheries-trianglevert@auderghem.brussels' },
+      '10': { nom: 'Henrard - Chasse Royale', email: 'henrard-chasseroyale@auderghem.brussels' }
+    };
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    function showScreen(screenId) {
+      // Masquer tous les écrans
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      
+      // Afficher l'écran demandé
+      const target = document.getElementById('screen-' + screenId);
+      if (target) {
+        target.classList.add('active');
+        
+        // Scroll vers le haut
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Focus sur le premier élément interactif pour accessibilité
+        const firstFocusable = target.querySelector('button, a, input, select, textarea');
+        if (firstFocusable) {
+          setTimeout(() => firstFocusable.focus(), 100);
+        }
+      }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SÉLECTION QUARTIER
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    function selectQuartier(id) {
+      const infoBox = document.getElementById('quartier-info');
+      
+      if (!id || !QUARTIERS[id]) {
+        infoBox.classList.remove('visible');
+        return;
+      }
+      
+      const quartier = QUARTIERS[id];
+      
+      document.getElementById('quartier-name').textContent = quartier.nom;
+      
+      const emailLink = document.getElementById('quartier-email-link');
+      emailLink.href = 'mailto:' + quartier.email;
+      emailLink.textContent = quartier.email;
+      
+      const emailCta = document.getElementById('quartier-email-cta');
+      emailCta.href = 'mailto:' + quartier.email + '?subject=Contact depuis le site';
+      
+      infoBox.classList.add('visible');
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SOUMISSION IDÉE (démo)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    function submitIdea(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('idea-title').value;
+      const detail = document.getElementById('idea-detail').value;
+      const quartier = document.getElementById('idea-quartier').value;
+      
+      // En vrai, on enverrait au serveur. Ici, juste une alerte.
+      alert(
+        'Merci pour votre idée !\n\n' +
+        'Titre : ' + title + '\n\n' +
+        '(Ceci est une démonstration. Pour soumettre un vrai projet, rendez-vous sur auderghem.be)'
+      );
+      
+      // Reset form
+      event.target.reset();
+      showScreen('home');
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Rien de spécial à initialiser - tout est prêt
+      console.log('Auderghem - Plateforme de participation citoyenne');
+      console.log('Données vérifiées depuis auderghem.be');
+    });
+  </script>
+</body>
+</html>

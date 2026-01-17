@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛋️ V!VE la Flemme — Diffusion Massive Mode Canapé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --surface: #16213e;
+            --card: #1f2b47;
+            --border: #2d3a5a;
+            --text: #e8e8f0;
+            --text-dim: #8899aa;
+            --lazy-orange: #ff6b35;
+            --lazy-yellow: #ffc300;
+            --lazy-pink: #ff006e;
+            --lazy-blue: #3a86ff;
+            --lazy-green: #06d6a0;
+            --success: #06d6a0;
+            --glow: 0 0 30px rgba(255, 107, 53, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--lazy-orange), var(--lazy-pink));
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🛋️';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .logo {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--lazy-yellow);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 0.5rem;
+        }
+
+        /* Progress bar header */
+        .progress-header {
+            background: var(--surface);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: var(--lazy-orange);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: var(--card);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--lazy-orange), var(--lazy-yellow));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+        }
+
+        /* Main layout */
+        .main {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: calc(100vh - 200px);
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .sidebar h3 {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--lazy-orange);
+        }
+
+        .filter-btn.active {
+            background: var(--lazy-orange);
+            border-color: var(--lazy-orange);
+            color: white;
+        }
+
+        .filter-btn .count {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            background: rgba(0,0,0,0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .quick-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .quick-btn.primary {
+            background: linear-gradient(135deg, var(--lazy-orange), var(--lazy-pink));
+            color: white;
+            font-weight: 600;
+        }
+
+        .quick-btn.primary:hover {
+            transform: scale(1.02);
+            box-shadow: var(--glow);
+        }
+
+        .quick-btn.secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .quick-btn.secondary:hover {
+            border-color: var(--lazy-orange);
+        }
+
+        /* Content area */
+        .content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        /* Mode selector */
+        .mode-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--surface);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .mode-btn:hover {
+            color: var(--text);
+        }
+
+        .mode-btn.active {
+            background: var(--lazy-orange);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Contact cards */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .contact-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .contact-card:hover {
+            border-color: var(--lazy-orange);
+            transform: translateY(-2px);
+        }
+
+        .contact-card.contacted {
+            opacity: 0.6;
+            border-color: var(--success);
+        }
+
+        .contact-card.contacted::after {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 28px;
+            height: 28px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .contact-type {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--lazy-blue);
+            color: white;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .contact-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-meta a {
+            color: var(--lazy-blue);
+            text-decoration: none;
+        }
+
+        .contact-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.6rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .action-btn.copy {
+            background: var(--lazy-orange);
+            color: white;
+        }
+
+        .action-btn.copy:hover {
+            background: var(--lazy-pink);
+        }
+
+        .action-btn.visit {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn.visit:hover {
+            border-color: var(--lazy-blue);
+        }
+
+        .action-btn.done {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Message composer */
+        .composer {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .composer h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .templates {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .template-btn {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            border-color: var(--lazy-orange);
+        }
+
+        .template-btn.active {
+            background: var(--lazy-orange);
+            border-color: var(--lazy-orange);
+            color: white;
+        }
+
+        .message-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+
+        .message-area:focus {
+            outline: none;
+            border-color: var(--lazy-orange);
+        }
+
+        .composer-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        /* Mass mode */
+        .mass-mode {
+            display: none;
+        }
+
+        .mass-mode.active {
+            display: block;
+        }
+
+        .mass-list {
+            background: var(--card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .mass-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+        }
+
+        .mass-item:last-child {
+            border-bottom: none;
+        }
+
+        .mass-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--lazy-orange);
+        }
+
+        .mass-item-info {
+            flex: 1;
+        }
+
+        .mass-item-name {
+            font-weight: 500;
+        }
+
+        .mass-item-site {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .mass-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.xp {
+            background: linear-gradient(135deg, var(--lazy-orange), var(--lazy-pink));
+        }
+
+        /* Achievement popup */
+        .achievement {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--surface);
+            border: 2px solid var(--lazy-yellow);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            z-index: 2000;
+            transition: transform 0.3s;
+        }
+
+        .achievement.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            color: var(--lazy-yellow);
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .achievement-close {
+            padding: 0.5rem 1.5rem;
+            background: var(--lazy-orange);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Lazy mode toggle */
+        .lazy-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .lazy-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--lazy-orange), var(--lazy-pink));
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: var(--glow);
+            transition: transform 0.2s;
+        }
+
+        .lazy-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Import modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--lazy-orange);
+        }
+
+        .drop-zone.dragover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--lazy-orange);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                max-height: none;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .content {
+                max-height: none;
+            }
+
+            .progress-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="logo">V<span>!</span>VE la Flemme</h1>
+        <p class="tagline">🛋️ Diffusion massive mode canapé — Maximum d'impact, minimum d'effort</p>
+    </header>
+
+    <!-- Progress Header -->
+    <div class="progress-header">
+        <div class="progress-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="stat-contacted">0</div>
+                <div class="stat-label">Contactés</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-total">96</div>
+                <div class="stat-label">Contacts</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-xp">0</div>
+                <div class="stat-label">XP Flemme</div>
+            </div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            <p class="progress-text"><span id="progress-percent">0</span>% — <span id="progress-status">Prêt à flemmarder</span></p>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="filter-group">
+                <h3>📂 Type</h3>
+                <button class="filter-btn active" data-filter="type" data-value="all">
+                    Tous <span class="count" id="count-all">96</span>
+                </button>
+                <div id="type-filters"></div>
+            </div>
+
+            <div class="filter-group">
+                <h3>🌍 Zone</h3>
+                <div id="zone-filters"></div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-btn primary" onclick="autoSelectNext()">
+                    🎯 Prochain contact
+                </button>
+                <button class="quick-btn secondary" onclick="selectRandom()">
+                    🎲 Contact aléatoire
+                </button>
+                <button class="quick-btn secondary" onclick="exportProgress()">
+                    💾 Sauvegarder
+                </button>
+                <button class="quick-btn secondary" onclick="showImportModal()">
+                    📥 Importer liste
+                </button>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content">
+            <!-- Mode selector -->
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="cards" onclick="switchMode('cards')">
+                    📇 Cartes
+                </button>
+                <button class="mode-btn" data-mode="list" onclick="switchMode('list')">
+                    📋 Liste
+                </button>
+                <button class="mode-btn" data-mode="mass" onclick="switchMode('mass')">
+                    🚀 Mass Mail
+                </button>
+            </div>
+
+            <!-- Composer -->
+            <div class="composer">
+                <h3>✉️ Message template</h3>
+                <div class="templates">
+                    <button class="template-btn active" onclick="setTemplate('intro')">🤝 Introduction</button>
+                    <button class="template-btn" onclick="setTemplate('collab')">🤜🤛 Collaboration</button>
+                    <button class="template-btn" onclick="setTemplate('relay')">📢 Relais</button>
+                    <button class="template-btn" onclick="setTemplate('short')">⚡ Ultra-court</button>
+                    <button class="template-btn" onclick="setTemplate('custom')">✏️ Personnalisé</button>
+                </div>
+                <textarea class="message-area" id="message-template"></textarea>
+                <div class="composer-actions">
+                    <button class="quick-btn secondary" onclick="copyMessage()">📋 Copier</button>
+                    <button class="quick-btn primary" onclick="copyAndNext()">📋 Copier & Suivant →</button>
+                </div>
+            </div>
+
+            <!-- Cards view -->
+            <div id="view-cards" class="contacts-grid"></div>
+
+            <!-- List view -->
+            <div id="view-list" class="mass-list" style="display:none"></div>
+
+            <!-- Mass view -->
+            <div id="view-mass" class="mass-mode">
+                <div class="composer" style="margin-bottom: 1rem;">
+                    <h3>🚀 Mode Mass Mail</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Sélectionne les contacts, copie le message, et envoie en masse via ton client mail.
+                    </p>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <button class="quick-btn secondary" onclick="selectAllVisible()">☑️ Tout sélectionner</button>
+                        <button class="quick-btn secondary" onclick="deselectAll()">☐ Tout désélectionner</button>
+                        <button class="quick-btn primary" onclick="copySelectedEmails()">📋 Copier les sites sélectionnés</button>
+                    </div>
+                </div>
+                <div id="mass-list" class="mass-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Achievement popup -->
+    <div class="achievement" id="achievement">
+        <div class="achievement-icon" id="achievement-icon">🏆</div>
+        <div class="achievement-title" id="achievement-title">Achievement!</div>
+        <div class="achievement-desc" id="achievement-desc">Description</div>
+        <button class="achievement-close" onclick="closeAchievement()">Nice!</button>
+    </div>
+
+    <!-- Lazy button -->
+    <div class="lazy-toggle">
+        <button class="lazy-btn" onclick="ultraLazyMode()" title="Mode Ultra Flemme">🦥</button>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="import-modal">
+        <div class="modal">
+            <h3>📥 Importer une liste de contacts</h3>
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <p style="font-size: 2rem; margin-bottom: 0.5rem;">📂</p>
+                <p>Glisse ton fichier Excel ici<br>ou clique pour sélectionner</p>
+                <input type="file" id="file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileImport(event)">
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1rem;">
+                Format attendu : Nom, Site Web, Type, Zone/Pays, Email, Statut contact
+            </p>
+            <button class="quick-btn secondary" onclick="closeImportModal()" style="width: 100%;">Annuler</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        const CONTACTS_DATA = [
+            {"Nom": "Info Libertaire", "Site Web": "https://www.infolibertaire.net", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Rebellyon", "Site Web": "https://rebellyon.info", "Type": "Média militant", "Zone/Pays": "Lyon"},
+            {"Nom": "Paris Luttes", "Site Web": "https://paris-luttes.info", "Type": "Média militant", "Zone/Pays": "Paris"},
+            {"Nom": "Squat.net", "Site Web": "https://squat.net", "Type": "Média militant", "Zone/Pays": "International", "Statut contact": "Inaccessible"},
+            {"Nom": "CQFD", "Site Web": "https://www.cqfd-journal.org", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Indymedia Grenoble", "Site Web": "https://grenoble.indymedia.org", "Type": "Indymedia", "Zone/Pays": "Grenoble"},
+            {"Nom": "Indymedia Nantes", "Site Web": "https://nantes.indymedia.org", "Type": "Indymedia", "Zone/Pays": "Nantes"},
+            {"Nom": "Indymedia Lille", "Site Web": "https://lille.indymedia.org", "Type": "Indymedia", "Zone/Pays": "Lille"},
+            {"Nom": "Le Monde Libertaire", "Site Web": "https://monde-libertaire.fr", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Alternative Libertaire", "Site Web": "https://www.unioncommunistelibertaire.org", "Type": "Organisation", "Zone/Pays": "France"},
+            {"Nom": "CNT-F", "Site Web": "https://www.cnt-f.org", "Type": "Syndicat", "Zone/Pays": "France"},
+            {"Nom": "CNT-SO", "Site Web": "https://www.cnt-so.org", "Type": "Syndicat", "Zone/Pays": "France"},
+            {"Nom": "Solidaires", "Site Web": "https://www.solidaires.org", "Type": "Syndicat", "Zone/Pays": "France"},
+            {"Nom": "CGT", "Site Web": "https://www.cgt.fr", "Type": "Syndicat", "Zone/Pays": "France"},
+            {"Nom": "Attac France", "Site Web": "https://france.attac.org", "Type": "Organisation", "Zone/Pays": "France"},
+            {"Nom": "Greenpeace France", "Site Web": "https://www.greenpeace.fr", "Type": "Écologie", "Zone/Pays": "France"},
+            {"Nom": "Les Amis de la Terre", "Site Web": "https://www.amisdelaterre.org", "Type": "Écologie", "Zone/Pays": "France"},
+            {"Nom": "Extinction Rebellion FR", "Site Web": "https://extinctionrebellion.fr", "Type": "Écologie", "Zone/Pays": "France"},
+            {"Nom": "Youth for Climate FR", "Site Web": "https://youthforclimate.fr", "Type": "Écologie", "Zone/Pays": "France"},
+            {"Nom": "Reporterre", "Site Web": "https://reporterre.net", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Basta!", "Site Web": "https://basta.media", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Mediapart", "Site Web": "https://www.mediapart.fr", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Le Media", "Site Web": "https://www.lemediatv.fr", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "QG Média", "Site Web": "https://qg.media", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Frustration Magazine", "Site Web": "https://www.frustrationmagazine.fr", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Ballast", "Site Web": "https://www.revue-ballast.fr", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Lundi Matin", "Site Web": "https://lundi.am", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "IGN - It's Going Down", "Site Web": "https://itsgoingdown.org", "Type": "Média militant", "Zone/Pays": "USA"},
+            {"Nom": "CrimethInc", "Site Web": "https://crimethinc.com", "Type": "Média militant", "Zone/Pays": "USA"},
+            {"Nom": "The Intercept", "Site Web": "https://theintercept.com", "Type": "Média militant", "Zone/Pays": "USA"},
+            {"Nom": "Freedom News UK", "Site Web": "https://freedomnews.org.uk", "Type": "Média militant", "Zone/Pays": "UK"},
+            {"Nom": "Libcom.org", "Site Web": "https://libcom.org", "Type": "Ressources", "Zone/Pays": "UK"},
+            {"Nom": "RISAL", "Site Web": "https://www.youscribe.com/risal", "Type": "Solidarité", "Zone/Pays": "Belgique"},
+            {"Nom": "Barricade", "Site Web": "https://www.barricade.be", "Type": "Ressources", "Zone/Pays": "Belgique"},
+            {"Nom": "CADTM", "Site Web": "https://www.cadtm.org", "Type": "Organisation", "Zone/Pays": "Belgique"},
+            {"Nom": "Investig'Action", "Site Web": "https://www.investigaction.net", "Type": "Média militant", "Zone/Pays": "Belgique"},
+            {"Nom": "CMAQ", "Site Web": "https://www.cmaq.net", "Type": "Média militant", "Zone/Pays": "Québec"},
+            {"Nom": "Presse-toi à gauche", "Site Web": "https://www.pressegauche.org", "Type": "Média militant", "Zone/Pays": "Québec"},
+            {"Nom": "Ricochet", "Site Web": "https://ricochet.media", "Type": "Média militant", "Zone/Pays": "Québec"},
+            {"Nom": "La Rotative", "Site Web": "https://larotative.info", "Type": "Média militant", "Zone/Pays": "Québec"},
+            {"Nom": "Pivot", "Site Web": "https://pivot.quebec", "Type": "Média militant", "Zone/Pays": "Québec"},
+            {"Nom": "Renversé", "Site Web": "https://renverse.co", "Type": "Média militant", "Zone/Pays": "Suisse"},
+            {"Nom": "BDS France", "Site Web": "https://www.bdsfrance.org", "Type": "Solidarité", "Zone/Pays": "Palestine"},
+            {"Nom": "AFPS", "Site Web": "https://www.france-palestine.org", "Type": "Solidarité", "Zone/Pays": "Palestine"},
+            {"Nom": "UJFP", "Site Web": "https://www.ujfp.org", "Type": "Solidarité", "Zone/Pays": "Palestine"},
+            {"Nom": "Europalestine", "Site Web": "https://europalestine.com", "Type": "Solidarité", "Zone/Pays": "Palestine"},
+            {"Nom": "Kedistan", "Site Web": "https://www.kedistan.net", "Type": "Média militant", "Zone/Pays": "Kurdistan"},
+            {"Nom": "ANF News", "Site Web": "https://anffrancais.com", "Type": "Média militant", "Zone/Pays": "Kurdistan"},
+            {"Nom": "Acrimed", "Site Web": "https://www.acrimed.org", "Type": "Critique médias", "Zone/Pays": "France"},
+            {"Nom": "La Mule du Pape", "Site Web": "https://muledupape.com", "Type": "Média militant", "Zone/Pays": "Avignon"},
+            {"Nom": "Dijoncter", "Site Web": "https://dijoncter.info", "Type": "Média militant", "Zone/Pays": "Dijon"},
+            {"Nom": "Expansive", "Site Web": "https://expansive.info", "Type": "Média militant", "Zone/Pays": "Strasbourg"},
+            {"Nom": "Iaata", "Site Web": "https://iaata.info", "Type": "Média militant", "Zone/Pays": "Toulouse"},
+            {"Nom": "La Horde", "Site Web": "https://lahorde.samizdat.net", "Type": "Antifascisme", "Zone/Pays": "France"},
+            {"Nom": "Le Poing", "Site Web": "https://lepoing.info", "Type": "Média militant", "Zone/Pays": "Montpellier"},
+            {"Nom": "Ricochets", "Site Web": "https://ricochets.cc", "Type": "Média militant", "Zone/Pays": "Drôme"},
+            {"Nom": "Manif-Est", "Site Web": "https://manif-est.info", "Type": "Média militant", "Zone/Pays": "Est"},
+            {"Nom": "Mars-Infos", "Site Web": "https://mars-infos.org", "Type": "Média militant", "Zone/Pays": "Marseille"},
+            {"Nom": "Nantes Révoltée", "Site Web": "https://nfrfrfr.noblogs.org", "Type": "Média militant", "Zone/Pays": "Nantes"},
+            {"Nom": "L'Envolée", "Site Web": "https://lenvolee.net", "Type": "Anti-répression", "Zone/Pays": "France"},
+            {"Nom": "Secours Rouge", "Site Web": "https://secoursrouge.org", "Type": "Anti-répression", "Zone/Pays": "France"},
+            {"Nom": "GISTI", "Site Web": "https://www.gisti.org", "Type": "Droits humains", "Zone/Pays": "France"},
+            {"Nom": "La Cimade", "Site Web": "https://www.lacimade.org", "Type": "Solidarité", "Zone/Pays": "France"},
+            {"Nom": "Infokiosques", "Site Web": "https://infokiosques.net", "Type": "Ressources", "Zone/Pays": "France"},
+            {"Nom": "Indymedia Bruxelles", "Site Web": "https://bxl.indymedia.org", "Type": "Indymedia", "Zone/Pays": "Belgique"},
+            {"Nom": "Bassines Non Merci", "Site Web": "https://bassinesnonmerci.fr", "Type": "Collectif", "Zone/Pays": "France"},
+            {"Nom": "Les Soulèvements de la Terre", "Site Web": "https://lessoulevementsdelaterre.org", "Type": "Organisation", "Zone/Pays": "France"},
+            {"Nom": "A l'encontre", "Site Web": "https://alencontre.org", "Type": "Média militant", "Zone/Pays": "International"},
+            {"Nom": "Contretemps", "Site Web": "https://www.contretemps.eu", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Période", "Site Web": "https://revueperiode.net", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Vacarme", "Site Web": "https://vacarme.org", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Agence France Palestine", "Site Web": "https://www.agencefrancepalestine.org", "Type": "Agence", "Zone/Pays": "France"},
+            {"Nom": "Prison Insider", "Site Web": "https://www.prison-insider.com", "Type": "Anti-répression", "Zone/Pays": "France"},
+            {"Nom": "Genepi", "Site Web": "https://www.genepi.fr", "Type": "Anti-répression", "Zone/Pays": "France"},
+            {"Nom": "OIP", "Site Web": "https://oip.org", "Type": "Anti-répression", "Zone/Pays": "France"},
+            {"Nom": "Ban Public", "Site Web": "https://prison.eu.org", "Type": "Anti-répression", "Zone/Pays": "Anti-prison"},
+            {"Nom": "Radio Canut", "Site Web": "https://radiocanut.org", "Type": "Radio", "Zone/Pays": "Lyon"},
+            {"Nom": "Jef Klak", "Site Web": "https://jefklak.org", "Type": "Revue", "Zone/Pays": "France"},
+            {"Nom": "Podcast Floraisons", "Site Web": "https://floraisons.blog", "Type": "Podcast", "Zone/Pays": "France"},
+            {"Nom": "Squat!net Toulouse", "Site Web": "https://toulouse.squat.net", "Type": "Squats", "Zone/Pays": "Toulouse"},
+            {"Nom": "ZAD de Notre-Dame", "Site Web": "https://zad.nadir.org", "Type": "Squats/ZAD", "Zone/Pays": "France"},
+            {"Nom": "Bure Zone Libre", "Site Web": "https://burezonelibre.wordpress.com", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "A Coeur Vaillant", "Site Web": "https://acva.noblogs.org", "Type": "Média militant", "Zone/Pays": "France"},
+            {"Nom": "Brest Ouvert", "Site Web": "https://bfrfrfr.noblogs.org", "Type": "Média militant", "Zone/Pays": "Brest"},
+            {"Nom": "Saint-Étienne Indymedia", "Site Web": "https://saint-etienne.indymedia.org", "Type": "Média militant", "Zone/Pays": "Saint-Étienne"},
+            {"Nom": "Survie", "Site Web": "https://survie.org", "Type": "Organisation", "Zone/Pays": "Afrique"},
+            {"Nom": "Dial - Diffusion", "Site Web": "https://www.dial-infos.org", "Type": "Média militant", "Zone/Pays": "International"},
+            {"Nom": "Scop Le Pavé", "Site Web": "https://www.dvdp.org", "Type": "Éducation", "Zone/Pays": "France"},
+            {"Nom": "L'An 02", "Site Web": "https://lan02.org", "Type": "Média militant", "Zone/Pays": "Ivry"},
+            {"Nom": "Info Tours", "Site Web": "https://tours.mediaslibres.org", "Type": "Média militant", "Zone/Pays": "Tours"},
+            {"Nom": "L'Ardèche Libertaire", "Site Web": "https://ardeche.anarchiste.free.fr", "Type": "Média militant", "Zone/Pays": "Ardèche"},
+            {"Nom": "Syndicat CNT 42", "Site Web": "https://cnt42.fr", "Type": "Syndicat", "Zone/Pays": "France"},
+            {"Nom": "Rojava Information Center", "Site Web": "https://rojavainformationcenter.com", "Type": "Média militant", "Zone/Pays": "Rojava"},
+            {"Nom": "Morvan Libre", "Site Web": "https://morvanlibre.fr", "Type": "Média militant", "Zone/Pays": "Morvan"}
+        ];
+
+        const TEMPLATES = {
+            intro: `Bonjour,
+
+Je me permets de vous contacter car je travaille sur un projet d'éducation populaire et de plaidoyer citoyen que je pense être dans la lignée de vos valeurs.
+
+🦠 "Virus Démocratique" est un outil open source, 100% gratuit et sans tracking, qui transforme l'engagement citoyen en parcours gamifié. Un seul fichier HTML, fonctionne hors-ligne, données 100% locales.
+
+Le projet inclut :
+- Des outils de plaidoyer et d'intelligence civile
+- Un système de quêtes pour actions citoyennes réelles
+- Une documentation juridique et éthique transparente
+
+Tout est sous licence libre (AGPL + CC BY-SA).
+
+Seriez-vous intéressé·e·s pour :
+- Relayer l'information à votre audience ?
+- Tester l'outil et nous faire des retours ?
+- Envisager une collaboration ?
+
+Plus d'infos : [URL]
+
+Solidairement,
+[Votre nom]`,
+
+            collab: `Salut !
+
+On bosse sur un projet qui pourrait vous intéresser : un outil de plaidoyer citoyen gamifié, 100% libre et sans flicage.
+
+L'idée : transformer chaque citoyen·ne en agent·e du changement, avec des quêtes concrètes (veille, analyse, mobilisation, transmission).
+
+On cherche des partenaires pour :
+- Co-construire des quêtes thématiques
+- Tester avec vos communautés
+- Mutualiser nos ressources
+
+Ça vous parle ?
+
+[URL]`,
+
+            relay: `🦠 VIRUS DÉMOCRATIQUE — Un fichier HTML qui change le monde
+
+Un nouvel outil d'éducation populaire et de plaidoyer citoyen vient de sortir :
+- 100% gratuit et open source
+- Fonctionne hors-ligne (un seul fichier HTML)
+- Zéro tracking, données 100% locales
+- Gamification de l'action citoyenne
+- Outils méthodologiques complets
+
+Pour diffusion à votre réseau : [URL]
+
+Licence libre, fork encouragé.`,
+
+            short: `🦠 Nouveau : outil de plaidoyer citoyen open source, gratuit, sans tracking.
+Un fichier HTML = formation + action + gamification.
+Jetez un œil ? [URL]`,
+
+            custom: `Écris ton message personnalisé ici...`
+        };
+
+        const ACHIEVEMENTS = {
+            first: { icon: '🎯', title: 'Premier contact !', desc: 'Tu as contacté ton premier média' },
+            ten: { icon: '🔥', title: 'Machine à contacts', desc: '10 contacts effectués' },
+            quarter: { icon: '🏆', title: 'Quart du chemin', desc: '25% des contacts effectués' },
+            half: { icon: '⭐', title: 'À mi-chemin', desc: '50% des contacts effectués' },
+            type_complete: { icon: '🎖️', title: 'Spécialiste', desc: 'Tous les contacts d\'un type effectués' },
+            streak: { icon: '⚡', title: 'Combo x5', desc: '5 contacts d\'affilée' }
+        };
+
+        // ==================== STATE ====================
+        let state = {
+            contacts: [...CONTACTS_DATA],
+            contacted: [],
+            selected: [],
+            currentFilter: { type: 'all', zone: 'all' },
+            currentTemplate: 'intro',
+            currentMode: 'cards',
+            xp: 0,
+            streak: 0,
+            achievements: []
+        };
+
+        // ==================== INIT ====================
+        function init() {
+            loadState();
+            renderFilters();
+            renderContacts();
+            setTemplate('intro');
+            updateStats();
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('vive_la_flemme');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                state.contacted = parsed.contacted || [];
+                state.xp = parsed.xp || 0;
+                state.achievements = parsed.achievements || [];
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('vive_la_flemme', JSON.stringify({
+                contacted: state.contacted,
+                xp: state.xp,
+                achievements: state.achievements
+            }));
+        }
+
+        // ==================== FILTERS ====================
+        function renderFilters() {
+            // Types
+            const types = [...new Set(state.contacts.map(c => c.Type))].sort();
+            const typeHtml = types.map(t => {
+                const count = state.contacts.filter(c => c.Type === t).length;
+                return `<button class="filter-btn" data-filter="type" data-value="${t}" onclick="setFilter('type', '${t}')">
+                    ${t} <span class="count">${count}</span>
+                </button>`;
+            }).join('');
+            document.getElementById('type-filters').innerHTML = typeHtml;
+
+            // Zones
+            const zones = [...new Set(state.contacts.map(c => c['Zone/Pays']).filter(z => z))].sort();
+            const zoneHtml = `<button class="filter-btn active" data-filter="zone" data-value="all" onclick="setFilter('zone', 'all')">
+                Toutes <span class="count">${state.contacts.length}</span>
+            </button>` + zones.slice(0, 15).map(z => {
+                const count = state.contacts.filter(c => c['Zone/Pays'] === z).length;
+                return `<button class="filter-btn" data-filter="zone" data-value="${z}" onclick="setFilter('zone', '${z}')">
+                    ${z} <span class="count">${count}</span>
+                </button>`;
+            }).join('');
+            document.getElementById('zone-filters').innerHTML = zoneHtml;
+        }
+
+        function setFilter(filterType, value) {
+            state.currentFilter[filterType] = value;
+            
+            // Update buttons
+            document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === value);
+            });
+            
+            renderContacts();
+            updateStats();
+        }
+
+        function getFilteredContacts() {
+            return state.contacts.filter(c => {
+                const typeMatch = state.currentFilter.type === 'all' || c.Type === state.currentFilter.type;
+                const zoneMatch = state.currentFilter.zone === 'all' || c['Zone/Pays'] === state.currentFilter.zone;
+                return typeMatch && zoneMatch;
+            });
+        }
+
+        // ==================== RENDER ====================
+        function renderContacts() {
+            const filtered = getFilteredContacts();
+            
+            // Cards view
+            const cardsHtml = filtered.map((c, i) => {
+                const isContacted = state.contacted.includes(c['Site Web']);
+                return `
+                    <div class="contact-card ${isContacted ? 'contacted' : ''}" data-index="${i}">
+                        <div class="contact-header">
+                            <span class="contact-name">${c.Nom}</span>
+                            <span class="contact-type">${c.Type}</span>
+                        </div>
+                        <div class="contact-meta">
+                            <span>📍 ${c['Zone/Pays'] || 'N/A'}</span>
+                            <a href="${c['Site Web']}" target="_blank">🔗 Site web</a>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="action-btn copy" onclick="copyForContact('${c['Site Web']}', '${c.Nom}')">
+                                📋 Copier message
+                            </button>
+                            <button class="action-btn visit" onclick="window.open('${c['Site Web']}', '_blank')">
+                                🔗 Visiter
+                            </button>
+                            <button class="action-btn ${isContacted ? 'done' : 'visit'}" onclick="markContacted('${c['Site Web']}')">
+                                ${isContacted ? '✓' : '✓ Fait'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('view-cards').innerHTML = cardsHtml || '<p style="color: var(--text-dim); text-align: center; padding: 2rem;">Aucun contact trouvé</p>';
+
+            // Mass view
+            const massHtml = filtered.map((c, i) => {
+                const isContacted = state.contacted.includes(c['Site Web']);
+                const isSelected = state.selected.includes(c['Site Web']);
+                return `
+                    <div class="mass-item ${isContacted ? 'contacted' : ''}">
+                        <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect('${c['Site Web']}')">
+                        <div class="mass-item-info">
+                            <div class="mass-item-name">${c.Nom}</div>
+                            <div class="mass-item-site">${c['Site Web']}</div>
+                        </div>
+                        <span style="font-size: 0.75rem; color: var(--text-dim);">${c.Type}</span>
+                        <button class="action-btn ${isContacted ? 'done' : 'copy'}" onclick="markContacted('${c['Site Web']}')" style="width: auto;">
+                            ${isContacted ? '✓' : 'Fait'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('mass-list').innerHTML = massHtml;
+
+            // Update count
+            document.getElementById('count-all').textContent = filtered.length;
+        }
+
+        function switchMode(mode) {
+            state.currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+            document.getElementById('view-cards').style.display = mode === 'cards' ? 'grid' : 'none';
+            document.getElementById('view-list').style.display = mode === 'list' ? 'block' : 'none';
+            document.getElementById('view-mass').style.display = mode === 'mass' ? 'block' : 'none';
+        }
+
+        // ==================== TEMPLATES ====================
+        function setTemplate(name) {
+            state.currentTemplate = name;
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(name) || 
+                    (name === 'intro' && btn.textContent.includes('Introduction')) ||
+                    (name === 'collab' && btn.textContent.includes('Collaboration')) ||
+                    (name === 'relay' && btn.textContent.includes('Relais')) ||
+                    (name === 'short' && btn.textContent.includes('court')) ||
+                    (name === 'custom' && btn.textContent.includes('Personnalisé')));
+            });
+            document.getElementById('message-template').value = TEMPLATES[name];
+        }
+
+        function copyMessage() {
+            const msg = document.getElementById('message-template').value;
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast('📋 Message copié !');
+            });
+        }
+
+        function copyForContact(url, name) {
+            let msg = document.getElementById('message-template').value;
+            msg = msg.replace('[URL]', 'https://virus-democratique.org'); // Replace with actual URL
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast(`📋 Message copié pour ${name}`);
+                window.open(url + '/contact', '_blank');
+            });
+        }
+
+        function copyAndNext() {
+            copyMessage();
+            setTimeout(() => autoSelectNext(), 500);
+        }
+
+        // ==================== ACTIONS ====================
+        function markContacted(url) {
+            if (!state.contacted.includes(url)) {
+                state.contacted.push(url);
+                state.xp += 10;
+                state.streak++;
+                
+                saveState();
+                renderContacts();
+                updateStats();
+                
+                showToast(`+10 XP Flemme ! 🛋️`, 'xp');
+                
+                // Check achievements
+                checkAchievements();
+            }
+        }
+
+        function autoSelectNext() {
+            const filtered = getFilteredContacts();
+            const notContacted = filtered.filter(c => !state.contacted.includes(c['Site Web']));
+            if (notContacted.length > 0) {
+                const next = notContacted[0];
+                showToast(`🎯 Prochain : ${next.Nom}`);
+                
+                // Scroll to card
+                const cards = document.querySelectorAll('.contact-card');
+                const card = [...cards].find(c => c.querySelector('.contact-name').textContent === next.Nom);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.style.animation = 'pulse 0.5s';
+                }
+            } else {
+                showToast('🎉 Tous les contacts filtrés ont été contactés !');
+            }
+        }
+
+        function selectRandom() {
+            const filtered = getFilteredContacts();
+            const notContacted = filtered.filter(c => !state.contacted.includes(c['Site Web']));
+            if (notContacted.length > 0) {
+                const random = notContacted[Math.floor(Math.random() * notContacted.length)];
+                showToast(`🎲 Aléatoire : ${random.Nom}`);
+                window.open(random['Site Web'], '_blank');
+            }
+        }
+
+        function toggleSelect(url) {
+            if (state.selected.includes(url)) {
+                state.selected = state.selected.filter(u => u !== url);
+            } else {
+                state.selected.push(url);
+            }
+        }
+
+        function selectAllVisible() {
+            const filtered = getFilteredContacts();
+            state.selected = filtered.map(c => c['Site Web']);
+            renderContacts();
+            showToast(`☑️ ${state.selected.length} contacts sélectionnés`);
+        }
+
+        function deselectAll() {
+            state.selected = [];
+            renderContacts();
+        }
+
+        function copySelectedEmails() {
+            const urls = state.selected.join('\n');
+            navigator.clipboard.writeText(urls).then(() => {
+                showToast(`📋 ${state.selected.length} URLs copiées !`);
+            });
+        }
+
+        // ==================== STATS ====================
+        function updateStats() {
+            const total = state.contacts.length;
+            const contacted = state.contacted.length;
+            const percent = Math.round((contacted / total) * 100);
+            
+            document.getElementById('stat-contacted').textContent = contacted;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-xp').textContent = state.xp;
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-percent').textContent = percent;
+            
+            // Status message
+            const statuses = [
+                { p: 0, msg: 'Prêt à flemmarder' },
+                { p: 10, msg: 'Échauffement du canapé' },
+                { p: 25, msg: 'Mode flemme activé' },
+                { p: 50, msg: 'Propagation en cours' },
+                { p: 75, msg: 'Virus en expansion' },
+                { p: 90, msg: 'Presque viral !' },
+                { p: 100, msg: '🎉 PANDÉMIE DÉMOCRATIQUE !' }
+            ];
+            const status = statuses.reverse().find(s => percent >= s.p);
+            document.getElementById('progress-status').textContent = status.msg;
+        }
+
+        // ==================== ACHIEVEMENTS ====================
+        function checkAchievements() {
+            const contacted = state.contacted.length;
+            const total = state.contacts.length;
+            const percent = (contacted / total) * 100;
+            
+            if (contacted === 1 && !state.achievements.includes('first')) {
+                unlockAchievement('first');
+            }
+            if (contacted >= 10 && !state.achievements.includes('ten')) {
+                unlockAchievement('ten');
+            }
+            if (percent >= 25 && !state.achievements.includes('quarter')) {
+                unlockAchievement('quarter');
+            }
+            if (percent >= 50 && !state.achievements.includes('half')) {
+                unlockAchievement('half');
+            }
+            if (state.streak >= 5 && !state.achievements.includes('streak')) {
+                unlockAchievement('streak');
+            }
+        }
+
+        function unlockAchievement(id) {
+            state.achievements.push(id);
+            saveState();
+            
+            const ach = ACHIEVEMENTS[id];
+            document.getElementById('achievement-icon').textContent = ach.icon;
+            document.getElementById('achievement-title').textContent = ach.title;
+            document.getElementById('achievement-desc').textContent = ach.desc;
+            document.getElementById('achievement').classList.add('show');
+            
+            state.xp += 50;
+            updateStats();
+        }
+
+        function closeAchievement() {
+            document.getElementById('achievement').classList.remove('show');
+        }
+
+        // ==================== ULTRA LAZY MODE ====================
+        function ultraLazyMode() {
+            // Auto-sequence: copy message, open random contact, mark as done after 30s
+            const filtered = getFilteredContacts();
+            const notContacted = filtered.filter(c => !state.contacted.includes(c['Site Web']));
+            
+            if (notContacted.length === 0) {
+                showToast('🎉 Tous contactés ! Tu peux retourner sur le canapé.');
+                return;
+            }
+            
+            const contact = notContacted[0];
+            
+            // Copy message
+            copyMessage();
+            
+            // Open site
+            setTimeout(() => {
+                window.open(contact['Site Web'], '_blank');
+                showToast(`🦥 Mode Ultra Flemme : ${contact.Nom}`);
+            }, 500);
+            
+            // Remind to mark as done
+            setTimeout(() => {
+                if (!state.contacted.includes(contact['Site Web'])) {
+                    showToast(`⏰ N'oublie pas de marquer "${contact.Nom}" comme contacté !`);
+                }
+            }, 30000);
+        }
+
+        // ==================== IMPORT/EXPORT ====================
+        function exportProgress() {
+            const data = {
+                date: new Date().toISOString(),
+                contacted: state.contacted,
+                xp: state.xp,
+                achievements: state.achievements,
+                stats: {
+                    total: state.contacts.length,
+                    contacted: state.contacted.length,
+                    percent: Math.round((state.contacted.length / state.contacts.length) * 100)
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `flemme-progress-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            showToast('💾 Progression sauvegardée !');
+        }
+
+        function showImportModal() {
+            document.getElementById('import-modal').classList.add('show');
+        }
+
+        function closeImportModal() {
+            document.getElementById('import-modal').classList.remove('show');
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            showToast('📂 Import en cours...');
+            closeImportModal();
+            
+            // For now, just show a message
+            // In production, would parse Excel/CSV
+            setTimeout(() => {
+                showToast('✅ Liste importée ! (simulation)');
+            }, 1000);
+        }
+
+        // Drag & drop
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                handleFileImport({ target: { files: [file] } });
+            }
+        });
+
+        // ==================== TOAST ====================
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA') return;
+            
+            if (e.key === 'c') copyMessage();
+            if (e.key === 'n') autoSelectNext();
+            if (e.key === 'r') selectRandom();
+            if (e.key === 'u') ultraLazyMode();
+        });
+
+        // ==================== INIT ====================
+        init();
+
+        // Console easter egg
+        console.log(`
+%c🛋️ V!VE la Flemme
+%c
+Raccourcis clavier :
+  C = Copier message
+  N = Prochain contact
+  R = Contact aléatoire
+  U = Ultra Lazy Mode
+
+Flemme level: MAXIMUM
+        `,
+        'color: #ff6b35; font-size: 24px; font-weight: bold;',
+        'color: #888; font-size: 12px;'
+        );
+    </script>
+</body>
+</html>

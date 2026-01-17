@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 CHECKLIST MONDIALE — Plan de conquête</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --success: #3fb950;
+            --warning: #d29922;
+            --danger: #f85149;
+            --purple: #a371f7;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .subtitle {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+        .progress-bar {
+            height: 8px;
+            background: var(--surface);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+        .progress-text {
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .section-header:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .section-title {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .section-progress {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .section-content {
+            padding: 1rem 1.5rem;
+        }
+        .task {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .task:last-child {
+            border-bottom: none;
+        }
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s;
+        }
+        .task-checkbox:hover {
+            border-color: var(--accent);
+        }
+        .task-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        .task-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .task-content {
+            flex: 1;
+        }
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .task.done .task-title {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .task-meta {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .task-priority {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .priority-critical {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--danger);
+        }
+        .priority-high {
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--warning);
+        }
+        .priority-medium {
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent);
+        }
+        .priority-low {
+            background: rgba(139, 148, 158, 0.2);
+            color: var(--text-dim);
+        }
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            background: rgba(163, 113, 247, 0.2);
+            color: var(--purple);
+            border-radius: 4px;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .summary-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .summary-value.green { color: var(--success); }
+        .summary-value.yellow { color: var(--warning); }
+        .summary-value.red { color: var(--danger); }
+        .summary-value.blue { color: var(--accent); }
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .legend {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            border-color: var(--accent);
+        }
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 CHECKLIST MONDIALE</h1>
+        <p class="subtitle">Todo list pour faire un carton mondial — Mis à jour en temps réel</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="total-progress" style="width: 35%"></div>
+        </div>
+        <p class="progress-text"><span id="done-count">14</span> / <span id="total-count">40</span> tâches complétées (<span id="percent">35</span>%)</p>
+
+        <div class="summary">
+            <div class="summary-card">
+                <div class="summary-value green" id="sum-done">14</div>
+                <div class="summary-label">Terminées</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value yellow" id="sum-progress">8</div>
+                <div class="summary-label">En cours</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value red" id="sum-todo">18</div>
+                <div class="summary-label">À faire</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value blue" id="sum-critical">5</div>
+                <div class="summary-label">Critiques</div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><span class="task-priority priority-critical">CRITIQUE</span> Bloquant pour le lancement</div>
+            <div class="legend-item"><span class="task-priority priority-high">HAUTE</span> Important pour le succès</div>
+            <div class="legend-item"><span class="task-priority priority-medium">MOYENNE</span> Amélioration significative</div>
+            <div class="legend-item"><span class="task-priority priority-low">BASSE</span> Nice to have</div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="exportChecklist()">📥 Exporter</button>
+            <button class="btn" onclick="resetChecklist()">🔄 Réinitialiser</button>
+            <button class="btn" onclick="showCritical()">🔴 Voir critiques</button>
+        </div>
+
+        <!-- SECTION 1: PRODUIT -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">📦 PRODUIT — Fonctionnalités core</span>
+                <span class="section-progress">8/10</span>
+            </div>
+            <div class="section-content">
+                <div class="task done" data-id="p1">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Outils de plaidoyer complets (15+ outils)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">v2.0</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p2">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Système de gamification (XP, niveaux, quêtes)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">ARG</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p3">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Manifeste et cadre idéologique</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span> <span class="tag">Anarcho-Kernel</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p4">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Documentation juridique (Politique du Nougat)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">Juridique</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p5">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Hub central unifié</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p6">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Landing page virale multilingue</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p7">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Export multi-formats (JSON, MD, HTML, PDF)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="p8">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Onboarding en 4 clics</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="p9">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">PWA installable (manifest + service worker)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span> <span class="tag">Mobile</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="p10">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Mode hors-ligne complet avec sync</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: INTERNATIONALISATION -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">🌍 INTERNATIONALISATION — Langues & cultures</span>
+                <span class="section-progress">1/8</span>
+            </div>
+            <div class="section-content">
+                <div class="task done" data-id="i1">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Français (langue source)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i2">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Anglais complet (tous modules)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">Priorité 1</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i3">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Espagnol</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Portugais (Brésil)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Arabe (RTL support)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Système i18n unifié (JSON par langue)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span> <span class="tag">Tech</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i7">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Adaptation culturelle des quêtes par région</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="i8">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Plateforme de traduction collaborative</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: COMMUNAUTÉ -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">👥 COMMUNAUTÉ — Réseau & engagement</span>
+                <span class="section-progress">0/7</span>
+            </div>
+            <div class="section-content">
+                <div class="task" data-id="c1">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Serveur Discord / Matrix pour la communauté</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">Priorité 1</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c2">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Système de guildes / collectifs dans l'ARG</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c3">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Leaderboard global (opt-in, anonyme possible)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Programme d'ambassadeur·rices</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Newsletter / liste de diffusion</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Forum ou espace de discussion intégré</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="c7">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Événements IRL récurrents (meetups, ateliers)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: VIRALITÉ -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">🦠 VIRALITÉ — Mécanismes de propagation</span>
+                <span class="section-progress">2/8</span>
+            </div>
+            <div class="section-content">
+                <div class="task done" data-id="v1">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Quête de propagation (partage = XP)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="v2">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Boutons de partage social intégrés</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v3">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Système de parrainage avec tracking</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Générateur de cartes/visuels partageables</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Challenges viraux hebdomadaires</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Vidéo trailer / teaser (30-60s)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span> <span class="tag">Média</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v7">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Memes et contenus humoristiques</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="v8">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Intégration TikTok/Reels/Shorts</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: PREUVES SOCIALES -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">📊 PREUVES SOCIALES — Crédibilité</span>
+                <span class="section-progress">0/6</span>
+            </div>
+            <div class="section-content">
+                <div class="task" data-id="s1">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">10 témoignages vidéo d'utilisateur·rices</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="s2">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">5 cas d'usage documentés (avant/après)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="s3">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Dashboard public d'impact (actions réelles)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="s4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Partenariats avec associations reconnues</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="s5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Couverture presse (articles, interviews)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="s6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Prix ou reconnaissance (hackathon, concours)</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: JURIDIQUE & FISCAL -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">⚖️ JURIDIQUE & FISCAL — Blindage</span>
+                <span class="section-progress">3/7</span>
+            </div>
+            <div class="section-content">
+                <div class="task done" data-id="j1">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Statuts AISBL rédigés</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="j2">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Charte éthique publiée</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task done" data-id="j3">
+                    <div class="task-checkbox checked" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Politique de confidentialité (anti-RGPD bullshit)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="j4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Enregistrement AISBL au Moniteur Belge</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span> <span class="tag">Bloquant</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="j5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Demande de ruling fiscal</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="j6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Compte bancaire associatif</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="j7">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Système de dons (Stripe, Liberapay, crypto)</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 7: DISTRIBUTION -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-title">📡 DISTRIBUTION — Canaux</span>
+                <span class="section-progress">0/6</span>
+            </div>
+            <div class="section-content">
+                <div class="task" data-id="d1">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Hébergement IPFS (décentralisé, incensurable)</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="d2">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">GitHub Pages / Netlify (accès facile)</div>
+                        <div class="task-meta"><span class="task-priority priority-critical">CRITIQUE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="d3">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Nom de domaine dédié</div>
+                        <div class="task-meta"><span class="task-priority priority-high">HAUTE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="d4">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">QR codes pour distribution offline</div>
+                        <div class="task-meta"><span class="task-priority priority-medium">MOYENNE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="d5">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Clés USB pré-chargées pour événements</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+                <div class="task" data-id="d6">
+                    <div class="task-checkbox" onclick="toggleTask(this)"></div>
+                    <div class="task-content">
+                        <div class="task-title">Torrent pour distribution massive</div>
+                        <div class="task-meta"><span class="task-priority priority-low">BASSE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('checklist_mondiale');
+            if (saved) {
+                const state = JSON.parse(saved);
+                state.forEach(id => {
+                    const task = document.querySelector(`[data-id="${id}"]`);
+                    if (task) {
+                        task.classList.add('done');
+                        task.querySelector('.task-checkbox').classList.add('checked');
+                    }
+                });
+            }
+            updateCounts();
+        }
+
+        function saveState() {
+            const done = [...document.querySelectorAll('.task.done')].map(t => t.dataset.id);
+            localStorage.setItem('checklist_mondiale', JSON.stringify(done));
+        }
+
+        function toggleTask(checkbox) {
+            checkbox.classList.toggle('checked');
+            checkbox.closest('.task').classList.toggle('done');
+            saveState();
+            updateCounts();
+        }
+
+        function toggleSection(header) {
+            header.nextElementSibling.style.display = 
+                header.nextElementSibling.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateCounts() {
+            const total = document.querySelectorAll('.task').length;
+            const done = document.querySelectorAll('.task.done').length;
+            const critical = document.querySelectorAll('.task:not(.done) .priority-critical').length;
+            
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('done-count').textContent = done;
+            document.getElementById('percent').textContent = Math.round(done/total*100);
+            document.getElementById('total-progress').style.width = (done/total*100) + '%';
+            
+            document.getElementById('sum-done').textContent = done;
+            document.getElementById('sum-progress').textContent = Math.round((total-done)/3);
+            document.getElementById('sum-todo').textContent = total - done;
+            document.getElementById('sum-critical').textContent = critical;
+
+            // Update section progress
+            document.querySelectorAll('.section').forEach(section => {
+                const tasks = section.querySelectorAll('.task').length;
+                const completed = section.querySelectorAll('.task.done').length;
+                section.querySelector('.section-progress').textContent = `${completed}/${tasks}`;
+            });
+        }
+
+        function exportChecklist() {
+            const data = {
+                date: new Date().toISOString(),
+                tasks: [...document.querySelectorAll('.task')].map(t => ({
+                    id: t.dataset.id,
+                    title: t.querySelector('.task-title').textContent,
+                    done: t.classList.contains('done')
+                }))
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'checklist-mondiale.json';
+            a.click();
+        }
+
+        function resetChecklist() {
+            if (confirm('Réinitialiser toutes les tâches ?')) {
+                localStorage.removeItem('checklist_mondiale');
+                document.querySelectorAll('.task').forEach(t => {
+                    t.classList.remove('done');
+                    t.querySelector('.task-checkbox').classList.remove('checked');
+                });
+                updateCounts();
+            }
+        }
+
+        function showCritical() {
+            document.querySelectorAll('.task').forEach(t => {
+                if (!t.querySelector('.priority-critical')) {
+                    t.style.display = t.style.display === 'none' ? 'flex' : 'none';
+                }
+            });
+        }
+
+        loadState();
+    </script>
+</body>
+</html>

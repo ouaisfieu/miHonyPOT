@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign Mind | Observatoire de la Domination Cognitive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Placeholder Comments Required -->
+    <!-- Chosen Palette: "Cyber-Intel Light" - Background: Slate-50 (Light), Text: Slate-900 (High Contrast), Accents: Electric Indigo (#6366f1), Neon Cyan (#06b6d4), Vibrant Fuchsia (#d946ef). Designed for clarity and high impact. -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero/Context: Introduces the "Grey Zone" shift from physical to cognitive warfare.
+         2. Actors Section: Uses a Radar Chart to compare asymmetric threats (State vs Non-State).
+         3. Doctrine Section: An interactive CSS-Grid based flow showing the logic of "Chaos Engineering".
+         4. Arsenal Section: Detailed Bar Charts ranking attack vectors by feasibility vs impact.
+         5. Simulation Section: A Line Chart controlled by a slider to visualize the erosion of democratic trust over time.
+         Rationale: Moves the user from "Understanding the World" (Macro) to "Understanding the Tech" (Micro) to "Understanding the Consequence" (Future).
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Comparison Cards (HTML/CSS): Visualizing the "Grey Zone" characteristics. Goal: Inform.
+         2. Radar Chart (Chart.js): Comparing Actor attributes (Resources, Agility, Impact). Goal: Compare/Relationships.
+         3. Interactive Process Map (HTML/CSS + JS): Visualizing the #B!Mi Agency Doctrine (Auftragstaktik). Goal: Organize/Flow.
+         4. Horizontal Bar Chart (Chart.js): Ranking Vectors (SEO, LLM, etc.). Goal: Compare.
+         5. Dynamic Line Chart (Chart.js): Simulating Trust Erosion. Goal: Change/Trend.
+         Justification: Chart.js allows for responsive, canvas-based interaction without SVG. HTML/CSS used for diagrams to avoid Mermaid.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate-50 */
+            color: #0f172a; /* Slate-900 */
+        }
+        
+        h1, h2, h3, .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Chart Container Styling Rules - STRICT ADHERENCE */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; 
+            max-height: 400px;
+            /* Prevent overflow */
+            overflow: hidden; 
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px; 
+            }
+        }
+
+        /* Custom UI Elements */
+        .nav-link.active {
+            color: #4f46e5; /* Indigo-600 */
+            border-bottom: 2px solid #4f46e5;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #818cf8;
+        }
+
+        /* Doctrine Flow Styles (CSS-only diagram) */
+        .doctrine-step {
+            position: relative;
+        }
+        .doctrine-arrow::after {
+            content: '→';
+            font-size: 2rem;
+            color: #cbd5e1;
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        @media (max-width: 768px) {
+            .doctrine-arrow::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -30px;
+                transform: translateX(50%);
+            }
+        }
+        
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            margin-top: -8px; 
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-500 heading-font">SOVEREIGN MIND</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('context')" class="nav-link text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors py-2">La Zone Grise</button>
+                    <button onclick="scrollToSection('actors')" class="nav-link text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors py-2">Les Acteurs</button>
+                    <button onclick="scrollToSection('doctrine')" class="nav-link text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors py-2">La Doctrine</button>
+                    <button onclick="scrollToSection('arsenal')" class="nav-link text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors py-2">L'Arsenal</button>
+                    <button onclick="scrollToSection('simulation')" class="nav-link text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors py-2">Simulation</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+
+        <!-- SECTION 1: CONTEXT / GREY ZONE -->
+        <section id="context" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="inline-block py-1 px-3 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wide mb-4">Rapport de Synthèse Stratégique</span>
+                    <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight heading-font">
+                        La Tectonique des Plaques <br class="hidden md:block" /> de la Souveraineté Numérique
+                    </h1>
+                    <p class="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                        Le XXIe siècle marque la fin de la binarité Guerre/Paix. Nous sommes entrés dans une <strong>"Zone Grise"</strong> permanente où le code est une arme politique.
+                        L'objectif n'est plus de conquérir des territoires, mais de <em>coloniser les infrastructures cognitives</em> des démocraties.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 card-hover">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-2xl">🌐</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3 heading-font">Ubiquité du Champ de Bataille</h3>
+                        <p class="text-slate-600 text-sm">Le conflit n'a plus de frontières géographiques. Il se déroule dans nos poches, via nos smartphones, et dans les algorithmes qui régissent notre accès à l'information.</p>
+                    </div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 card-hover">
+                        <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-6 text-2xl">👻</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3 heading-font">Déniabilité Plausible</h3>
+                        <p class="text-slate-600 text-sm">Les attaques sont conçues pour être non-attribuables. Les États utilisent des proxys (hacktivistes, mercenaires) pour agir sous le seuil de la réponse militaire.</p>
+                    </div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 card-hover">
+                        <div class="w-12 h-12 bg-fuchsia-100 rounded-lg flex items-center justify-center mb-6 text-2xl">🧠</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-3 heading-font">Guerre Cognitive</h3>
+                        <p class="text-slate-600 text-sm">L'enjeu final est la modification de la perception du réel par la cible. C'est le "hacking" des cerveaux via la manipulation de l'environnement informationnel.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ACTORS -->
+        <section id="actors" class="py-16 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Text Content -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-6 heading-font">Matrice des Menaces : Asymétrie des Forces</h2>
+                        <p class="text-slate-600 mb-6">
+                            L'analyse des acteurs du "Hacking Politique" révèle une profonde asymétrie. Alors que les États investissent massivement dans des capacités stratégiques à long terme, les groupes d'hacktivistes et les mercenaires privés (comme "Team Jorge") exploitent leur agilité pour perturber les processus démocratiques.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <button onclick="updateRadar('state')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-indigo-400 transition flex items-center group">
+                                <span class="w-3 h-3 rounded-full bg-indigo-600 mr-4"></span>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 group-hover:text-indigo-600">Acteurs Étatiques</h4>
+                                    <p class="text-xs text-slate-500">Ressources illimitées, vision stratégique.</p>
+                                </div>
+                            </button>
+                            <button onclick="updateRadar('mercenary')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-fuchsia-400 transition flex items-center group">
+                                <span class="w-3 h-3 rounded-full bg-fuchsia-500 mr-4"></span>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 group-hover:text-fuchsia-600">Mercenaires Privés</h4>
+                                    <p class="text-xs text-slate-500">Haute technicité, motivation financière.</p>
+                                </div>
+                            </button>
+                            <button onclick="updateRadar('hacktivist')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-cyan-400 transition flex items-center group">
+                                <span class="w-3 h-3 rounded-full bg-cyan-500 mr-4"></span>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 group-hover:text-cyan-600">Hacktivistes / Citoyens</h4>
+                                    <p class="text-xs text-slate-500">Forte agilité, motivation idéologique.</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-700">Profilage des Capacités</h3>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider">Données Rapport #B!Mi</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="actorsRadar"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DOCTRINE -->
+        <section id="doctrine" class="py-16 bg-slate-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-cyan-400 font-bold tracking-widest uppercase text-sm">Méthodologie Opérationnelle</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4 heading-font">Le Moteur du Chaos</h2>
+                    <p class="text-slate-400 max-w-3xl mx-auto">
+                        La "Doctrine de Domination Cognitive" n'est pas une simple cyberattaque. C'est l'hybridation de la philosophie militaire prussienne (<em>Auftragstaktik</em>) et de la théorie mathématique du chaos.
+                    </p>
+                </div>
+
+                <!-- Interactive Process Flow (No SVG) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                    
+                    <!-- Step 1 -->
+                    <div class="doctrine-step doctrine-arrow bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-cyan-500 transition cursor-default">
+                        <div class="text-4xl mb-4">🎲</div>
+                        <h3 class="text-xl font-bold text-cyan-400 mb-2">1. Auftragstaktik</h3>
+                        <p class="text-slate-300 text-sm mb-4">Commandement Décentralisé</p>
+                        <div class="bg-slate-900/50 p-3 rounded text-xs text-slate-400 border-l-2 border-cyan-500">
+                            L'attaquant définit l'intention (ex: "Discréditer l'élection"), mais laisse l'initiative tactique aux unités périphériques (bots, trolls).
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="doctrine-step doctrine-arrow bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-fuchsia-500 transition cursor-default">
+                        <div class="text-4xl mb-4">🦋</div>
+                        <h3 class="text-xl font-bold text-fuchsia-400 mb-2">2. Effet Papillon</h3>
+                        <p class="text-slate-300 text-sm mb-4">Amplification Algorithmique</p>
+                        <div class="bg-slate-900/50 p-3 rounded text-xs text-slate-400 border-l-2 border-fuchsia-500">
+                            De petites perturbations (faux liens, commentaires toxiques) sont amplifiées par les algorithmes de recommandation, créant une tempête virale.
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-indigo-500 transition cursor-default">
+                        <div class="text-4xl mb-4">💥</div>
+                        <h3 class="text-xl font-bold text-indigo-400 mb-2">3. Effet Systémique</h3>
+                        <p class="text-slate-300 text-sm mb-4">Paralysie Cognitive</p>
+                        <div class="bg-slate-900/50 p-3 rounded text-xs text-slate-400 border-l-2 border-indigo-500">
+                            Le système cible est saturé. La confiance s'effondre. Le décideur politique, submergé par le bruit informationnel, ne peut plus agir.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ARSENAL -->
+        <section id="arsenal" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    
+                    <!-- Content & Interactive List -->
+                    <div class="lg:col-span-1">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4 heading-font">L'Arsenal Technique</h2>
+                        <p class="text-slate-600 mb-6 text-sm">
+                            L'étude de faisabilité a identifié et classé les vecteurs d'attaque les plus performants. L'accent est mis sur les failles du Web Sémantique (Google Knowledge Graph) et l'émergence des LLM.
+                        </p>
+                        
+                        <div class="space-y-3" id="vector-list">
+                            <!-- Dynamic Content populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Chart Display -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 h-full">
+                            <h3 class="font-bold text-slate-800 mb-2">Performance des Vecteurs (Faisabilité vs Impact)</h3>
+                            <p class="text-xs text-slate-500 mb-4">Données basées sur les tests de perméabilité de l'Agence #B!Mi.</p>
+                            <div class="chart-container">
+                                <canvas id="arsenalChart"></canvas>
+                            </div>
+                            <div class="mt-4 p-4 bg-white rounded border border-slate-200 text-sm text-slate-600" id="vector-detail">
+                                <span class="font-bold text-indigo-600">Info :</span> Survolez ou cliquez sur les barres pour voir les détails tactiques.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: SIMULATION -->
+        <section id="simulation" class="py-16 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 heading-font">Simulateur d'Impact Démocratique</h2>
+                <p class="text-slate-600 mb-8">
+                    Utilisez le curseur pour simuler l'intensité d'une campagne de domination cognitive et observer son impact sur la confiance institutionnelle et la polarisation sociale.
+                </p>
+
+                <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+                    
+                    <!-- Slider Control -->
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <label for="intensitySlider" class="font-bold text-slate-700">Intensité de l'Attaque</label>
+                            <span id="intensityValue" class="font-mono font-bold text-indigo-600">Niveau 1 (Bruit de fond)</span>
+                        </div>
+                        <input type="range" id="intensitySlider" min="1" max="100" value="10" class="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-400 mt-2">
+                            <span>Campagne Organique</span>
+                            <span>Opération Étatique Massive</span>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Chart -->
+                    <div class="chart-container">
+                        <canvas id="simulationChart"></canvas>
+                    </div>
+
+                    <!-- Dynamic Insights -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-left">
+                        <div class="p-4 bg-red-50 rounded border border-red-100">
+                            <h4 class="font-bold text-red-800 text-xs uppercase mb-1">Risque Démocratique</h4>
+                            <p id="riskText" class="text-red-700 text-sm">Faible. Les institutions absorbent le choc.</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded border border-emerald-100">
+                            <h4 class="font-bold text-emerald-800 text-xs uppercase mb-1">Levier de Résilience</h4>
+                            <p id="resilienceText" class="text-emerald-700 text-sm">Éducation aux médias suffisante.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="font-mono text-sm mb-2">Généré par l'IA d'Analyse Stratégique</p>
+                <p class="text-xs text-slate-500">Basé sur les rapports : "Hacking Politique" & "Faisabilité Doctrine Domination Cognitive"</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        // --- Shared Chart Config ---
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.scale.grid.color = '#f1f5f9';
+
+        // --- Utils: Text Wrapping for Labels ---
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length < maxLen) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Data Stores ---
+        const actorsData = {
+            state: {
+                label: 'Acteur Étatique',
+                data: [95, 40, 90, 80, 20], // Resources, Agility, Impact, Persistence, Deniability
+                color: '#4f46e5' // Indigo
+            },
+            mercenary: {
+                label: 'Mercenaires Privés',
+                data: [60, 70, 75, 50, 60],
+                color: '#d946ef' // Fuchsia
+            },
+            hacktivist: {
+                label: 'Hacktivistes',
+                data: [20, 95, 40, 30, 50],
+                color: '#06b6d4' // Cyan
+            }
+        };
+
+        const vectorData = [
+            { name: "Negative SEO", feas: 90, impact: 70, desc: "Création massive de liens toxiques (spammy backlinks) vers le site d'un candidat pour déclencher une pénalité algorithmique Google." },
+            { name: "Graph Poisoning", feas: 75, impact: 95, desc: "Manipulation du Knowledge Graph (encadré Google) via des réseaux de sites satellites pour associer une entité à des concepts négatifs." },
+            { name: "LLM Injection", feas: 50, impact: 85, desc: "Empoisonnement des données d'entraînement des IA (Data Poisoning) pour biaiser les réponses futures des chatbots." },
+            { name: "Astroturfing", feas: 85, impact: 60, desc: "Simulation d'un mouvement citoyen spontané via des bots et des faux comptes pour valider socialement un narratif." }
+        ];
+
+        // --- Chart Instances ---
+        let actorsRadarInstance = null;
+        let arsenalChartInstance = null;
+        let simulationChartInstance = null;
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initActorsRadar();
+            initArsenalChart();
+            initSimulationChart();
+            renderVectorList();
+            
+            // Setup Slider Listener
+            document.getElementById('intensitySlider').addEventListener('input', (e) => {
+                updateSimulation(e.target.value);
+            });
+        });
+
+        // --- 1. Actors Logic ---
+        function initActorsRadar() {
+            const ctx = document.getElementById('actorsRadar').getContext('2d');
+            actorsRadarInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Ressources', 'Agilité', 'Impact Stratégique', 'Persistance', 'Déniabilité'],
+                    datasets: [{
+                        label: actorsData.state.label,
+                        data: actorsData.state.data,
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderColor: actorsData.state.color,
+                        pointBackgroundColor: actorsData.state.color,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { size: 12, weight: '600' },
+                                color: '#334155'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => items[0].label
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateRadar(type) {
+            const data = actorsData[type];
+            actorsRadarInstance.data.datasets[0].label = data.label;
+            actorsRadarInstance.data.datasets[0].data = data.data;
+            actorsRadarInstance.data.datasets[0].borderColor = data.color;
+            actorsRadarInstance.data.datasets[0].pointBackgroundColor = data.color;
+            actorsRadarInstance.data.datasets[0].backgroundColor = data.color + '33'; // Add transparency
+            actorsRadarInstance.update();
+        }
+
+        // --- 2. Arsenal Logic ---
+        function initArsenalChart() {
+            const ctx = document.getElementById('arsenalChart').getContext('2d');
+            arsenalChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: vectorData.map(v => wrapLabel(v.name)),
+                    datasets: [
+                        {
+                            label: 'Faisabilité Technique',
+                            data: vectorData.map(v => v.feas),
+                            backgroundColor: '#06b6d4',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Impact Cognitif',
+                            data: vectorData.map(v => v.impact),
+                            backgroundColor: '#4f46e5',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            showVectorDetail(index);
+                        }
+                    },
+                    scales: {
+                        x: { max: 100 }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => {
+                                    const label = items[0].chart.data.labels[items[0].dataIndex];
+                                    return Array.isArray(label) ? label.join(' ') : label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderVectorList() {
+            const container = document.getElementById('vector-list');
+            vectorData.forEach((v, i) => {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-white border border-slate-200 rounded cursor-pointer hover:bg-slate-50 transition flex justify-between items-center";
+                div.innerHTML = `<span class="font-medium text-slate-700">${v.name}</span> <span class="text-xs text-slate-400">Info →</span>`;
+                div.onclick = () => showVectorDetail(i);
+                container.appendChild(div);
+            });
+        }
+
+        function showVectorDetail(index) {
+            const data = vectorData[index];
+            const detailBox = document.getElementById('vector-detail');
+            detailBox.innerHTML = `
+                <h4 class="font-bold text-slate-800 text-lg mb-1">${data.name}</h4>
+                <div class="flex gap-4 mb-2 text-xs font-bold">
+                    <span class="text-cyan-600">Faisabilité: ${data.feas}%</span>
+                    <span class="text-indigo-600">Impact: ${data.impact}%</span>
+                </div>
+                <p class="text-slate-600">${data.desc}</p>
+            `;
+        }
+
+        // --- 3. Simulation Logic ---
+        function initSimulationChart() {
+            const ctx = document.getElementById('simulationChart').getContext('2d');
+            
+            // Generate synthetic time series
+            const labels = ['Mois 1', 'Mois 2', 'Mois 3', 'Mois 4', 'Mois 5', 'Élection'];
+            
+            simulationChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Confiance Institutionnelle',
+                            data: [90, 88, 85, 82, 80, 78], // Base scenario
+                            borderColor: '#10b981', // Emerald
+                            tension: 0.4,
+                            pointRadius: 4
+                        },
+                        {
+                            label: 'Polarisation Sociale',
+                            data: [20, 22, 25, 28, 30, 32],
+                            borderColor: '#ef4444', // Red
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            pointRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 100 }
+                    }
+                }
+            });
+        }
+
+        function updateSimulation(intensity) {
+            // Logic: High intensity = Faster drop in trust, Faster rise in polarization
+            const trustData = [];
+            const polarData = [];
+            let currentTrust = 90;
+            let currentPolar = 20;
+
+            // Update UI Text
+            const label = document.getElementById('intensityValue');
+            const risk = document.getElementById('riskText');
+            const resilience = document.getElementById('resilienceText');
+
+            if (intensity < 30) {
+                label.innerText = `Niveau ${intensity} (Bruit de fond)`;
+                label.className = "font-mono font-bold text-indigo-600";
+                risk.innerText = "Faible. Les institutions absorbent le choc.";
+                resilience.innerText = "Éducation aux médias suffisante.";
+            } else if (intensity < 70) {
+                label.innerText = `Niveau ${intensity} (Attaque Coordonnée)`;
+                label.className = "font-mono font-bold text-amber-600";
+                risk.innerText = "Modéré. Doutes sur la légitimité électorale.";
+                resilience.innerText = "Nécessité de débunking actif (Fact-checking).";
+            } else {
+                label.innerText = `Niveau ${intensity} (Guerre Cognitive Totale)`;
+                label.className = "font-mono font-bold text-red-600";
+                risk.innerText = "Critique. Rejet du résultat, violences potentielles.";
+                resilience.innerText = "Rupture du contrat social. Régulation d'urgence requise.";
+            }
+
+            // Math Simulation
+            for (let i = 0; i < 6; i++) {
+                // Chaos factor
+                const drop = (intensity / 10) * (1 + (i * 0.2)); 
+                const rise = (intensity / 8) * (1 + (i * 0.3));
+                
+                currentTrust = Math.max(10, currentTrust - drop);
+                currentPolar = Math.min(95, currentPolar + rise);
+                
+                trustData.push(currentTrust);
+                polarData.push(currentPolar);
+            }
+
+            simulationChartInstance.data.datasets[0].data = trustData;
+            simulationChartInstance.data.datasets[1].data = polarData;
+            simulationChartInstance.update();
+        }
+
+        // --- Navigation Utils ---
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+    </script>
+</body>
+</html>

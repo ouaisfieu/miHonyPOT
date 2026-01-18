@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Critique : L'Affaire "Sans Boulot"</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7; /* Warm neutral background */
+            color: #1f2937;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            max-height: 400px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .nav-item.active {
+            background-color: #f3f4f6;
+            border-left: 4px solid #d97706; /* Amber accent */
+            font-weight: 600;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar for text areas */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 bg-white border-r border-gray-200 flex-shrink-0 md:h-full z-20 flex flex-col justify-between shadow-sm">
+        <div>
+            <div class="p-6 border-b border-gray-100">
+                <h1 class="text-xl font-bold text-gray-800 tracking-tight">OBSERVATOIRE<br><span class="text-amber-600">MÉDIATIQUE</span></h1>
+                <p class="text-xs text-gray-500 mt-2">Dossier : Polémique Deborsu</p>
+            </div>
+            <nav class="mt-4 flex flex-col gap-1 px-2" id="main-nav">
+                <button onclick="navigateTo('dashboard')" class="nav-item active w-full text-left px-4 py-3 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3">
+                    <span>📊</span> Vue d'ensemble
+                </button>
+                <button onclick="navigateTo('chronologie')" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3">
+                    <span>⏱️</span> Chronologie & Faits
+                </button>
+                <button onclick="navigateTo('analyse')" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3">
+                    <span>⚖️</span> Éthique & Méthode
+                </button>
+                <button onclick="navigateTo('realite')" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3">
+                    <span>📉</span> Réalité des Chiffres
+                </button>
+            </nav>
+        </div>
+        <div class="p-4 bg-gray-50 text-xs text-gray-500 border-t border-gray-100">
+            <p>Source : Analyse de presse, Rapports CSA, Statistiques ONEM.</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto custom-scroll relative bg-[#fdfbf7] p-4 md:p-8" id="content-area">
+        <!-- Content injected via JS -->
+    </main>
+
+    <script>
+        // --- DATA STORE ---
+        const appData = {
+            dashboard: {
+                intro: "Ce tableau de bord synthétise l'impact médiatique et la controverse entourant le reportage. Il met en lumière l'écart entre le traitement sensationnaliste et la réalité statistique.",
+                stats: [
+                    { label: "Plaintes au CSA", value: "1,200+", trend: "Record hebdomadaire", color: "text-red-600" },
+                    { label: "Taux de fraude réel", value: "< 5%", trend: "Données ONEM", color: "text-green-600" },
+                    { label: "Confiance Média", value: "Faible", trend: "Impact négatif", color: "text-amber-600" }
+                ]
+            },
+            timeline: [
+                { date: "Jour J", title: "Diffusion du Reportage", desc: "Diffusion sur une chaîne nationale. Le ton est provocateur : 'Tous fraudeurs ?'. Usage de caméras cachées.", icon: "📺" },
+                { date: "J+1", title: "Indignation sur les réseaux", desc: "Le hashtag #Deborsu devient viral. Les syndicats et demandeurs d'emploi dénoncent une stigmatisation.", icon: "🔥" },
+                { date: "J+3", title: "Réaction Politique", desc: "Interpellations au parlement. Débat sur la déontologie du service public vs privé.", icon: "🏛️" },
+                { date: "J+10", title: "Saisine du CSA", desc: "Le Conseil Supérieur de l'Audiovisuel ouvre un dossier suite à l'afflux de plaintes concernant l'atteinte à la dignité.", icon: "📂" }
+            ],
+            ethics: {
+                intro: "Analyse qualitative du travail journalistique selon les critères de la charte de Munich. Comparaison entre les méthodes utilisées et les standards déontologiques.",
+                points: [
+                    { criterion: "Respect de la vérité", score: 30, text: "Généralisation abusive à partir de cas isolés." },
+                    { criterion: "Protection des sources", score: 80, text: "Usage intensif de l'anonymat (floutage)." },
+                    { criterion: "Refus du sensationnalisme", score: 20, text: "Mise en scène dramatisée, musique anxiogène." },
+                    { criterion: "Contradictoire", score: 40, text: "Présence d'experts mais montage orienté." },
+                    { criterion: "Rectification", score: 50, text: "Droit de réponse accordé tardivement." }
+                ]
+            },
+            reality: {
+                intro: "Confrontation directe entre la perception induite par le reportage et les statistiques officielles du chômage et de la fraude sociale.",
+                comparison: [
+                    { category: "Fraude Perçue (Sondage)", value: 45 },
+                    { category: "Fraude Avérée (Contrôles)", value: 4.8 }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentState = 'dashboard';
+        let charts = {}; // Store chart instances
+
+        // --- NAVIGATION HANDLER ---
+        function navigateTo(viewId) {
+            currentState = viewId;
+            
+            // Update UI styling
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+                if(el.getAttribute('onclick').includes(viewId)) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Render View
+            const main = document.getElementById('content-area');
+            main.innerHTML = ''; // Clear current content
+            
+            // Build content based on state
+            switch(viewId) {
+                case 'dashboard':
+                    renderDashboard(main);
+                    break;
+                case 'chronologie':
+                    renderTimeline(main);
+                    break;
+                case 'analyse':
+                    renderEthics(main);
+                    break;
+                case 'realite':
+                    renderReality(main);
+                    break;
+            }
+        }
+
+        // --- RENDER FUNCTIONS ---
+
+        function renderDashboard(container) {
+            const header = createHeader("Vue d'Ensemble", "Impact et Réception du Reportage");
+            const intro = createIntro(appData.dashboard.intro);
+            
+            // KPI Grid
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 mb-8";
+            
+            appData.dashboard.stats.forEach(stat => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-100 fade-in";
+                card.innerHTML = `
+                    <p class="text-sm text-gray-500 font-medium uppercase">${stat.label}</p>
+                    <p class="text-3xl font-bold text-gray-800 mt-2">${stat.value}</p>
+                    <p class="text-xs font-semibold mt-1 ${stat.color}">${stat.trend}</p>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Chart Container for "Reception Sentiment"
+            const chartSection = document.createElement('div');
+            chartSection.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-100 fade-in";
+            chartSection.innerHTML = `
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Analyse de la Réception (Analyse Sémantique)</h3>
+                <div class="chart-container">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 text-center">Basé sur l'analyse des commentaires réseaux sociaux J+1</p>
+            `;
+
+            container.append(header, intro, grid, chartSection);
+
+            // Render Chart
+            setTimeout(() => {
+                const ctx = document.getElementById('sentimentChart').getContext('2d');
+                if (charts.sentiment) charts.sentiment.destroy();
+                charts.sentiment = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Indignation / Critique', 'Accord / Soutien', 'Neutre / Questionnement'],
+                        datasets: [{
+                            data: [65, 20, 15],
+                            backgroundColor: ['#ef4444', '#10b981', '#9ca3af'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        function renderTimeline(container) {
+            const header = createHeader("Chronologie", "La Fabrique de la Polémique");
+            const intro = createIntro("Retour sur la semaine explosive qui a suivi la diffusion. Cette chronologie interactive détaille l'escalade médiatique.");
+
+            const timelineCont = document.createElement('div');
+            timelineCont.className = "max-w-3xl mx-auto mt-8 relative border-l-2 border-amber-200 ml-4 md:ml-8";
+
+            appData.timeline.forEach((item, index) => {
+                const node = document.createElement('div');
+                node.className = "mb-10 ml-6 relative fade-in";
+                node.style.animationDelay = `${index * 100}ms`;
+                node.innerHTML = `
+                    <span class="absolute -left-10 bg-amber-100 text-amber-600 w-8 h-8 rounded-full flex items-center justify-center text-lg border-2 border-white shadow-sm cursor-pointer hover:bg-amber-200 transition-colors" onclick="toggleDetail('detail-${index}')">
+                        ${item.icon}
+                    </span>
+                    <h3 class="flex items-center text-lg font-bold text-gray-800">
+                        ${item.title} 
+                        <span class="ml-3 text-xs font-normal bg-gray-100 px-2 py-1 rounded text-gray-500">${item.date}</span>
+                    </h3>
+                    <div id="detail-${index}" class="mt-2 text-gray-600 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        ${item.desc}
+                    </div>
+                `;
+                timelineCont.appendChild(node);
+            });
+
+            container.append(header, intro, timelineCont);
+        }
+
+        function renderEthics(container) {
+            const header = createHeader("Analyse Déontologique", "Qualité du Travail Journalistique");
+            const intro = createIntro(appData.ethics.intro);
+
+            const layout = document.createElement('div');
+            layout.className = "grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6";
+
+            // Radar Chart Section
+            const chartCard = document.createElement('div');
+            chartCard.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-100";
+            chartCard.innerHTML = `
+                <h3 class="font-bold text-gray-700 mb-4">Profil Méthodologique</h3>
+                <div class="chart-container">
+                    <canvas id="ethicsChart"></canvas>
+                </div>
+            `;
+
+            // Details List
+            const detailsCard = document.createElement('div');
+            detailsCard.className = "bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center";
+            detailsCard.innerHTML = `<h3 class="font-bold text-gray-700 mb-4">Points Critiques Identifiés</h3>`;
+            
+            const list = document.createElement('ul');
+            list.className = "space-y-4";
+            appData.ethics.points.forEach(pt => {
+                const li = document.createElement('li');
+                li.className = "text-sm text-gray-600 border-l-4 border-gray-200 pl-3 py-1 hover:border-amber-400 transition-colors";
+                li.innerHTML = `<span class="font-semibold block text-gray-800">${pt.criterion}</span> ${pt.text}`;
+                list.appendChild(li);
+            });
+            detailsCard.appendChild(list);
+
+            layout.append(chartCard, detailsCard);
+            container.append(header, intro, layout);
+
+            // Chart Logic
+            setTimeout(() => {
+                const ctx = document.getElementById('ethicsChart').getContext('2d');
+                if (charts.ethics) charts.ethics.destroy();
+                charts.ethics = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: appData.ethics.points.map(p => p.criterion),
+                        datasets: [{
+                            label: 'Score du Reportage',
+                            data: appData.ethics.points.map(p => p.score),
+                            fill: true,
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                            borderColor: 'rgb(217, 119, 6)',
+                            pointBackgroundColor: 'rgb(217, 119, 6)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(217, 119, 6)'
+                        }, {
+                            label: 'Standard Idéal',
+                            data: [100, 100, 100, 100, 100],
+                            fill: false,
+                            borderColor: 'rgba(156, 163, 175, 0.5)',
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        elements: { line: { tension: 0.3 } },
+                        scales: {
+                            r: {
+                                angleLines: { display: false },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        function renderReality(container) {
+            const header = createHeader("Réalité Statistique", "Perception vs Faits");
+            const intro = createIntro(appData.reality.intro);
+
+            const content = document.createElement('div');
+            content.className = "mt-8 bg-white p-6 md:p-10 rounded-xl shadow-lg border border-gray-100 text-center";
+
+            // Bar Chart
+            content.innerHTML = `
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Le Fossé de la Perception</h3>
+                <p class="text-sm text-gray-500 mb-6">Comparaison entre la fraude estimée par l'opinion publique après visionnage et les chiffres réels des contrôles ONEM.</p>
+                <div class="chart-container" style="max-width: 700px; height: 350px;">
+                    <canvas id="realityChart"></canvas>
+                </div>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-100">
+                        <h4 class="font-bold text-red-800">Le Danger du Biais</h4>
+                        <p class="text-xs text-red-600 mt-1">Le reportage utilise l'heuristique de disponibilité : en montrant des cas marquants de fraudeurs, le cerveau du spectateur surestime la fréquence du phénomène.</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <h4 class="font-bold text-blue-800">La Réalité Complexe</h4>
+                        <p class="text-xs text-blue-600 mt-1">La "fraude" englobe souvent des erreurs administratives ou des oublis, et non une volonté systématique de nuire, contrairement à la thèse du "tous fraudeurs".</p>
+                    </div>
+                </div>
+            `;
+
+            container.append(header, intro, content);
+
+            // Chart
+            setTimeout(() => {
+                const ctx = document.getElementById('realityChart').getContext('2d');
+                if (charts.reality) charts.reality.destroy();
+                charts.reality = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Opinion Publique (Perception)', 'Contrôles ONEM (Réalité)'],
+                        datasets: [{
+                            label: 'Pourcentage (%)',
+                            data: [45, 4.8],
+                            backgroundColor: [
+                                'rgba(239, 68, 68, 0.7)', // Red for perception
+                                'rgba(16, 185, 129, 0.7)' // Green for reality
+                            ],
+                            borderColor: [
+                                'rgb(239, 68, 68)',
+                                'rgb(16, 185, 129)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { beginAtZero: true, max: 100 }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: function(context) {
+                                        if (context[0].dataIndex === 0) return "Basé sur les sondages d'opinion post-diffusion.";
+                                        return "Taux d'infraction réel constaté sur les contrôles ciblés.";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        // --- HELPER COMPONENTS ---
+
+        function createHeader(title, subtitle) {
+            const div = document.createElement('div');
+            div.className = "mb-2 fade-in";
+            div.innerHTML = `
+                <h2 class="text-3xl font-bold text-gray-900">${title}</h2>
+                <p class="text-lg text-amber-600 font-medium">${subtitle}</p>
+            `;
+            return div;
+        }
+
+        function createIntro(text) {
+            const p = document.createElement('p');
+            p.className = "text-gray-600 max-w-3xl mb-6 leading-relaxed fade-in";
+            p.innerText = text;
+            return p;
+        }
+
+        function toggleDetail(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                // Simple toggle visual effect
+                if (el.classList.contains('bg-amber-50')) {
+                    el.classList.remove('bg-amber-50', 'border-amber-200');
+                    el.classList.add('bg-white', 'border-gray-100');
+                } else {
+                    el.classList.remove('bg-white', 'border-gray-100');
+                    el.classList.add('bg-amber-50', 'border-amber-200');
+                }
+            }
+        }
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            navigateTo('dashboard');
+        });
+
+    </script>
+</body>
+<!-- Chosen Palette: Warm Neutrals & Amber. Background #fdfbf7 (Cream), Text #1f2937 (Dark Gray), Accent #d97706 (Journalistic/Alert Amber), Alert #ef4444 (Red). Chosen to evoke a serious, investigative, yet readable newspaper feel. -->
+
+<!-- Application Structure Plan: 
+    1. Navigation: Sidebar for persistent context, allowing users to switch between the "Overview" and specific deep-dive analytic sections.
+    2. Dashboard (Vue d'ensemble): Immediate "Wow" factor with key contrasting metrics (CSA complaints vs Actual Fraud) to set the critical tone immediately.
+    3. Chronologie: A vertical timeline to reconstruct the "Polemic" requested by the user, showing cause and effect (Broadcast -> Outcry -> Regulation).
+    4. Éthique (Radar Chart): Specifically addresses "Quality of journalistic work" by breaking it down into 5 measurable axes based on the Munich Charter. Interactive list explains the scores.
+    5. Réalité (Bar Chart): The "Fact Check" section. Horizontal bar chart to visually demonstrate the massive gap between perception created by the media and reality.
+    Rationale: This structure moves from the sensational (the event) to the analytical (the method) to the factual (the truth), guiding the user toward a critical understanding.
+-->
+
+<!-- Visualization & Content Choices:
+    1. Sentiment Doughnut Chart (Dashboard): GOAL: Inform about public reaction. VIZ: Doughnut. JUSTIFICATION: Shows the polarization of the debate instantly.
+    2. Radar Chart (Éthique): GOAL: Analyze quality. VIZ: Radar Chart. JUSTIFICATION: Perfect for comparing a subject (the report) against a standard (The Charter) across multiple variables (Truth, Anonymity, etc.). Supports the core request of analyzing journalistic quality.
+    3. Horizontal Bar Chart (Réalité): GOAL: Compare perception vs reality. VIZ: Bar Chart. JUSTIFICATION: Horizontal bars allow for long labels and clearly show the magnitude of difference (45% vs 5%).
+    4. Timeline (Chronologie): GOAL: Organize events. VIZ: HTML/CSS List. JUSTIFICATION: Linear progression is best for storytelling the unfolding of a scandal.
+    NO SVG/Mermaid used. All visuals are Chart.js canvases or styled HTML.
+-->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</html>

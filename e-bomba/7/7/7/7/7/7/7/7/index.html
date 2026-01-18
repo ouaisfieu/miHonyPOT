@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méta-Atelier : Les Vigilantes - Protocole 42</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Resistance -->
+    <!-- 
+        Background: #FDFBF7 (Warm Paper)
+        Text: #1C1917 (Soft Black/Ink)
+        Primary Accent: #BE123C (Revolution Red/Rose)
+        Secondary Accent: #D97706 (Amber/Light)
+        Neutral: #E5E5E5 (Gray)
+    -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FDFBF7',
+                        ink: '#1C1917',
+                        revolution: '#BE123C',
+                        amber: '#D97706',
+                        stone: '#78716c'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #1C1917;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Custom Scrollbar for timeline */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .page-fragment {
+            transition: all 0.3s ease;
+        }
+        .page-fragment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Application Structure Plan: 
+         The app is designed as a "Protocol Briefing" rather than a standard event page. 
+         1. Header: Quick navigation and SEO keywords.
+         2. Hero: Emotional hook, connecting the book "Les Vigilantes" to the user's action.
+         3. Concept (Arpentage): Interactive grid to demystify the method immediately.
+         4. The Event (Amazone): Contextualizes the source event as the "Launchpad".
+         5. The Meta-Protocol (42 Days): A horizontal timeline showing the asynchronous journey.
+         6. Viral Impact & Funding: A calculator and network visualizer to incentivize group creation (>9 pax) for funding.
+         7. Footer: SEO semantics.
+    -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-paper/95 backdrop-blur border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <span class="text-2xl font-serif font-bold text-revolution">◈ Méta-Atelier</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#concept" class="text-stone-600 hover:text-revolution transition">La Méthode</a>
+                    <a href="#protocol" class="text-stone-600 hover:text-revolution transition">Le Protocole 42j</a>
+                    <a href="#impact" class="text-stone-600 hover:text-revolution transition">Impact & Subsides</a>
+                    <button onclick="scrollToId('join')" class="bg-ink text-white px-4 py-2 rounded hover:bg-revolution transition">Rejoindre</button>
+                </div>
+                <!-- Mobile menu button placeholder -->
+                <div class="md:hidden text-2xl cursor-pointer">☰</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-ink tracking-tight">
+                Les Vigilantes <br>
+                <span class="text-revolution">Le Méta-Atelier</span>
+            </h1>
+            <p class="mt-4 text-xl text-stone-600 max-w-2xl mx-auto">
+                Une expérience de lecture collective massivement distribuée.
+                Inspiré de l'événement Amazone du 22. 
+                <br><strong>42 jours. Asynchrone. Viral.</strong>
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <button onclick="scrollToId('protocol')" class="bg-revolution text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-red-800 transition transform hover:-translate-y-1">
+                    Lancer le Protocole
+                </button>
+                <button onclick="scrollToId('source')" class="bg-white text-ink border border-stone-300 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-stone-50 transition">
+                    Voir la Source
+                </button>
+            </div>
+            
+            <!-- Stats Ticker -->
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-stone-200 pt-8">
+                <div>
+                    <div class="text-3xl font-bold text-revolution" id="stat-days">42</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-wide">Jours de Cycle</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-revolution">1</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-wide">Livre Cible</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-revolution" id="stat-nodes">12+</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-wide">Ateliers Satellites</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-revolution">∞</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-wide">Potentiel Viral</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization & Content Choices:
+         1. Section: The Method (Arpentage).
+         2. Goal: Explain the "cutting" of the book simply.
+         3. Method: Interactive Grid (HTML/JS).
+         4. Interaction: Click grid items ("pages") to "read" them, filling a progress bar.
+         5. Justification: Shows how individual contributions build a collective whole without needing complex graphics.
+    -->
+    <section id="concept" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                
+                <!-- Text Content -->
+                <div class="mb-10 lg:mb-0">
+                    <h2 class="text-3xl font-serif font-bold text-ink mb-4">La Méthode : L'Arpentage</h2>
+                    <p class="text-lg text-stone-600 mb-6">
+                        Nous ne lisons pas seuls. L'arpentage est une méthode de déconstruction collective issue de l'éducation populaire. 
+                        Nous déchirons le livre (physiquement ou virtuellement), nous nous répartissons les sections, et nous reconstruisons le sens ensemble.
+                    </p>
+                    <div class="bg-paper p-6 rounded-lg border-l-4 border-revolution shadow-sm">
+                        <h3 class="font-bold text-ink mb-2">Pourquoi "Méta" ?</h3>
+                        <p class="text-sm text-stone-600">
+                            Au lieu d'un seul atelier unique, nous lançons une vague d'ateliers interconnectés. 
+                            Le contenu est digéré localement, mais les synthèses sont partagées globalement.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Visualization -->
+                <div class="bg-paper p-8 rounded-xl shadow-inner border border-stone-100">
+                    <div class="flex justify-between items-end mb-4">
+                        <h3 class="font-bold text-stone-500 text-sm tracking-widest">SIMULATEUR DE LECTURE DISTRIBUÉE</h3>
+                        <span id="progress-text" class="text-revolution font-bold">0% Reconstruit</span>
+                    </div>
+                    
+                    <!-- Grid of Pages -->
+                    <div id="page-grid" class="grid grid-cols-5 gap-2 mb-6 h-48 content-start">
+                        <!-- JS generates pages here -->
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="h-2 bg-stone-200 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-revolution w-0 transition-all duration-500"></div>
+                        </div>
+                        <p class="text-xs text-stone-400 text-center italic">Cliquez sur les fragments pour contribuer à la synthèse</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: The Source (Amazone Event) -->
+    <section id="source" class="py-16 bg-stone-50 border-y border-stone-200">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="inline-block bg-revolution text-white px-3 py-1 rounded-full text-xs font-bold tracking-widest mb-4">L'ORIGINE DU SIGNAL</div>
+            <h2 class="text-3xl font-serif font-bold mb-6">Le 22 : Arpentage chez Amazone</h2>
+            <p class="text-stone-600 mb-8 leading-relaxed">
+                Tout commence au carrefour de l'égalité de genre à Bruxelles. 
+                L'autrice <strong>Léane Alestra</strong> ("Les Vigilantes") sera le point focal de notre première vague.
+                Notre méta-atelier amplifie cet événement physique pour en faire une résonance numérique durable.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div class="bg-white p-6 rounded shadow-sm">
+                    <div class="text-2xl mb-2">📍</div>
+                    <h3 class="font-bold">Le Lieu</h3>
+                    <p class="text-sm text-stone-500">Amazone ASBL, Bruxelles. Carrefour de l'espace femmes.</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow-sm">
+                    <div class="text-2xl mb-2">📖</div>
+                    <div class="font-bold">Le Livre</div>
+                    <p class="text-sm text-stone-500">"Les Vigilantes". Une dystopie féministe sur le contrôle des corps.</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow-sm">
+                    <div class="text-2xl mb-2">🎯</div>
+                    <h3 class="font-bold">L'Objectif</h3>
+                    <p class="text-sm text-stone-500">Lancer une viralité sémantique et co-construire un projet durable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization & Content Choices:
+         1. Section: The Protocol (Timeline).
+         2. Goal: Visualize the 42-day structure.
+         3. Method: Horizontal Flexbox Scroll/Steps.
+         4. Interaction: Click steps to reveal details.
+         5. Justification: 42 days is long; breaking it into phases makes it manageable.
+    -->
+    <section id="protocol" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-ink">Le Protocole de 42 Jours</h2>
+                <p class="text-stone-500 mt-2">Cycle de vie d'un Méta-Atelier Asynchrone</p>
+            </div>
+
+            <!-- Dynamic Timeline Container -->
+            <div class="relative">
+                <!-- Phases Buttons -->
+                <div class="flex justify-between mb-8 overflow-x-auto pb-4 gap-4 hide-scrollbar" id="timeline-controls">
+                    <button class="flex-shrink-0 px-6 py-3 rounded-full bg-revolution text-white font-semibold shadow-md ring-2 ring-offset-2 ring-revolution transition" onclick="updateProtocol(0)">
+                        Jours 1-7 : Lancement
+                    </button>
+                    <button class="flex-shrink-0 px-6 py-3 rounded-full bg-white text-stone-600 font-semibold border border-stone-200 hover:bg-stone-50 transition" onclick="updateProtocol(1)">
+                        Jours 8-21 : Lecture Dispersée
+                    </button>
+                    <button class="flex-shrink-0 px-6 py-3 rounded-full bg-white text-stone-600 font-semibold border border-stone-200 hover:bg-stone-50 transition" onclick="updateProtocol(2)">
+                        Jours 22-35 : Hybridation
+                    </button>
+                    <button class="flex-shrink-0 px-6 py-3 rounded-full bg-white text-stone-600 font-semibold border border-stone-200 hover:bg-stone-50 transition" onclick="updateProtocol(3)">
+                        Jours 36-42 : Convergence
+                    </button>
+                </div>
+
+                <!-- Detail View -->
+                <div class="bg-paper border border-stone-200 rounded-2xl p-8 md:p-12 transition-all duration-300" id="protocol-detail">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="w-full md:w-1/3 text-center md:text-right border-b md:border-b-0 md:border-r border-stone-200 pb-6 md:pb-0 md:pr-8">
+                            <span class="block text-6xl font-serif text-revolution/20 font-bold" id="proto-days">J1-7</span>
+                            <h3 class="text-2xl font-bold text-ink mt-2" id="proto-title">L'Injection</h3>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <p class="text-lg text-stone-700 leading-relaxed mb-4" id="proto-desc">
+                                Lancement simultané sur toutes les plateformes. Création des groupes locaux. 
+                                Les participants reçoivent le "Kit Arpentage Numérique". 
+                                Objectif : Créer le bruit initial et optimiser le SEO pour l'événement Amazone.
+                            </p>
+                            <ul class="space-y-2 text-sm text-stone-500" id="proto-tasks">
+                                <li class="flex items-center">✓ Inscription des noyaux durs</li>
+                                <li class="flex items-center">✓ Distribution des fragments de texte</li>
+                                <li class="flex items-center">✓ Premier "Check-in" vidéo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization & Content Choices:
+         1. Section: Impact & Funding.
+         2. Goal: Show the value of gathering >9 people.
+         3. Method: Two Viz Columns. 
+            - Left: Chart.js Bubble chart (Network/Virality).
+            - Right: Interactive Calculator (Funding logic).
+         4. Interaction: Slider for participant count updates both the chart (density) and the calculator results.
+         5. Justification: Makes the abstract "Éducation Permanente" rules concrete and rewarding.
+    -->
+    <section id="impact" class="py-20 bg-stone-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Left: Network Visualization -->
+                <div>
+                    <h3 class="text-2xl font-serif font-bold mb-4 text-white">Viralité du Réseau</h3>
+                    <p class="text-stone-400 mb-6 text-sm">Visualisation des nœuds actifs. Plus il y a de participants, plus le réseau se densifie et renforce le SEO sémantique.</p>
+                    
+                    <div class="bg-black/30 rounded-xl p-4 border border-white/10">
+                        <div class="chart-container">
+                            <canvas id="networkChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Funding Calculator -->
+                <div class="flex flex-col justify-center">
+                    <div class="bg-white/5 p-8 rounded-xl border border-white/10 backdrop-blur-sm">
+                        <h3 class="text-xl font-bold mb-2 text-amber-500">Calculateur d'Impact (Décret FWB)</h3>
+                        <p class="text-sm text-stone-300 mb-8">
+                            Au-delà de 9 participants, un atelier entre dans le cadre de l'Éducation Permanente, ouvrant la porte à des soutiens pour la co-construction durable.
+                        </p>
+
+                        <!-- Slider -->
+                        <div class="mb-8">
+                            <label class="block text-xs uppercase tracking-wide text-stone-400 mb-2">Nombre de Participants par Atelier</label>
+                            <input type="range" min="1" max="25" value="5" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-revolution" id="participant-slider">
+                            <div class="flex justify-between mt-2 text-sm font-mono">
+                                <span>1</span>
+                                <span class="text-2xl font-bold text-revolution" id="participant-count">5</span>
+                                <span>25+</span>
+                            </div>
+                        </div>
+
+                        <!-- Results Box -->
+                        <div class="space-y-4" id="funding-result">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <span>Statut :</span>
+                                <span class="font-bold text-stone-400" id="status-text">Groupe Informel</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <span>Potentiel Viral :</span>
+                                <span class="font-bold text-stone-400" id="viral-text">Faible</span>
+                            </div>
+                            <div class="mt-4 p-4 bg-red-900/20 rounded border border-red-500/30 hidden" id="unlock-box">
+                                <p class="text-sm text-red-200 font-semibold">✨ SEUIL DÉPASSÉ ✨</p>
+                                <p class="text-xs text-stone-300 mt-1">Valorisation Éducation Permanente possible. Création de projet durable activée.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="join" class="py-24 bg-paper text-center">
+        <div class="max-w-2xl mx-auto px-4">
+            <h2 class="text-4xl font-serif font-bold text-ink mb-6">Rejoignez la Méta-Structure</h2>
+            <p class="text-stone-600 mb-10">
+                Que vous soyez Amazone, une asso, ou un lecteur isolé. <br>
+                Participez à la construction de la première archive vigilante distribuée.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-ink text-white px-8 py-4 rounded shadow-lg hover:bg-stone-800 transition font-bold">
+                    Créer un Nœud (Organisateur)
+                </button>
+                <button class="bg-white text-ink border border-stone-300 px-8 py-4 rounded hover:bg-stone-50 transition font-bold">
+                    Rejoindre un Atelier
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="font-serif font-bold text-xl">Les Vigilantes</span>
+                <p class="text-xs text-stone-400 mt-1">Basé sur l'œuvre de Léane Alestra.</p>
+            </div>
+            <div class="text-sm text-stone-500 text-center md:text-right space-y-1">
+                <p>Optimisé pour le Web Sémantique.</p>
+                <p>Partenaire : <a href="#" class="text-revolution underline">Amazone ASBL</a></p>
+                <p class="text-xs mt-2 opacity-50">© 2024 Méta-Atelier Initiative</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script>
+        // --- State Management ---
+        const state = {
+            pagesRead: 0,
+            totalPages: 20, // Simplified for demo
+            currentProtocolPhase: 0,
+            participants: 5
+        };
+
+        const protocolData = [
+            {
+                title: "L'Injection (J1-7)",
+                desc: "Lancement simultané sur toutes les plateformes. Création des groupes locaux et distribution des 'Kits Arpentage'. Objectif : Créer le bruit initial pour l'événement Amazone.",
+                tasks: ["Inscription des noyaux durs", "Distribution des fragments", "Premier 'Check-in' vidéo"]
+            },
+            {
+                title: "Lecture Dispersée (J8-21)",
+                desc: "Phase asynchrone pure. Chaque participant lit sa section et produit une micro-synthèse (audio, texte, dessin). Les nœuds communiquent via le hub central.",
+                tasks: ["Lecture individuelle", "Production de contenu dérivé", "Partage sur réseaux (Viralité)"]
+            },
+            {
+                title: "Hybridation (J22-35)",
+                desc: "Les synthèses sont croisées. On utilise les outils numériques pour relier les thèmes du livre à l'actualité politique et sociale.",
+                tasks: ["Croisement des données", "Débats en ligne", "Préparation des propositions"]
+            },
+            {
+                title: "Convergence (J36-42)",
+                desc: "Restitution finale. Tous les ateliers envoient leurs conclusions pour créer le 'Manifeste Vigilant'. Valorisation auprès des institutions (FWB).",
+                tasks: ["Rédaction du Manifeste", "Envoi aux décideurs", "Clôture festive"]
+            }
+        ];
+
+        // --- Utils ---
+        function scrollToId(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- Component: Interactive Grid (Arpentage) ---
+        function initGrid() {
+            const grid = document.getElementById('page-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < state.totalPages; i++) {
+                const page = document.createElement('div');
+                page.className = 'page-fragment bg-stone-100 border border-stone-200 rounded cursor-pointer h-8 w-full flex items-center justify-center text-xs text-stone-400 font-mono';
+                page.innerText = i + 1;
+                page.onclick = () => readPage(page);
+                grid.appendChild(page);
+            }
+        }
+
+        function readPage(element) {
+            if (!element.classList.contains('bg-revolution')) {
+                element.classList.remove('bg-stone-100', 'text-stone-400');
+                element.classList.add('bg-revolution', 'text-white', 'border-revolution');
+                state.pagesRead++;
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((state.pagesRead / state.totalPages) * 100);
+            const bar = document.getElementById('progress-bar');
+            const text = document.getElementById('progress-text');
+            
+            bar.style.width = `${percentage}%`;
+            text.innerText = `${percentage}% Reconstruit`;
+            
+            if (percentage === 100) {
+                text.innerText = "SYNTHÈSE COMPLÈTE";
+                text.classList.add("animate-pulse");
+            }
+        }
+
+        // --- Component: Protocol Tabs ---
+        function updateProtocol(index) {
+            state.currentProtocolPhase = index;
+            const data = protocolData[index];
+            
+            // Update UI Text
+            document.getElementById('proto-days').innerText = data.title.match(/\((.*?)\)/)[1];
+            document.getElementById('proto-title').innerText = data.title.split('(')[0].trim();
+            document.getElementById('proto-desc').innerText = data.desc;
+            
+            const taskList = document.getElementById('proto-tasks');
+            taskList.innerHTML = data.tasks.map(t => `<li class="flex items-center text-stone-600"><span class="mr-2 text-revolution font-bold">✓</span> ${t}</li>`).join('');
+
+            // Update Buttons State
+            const buttons = document.getElementById('timeline-controls').getElementsByTagName('button');
+            for(let i=0; i<buttons.length; i++) {
+                if(i === index) {
+                    buttons[i].classList.remove('bg-white', 'text-stone-600', 'border-stone-200');
+                    buttons[i].classList.add('bg-revolution', 'text-white', 'ring-2', 'ring-offset-2', 'ring-revolution');
+                } else {
+                    buttons[i].classList.add('bg-white', 'text-stone-600', 'border-stone-200');
+                    buttons[i].classList.remove('bg-revolution', 'text-white', 'ring-2', 'ring-offset-2', 'ring-revolution');
+                }
+            }
+        }
+
+        // --- Component: Network Visualization (Chart.js) ---
+        let networkChart;
+
+        function initNetworkChart() {
+            const ctx = document.getElementById('networkChart').getContext('2d');
+            
+            // Generate initial random nodes based on slider value
+            const initialData = generateNetworkData(5);
+
+            networkChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Ateliers Actifs',
+                        data: initialData,
+                        backgroundColor: 'rgba(217, 119, 6, 0.6)', // Amber with opacity
+                        borderColor: 'rgba(217, 119, 6, 1)',
+                        borderWidth: 1,
+                        hoverBackgroundColor: 'rgba(190, 18, 60, 0.8)', // Revolution Red
+                        hoverBorderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Atelier #${context.dataIndex + 1}: ${context.raw.r * 2} participants`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { display: false, min: 0, max: 100 },
+                        y: { display: false, min: 0, max: 100 }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        function generateNetworkData(count) {
+            const data = [];
+            for(let i=0; i<count; i++) {
+                data.push({
+                    x: Math.random() * 100,
+                    y: Math.random() * 100,
+                    r: Math.random() * 10 + 5 // Radius based on "size" of workshop
+                });
+            }
+            return data;
+        }
+
+        // --- Component: Funding Calculator Logic ---
+        function initCalculator() {
+            const slider = document.getElementById('participant-slider');
+            const output = document.getElementById('participant-count');
+            
+            slider.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                output.innerText = val;
+                updateFundingStatus(val);
+                updateNetworkViz(val);
+            });
+        }
+
+        function updateFundingStatus(count) {
+            const statusText = document.getElementById('status-text');
+            const viralText = document.getElementById('viral-text');
+            const unlockBox = document.getElementById('unlock-box');
+
+            // Style resets
+            statusText.className = "font-bold";
+            viralText.className = "font-bold";
+
+            if (count >= 9) {
+                statusText.innerText = "Éligible Décret EP";
+                statusText.classList.add("text-green-400");
+                statusText.classList.remove("text-stone-400");
+                
+                viralText.innerText = "Optimal (Web Sémantique)";
+                viralText.classList.add("text-amber-400");
+                
+                unlockBox.classList.remove("hidden");
+                unlockBox.classList.add("animate-bounce");
+                setTimeout(() => unlockBox.classList.remove("animate-bounce"), 1000); // Stop bounce
+            } else {
+                statusText.innerText = "Groupe Informel";
+                statusText.classList.add("text-stone-400");
+                statusText.classList.remove("text-green-400");
+                
+                viralText.innerText = count < 5 ? "Faible" : "Moyen";
+                viralText.classList.add("text-stone-400");
+                viralText.classList.remove("text-amber-400");
+                
+                unlockBox.classList.add("hidden");
+            }
+        }
+
+        function updateNetworkViz(count) {
+            // Logic: More participants in slider = More nodes in chart + bigger nodes
+            // Just a simulation for visual impact
+            const nodeCount = Math.max(3, count * 1.5); // Simulation multiplier
+            const newData = generateNetworkData(nodeCount);
+            
+            networkChart.data.datasets[0].data = newData;
+            
+            // Dynamic Color Shift based on intensity
+            if (count >= 9) {
+                networkChart.data.datasets[0].backgroundColor = 'rgba(190, 18, 60, 0.6)'; // Revolution Red
+                networkChart.data.datasets[0].borderColor = 'rgba(190, 18, 60, 1)';
+            } else {
+                networkChart.data.datasets[0].backgroundColor = 'rgba(217, 119, 6, 0.6)'; // Amber
+                networkChart.data.datasets[0].borderColor = 'rgba(217, 119, 6, 1)';
+            }
+            
+            networkChart.update();
+        }
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initGrid();
+            initNetworkChart();
+            initCalculator();
+            updateProtocol(0); // Initialize first tab
+        });
+
+    </script>
+</body>
+</html>

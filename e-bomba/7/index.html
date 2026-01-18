@@ -1,60 +1,2945 @@
-KiKôÜ Gens
-Il faut que je vous écrive,
-alors je le fait.
-(pas trop tôt, lol)
 
-Ben oui, ça m'a pris du temps mais ça pushait le coup: j'explique.
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/Ik2t89D83FVkJmxt_xGlz1e_Q2yfmzBlK5m8BnUUVDOHFbAyQ7QzZuYU1lOTWCo8-8uq-AJjWGuxseKkX7ftr8kzXIkPzP6S2GYTAVchuJl2vDFtUbxMsfuYSEmbxYrMYaMwhIzGVA17D-x2paKo9_4mlT0yUrtaZB2D9pjlrv8gDsQQ6AMZzCkhYWB0RhUQiH-QKVbGTUh1x-sYcQM03ADAm3c1ZRiark9iVVHDbOyG2zooztmxdCM4TrUveG9HZKDQA6YPl6KfaWxL2he95nuXUAF-7WEWqBRJ_tKAuCm75iKYYxpq9WtfxgN73Dt_W4fmud1EGnbFZnggejyboPvp0xyi0xSyhI7B6Ubixs7lQm6R3Y-fLKGpDgij_A9_rB3pdEilRGnMsWaRGsyiEOiTbt_eBhLET2S5fiKM8dvto6PFAKSJTUa-eBSGBS2ACPpM2rq9lGLf5vncx60hmCi1aHU'></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mySPOT — Strategic Planning & Organization Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #08090c;
+  --bg: #0d0f14;
+  --surface: #13161d;
+  --card: #1a1e27;
+  --card-hover: #1f2430;
+  --border: #2a303d;
+  --border-light: #3a4255;
+  --text: #e8eaed;
+  --text-soft: #b4bcd0;
+  --muted: #6b7894;
+  --accent: #00d4aa;
+  --accent-dim: rgba(0,212,170,0.15);
+  --accent-glow: rgba(0,212,170,0.4);
+  --blue: #4da6ff;
+  --purple: #a78bfa;
+  --pink: #f472b6;
+  --amber: #fbbf24;
+  --red: #f87171;
+  --green: #4ade80;
+  --cyan: #22d3ee;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.6);
+  --font: 'Outfit', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-En gros c'est la dêche alors vous choquez pas:
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-/!\ SPOILER /!\
-Bibi risque bien de vous harceler à tout bouts de(s fleurs de)s champs toussa rien que pour vous gratter 12,50 EUR/an.
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
 
-Merci d'avance d'ailleurs
+/* Layout */
+.app { display: flex; flex-direction: column; height: 100%; }
 
-Minute pape-ion, de un on va voir si le courant passe et après on parlera business.
+header {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
 
-Si on parlait de ton business maintenant ?
+.logo {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+.logo-text { color: var(--text); }
+.logo-text span { color: var(--accent); }
 
-Je DÉCONNE
-Voir mon OFFRE ULTRA HYPER INCLUSIVE VIP+
-Mais c'est 12,50 EUR le chapitre... c'est pas donné-donné... CECI explique CELA =>
+.nav { display: flex; gap: 4px; flex: 1; margin-left: 24px; }
+.nav-tab {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-tab:hover { background: var(--card); color: var(--text-soft); }
+.nav-tab.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.nav-tab .icon { font-size: 15px; }
 
-ROI spécial +> INVEST EUROLabel++
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  gap: 8px;
+  transition: var(--transition);
+}
+.search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.search-box input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 13px;
+  padding: 8px 0;
+  width: 200px;
+  outline: none;
+  font-family: var(--font);
+}
+.search-box input::placeholder { color: var(--muted); }
+.search-box .icon { color: var(--muted); font-size: 14px; }
 
-+> SROI LABEL WORLD-FUND.ORG
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.btn:hover { background: var(--card-hover); border-color: var(--border-light); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-deep);
+  font-weight: 600;
+}
+.btn-primary:hover { background: #00e6b8; border-color: #00e6b8; }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-ghost:hover { background: var(--card); }
+.btn-danger { color: var(--red); }
+.btn-danger:hover { background: rgba(248,113,113,0.1); }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+.btn-icon { padding: 8px; }
+.btn-icon .icon { margin: 0; }
 
-+> garanti ma tête à couper...
-(la tête c'est dégueu mais bonus).
+main { flex: 1; display: flex; overflow: hidden; }
 
-+> BÉNEF/an (non lucratif) [500-2000k]
+/* Tab Content */
+.tab-content { display: none; flex: 1; overflow: hidden; }
+.tab-content.active { display: flex; }
 
-Bref, profite du gratuit en attendant de trouver mon numéro de compte ULTRA CONFIDENTIEL (RGPD oblige) et le temps de réaliser que tu vas d'office finir par raquer tu vas chialer ta race pour que je sois ton ami sur Facebook.
+/* Panels */
+.panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+.panel-header {
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.panel-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.panel-content { flex: 1; overflow-y: auto; padding: 12px; }
+.panel-border-right { border-right: 1px solid var(--border); }
 
-Oui, je suis complètement givré mais ça fait partie du bail alors tu fais avec ou pas.
+/* Entity List */
+.entity-list { display: flex; flex-direction: column; gap: 6px; }
+.entity-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.entity-item:hover { border-color: var(--border-light); background: var(--card-hover); }
+.entity-item.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.entity-item-header { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.entity-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+.entity-alias { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.entity-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.entity-type-badge {
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.type-person { background: rgba(77,166,255,0.15); color: var(--blue); }
+.type-org { background: rgba(167,139,250,0.15); color: var(--purple); }
+.type-place { background: rgba(74,222,128,0.15); color: var(--green); }
+.type-event { background: rgba(251,191,36,0.15); color: var(--amber); }
+.type-object { background: rgba(244,114,182,0.15); color: var(--pink); }
+.type-document { background: rgba(107,120,148,0.15); color: var(--muted); }
+.role-badge {
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.role-ally { background: rgba(74,222,128,0.15); color: var(--green); }
+.role-adversary { background: rgba(248,113,113,0.15); color: var(--red); }
+.role-target { background: rgba(251,191,36,0.15); color: var(--amber); }
+.role-undecided { background: rgba(107,120,148,0.15); color: var(--muted); }
 
-Si pas, tu prends tout ce qui est gratuit et tu fais ton chemin avec ta vie toute vide de moi en prime. C'est un peu triste mais bon.
+/* Entity Detail */
+.detail-panel { flex: 1; display: flex; flex-direction: column; }
+.detail-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  gap: 12px;
+}
+.detail-empty .icon { font-size: 48px; opacity: 0.3; }
+.detail-content { flex: 1; overflow-y: auto; }
+.detail-header {
+  padding: 20px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+}
+.detail-title { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.detail-subtitle { color: var(--muted); font-size: 13px; }
+.detail-badges { display: flex; gap: 8px; margin-top: 12px; }
+.detail-body { padding: 20px; }
+.detail-section { margin-bottom: 24px; }
+.detail-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.detail-desc { color: var(--text-soft); line-height: 1.7; }
+.detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-soft);
+}
 
-Donc tu reviens quand tu veux, et tu seras toujours mon/ma pot/o/a quand même
-(sans obligation, et/ou/ni rancune aucune)
-(Voir CGU ART-VII-§3 : Carte : Têtes de Clients)
+/* Relations & Notes */
+.relation-item, .note-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.relation-item:hover, .note-item:hover { border-color: var(--border-light); }
+.relation-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.relation-info { flex: 1; min-width: 0; }
+.relation-type { font-size: 11px; color: var(--accent); margin-bottom: 2px; }
+.relation-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.note-content { flex: 1; font-size: 12px; color: var(--text-soft); }
+.note-date { font-size: 10px; color: var(--muted); }
 
-Ok poto :
+/* Graph */
+.graph-container { flex: 1; position: relative; background: var(--bg-deep); }
+.graph-canvas { width: 100%; height: 100%; display: block; }
+.graph-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  box-shadow: var(--shadow);
+}
+.graph-legend {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  font-size: 11px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.legend-item:last-child { margin-bottom: 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.graph-tooltip {
+  position: absolute;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  max-width: 250px;
+}
+.graph-tooltip.visible { opacity: 1; }
+.graph-tooltip-title { font-weight: 600; margin-bottom: 4px; }
+.graph-tooltip-type { font-size: 10px; color: var(--accent); text-transform: uppercase; }
 
-TOPO
-Toujours potos ?
+/* Timeline */
+.timeline-container { flex: 1; overflow-y: auto; padding: 24px; }
+.timeline { position: relative; padding-left: 30px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item { position: relative; margin-bottom: 24px; }
+.timeline-dot {
+  position: absolute;
+  left: -26px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+}
+.timeline-date { font-size: 11px; color: var(--accent); font-family: var(--mono); margin-bottom: 4px; }
+.timeline-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.timeline-card:hover { border-color: var(--accent); }
+.timeline-title { font-weight: 600; margin-bottom: 4px; }
+.timeline-desc { font-size: 12px; color: var(--muted); }
 
-PRéVIÔôSLY
-C'était la dêche...
-Pas mieux, d'ailleurs:
-Pire, ça a empiré depuis
-=> 12,50 EUR merci :o)
+/* Plaidoyer */
+.plaidoyer-layout { display: flex; flex: 1; overflow: hidden; }
+.plaidoyer-sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 12px;
+}
+.plaidoyer-content { flex: 1; overflow-y: auto; padding: 24px; }
+.plaid-nav-group { margin-bottom: 20px; }
+.plaid-nav-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+}
+.plaid-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-soft);
+  transition: var(--transition);
+}
+.plaid-nav-item:hover { background: var(--card); color: var(--text); }
+.plaid-nav-item.active { background: var(--accent-dim); color: var(--accent); }
+.plaid-nav-item .emoji { font-size: 16px; }
 
-J'ai besoin de THUUUNASSES
-GR=ÂVE=
+.plaid-section { display: none; }
+.plaid-section.active { display: block; }
+.plaid-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.plaid-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.plaid-card-title { font-weight: 600; font-size: 15px; }
+.plaid-card-body { padding: 20px; }
 
-On va se présenter ou plutôt non, on va brouiller les pistes.
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
+/* SWOT */
+.swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.swot-cell { border-radius: var(--radius); padding: 16px; min-height: 180px; }
+.swot-cell h4 { font-size: 12px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.swot-strengths { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); }
+.swot-strengths h4 { color: var(--green); }
+.swot-weaknesses { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); }
+.swot-weaknesses h4 { color: var(--red); }
+.swot-opportunities { background: rgba(77,166,255,0.08); border: 1px solid rgba(77,166,255,0.2); }
+.swot-opportunities h4 { color: var(--blue); }
+.swot-threats { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); }
+.swot-threats h4 { color: var(--amber); }
+.swot-items { list-style: none; }
+.swot-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.swot-item .remove-btn {
+  opacity: 0;
+  cursor: pointer;
+  color: var(--red);
+  transition: opacity 0.15s;
+}
+.swot-item:hover .remove-btn { opacity: 1; }
+.swot-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text);
+  font-size: 12px;
+  padding: 8px 0;
+  margin-top: 8px;
+  font-family: var(--font);
+}
+.swot-input:focus { outline: none; border-color: var(--accent); }
+.swot-input::placeholder { color: var(--muted); }
 
-Et maintenant
-[...]
+/* Forms */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+  padding: 10px 12px;
+  font-family: var(--font);
+  transition: var(--transition);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.form-textarea { min-height: 100px; resize: vertical; }
+.form-select { cursor: pointer; }
+.form-row { display: flex; gap: 12px; }
+.form-row .form-group { flex: 1; }
+.form-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95) translateY(20px);
+  transition: transform 0.2s;
+}
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-lg { max-width: 800px; }
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title { font-size: 18px; font-weight: 600; }
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: var(--transition);
+}
+.modal-close:hover { background: var(--surface); color: var(--text); }
+.modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast-success { border-left: 3px solid var(--green); }
+.toast-error { border-left: 3px solid var(--red); }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Import Drop Zone */
+.import-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.import-zone:hover, .import-zone.dragover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.import-zone .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+.import-zone h3 { font-size: 16px; margin-bottom: 8px; }
+.import-zone p { color: var(--muted); font-size: 13px; }
+
+/* Tools Grid */
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: var(--transition);
+}
+.tool-card:hover { border-color: var(--border-light); }
+.tool-card h3 { font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.tool-card p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.tool-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Target Profiles */
+.target-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 12px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.target-card:hover { border-color: var(--accent); }
+.target-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.target-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.target-info h4 { font-size: 15px; margin-bottom: 2px; }
+.target-info p { font-size: 12px; color: var(--muted); }
+.target-body { padding: 16px; }
+.target-stats { display: flex; gap: 20px; }
+.target-stat { text-align: center; }
+.target-stat-value { font-size: 18px; font-weight: 700; color: var(--accent); }
+.target-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+/* Strategy Cards */
+.strategy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.strategy-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+.strategy-card:hover { border-color: var(--accent); background: var(--card); }
+.strategy-card.selected { border-color: var(--accent); background: var(--accent-dim); }
+.strategy-card .emoji { font-size: 28px; margin-bottom: 8px; }
+.strategy-card h5 { font-size: 13px; margin-bottom: 4px; }
+.strategy-card p { font-size: 11px; color: var(--muted); }
+
+/* Progress Table */
+.progress-table { width: 100%; border-collapse: collapse; }
+.progress-table th, .progress-table td {
+  border: 1px solid var(--border);
+  padding: 12px;
+  text-align: left;
+  font-size: 12px;
+}
+.progress-table th {
+  background: var(--surface);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+.progress-table textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 12px;
+  resize: none;
+  font-family: var(--font);
+}
+.progress-table textarea:focus { outline: none; }
+
+/* Actions Table */
+.action-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.action-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-planned { background: var(--muted); }
+.status-ongoing { background: var(--amber); }
+.status-completed { background: var(--green); }
+.action-info { flex: 1; }
+.action-title { font-weight: 500; margin-bottom: 2px; }
+.action-deadline { font-size: 11px; color: var(--muted); }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}
+.empty-state .icon { font-size: 64px; margin-bottom: 16px; opacity: 0.3; }
+.empty-state h3 { font-size: 16px; color: var(--text); margin-bottom: 8px; }
+.empty-state p { font-size: 13px; margin-bottom: 20px; }
+
+/* Slider */
+.slider-group { display: flex; align-items: center; gap: 12px; }
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.slider-value {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Keyboard Hint */
+.kbd {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--muted);
+}
+
+/* Utils */
+.flex { display: flex; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.text-center { text-align: center; }
+.text-muted { color: var(--muted); }
+.text-accent { color: var(--accent); }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">◈</div>
+      <div class="logo-text">my<span>SPOT</span></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-tab active" data-tab="entities"><span class="icon">👥</span> Entités</button>
+      <button class="nav-tab" data-tab="graph"><span class="icon">🕸️</span> Graphe</button>
+      <button class="nav-tab" data-tab="timeline"><span class="icon">📅</span> Timeline</button>
+      <button class="nav-tab" data-tab="plaidoyer"><span class="icon">🎯</span> Plaidoyer</button>
+      <button class="nav-tab" data-tab="import"><span class="icon">📥</span> Import</button>
+      <button class="nav-tab" data-tab="tools"><span class="icon">🔧</span> Outils</button>
+    </nav>
+    <div class="header-actions">
+      <div class="search-box">
+        <span class="icon">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Rechercher... (Ctrl+K)">
+      </div>
+      <button class="btn btn-primary" onclick="openEntityModal()">
+        <span>＋</span> Nouvelle entité
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ENTITIES TAB -->
+    <div class="tab-content active" id="tab-entities">
+      <div class="panel panel-border-right" style="width: 320px;">
+        <div class="panel-header">
+          <span class="panel-title">Entités</span>
+          <div class="flex gap-2">
+            <select id="filterType" class="form-select" style="width:auto;padding:4px 8px;font-size:11px">
+              <option value="">Tous types</option>
+              <option value="person">👤 Personnes</option>
+              <option value="org">🏢 Organisations</option>
+              <option value="place">📍 Lieux</option>
+              <option value="event">📅 Événements</option>
+              <option value="object">🔮 Objets</option>
+            </select>
+            <select id="filterRole" class="form-select" style="width:auto;padding:4px 8px;font-size:11px">
+              <option value="">Tous rôles</option>
+              <option value="ally">✅ Alliés</option>
+              <option value="adversary">❌ Adversaires</option>
+              <option value="target">🎯 Cibles</option>
+              <option value="undecided">❓ Indécis</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="entity-list" id="entityList"></div>
+        </div>
+      </div>
+      <div class="detail-panel" id="detailPanel">
+        <div class="detail-empty">
+          <span class="icon">◈</span>
+          <p>Sélectionnez une entité ou créez-en une nouvelle</p>
+          <button class="btn btn-primary" onclick="openEntityModal()">＋ Nouvelle entité</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAPH TAB -->
+    <div class="tab-content" id="tab-graph">
+      <div class="graph-container">
+        <canvas class="graph-canvas" id="graphCanvas"></canvas>
+        <div class="graph-controls">
+          <button class="btn btn-sm" onclick="resetGraph()">⟳ Reset</button>
+          <button class="btn btn-sm" onclick="zoomGraph(1.2)">＋ Zoom</button>
+          <button class="btn btn-sm" onclick="zoomGraph(0.8)">－ Dézoom</button>
+          <button class="btn btn-sm" onclick="togglePhysics()">⚡ Physique</button>
+          <button class="btn btn-sm" onclick="exportGraphPNG()">📷 Export PNG</button>
+        </div>
+        <div class="graph-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span> Personne</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span> Organisation</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Lieu</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span> Événement</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--pink)"></span> Objet</div>
+        </div>
+        <div class="graph-tooltip" id="graphTooltip">
+          <div class="graph-tooltip-title"></div>
+          <div class="graph-tooltip-type"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE TAB -->
+    <div class="tab-content" id="tab-timeline">
+      <div class="timeline-container" id="timelineContainer">
+        <div class="empty-state">
+          <span class="icon">📅</span>
+          <h3>Timeline vide</h3>
+          <p>Ajoutez des dates à vos entités pour les voir apparaître ici</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAIDOYER TAB -->
+    <div class="tab-content" id="tab-plaidoyer">
+      <div class="plaidoyer-layout">
+        <div class="plaidoyer-sidebar">
+          <div class="plaid-nav-group">
+            <div class="plaid-nav-title">📐 Cadrage</div>
+            <div class="plaid-nav-item active" data-section="toc"><span class="emoji">🧭</span> Théorie du Changement</div>
+            <div class="plaid-nav-item" data-section="swot"><span class="emoji">📊</span> SWOT</div>
+            <div class="plaid-nav-item" data-section="pestel"><span class="emoji">🌍</span> PESTEL</div>
+          </div>
+          <div class="plaid-nav-group">
+            <div class="plaid-nav-title">🔍 Analyse</div>
+            <div class="plaid-nav-item" data-section="tree"><span class="emoji">🌳</span> Arbre à Problèmes</div>
+            <div class="plaid-nav-item" data-section="fivewhy"><span class="emoji">❓</span> 5 Pourquoi</div>
+            <div class="plaid-nav-item" data-section="objectives"><span class="emoji">🎯</span> Objectifs SMART</div>
+          </div>
+          <div class="plaid-nav-group">
+            <div class="plaid-nav-title">⚔️ Stratégie</div>
+            <div class="plaid-nav-item" data-section="strategies"><span class="emoji">♟️</span> Choix de Stratégies</div>
+            <div class="plaid-nav-item" data-section="targets"><span class="emoji">👥</span> Fiches de Ciblage</div>
+          </div>
+          <div class="plaid-nav-group">
+            <div class="plaid-nav-title">📢 Communication</div>
+            <div class="plaid-nav-item" data-section="messages"><span class="emoji">💬</span> Messages clés</div>
+          </div>
+          <div class="plaid-nav-group">
+            <div class="plaid-nav-title">📈 Suivi</div>
+            <div class="plaid-nav-item" data-section="progress"><span class="emoji">📉</span> Marqueurs de Progrès</div>
+            <div class="plaid-nav-item" data-section="actions"><span class="emoji">✅</span> Suivi des Actions</div>
+          </div>
+        </div>
+        <div class="plaidoyer-content" id="plaidoyerContent">
+          <!-- Content injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORT TAB -->
+    <div class="tab-content" id="tab-import">
+      <div style="flex:1;padding:32px;max-width:800px;margin:0 auto">
+        <h2 style="margin-bottom:24px">📥 Importer des données</h2>
+        <div class="import-zone" id="importZone">
+          <div class="icon">📁</div>
+          <h3>Glissez vos fichiers ici</h3>
+          <p>JSON, CSV, XLSX, TXT supportés</p>
+          <input type="file" id="fileInput" accept=".json,.csv,.xlsx,.txt" multiple hidden>
+          <button class="btn btn-primary mt-4" onclick="document.getElementById('fileInput').click()">Parcourir</button>
+        </div>
+        <div class="mt-4" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+          <h4 style="margin-bottom:12px">💡 Formats acceptés</h4>
+          <ul style="color:var(--muted);font-size:13px;list-style:disc;padding-left:20px;line-height:1.8">
+            <li><strong>JSON</strong> — Export mySPOT ou structure {entities, relations, notes}</li>
+            <li><strong>CSV/XLSX</strong> — Colonnes: id, name, type, alias, desc, date, tags, role</li>
+            <li><strong>TXT</strong> — Liste de noms (1 par ligne, créés comme personnes)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS TAB -->
+    <div class="tab-content" id="tab-tools">
+      <div style="flex:1;padding:32px;overflow-y:auto">
+        <h2 style="margin-bottom:24px">🔧 Outils</h2>
+        <div class="tools-grid" id="toolsGrid"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ENTITY MODAL -->
+<div class="modal-overlay" id="entityModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="entityModalTitle">Nouvelle entité</h3>
+      <button class="modal-close" onclick="closeModal('entityModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="entityId">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nom *</label>
+          <input type="text" class="form-input" id="entityName" placeholder="Nom de l'entité">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type *</label>
+          <select class="form-select" id="entityType">
+            <option value="person">👤 Personne</option>
+            <option value="org">🏢 Organisation</option>
+            <option value="place">📍 Lieu</option>
+            <option value="event">📅 Événement</option>
+            <option value="object">🔮 Objet</option>
+            <option value="document">📄 Document</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Alias / Surnoms</label>
+        <input type="text" class="form-input" id="entityAlias" placeholder="Autres noms, séparés par des virgules">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="entityDesc" placeholder="Description détaillée..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="text" class="form-input" id="entityDate" placeholder="Date, période, année...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rôle (Plaidoyer)</label>
+          <select class="form-select" id="entityRole">
+            <option value="">— Aucun —</option>
+            <option value="ally">✅ Allié</option>
+            <option value="adversary">❌ Adversaire</option>
+            <option value="target">🎯 Cible</option>
+            <option value="undecided">❓ Indécis</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tags</label>
+        <input type="text" class="form-input" id="entityTags" placeholder="Tags séparés par des virgules">
+        <div class="form-hint">Ex: héros, quête, important</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('entityModal')">Annuler</button>
+      <button class="btn btn-danger hidden" id="deleteEntityBtn" onclick="deleteEntity()">Supprimer</button>
+      <button class="btn btn-primary" onclick="saveEntity()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELATION MODAL -->
+<div class="modal-overlay" id="relationModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Nouvelle relation</h3>
+      <button class="modal-close" onclick="closeModal('relationModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="relationId">
+      <div class="form-group">
+        <label class="form-label">De (source)</label>
+        <select class="form-select" id="relationFrom"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type de relation</label>
+        <input type="text" class="form-input" id="relationType" placeholder="ex: ami de, travaille pour, situé à...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Vers (cible)</label>
+        <select class="form-select" id="relationTo"></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('relationModal')">Annuler</button>
+      <button class="btn btn-danger hidden" id="deleteRelationBtn" onclick="deleteRelation()">Supprimer</button>
+      <button class="btn btn-primary" onclick="saveRelation()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Nouvelle note</h3>
+      <button class="modal-close" onclick="closeModal('noteModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="noteId">
+      <input type="hidden" id="noteEntityId">
+      <div class="form-group">
+        <label class="form-label">Contenu</label>
+        <textarea class="form-textarea" id="noteContent" placeholder="Votre note..." style="min-height:150px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Source</label>
+        <input type="text" class="form-input" id="noteSource" placeholder="Livre, site web, interview...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('noteModal')">Annuler</button>
+      <button class="btn btn-danger hidden" id="deleteNoteBtn" onclick="deleteNote()">Supprimer</button>
+      <button class="btn btn-primary" onclick="saveNote()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TARGET MODAL -->
+<div class="modal-overlay" id="targetModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="targetModalTitle">Nouvelle fiche de ciblage</h3>
+      <button class="modal-close" onclick="closeModal('targetModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="targetId">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nom / Organisation *</label>
+          <input type="text" class="form-input" id="targetName" placeholder="Nom de la cible">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Représentant</label>
+          <input type="text" class="form-input" id="targetRep" placeholder="Personne à contacter">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Objectifs de la cible</label>
+        <textarea class="form-textarea" id="targetObjectives" placeholder="Quels sont ses objectifs, intérêts ?"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Niveau d'intérêt (1-5)</label>
+          <div class="slider-group">
+            <input type="range" class="slider" id="targetInterest" min="1" max="5" value="3">
+            <span class="slider-value" id="targetInterestVal">3</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Niveau d'influence (1-5)</label>
+          <div class="slider-group">
+            <input type="range" class="slider" id="targetInfluence" min="1" max="5" value="3">
+            <span class="slider-value" id="targetInfluenceVal">3</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Position actuelle</label>
+          <select class="form-select" id="targetPosition">
+            <option value="-2">Fortement opposé</option>
+            <option value="-1">Plutôt opposé</option>
+            <option value="0" selected>Neutre</option>
+            <option value="1">Plutôt favorable</option>
+            <option value="2">Fortement favorable</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Niveau d'accès</label>
+          <select class="form-select" id="targetAccess">
+            <option value="none">Aucun</option>
+            <option value="indirect">Indirect</option>
+            <option value="direct">Direct</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Action souhaitée</label>
+        <input type="text" class="form-input" id="targetAction" placeholder="Quelle action voulez-vous qu'elle entreprenne ?">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Arguments déclencheurs</label>
+        <textarea class="form-textarea" id="targetArguments" placeholder="Quels arguments pourraient la convaincre ?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('targetModal')">Annuler</button>
+      <button class="btn btn-danger hidden" id="deleteTargetBtn" onclick="deleteTarget()">Supprimer</button>
+      <button class="btn btn-primary" onclick="saveTarget()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="modal-overlay" id="searchModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">🔍 Recherche</h3>
+      <button class="modal-close" onclick="closeModal('searchModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" class="form-input" id="searchInput" placeholder="Rechercher une entité..." autofocus style="font-size:16px;padding:14px">
+      <div id="searchResults" class="mt-4"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT UNIVERSE MODAL -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">🌍 Exporter l'Univers</h3>
+      <button class="modal-close" onclick="closeModal('exportModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Titre de l'univers</label>
+        <input type="text" class="form-input" id="exportTitle" placeholder="Ex: Le Seigneur des Anneaux">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optionnel)</label>
+        <textarea class="form-textarea" id="exportDesc" placeholder="Brève description de cet univers..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('exportModal')">Annuler</button>
+      <button class="btn btn-primary" onclick="exportUniverseHTML()">🌍 Générer HTML</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// mySPOT — Strategic Planning & Organization Tool
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Database
+let db = {
+  entities: [],
+  relations: [],
+  notes: [],
+  plaidoyer: {
+    toc: { vision: '', values: '', hypotheses: '', missions: '' },
+    swot: { strengths: [], weaknesses: [], opportunities: [], threats: [] },
+    pestel: { political: '', economic: '', social: '', tech: '', env: '', legal: '' },
+    tree: { problem: '', causes: [], consequences: [] },
+    fiveWhy: ['', '', '', '', '', ''],
+    objectives: [],
+    strategies: [],
+    messages: [],
+    targets: [],
+    progress: [],
+    actions: []
+  }
+};
+
+let selectedEntity = null;
+let graphState = { nodes: [], zoom: 1, offsetX: 0, offsetY: 0, dragging: null, physics: true };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+const genId = () => 'id_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+const esc = s => s ? String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) : '';
+const typeIcons = { person: '👤', org: '🏢', place: '📍', event: '📅', object: '🔮', document: '📄' };
+const typeColors = { person: '#4da6ff', org: '#a78bfa', place: '#4ade80', event: '#fbbf24', object: '#f472b6', document: '#6b7894' };
+const roleColors = { ally: '#4ade80', adversary: '#f87171', target: '#fbbf24', undecided: '#6b7894' };
+
+function toast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span> ${esc(msg)}`;
+  container.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DATABASE PERSISTENCE
+// ═══════════════════════════════════════════════════════════════════════════
+
+const DB_NAME = 'mySPOT_DB';
+const DB_STORE = 'data';
+const DB_KEY = 'main';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(DB_STORE);
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e);
+  });
+}
+
+async function saveDB() {
+  try {
+    const idb = await openDB();
+    const tx = idb.transaction(DB_STORE, 'readwrite');
+    tx.objectStore(DB_STORE).put(db, DB_KEY);
+  } catch (e) { console.error('Save error:', e); }
+}
+
+async function loadDB() {
+  try {
+    const idb = await openDB();
+    const tx = idb.transaction(DB_STORE, 'readonly');
+    const req = tx.objectStore(DB_STORE).get(DB_KEY);
+    req.onsuccess = () => {
+      if (req.result) {
+        db = { ...db, ...req.result };
+        if (!db.plaidoyer) db.plaidoyer = { toc: {}, swot: {}, pestel: {}, tree: {}, fiveWhy: [], objectives: [], strategies: [], messages: [], targets: [], progress: [], actions: [] };
+      }
+      renderAll();
+    };
+  } catch (e) { console.error('Load error:', e); renderAll(); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ENTITY CRUD
+// ═══════════════════════════════════════════════════════════════════════════
+
+function openEntityModal(entity = null) {
+  document.getElementById('entityModalTitle').textContent = entity ? 'Modifier l\'entité' : 'Nouvelle entité';
+  document.getElementById('entityId').value = entity?.id || '';
+  document.getElementById('entityName').value = entity?.name || '';
+  document.getElementById('entityType').value = entity?.type || 'person';
+  document.getElementById('entityAlias').value = entity?.alias || '';
+  document.getElementById('entityDesc').value = entity?.desc || '';
+  document.getElementById('entityDate').value = entity?.date || '';
+  document.getElementById('entityRole').value = entity?.role || '';
+  document.getElementById('entityTags').value = entity?.tags?.join(', ') || '';
+  document.getElementById('deleteEntityBtn').classList.toggle('hidden', !entity);
+  openModal('entityModal');
+  document.getElementById('entityName').focus();
+}
+
+function saveEntity() {
+  const id = document.getElementById('entityId').value || genId();
+  const name = document.getElementById('entityName').value.trim();
+  if (!name) { toast('Le nom est requis', 'error'); return; }
+  
+  const entity = {
+    id,
+    name,
+    type: document.getElementById('entityType').value,
+    alias: document.getElementById('entityAlias').value.trim(),
+    desc: document.getElementById('entityDesc').value.trim(),
+    date: document.getElementById('entityDate').value.trim(),
+    role: document.getElementById('entityRole').value,
+    tags: document.getElementById('entityTags').value.split(',').map(t => t.trim()).filter(Boolean)
+  };
+  
+  const idx = db.entities.findIndex(e => e.id === id);
+  if (idx >= 0) db.entities[idx] = entity;
+  else db.entities.push(entity);
+  
+  saveDB();
+  closeModal('entityModal');
+  renderEntityList();
+  if (selectedEntity?.id === id) selectEntity(entity);
+  renderGraph();
+  toast(idx >= 0 ? 'Entité mise à jour' : 'Entité créée');
+}
+
+function deleteEntity() {
+  const id = document.getElementById('entityId').value;
+  if (!id || !confirm('Supprimer cette entité et toutes ses relations ?')) return;
+  
+  db.entities = db.entities.filter(e => e.id !== id);
+  db.relations = db.relations.filter(r => r.from !== id && r.to !== id);
+  db.notes = db.notes.filter(n => n.entityId !== id);
+  
+  saveDB();
+  closeModal('entityModal');
+  selectedEntity = null;
+  renderEntityList();
+  renderDetailPanel();
+  renderGraph();
+  toast('Entité supprimée');
+}
+
+function selectEntity(entity) {
+  selectedEntity = entity;
+  document.querySelectorAll('.entity-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.id === entity.id);
+  });
+  renderDetailPanel();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RENDER ENTITY LIST
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderEntityList() {
+  const container = document.getElementById('entityList');
+  const typeFilter = document.getElementById('filterType').value;
+  const roleFilter = document.getElementById('filterRole').value;
+  
+  let entities = db.entities;
+  if (typeFilter) entities = entities.filter(e => e.type === typeFilter);
+  if (roleFilter) entities = entities.filter(e => e.role === roleFilter);
+  
+  if (!entities.length) {
+    container.innerHTML = `<div class="empty-state"><span class="icon">◈</span><p>Aucune entité</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = entities.map(e => `
+    <div class="entity-item ${selectedEntity?.id === e.id ? 'selected' : ''}" data-id="${e.id}" onclick="selectEntity(db.entities.find(x=>x.id==='${e.id}'))">
+      <div class="entity-item-header">
+        <div>
+          <div class="entity-name">${esc(e.name)}</div>
+          ${e.alias ? `<div class="entity-alias">${esc(e.alias.substring(0, 40))}${e.alias.length > 40 ? '...' : ''}</div>` : ''}
+        </div>
+      </div>
+      <div class="entity-meta">
+        <span class="entity-type-badge type-${e.type}">${typeIcons[e.type] || '📦'} ${e.type}</span>
+        ${e.role ? `<span class="role-badge role-${e.role}">${e.role}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RENDER DETAIL PANEL
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderDetailPanel() {
+  const panel = document.getElementById('detailPanel');
+  if (!selectedEntity) {
+    panel.innerHTML = `<div class="detail-empty"><span class="icon">◈</span><p>Sélectionnez une entité ou créez-en une nouvelle</p><button class="btn btn-primary" onclick="openEntityModal()">＋ Nouvelle entité</button></div>`;
+    return;
+  }
+  
+  const e = selectedEntity;
+  const relations = db.relations.filter(r => r.from === e.id || r.to === e.id);
+  const notes = db.notes.filter(n => n.entityId === e.id);
+  
+  panel.innerHTML = `
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="detail-title">${esc(e.name)}</div>
+            ${e.alias ? `<div class="detail-subtitle">${esc(e.alias)}</div>` : ''}
+          </div>
+          <button class="btn" onclick="openEntityModal(db.entities.find(x=>x.id==='${e.id}'))">✏️ Modifier</button>
+        </div>
+        <div class="detail-badges">
+          <span class="entity-type-badge type-${e.type}">${typeIcons[e.type]} ${e.type}</span>
+          ${e.role ? `<span class="role-badge role-${e.role}">${e.role}</span>` : ''}
+          ${e.date ? `<span class="tag">📅 ${esc(e.date)}</span>` : ''}
+        </div>
+      </div>
+      <div class="detail-body">
+        ${e.desc ? `<div class="detail-section"><div class="detail-section-title">Description</div><p class="detail-desc">${esc(e.desc)}</p></div>` : ''}
+        ${e.tags?.length ? `<div class="detail-section"><div class="detail-section-title">Tags</div><div class="detail-tags">${e.tags.map(t => `<span class="tag">#${esc(t)}</span>`).join('')}</div></div>` : ''}
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Relations <button class="btn btn-sm btn-ghost" onclick="openRelationModal(null, '${e.id}')">＋ Ajouter</button></div>
+          ${relations.length ? relations.map(r => {
+            const other = r.from === e.id ? db.entities.find(x => x.id === r.to) : db.entities.find(x => x.id === r.from);
+            const dir = r.from === e.id ? '→' : '←';
+            return `
+              <div class="relation-item" onclick="openRelationModal(db.relations.find(x=>x.id==='${r.id}'))">
+                <div class="relation-icon">${other ? typeIcons[other.type] : '?'}</div>
+                <div class="relation-info">
+                  <div class="relation-type">${dir} ${esc(r.type)}</div>
+                  <div class="relation-name">${esc(other?.name || 'Entité supprimée')}</div>
+                </div>
+              </div>
+            `;
+          }).join('') : '<p class="text-muted" style="font-size:12px">Aucune relation</p>'}
+        </div>
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Notes <button class="btn btn-sm btn-ghost" onclick="openNoteModal(null, '${e.id}')">＋ Ajouter</button></div>
+          ${notes.length ? notes.map(n => `
+            <div class="note-item" onclick="openNoteModal(db.notes.find(x=>x.id==='${n.id}'))">
+              <div class="note-content">${esc(n.content.substring(0, 100))}${n.content.length > 100 ? '...' : ''}</div>
+              <div class="note-date">${n.source ? esc(n.source) : ''}</div>
+            </div>
+          `).join('') : '<p class="text-muted" style="font-size:12px">Aucune note</p>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RELATIONS CRUD
+// ═══════════════════════════════════════════════════════════════════════════
+
+function openRelationModal(relation = null, defaultFrom = null) {
+  const fromSelect = document.getElementById('relationFrom');
+  const toSelect = document.getElementById('relationTo');
+  const options = db.entities.map(e => `<option value="${e.id}">${esc(e.name)}</option>`).join('');
+  fromSelect.innerHTML = options;
+  toSelect.innerHTML = options;
+  
+  document.getElementById('relationId').value = relation?.id || '';
+  fromSelect.value = relation?.from || defaultFrom || db.entities[0]?.id || '';
+  document.getElementById('relationType').value = relation?.type || '';
+  toSelect.value = relation?.to || db.entities[1]?.id || '';
+  document.getElementById('deleteRelationBtn').classList.toggle('hidden', !relation);
+  openModal('relationModal');
+}
+
+function saveRelation() {
+  const id = document.getElementById('relationId').value || genId();
+  const from = document.getElementById('relationFrom').value;
+  const to = document.getElementById('relationTo').value;
+  const type = document.getElementById('relationType').value.trim();
+  
+  if (!from || !to || !type) { toast('Tous les champs sont requis', 'error'); return; }
+  if (from === to) { toast('Source et cible doivent être différentes', 'error'); return; }
+  
+  const relation = { id, from, to, type };
+  const idx = db.relations.findIndex(r => r.id === id);
+  if (idx >= 0) db.relations[idx] = relation;
+  else db.relations.push(relation);
+  
+  saveDB();
+  closeModal('relationModal');
+  renderDetailPanel();
+  renderGraph();
+  toast(idx >= 0 ? 'Relation mise à jour' : 'Relation créée');
+}
+
+function deleteRelation() {
+  const id = document.getElementById('relationId').value;
+  if (!id || !confirm('Supprimer cette relation ?')) return;
+  db.relations = db.relations.filter(r => r.id !== id);
+  saveDB();
+  closeModal('relationModal');
+  renderDetailPanel();
+  renderGraph();
+  toast('Relation supprimée');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NOTES CRUD
+// ═══════════════════════════════════════════════════════════════════════════
+
+function openNoteModal(note = null, entityId = null) {
+  document.getElementById('noteId').value = note?.id || '';
+  document.getElementById('noteEntityId').value = note?.entityId || entityId || '';
+  document.getElementById('noteContent').value = note?.content || '';
+  document.getElementById('noteSource').value = note?.source || '';
+  document.getElementById('deleteNoteBtn').classList.toggle('hidden', !note);
+  openModal('noteModal');
+  document.getElementById('noteContent').focus();
+}
+
+function saveNote() {
+  const id = document.getElementById('noteId').value || genId();
+  const entityId = document.getElementById('noteEntityId').value;
+  const content = document.getElementById('noteContent').value.trim();
+  
+  if (!content) { toast('Le contenu est requis', 'error'); return; }
+  
+  const note = { id, entityId, content, source: document.getElementById('noteSource').value.trim(), time: Date.now() };
+  const idx = db.notes.findIndex(n => n.id === id);
+  if (idx >= 0) db.notes[idx] = note;
+  else db.notes.push(note);
+  
+  saveDB();
+  closeModal('noteModal');
+  renderDetailPanel();
+  toast(idx >= 0 ? 'Note mise à jour' : 'Note créée');
+}
+
+function deleteNote() {
+  const id = document.getElementById('noteId').value;
+  if (!id || !confirm('Supprimer cette note ?')) return;
+  db.notes = db.notes.filter(n => n.id !== id);
+  saveDB();
+  closeModal('noteModal');
+  renderDetailPanel();
+  toast('Note supprimée');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INTERACTIVE GRAPH
+// ═══════════════════════════════════════════════════════════════════════════
+
+let graphCanvas, graphCtx, graphAnimationId;
+let hoveredNode = null;
+
+function initGraph() {
+  graphCanvas = document.getElementById('graphCanvas');
+  graphCtx = graphCanvas.getContext('2d');
+  
+  // Event listeners
+  graphCanvas.addEventListener('mousedown', onGraphMouseDown);
+  graphCanvas.addEventListener('mousemove', onGraphMouseMove);
+  graphCanvas.addEventListener('mouseup', onGraphMouseUp);
+  graphCanvas.addEventListener('wheel', onGraphWheel);
+  graphCanvas.addEventListener('dblclick', onGraphDblClick);
+  
+  window.addEventListener('resize', resizeGraph);
+  resizeGraph();
+}
+
+function resizeGraph() {
+  const container = graphCanvas.parentElement;
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  const dpr = window.devicePixelRatio || 1;
+  graphCanvas.width = w * dpr;
+  graphCanvas.height = h * dpr;
+  graphCanvas.style.width = w + 'px';
+  graphCanvas.style.height = h + 'px';
+  graphCtx.scale(dpr, dpr);
+  renderGraph();
+}
+
+function buildGraphNodes() {
+  const w = graphCanvas.clientWidth;
+  const h = graphCanvas.clientHeight;
+  
+  // Keep existing positions if possible
+  const existingMap = {};
+  graphState.nodes.forEach(n => { existingMap[n.id] = n; });
+  
+  graphState.nodes = db.entities.map((e, i) => {
+    if (existingMap[e.id]) {
+      return { ...existingMap[e.id], entity: e };
+    }
+    // Random initial position
+    const angle = (2 * Math.PI * i) / Math.max(db.entities.length, 1);
+    const r = Math.min(w, h) * 0.3;
+    return {
+      id: e.id,
+      entity: e,
+      x: w / 2 + r * Math.cos(angle) + (Math.random() - 0.5) * 50,
+      y: h / 2 + r * Math.sin(angle) + (Math.random() - 0.5) * 50,
+      vx: 0,
+      vy: 0
+    };
+  });
+}
+
+function simulatePhysics() {
+  if (!graphState.physics || graphState.nodes.length === 0) return;
+  
+  const w = graphCanvas.clientWidth;
+  const h = graphCanvas.clientHeight;
+  const nodes = graphState.nodes;
+  
+  // Reset forces
+  nodes.forEach(n => { n.fx = 0; n.fy = 0; });
+  
+  // Center gravity
+  const cx = w / 2, cy = h / 2;
+  nodes.forEach(n => {
+    n.fx += (cx - n.x) * 0.0005;
+    n.fy += (cy - n.y) * 0.0005;
+  });
+  
+  // Node repulsion
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[j].x - nodes[i].x;
+      const dy = nodes[j].y - nodes[i].y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const force = 8000 / (dist * dist);
+      const fx = (dx / dist) * force;
+      const fy = (dy / dist) * force;
+      nodes[i].fx -= fx;
+      nodes[i].fy -= fy;
+      nodes[j].fx += fx;
+      nodes[j].fy += fy;
+    }
+  }
+  
+  // Edge attraction
+  db.relations.forEach(r => {
+    const from = nodes.find(n => n.id === r.from);
+    const to = nodes.find(n => n.id === r.to);
+    if (!from || !to) return;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const force = (dist - 120) * 0.01;
+    const fx = (dx / dist) * force;
+    const fy = (dy / dist) * force;
+    from.fx += fx;
+    from.fy += fy;
+    to.fx -= fx;
+    to.fy -= fy;
+  });
+  
+  // Apply forces
+  nodes.forEach(n => {
+    if (graphState.dragging === n) return;
+    n.vx = (n.vx + n.fx) * 0.8;
+    n.vy = (n.vy + n.fy) * 0.8;
+    n.x += n.vx;
+    n.y += n.vy;
+    // Bounds
+    n.x = Math.max(30, Math.min(w - 30, n.x));
+    n.y = Math.max(30, Math.min(h - 30, n.y));
+  });
+}
+
+function renderGraph() {
+  if (!graphCtx) return;
+  buildGraphNodes();
+  
+  cancelAnimationFrame(graphAnimationId);
+  
+  function draw() {
+    const w = graphCanvas.clientWidth;
+    const h = graphCanvas.clientHeight;
+    
+    simulatePhysics();
+    
+    graphCtx.save();
+    graphCtx.clearRect(0, 0, w, h);
+    
+    // Apply zoom and pan
+    graphCtx.translate(graphState.offsetX, graphState.offsetY);
+    graphCtx.scale(graphState.zoom, graphState.zoom);
+    
+    const nodes = graphState.nodes;
+    
+    // Draw edges
+    graphCtx.strokeStyle = 'rgba(58, 66, 85, 0.6)';
+    graphCtx.lineWidth = 1;
+    db.relations.forEach(r => {
+      const from = nodes.find(n => n.id === r.from);
+      const to = nodes.find(n => n.id === r.to);
+      if (!from || !to) return;
+      graphCtx.beginPath();
+      graphCtx.moveTo(from.x, from.y);
+      graphCtx.lineTo(to.x, to.y);
+      graphCtx.stroke();
+    });
+    
+    // Draw nodes
+    nodes.forEach(n => {
+      const e = n.entity;
+      const color = e.role ? roleColors[e.role] : typeColors[e.type] || '#6b7894';
+      const radius = hoveredNode === n ? 22 : 18;
+      
+      // Glow for hovered
+      if (hoveredNode === n) {
+        graphCtx.beginPath();
+        graphCtx.arc(n.x, n.y, radius + 8, 0, Math.PI * 2);
+        graphCtx.fillStyle = color.replace(')', ', 0.2)').replace('rgb', 'rgba');
+        graphCtx.fill();
+      }
+      
+      // Node circle
+      graphCtx.beginPath();
+      graphCtx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+      graphCtx.fillStyle = color;
+      graphCtx.fill();
+      
+      // Role ring
+      if (e.role) {
+        graphCtx.beginPath();
+        graphCtx.arc(n.x, n.y, radius + 3, 0, Math.PI * 2);
+        graphCtx.strokeStyle = roleColors[e.role];
+        graphCtx.lineWidth = 2;
+        graphCtx.stroke();
+      }
+      
+      // Label
+      graphCtx.fillStyle = '#e8eaed';
+      graphCtx.font = '11px Outfit, sans-serif';
+      graphCtx.textAlign = 'center';
+      graphCtx.fillText(e.name.substring(0, 12), n.x, n.y + radius + 14);
+    });
+    
+    graphCtx.restore();
+    
+    if (graphState.physics) {
+      graphAnimationId = requestAnimationFrame(draw);
+    }
+  }
+  
+  draw();
+}
+
+function getNodeAtPos(x, y) {
+  const tx = (x - graphState.offsetX) / graphState.zoom;
+  const ty = (y - graphState.offsetY) / graphState.zoom;
+  
+  for (let i = graphState.nodes.length - 1; i >= 0; i--) {
+    const n = graphState.nodes[i];
+    const dx = tx - n.x;
+    const dy = ty - n.y;
+    if (dx * dx + dy * dy < 400) return n;
+  }
+  return null;
+}
+
+function onGraphMouseDown(e) {
+  const rect = graphCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const node = getNodeAtPos(x, y);
+  
+  if (node) {
+    graphState.dragging = node;
+    graphState.dragOffsetX = (x - graphState.offsetX) / graphState.zoom - node.x;
+    graphState.dragOffsetY = (y - graphState.offsetY) / graphState.zoom - node.y;
+  } else {
+    graphState.panning = true;
+    graphState.panStartX = x - graphState.offsetX;
+    graphState.panStartY = y - graphState.offsetY;
+  }
+}
+
+function onGraphMouseMove(e) {
+  const rect = graphCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  if (graphState.dragging) {
+    graphState.dragging.x = (x - graphState.offsetX) / graphState.zoom - graphState.dragOffsetX;
+    graphState.dragging.y = (y - graphState.offsetY) / graphState.zoom - graphState.dragOffsetY;
+    graphState.dragging.vx = 0;
+    graphState.dragging.vy = 0;
+    if (!graphState.physics) renderGraph();
+  } else if (graphState.panning) {
+    graphState.offsetX = x - graphState.panStartX;
+    graphState.offsetY = y - graphState.panStartY;
+    if (!graphState.physics) renderGraph();
+  } else {
+    // Hover detection
+    const node = getNodeAtPos(x, y);
+    const tooltip = document.getElementById('graphTooltip');
+    
+    if (node && node !== hoveredNode) {
+      hoveredNode = node;
+      tooltip.querySelector('.graph-tooltip-title').textContent = node.entity.name;
+      tooltip.querySelector('.graph-tooltip-type').textContent = `${typeIcons[node.entity.type]} ${node.entity.type}${node.entity.role ? ' • ' + node.entity.role : ''}`;
+      tooltip.style.left = (x + 15) + 'px';
+      tooltip.style.top = (y - 10) + 'px';
+      tooltip.classList.add('visible');
+      graphCanvas.style.cursor = 'pointer';
+      if (!graphState.physics) renderGraph();
+    } else if (!node && hoveredNode) {
+      hoveredNode = null;
+      tooltip.classList.remove('visible');
+      graphCanvas.style.cursor = 'default';
+      if (!graphState.physics) renderGraph();
+    }
+  }
+}
+
+function onGraphMouseUp() {
+  graphState.dragging = null;
+  graphState.panning = false;
+}
+
+function onGraphWheel(e) {
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 0.9 : 1.1;
+  graphState.zoom = Math.max(0.2, Math.min(3, graphState.zoom * factor));
+  if (!graphState.physics) renderGraph();
+}
+
+function onGraphDblClick(e) {
+  const rect = graphCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const node = getNodeAtPos(x, y);
+  
+  if (node) {
+    const entity = db.entities.find(en => en.id === node.id);
+    if (entity) {
+      selectEntity(entity);
+      switchTab('entities');
+    }
+  }
+}
+
+function resetGraph() {
+  graphState.zoom = 1;
+  graphState.offsetX = 0;
+  graphState.offsetY = 0;
+  graphState.nodes = [];
+  renderGraph();
+}
+
+function zoomGraph(factor) {
+  graphState.zoom = Math.max(0.2, Math.min(3, graphState.zoom * factor));
+  if (!graphState.physics) renderGraph();
+}
+
+function togglePhysics() {
+  graphState.physics = !graphState.physics;
+  if (graphState.physics) renderGraph();
+  toast(graphState.physics ? 'Physique activée' : 'Physique désactivée');
+}
+
+function exportGraphPNG() {
+  const link = document.createElement('a');
+  link.download = 'myspot-graph.png';
+  link.href = graphCanvas.toDataURL('image/png');
+  link.click();
+  toast('Graphe exporté en PNG');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TIMELINE
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderTimeline() {
+  const container = document.getElementById('timelineContainer');
+  const datedEntities = db.entities.filter(e => e.date).sort((a, b) => {
+    const da = a.date.match(/\d+/) ? parseInt(a.date.match(/\d+/)[0]) : 0;
+    const db = b.date.match(/\d+/) ? parseInt(b.date.match(/\d+/)[0]) : 0;
+    return da - db;
+  });
+  
+  if (!datedEntities.length) {
+    container.innerHTML = `<div class="empty-state"><span class="icon">📅</span><h3>Timeline vide</h3><p>Ajoutez des dates à vos entités pour les voir apparaître ici</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = `
+    <h2 style="margin-bottom:24px">📅 Timeline</h2>
+    <div class="timeline">
+      ${datedEntities.map(e => `
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:${typeColors[e.type]}"></div>
+          <div class="timeline-date">${esc(e.date)}</div>
+          <div class="timeline-card" onclick="selectEntity(db.entities.find(x=>x.id==='${e.id}')); switchTab('entities')">
+            <div class="timeline-title">${typeIcons[e.type]} ${esc(e.name)}</div>
+            ${e.desc ? `<div class="timeline-desc">${esc(e.desc.substring(0, 100))}${e.desc.length > 100 ? '...' : ''}</div>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════════════════════
+
+function openSearch() {
+  openModal('searchModal');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchInput').focus();
+  document.getElementById('searchResults').innerHTML = '<p class="text-muted text-center">Tapez pour rechercher...</p>';
+}
+
+function performSearch(query) {
+  const results = document.getElementById('searchResults');
+  if (!query.trim()) {
+    results.innerHTML = '<p class="text-muted text-center">Tapez pour rechercher...</p>';
+    return;
+  }
+  
+  const q = query.toLowerCase();
+  const matches = db.entities.filter(e => 
+    e.name.toLowerCase().includes(q) ||
+    (e.alias && e.alias.toLowerCase().includes(q)) ||
+    (e.desc && e.desc.toLowerCase().includes(q)) ||
+    (e.tags && e.tags.some(t => t.toLowerCase().includes(q)))
+  );
+  
+  if (!matches.length) {
+    results.innerHTML = '<p class="text-muted text-center">Aucun résultat</p>';
+    return;
+  }
+  
+  results.innerHTML = matches.slice(0, 10).map(e => `
+    <div class="entity-item" onclick="selectEntity(db.entities.find(x=>x.id==='${e.id}')); closeModal('searchModal'); switchTab('entities')">
+      <div class="entity-name">${esc(e.name)}</div>
+      <div class="entity-meta">
+        <span class="entity-type-badge type-${e.type}">${typeIcons[e.type]} ${e.type}</span>
+        ${e.role ? `<span class="role-badge role-${e.role}">${e.role}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PLAIDOYER MODULE
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderPlaidoyer() {
+  const content = document.getElementById('plaidoyerContent');
+  const p = db.plaidoyer;
+  
+  content.innerHTML = `
+    <!-- TOC -->
+    <div class="plaid-section active" id="plaid-toc">
+      <h2 style="margin-bottom:20px">🧭 Théorie du Changement</h2>
+      <div class="grid-2">
+        <div class="plaid-card">
+          <div class="plaid-card-header" style="border-left:3px solid var(--blue)"><span class="plaid-card-title">🔭 Vision</span></div>
+          <div class="plaid-card-body"><textarea class="form-textarea" placeholder="Le monde que nous voulons voir..." onchange="savePlaid('toc','vision',this.value)">${esc(p.toc.vision||'')}</textarea></div>
+        </div>
+        <div class="plaid-card">
+          <div class="plaid-card-header" style="border-left:3px solid var(--green)"><span class="plaid-card-title">💎 Valeurs</span></div>
+          <div class="plaid-card-body"><textarea class="form-textarea" placeholder="Nos valeurs fondamentales..." onchange="savePlaid('toc','values',this.value)">${esc(p.toc.values||'')}</textarea></div>
+        </div>
+        <div class="plaid-card">
+          <div class="plaid-card-header" style="border-left:3px solid var(--amber)"><span class="plaid-card-title">💡 Hypothèses</span></div>
+          <div class="plaid-card-body"><textarea class="form-textarea" placeholder="Ce que nous croyons vrai..." onchange="savePlaid('toc','hypotheses',this.value)">${esc(p.toc.hypotheses||'')}</textarea></div>
+        </div>
+        <div class="plaid-card">
+          <div class="plaid-card-header" style="border-left:3px solid var(--purple)"><span class="plaid-card-title">🎯 Missions</span></div>
+          <div class="plaid-card-body"><textarea class="form-textarea" placeholder="Notre mission..." onchange="savePlaid('toc','missions',this.value)">${esc(p.toc.missions||'')}</textarea></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SWOT -->
+    <div class="plaid-section" id="plaid-swot">
+      <h2 style="margin-bottom:20px">📊 Analyse SWOT</h2>
+      <div class="swot-grid">
+        <div class="swot-cell swot-strengths">
+          <h4>💪 Forces</h4>
+          <ul class="swot-items" id="swot-strengths">${(p.swot.strengths||[]).map((s,i)=>`<li class="swot-item"><span>•</span><span>${esc(s)}</span><span class="remove-btn" onclick="removeSwotItem('strengths',${i})">✕</span></li>`).join('')}</ul>
+          <input class="swot-input" placeholder="+ Ajouter une force" onkeydown="if(event.key==='Enter'){addSwotItem('strengths',this.value);this.value=''}">
+        </div>
+        <div class="swot-cell swot-weaknesses">
+          <h4>🩹 Faiblesses</h4>
+          <ul class="swot-items" id="swot-weaknesses">${(p.swot.weaknesses||[]).map((s,i)=>`<li class="swot-item"><span>•</span><span>${esc(s)}</span><span class="remove-btn" onclick="removeSwotItem('weaknesses',${i})">✕</span></li>`).join('')}</ul>
+          <input class="swot-input" placeholder="+ Ajouter une faiblesse" onkeydown="if(event.key==='Enter'){addSwotItem('weaknesses',this.value);this.value=''}">
+        </div>
+        <div class="swot-cell swot-opportunities">
+          <h4>🌟 Opportunités</h4>
+          <ul class="swot-items" id="swot-opportunities">${(p.swot.opportunities||[]).map((s,i)=>`<li class="swot-item"><span>•</span><span>${esc(s)}</span><span class="remove-btn" onclick="removeSwotItem('opportunities',${i})">✕</span></li>`).join('')}</ul>
+          <input class="swot-input" placeholder="+ Ajouter une opportunité" onkeydown="if(event.key==='Enter'){addSwotItem('opportunities',this.value);this.value=''}">
+        </div>
+        <div class="swot-cell swot-threats">
+          <h4>⚠️ Menaces</h4>
+          <ul class="swot-items" id="swot-threats">${(p.swot.threats||[]).map((s,i)=>`<li class="swot-item"><span>•</span><span>${esc(s)}</span><span class="remove-btn" onclick="removeSwotItem('threats',${i})">✕</span></li>`).join('')}</ul>
+          <input class="swot-input" placeholder="+ Ajouter une menace" onkeydown="if(event.key==='Enter'){addSwotItem('threats',this.value);this.value=''}">
+        </div>
+      </div>
+    </div>
+    
+    <!-- PESTEL -->
+    <div class="plaid-section" id="plaid-pestel">
+      <h2 style="margin-bottom:20px">🌍 Analyse PESTEL</h2>
+      <div class="grid-3">
+        ${['political:🏛️ Politique:blue','economic:💰 Économique:green','social:👥 Social:pink','tech:🔬 Technologique:purple','env:🌿 Environnemental:green','legal:⚖️ Légal:amber'].map(x => {
+          const [key, label, color] = x.split(':');
+          return `<div class="plaid-card"><div class="plaid-card-header" style="border-left:3px solid var(--${color})"><span class="plaid-card-title">${label}</span></div><div class="plaid-card-body"><textarea class="form-textarea" style="min-height:120px" placeholder="Facteurs ${label.split(' ')[1]}..." onchange="savePlaid('pestel','${key}',this.value)">${esc(p.pestel[key]||'')}</textarea></div></div>`;
+        }).join('')}
+      </div>
+    </div>
+    
+    <!-- Problem Tree -->
+    <div class="plaid-section" id="plaid-tree">
+      <h2 style="margin-bottom:20px">🌳 Arbre à Problèmes</h2>
+      <div class="plaid-card">
+        <div class="plaid-card-body" style="text-align:center">
+          <div class="mb-4">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px">CONSÉQUENCES ↑</div>
+            <div id="treeConsequences" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+              ${(p.tree.consequences||[]).map((c,i)=>`<div class="tag" style="background:var(--green);color:var(--bg);padding:8px 12px">${esc(c)} <span style="cursor:pointer;margin-left:6px" onclick="removeTreeItem('consequences',${i})">✕</span></div>`).join('')}
+              <input class="form-input" style="width:150px;font-size:12px" placeholder="+ Ajouter" onkeydown="if(event.key==='Enter'){addTreeItem('consequences',this.value);this.value=''}">
+            </div>
+          </div>
+          <div style="color:var(--muted);font-size:20px">↑</div>
+          <div class="my-4">
+            <textarea class="form-textarea" style="max-width:400px;margin:0 auto;text-align:center;font-weight:600;background:var(--amber);color:var(--bg);border:none" placeholder="PROBLÈME CENTRAL" onchange="savePlaid('tree','problem',this.value)">${esc(p.tree.problem||'')}</textarea>
+          </div>
+          <div style="color:var(--muted);font-size:20px">↑</div>
+          <div class="mt-4">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px">↓ CAUSES</div>
+            <div id="treeCauses" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+              ${(p.tree.causes||[]).map((c,i)=>`<div class="tag" style="background:var(--red);color:white;padding:8px 12px">${esc(c)} <span style="cursor:pointer;margin-left:6px" onclick="removeTreeItem('causes',${i})">✕</span></div>`).join('')}
+              <input class="form-input" style="width:150px;font-size:12px" placeholder="+ Ajouter" onkeydown="if(event.key==='Enter'){addTreeItem('causes',this.value);this.value=''}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 5 Why -->
+    <div class="plaid-section" id="plaid-fivewhy">
+      <h2 style="margin-bottom:20px">❓ Les 5 Pourquoi</h2>
+      <div class="plaid-card">
+        <div class="plaid-card-body">
+          ${['Problème initial','Pourquoi 1 ?','Pourquoi 2 ?','Pourquoi 3 ?','Pourquoi 4 ?','Pourquoi 5 ? (Cause racine)'].map((label,i) => `
+            <div class="form-group">
+              <label class="form-label">${label}</label>
+              <input class="form-input" value="${esc(p.fiveWhy[i]||'')}" onchange="db.plaidoyer.fiveWhy[${i}]=this.value;saveDB()">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    
+    <!-- SMART Objectives -->
+    <div class="plaid-section" id="plaid-objectives">
+      <h2 style="margin-bottom:20px">🎯 Objectifs SMART</h2>
+      <div class="plaid-card">
+        <div class="plaid-card-header"><span class="plaid-card-title">Générateur d'objectif SMART</span></div>
+        <div class="plaid-card-body">
+          <div class="grid-2 mb-4">
+            <div class="form-group"><label class="form-label">Temporel (Quand ?)</label><input class="form-input" id="smartT" placeholder="D'ici fin 2025"></div>
+            <div class="form-group"><label class="form-label">Spécifique (Quoi ?)</label><input class="form-input" id="smartS" placeholder="le nombre de X"></div>
+            <div class="form-group"><label class="form-label">Mesurable (Combien ?)</label><input class="form-input" id="smartM" placeholder="de 20%"></div>
+            <div class="form-group"><label class="form-label">Action (Verbe)</label><input class="form-input" id="smartA" placeholder="augmenter"></div>
+            <div class="form-group" style="grid-column:span 2"><label class="form-label">Réaliste (Comment ?)</label><input class="form-input" id="smartR" placeholder="via une campagne de sensibilisation"></div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px">APERÇU</div>
+            <div id="smartPreview" style="font-size:15px;font-weight:500;color:var(--accent)">—</div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSmartObjective()">💾 Enregistrer cet objectif</button>
+        </div>
+      </div>
+      <div id="objectivesList" class="mt-4">
+        ${(p.objectives||[]).map((o,i) => `<div class="action-item"><div class="action-status ${o.status==='completed'?'status-completed':'status-ongoing'}"></div><div class="action-info"><div class="action-title">${esc(o.text)}</div></div><button class="btn btn-sm btn-danger" onclick="removeObjective(${i})">✕</button></div>`).join('')}
+      </div>
+    </div>
+    
+    <!-- Strategies -->
+    <div class="plaid-section" id="plaid-strategies">
+      <h2 style="margin-bottom:20px">♟️ Choix de Stratégies</h2>
+      <p class="text-muted mb-4">Sélectionnez les stratégies pertinentes pour votre campagne</p>
+      <div class="strategy-grid">
+        ${[
+          {id:'research',emoji:'🔬',name:'Recherche',desc:'Études, données, preuves'},
+          {id:'mobilization',emoji:'✊',name:'Mobilisation',desc:'Manifestations, pétitions'},
+          {id:'legal',emoji:'⚖️',name:'Action juridique',desc:'Procès, recours'},
+          {id:'opposition',emoji:'🚫',name:'Opposition',desc:'Blocage, résistance'},
+          {id:'boycott',emoji:'🛒',name:'Boycott',desc:'Pression économique'},
+          {id:'negotiation',emoji:'🤝',name:'Négociation',desc:'Dialogue, compromis'},
+          {id:'petition',emoji:'📝',name:'Pétition',desc:'Signatures, soutien'},
+          {id:'lobbying',emoji:'🏛️',name:'Lobbying',desc:'Influence politique'},
+          {id:'alliance',emoji:'🔗',name:'Alliance',desc:'Coalitions, partenariats'},
+          {id:'media',emoji:'📰',name:'Médias',desc:'Presse, communication'},
+          {id:'education',emoji:'📚',name:'Éducation',desc:'Sensibilisation, formation'},
+          {id:'digital',emoji:'💻',name:'Numérique',desc:'Réseaux sociaux, viral'}
+        ].map(s => `
+          <div class="strategy-card ${(p.strategies||[]).includes(s.id)?'selected':''}" onclick="toggleStrategy('${s.id}')">
+            <div class="emoji">${s.emoji}</div>
+            <h5>${s.name}</h5>
+            <p>${s.desc}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <!-- Targets -->
+    <div class="plaid-section" id="plaid-targets">
+      <h2 style="margin-bottom:20px">👥 Fiches de Ciblage</h2>
+      <button class="btn btn-primary mb-4" onclick="openTargetModal()">＋ Nouvelle fiche</button>
+      <div id="targetsList">
+        ${(p.targets||[]).map((t,i) => `
+          <div class="target-card" onclick="openTargetModal(${i})">
+            <div class="target-header">
+              <div class="target-avatar">👤</div>
+              <div class="target-info">
+                <h4>${esc(t.name)}</h4>
+                <p>${esc(t.rep||'Pas de représentant')}</p>
+              </div>
+            </div>
+            <div class="target-body">
+              <div class="target-stats">
+                <div class="target-stat"><div class="target-stat-value">${t.interest||0}</div><div class="target-stat-label">Intérêt</div></div>
+                <div class="target-stat"><div class="target-stat-value">${t.influence||0}</div><div class="target-stat-label">Influence</div></div>
+                <div class="target-stat"><div class="target-stat-value">${{'-2':'--','-1':'-','0':'○','1':'+','2':'++'}[t.position]||'○'}</div><div class="target-stat-label">Position</div></div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <!-- Messages -->
+    <div class="plaid-section" id="plaid-messages">
+      <h2 style="margin-bottom:20px">💬 Messages clés</h2>
+      <div class="plaid-card">
+        <div class="plaid-card-header"><span class="plaid-card-title">Construire un message</span></div>
+        <div class="plaid-card-body">
+          <div class="grid-2 mb-4">
+            <div class="form-group"><label class="form-label" style="color:var(--blue)">🎣 Accroche</label><textarea class="form-textarea" id="msgHook" placeholder="Captez l'attention..."></textarea></div>
+            <div class="form-group"><label class="form-label" style="color:var(--red)">⚠️ Problème</label><textarea class="form-textarea" id="msgProblem" placeholder="Exposez le problème..."></textarea></div>
+            <div class="form-group"><label class="form-label" style="color:var(--amber)">❗ Importance</label><textarea class="form-textarea" id="msgImportance" placeholder="Pourquoi agir..."></textarea></div>
+            <div class="form-group"><label class="form-label" style="color:var(--purple)">🎯 Cible</label><textarea class="form-textarea" id="msgTarget" placeholder="Qui peut agir..."></textarea></div>
+            <div class="form-group" style="grid-column:span 2"><label class="form-label" style="color:var(--green)">✅ Action</label><textarea class="form-textarea" id="msgAction" placeholder="Que faire concrètement..."></textarea></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveMessage()">💾 Enregistrer ce message</button>
+        </div>
+      </div>
+      <div id="messagesList" class="mt-4">
+        ${(p.messages||[]).map((m,i) => `
+          <div class="plaid-card">
+            <div class="plaid-card-body" style="font-size:13px">
+              ${m.hook?`<p><strong style="color:var(--blue)">Accroche:</strong> ${esc(m.hook)}</p>`:''}
+              ${m.problem?`<p><strong style="color:var(--red)">Problème:</strong> ${esc(m.problem)}</p>`:''}
+              ${m.importance?`<p><strong style="color:var(--amber)">Importance:</strong> ${esc(m.importance)}</p>`:''}
+              ${m.target?`<p><strong style="color:var(--purple)">Cible:</strong> ${esc(m.target)}</p>`:''}
+              ${m.action?`<p><strong style="color:var(--green)">Action:</strong> ${esc(m.action)}</p>`:''}
+              <button class="btn btn-sm btn-danger mt-2" onclick="removeMessage(${i})">✕ Supprimer</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <!-- Progress Markers -->
+    <div class="plaid-section" id="plaid-progress">
+      <h2 style="margin-bottom:20px">📉 Marqueurs de Progrès</h2>
+      <button class="btn mb-4" onclick="addProgressMarker()">＋ Ajouter un acteur</button>
+      <table class="progress-table">
+        <thead><tr><th style="width:150px">Acteur</th><th class="progress-expect">Expect (minimum)</th><th class="progress-like">Like (souhaité)</th><th class="progress-love">Love (idéal)</th><th style="width:50px"></th></tr></thead>
+        <tbody id="progressBody">
+          ${(p.progress||[]).map((pr,i) => `
+            <tr>
+              <td><input class="form-input" value="${esc(pr.actor)}" onchange="updateProgress(${i},'actor',this.value)"></td>
+              <td class="progress-expect"><textarea onchange="updateProgress(${i},'expect',this.value)">${esc(pr.expect||'')}</textarea></td>
+              <td class="progress-like"><textarea onchange="updateProgress(${i},'like',this.value)">${esc(pr.like||'')}</textarea></td>
+              <td class="progress-love"><textarea onchange="updateProgress(${i},'love',this.value)">${esc(pr.love||'')}</textarea></td>
+              <td><button class="btn btn-sm btn-danger" onclick="removeProgress(${i})">✕</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Actions -->
+    <div class="plaid-section" id="plaid-actions">
+      <h2 style="margin-bottom:20px">✅ Suivi des Actions</h2>
+      <button class="btn btn-primary mb-4" onclick="addPlaidAction()">＋ Nouvelle action</button>
+      <div id="actionsList">
+        ${(p.actions||[]).map((a,i) => `
+          <div class="action-item">
+            <div class="action-status status-${a.status||'planned'}"></div>
+            <div class="action-info">
+              <div class="action-title">${esc(a.title)}</div>
+              <div class="action-deadline">${a.deadline?`📅 ${a.deadline}`:''} ${a.indicator?`• 📊 ${esc(a.indicator)}`:''}</div>
+            </div>
+            <select class="form-select" style="width:auto" onchange="updateAction(${i},'status',this.value)">
+              <option value="planned" ${a.status==='planned'?'selected':''}>Planifié</option>
+              <option value="ongoing" ${a.status==='ongoing'?'selected':''}>En cours</option>
+              <option value="completed" ${a.status==='completed'?'selected':''}>Terminé</option>
+            </select>
+            <button class="btn btn-sm btn-danger" onclick="removeAction(${i})">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  // Setup SMART preview
+  ['smartT','smartS','smartM','smartA','smartR'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', updateSmartPreview);
+  });
+  
+  // Setup target sliders
+  document.getElementById('targetInterest')?.addEventListener('input', e => {
+    document.getElementById('targetInterestVal').textContent = e.target.value;
+  });
+  document.getElementById('targetInfluence')?.addEventListener('input', e => {
+    document.getElementById('targetInfluenceVal').textContent = e.target.value;
+  });
+}
+
+// Plaidoyer helper functions
+function savePlaid(section, key, value) {
+  if (!db.plaidoyer[section]) db.plaidoyer[section] = {};
+  db.plaidoyer[section][key] = value;
+  saveDB();
+}
+
+function addSwotItem(category, value) {
+  if (!value.trim()) return;
+  if (!db.plaidoyer.swot[category]) db.plaidoyer.swot[category] = [];
+  db.plaidoyer.swot[category].push(value.trim());
+  saveDB();
+  renderPlaidoyer();
+}
+
+function removeSwotItem(category, idx) {
+  db.plaidoyer.swot[category].splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function addTreeItem(type, value) {
+  if (!value.trim()) return;
+  if (!db.plaidoyer.tree[type]) db.plaidoyer.tree[type] = [];
+  db.plaidoyer.tree[type].push(value.trim());
+  saveDB();
+  renderPlaidoyer();
+}
+
+function removeTreeItem(type, idx) {
+  db.plaidoyer.tree[type].splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function updateSmartPreview() {
+  const t = document.getElementById('smartT').value;
+  const s = document.getElementById('smartS').value;
+  const m = document.getElementById('smartM').value;
+  const a = document.getElementById('smartA').value;
+  const r = document.getElementById('smartR').value;
+  const preview = [t, a, s, m, r].filter(Boolean).join(' ') || '—';
+  document.getElementById('smartPreview').textContent = preview;
+}
+
+function saveSmartObjective() {
+  const text = document.getElementById('smartPreview').textContent;
+  if (text === '—') { toast('Complétez l\'objectif', 'error'); return; }
+  if (!db.plaidoyer.objectives) db.plaidoyer.objectives = [];
+  db.plaidoyer.objectives.push({ text, status: 'ongoing', created: Date.now() });
+  saveDB();
+  renderPlaidoyer();
+  toast('Objectif enregistré');
+}
+
+function removeObjective(idx) {
+  db.plaidoyer.objectives.splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function toggleStrategy(id) {
+  if (!db.plaidoyer.strategies) db.plaidoyer.strategies = [];
+  const idx = db.plaidoyer.strategies.indexOf(id);
+  if (idx >= 0) db.plaidoyer.strategies.splice(idx, 1);
+  else db.plaidoyer.strategies.push(id);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function openTargetModal(idx = null) {
+  const t = idx !== null ? db.plaidoyer.targets[idx] : null;
+  document.getElementById('targetModalTitle').textContent = t ? 'Modifier la fiche' : 'Nouvelle fiche de ciblage';
+  document.getElementById('targetId').value = idx !== null ? idx : '';
+  document.getElementById('targetName').value = t?.name || '';
+  document.getElementById('targetRep').value = t?.rep || '';
+  document.getElementById('targetObjectives').value = t?.objectives || '';
+  document.getElementById('targetInterest').value = t?.interest || 3;
+  document.getElementById('targetInterestVal').textContent = t?.interest || 3;
+  document.getElementById('targetInfluence').value = t?.influence || 3;
+  document.getElementById('targetInfluenceVal').textContent = t?.influence || 3;
+  document.getElementById('targetPosition').value = t?.position || 0;
+  document.getElementById('targetAccess').value = t?.access || 'none';
+  document.getElementById('targetAction').value = t?.action || '';
+  document.getElementById('targetArguments').value = t?.arguments || '';
+  document.getElementById('deleteTargetBtn').classList.toggle('hidden', idx === null);
+  openModal('targetModal');
+}
+
+function saveTarget() {
+  const idx = document.getElementById('targetId').value;
+  const target = {
+    name: document.getElementById('targetName').value.trim(),
+    rep: document.getElementById('targetRep').value.trim(),
+    objectives: document.getElementById('targetObjectives').value.trim(),
+    interest: parseInt(document.getElementById('targetInterest').value),
+    influence: parseInt(document.getElementById('targetInfluence').value),
+    position: document.getElementById('targetPosition').value,
+    access: document.getElementById('targetAccess').value,
+    action: document.getElementById('targetAction').value.trim(),
+    arguments: document.getElementById('targetArguments').value.trim()
+  };
+  if (!target.name) { toast('Le nom est requis', 'error'); return; }
+  if (!db.plaidoyer.targets) db.plaidoyer.targets = [];
+  if (idx !== '') db.plaidoyer.targets[parseInt(idx)] = target;
+  else db.plaidoyer.targets.push(target);
+  saveDB();
+  closeModal('targetModal');
+  renderPlaidoyer();
+  toast('Fiche enregistrée');
+}
+
+function deleteTarget() {
+  const idx = document.getElementById('targetId').value;
+  if (idx === '' || !confirm('Supprimer cette fiche ?')) return;
+  db.plaidoyer.targets.splice(parseInt(idx), 1);
+  saveDB();
+  closeModal('targetModal');
+  renderPlaidoyer();
+  toast('Fiche supprimée');
+}
+
+function saveMessage() {
+  const msg = {
+    hook: document.getElementById('msgHook').value.trim(),
+    problem: document.getElementById('msgProblem').value.trim(),
+    importance: document.getElementById('msgImportance').value.trim(),
+    target: document.getElementById('msgTarget').value.trim(),
+    action: document.getElementById('msgAction').value.trim(),
+    created: Date.now()
+  };
+  if (!msg.hook && !msg.problem && !msg.action) { toast('Le message est vide', 'error'); return; }
+  if (!db.plaidoyer.messages) db.plaidoyer.messages = [];
+  db.plaidoyer.messages.push(msg);
+  saveDB();
+  ['msgHook','msgProblem','msgImportance','msgTarget','msgAction'].forEach(id => document.getElementById(id).value = '');
+  renderPlaidoyer();
+  toast('Message enregistré');
+}
+
+function removeMessage(idx) {
+  db.plaidoyer.messages.splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function addProgressMarker() {
+  if (!db.plaidoyer.progress) db.plaidoyer.progress = [];
+  db.plaidoyer.progress.push({ actor: 'Nouvel acteur', expect: '', like: '', love: '' });
+  saveDB();
+  renderPlaidoyer();
+}
+
+function updateProgress(idx, key, value) {
+  db.plaidoyer.progress[idx][key] = value;
+  saveDB();
+}
+
+function removeProgress(idx) {
+  db.plaidoyer.progress.splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+function addPlaidAction() {
+  const title = prompt('Titre de l\'action:');
+  if (!title) return;
+  if (!db.plaidoyer.actions) db.plaidoyer.actions = [];
+  db.plaidoyer.actions.push({ title, status: 'planned', deadline: '', indicator: '' });
+  saveDB();
+  renderPlaidoyer();
+}
+
+function updateAction(idx, key, value) {
+  db.plaidoyer.actions[idx][key] = value;
+  saveDB();
+  renderPlaidoyer();
+}
+
+function removeAction(idx) {
+  db.plaidoyer.actions.splice(idx, 1);
+  saveDB();
+  renderPlaidoyer();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// IMPORT
+// ═══════════════════════════════════════════════════════════════════════════
+
+function setupImport() {
+  const zone = document.getElementById('importZone');
+  const input = document.getElementById('fileInput');
+  
+  ['dragenter','dragover'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('dragover'); }));
+  
+  zone.addEventListener('drop', e => {
+    [...e.dataTransfer.files].forEach(processFile);
+  });
+  
+  input.addEventListener('change', e => {
+    [...e.target.files].forEach(processFile);
+  });
+}
+
+function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const reader = new FileReader();
+  
+  if (ext === 'json') {
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.entities) {
+          db.entities.push(...data.entities.filter(ne => !db.entities.find(e => e.id === ne.id)));
+        }
+        if (data.relations) {
+          db.relations.push(...data.relations.filter(nr => !db.relations.find(r => r.id === nr.id)));
+        }
+        if (data.notes) {
+          db.notes.push(...data.notes.filter(nn => !db.notes.find(n => n.id === nn.id)));
+        }
+        if (data.plaidoyer) {
+          db.plaidoyer = { ...db.plaidoyer, ...data.plaidoyer };
+        }
+        saveDB();
+        renderAll();
+        toast(`Importé: ${data.entities?.length || 0} entités, ${data.relations?.length || 0} relations`);
+      } catch (err) { toast('Erreur JSON: ' + err.message, 'error'); }
+    };
+    reader.readAsText(file);
+  } else if (ext === 'csv' || ext === 'xlsx') {
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'array' });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet);
+        let count = 0;
+        rows.forEach(row => {
+          const entity = {
+            id: row.id || genId(),
+            name: row.name || row.Name || row.nom || '',
+            type: row.type || row.Type || 'person',
+            alias: row.alias || row.Alias || '',
+            desc: row.desc || row.description || row.Description || '',
+            date: row.date || row.Date || '',
+            role: row.role || row.Role || '',
+            tags: typeof row.tags === 'string' ? row.tags.split(',').map(t => t.trim()) : (row.tags || [])
+          };
+          if (entity.name && !db.entities.find(e => e.id === entity.id)) {
+            db.entities.push(entity);
+            count++;
+          }
+        });
+        saveDB();
+        renderAll();
+        toast(`Importé: ${count} entités`);
+      } catch (err) { toast('Erreur fichier: ' + err.message, 'error'); }
+    };
+    reader.readAsArrayBuffer(file);
+  } else if (ext === 'txt') {
+    reader.onload = e => {
+      const lines = e.target.result.split('\n').map(l => l.trim()).filter(Boolean);
+      let count = 0;
+      lines.forEach(name => {
+        if (!db.entities.find(e => e.name.toLowerCase() === name.toLowerCase())) {
+          db.entities.push({ id: genId(), name, type: 'person', alias: '', desc: '', date: '', tags: [], role: '' });
+          count++;
+        }
+      });
+      saveDB();
+      renderAll();
+      toast(`Importé: ${count} entités`);
+    };
+    reader.readAsText(file);
+  } else {
+    toast('Format non supporté', 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════════════════════════
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportJSON() {
+  downloadFile(JSON.stringify(db, null, 2), 'myspot-export.json', 'application/json');
+  toast('Export JSON téléchargé');
+}
+
+function exportCSV() {
+  const headers = ['id','name','type','alias','desc','date','role','tags'];
+  const csv = [headers.join(','), ...db.entities.map(e => headers.map(h => `"${String(e[h]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
+  downloadFile(csv, 'myspot-entities.csv', 'text/csv');
+  toast('Export CSV téléchargé');
+}
+
+function exportMarkdown() {
+  let md = `# mySPOT Export\n\n*${new Date().toLocaleDateString('fr-FR')}*\n\n`;
+  md += `## Statistiques\n- ${db.entities.length} entités\n- ${db.relations.length} relations\n- ${db.notes.length} notes\n\n`;
+  
+  const byType = {};
+  db.entities.forEach(e => { if (!byType[e.type]) byType[e.type] = []; byType[e.type].push(e); });
+  
+  Object.keys(byType).forEach(type => {
+    md += `## ${typeIcons[type]} ${type.charAt(0).toUpperCase() + type.slice(1)}s\n\n`;
+    byType[type].forEach(e => {
+      md += `### ${e.name}\n`;
+      if (e.alias) md += `*Alias: ${e.alias}*\n\n`;
+      if (e.desc) md += `${e.desc}\n\n`;
+      if (e.date) md += `📅 ${e.date}\n\n`;
+      if (e.tags?.length) md += `Tags: ${e.tags.map(t => `\`${t}\``).join(' ')}\n\n`;
+    });
+  });
+  
+  downloadFile(md, 'myspot-export.md', 'text/markdown');
+  toast('Export Markdown téléchargé');
+}
+
+function openExportModal() {
+  document.getElementById('exportTitle').value = '';
+  document.getElementById('exportDesc').value = '';
+  openModal('exportModal');
+}
+
+function exportUniverseHTML() {
+  const title = document.getElementById('exportTitle').value || 'Mon Univers';
+  const desc = document.getElementById('exportDesc').value || '';
+  
+  const stats = { entities: db.entities.length, relations: db.relations.length, notes: db.notes.length, allies: 0, adversaries: 0 };
+  db.entities.forEach(e => { if (e.role === 'ally') stats.allies++; if (e.role === 'adversary') stats.adversaries++; });
+  
+  const byType = {};
+  db.entities.forEach(e => { if (!byType[e.type]) byType[e.type] = []; byType[e.type].push(e); });
+  
+  let sections = Object.keys(byType).sort().map(type => {
+    return `<section id="type-${type}">
+      <h2>${typeIcons[type]||'📦'} ${type.charAt(0).toUpperCase()+type.slice(1)}s <span class="count">(${byType[type].length})</span></h2>
+      <div class="grid">${byType[type].map(e => {
+        const rels = db.relations.filter(r => r.from === e.id || r.to === e.id);
+        return `<article class="card" style="border-left:4px solid ${e.role?roleColors[e.role]:typeColors[e.type]}" id="e-${e.id}">
+          <h3>${esc(e.name)}</h3>
+          <div class="badges"><span class="badge" style="background:${typeColors[e.type]}22;color:${typeColors[e.type]}">${type}</span>${e.role?`<span class="badge" style="background:${roleColors[e.role]}22;color:${roleColors[e.role]}">${e.role}</span>`:''}</div>
+          ${e.alias?`<p class="alias">${esc(e.alias)}</p>`:''}
+          ${e.desc?`<p class="desc">${esc(e.desc)}</p>`:''}
+          ${e.date?`<p class="date">📅 ${esc(e.date)}</p>`:''}
+          ${e.tags?.length?`<div class="tags">${e.tags.map(t=>`<span class="tag">#${t}</span>`).join('')}</div>`:''}
+          ${rels.length?`<div class="rels"><strong>Relations:</strong><ul>${rels.slice(0,5).map(r=>{const o=r.from===e.id?db.entities.find(x=>x.id===r.to):db.entities.find(x=>x.id===r.from);return`<li><a href="#e-${o?.id}">${esc(r.type)} → ${esc(o?.name||'?')}</a></li>`;}).join('')}</ul></div>`:''}
+        </article>`;
+      }).join('')}</div></section>`;
+  }).join('');
+  
+  // Build graph SVG
+  const gw = 800, gh = 600;
+  const nodes = db.entities.map((e, i) => {
+    const angle = (2 * Math.PI * i) / Math.max(db.entities.length, 1);
+    const r = Math.min(gw, gh) * 0.4;
+    return { id: e.id, x: gw/2 + r * Math.cos(angle), y: gh/2 + r * Math.sin(angle), e };
+  });
+  const edges = db.relations.map(r => {
+    const f = nodes.find(n => n.id === r.from), t = nodes.find(n => n.id === r.to);
+    return f && t ? `<line x1="${f.x}" y1="${f.y}" x2="${t.x}" y2="${t.y}" stroke="#3a4255" stroke-width="0.5"/>` : '';
+  }).join('');
+  const nodesSVG = nodes.map(n => `<g transform="translate(${n.x},${n.y})"><circle r="10" fill="${n.e.role?roleColors[n.e.role]:typeColors[n.e.type]||'#6b7894'}"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">${esc(n.e.name.substring(0,10))}</text></g>`).join('');
+  
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} — mySPOT</title>
+<style>
+:root{--bg:#0a0b0d;--surface:#12141a;--card:#1a1d24;--border:#2a303d;--text:#e8eaed;--muted:#8b94a8;--accent:#00d4aa}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:1400px;margin:0 auto;padding:24px}
+header{text-align:center;padding:60px 24px;background:linear-gradient(135deg,#0d2137 0%,#0a0b0d 100%);border-bottom:1px solid var(--border)}
+header h1{font-size:2.5rem;margin-bottom:8px;background:linear-gradient(90deg,var(--accent),#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--muted)}
+.stats{display:flex;justify-content:center;gap:24px;margin-top:24px;flex-wrap:wrap}
+.stat{background:var(--card);padding:16px 24px;border-radius:10px;text-align:center;border:1px solid var(--border)}
+.stat-value{font-size:1.8rem;font-weight:700;color:var(--accent)}.stat-label{font-size:0.8rem;color:var(--muted)}
+nav{background:var(--surface);padding:16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+nav ul{display:flex;justify-content:center;gap:16px;list-style:none;flex-wrap:wrap}
+nav a{color:var(--text);padding:8px 14px;border-radius:6px}nav a:hover{background:var(--card);text-decoration:none}
+section{margin:40px 0}section h2{font-size:1.4rem;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.count{color:var(--muted);font-weight:400;font-size:0.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.card:hover{border-color:var(--accent)}
+.card h3{font-size:1.1rem;margin-bottom:8px}
+.badges{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.badge{font-size:0.65rem;padding:3px 8px;border-radius:4px;text-transform:uppercase;font-weight:600}
+.alias{font-size:0.85rem;color:var(--muted);font-style:italic;margin-bottom:6px}
+.desc{font-size:0.9rem;margin-bottom:8px}
+.date{font-size:0.8rem;color:var(--muted)}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.tag{font-size:0.7rem;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--muted)}
+.rels{font-size:0.8rem;margin-top:10px}.rels ul{padding-left:16px;margin-top:4px}
+.graph{text-align:center;margin:40px 0}
+.graph svg{background:var(--card);border-radius:10px;border:1px solid var(--border);max-width:100%}
+footer{text-align:center;padding:40px;color:var(--muted);font-size:0.8rem;border-top:1px solid var(--border);margin-top:40px}
+@media(max-width:768px){header h1{font-size:1.8rem}.grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><h1>◈ ${esc(title)}</h1>${desc?`<p>${esc(desc)}</p>`:'<p>Généré par mySPOT</p>'}
+<div class="stats"><div class="stat"><div class="stat-value">${stats.entities}</div><div class="stat-label">Entités</div></div><div class="stat"><div class="stat-value">${stats.relations}</div><div class="stat-label">Relations</div></div><div class="stat"><div class="stat-value">${stats.allies}</div><div class="stat-label">Alliés</div></div><div class="stat"><div class="stat-value">${stats.adversaries}</div><div class="stat-label">Adversaires</div></div></div></header>
+<nav><ul>${Object.keys(byType).sort().map(t=>`<li><a href="#type-${t}">${typeIcons[t]||'📦'} ${t}s</a></li>`).join('')}<li><a href="#graph">🕸️ Graphe</a></li></ul></nav>
+<main class="container">${sections}
+<section class="graph" id="graph"><h2>🕸️ Graphe des Relations</h2><svg viewBox="0 0 ${gw} ${gh}">${edges}${nodesSVG}</svg></section>
+</main>
+<footer>Généré le ${new Date().toLocaleDateString('fr-FR')} — mySPOT</footer>
+</body></html>`;
+  
+  downloadFile(html, title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-universe.html', 'text/html');
+  closeModal('exportModal');
+  toast('Univers HTML exporté');
+}
+
+function exportPlaidoyerMD() {
+  const p = db.plaidoyer;
+  let md = `# Plan de Plaidoyer\n\n*Généré le ${new Date().toLocaleDateString('fr-FR')}*\n\n`;
+  
+  md += `## 🧭 Théorie du Changement\n\n`;
+  if (p.toc.vision) md += `**Vision:** ${p.toc.vision}\n\n`;
+  if (p.toc.values) md += `**Valeurs:** ${p.toc.values}\n\n`;
+  if (p.toc.hypotheses) md += `**Hypothèses:** ${p.toc.hypotheses}\n\n`;
+  if (p.toc.missions) md += `**Missions:** ${p.toc.missions}\n\n`;
+  
+  md += `## 📊 Analyse SWOT\n\n`;
+  if (p.swot.strengths?.length) md += `**Forces:**\n${p.swot.strengths.map(s=>`- ${s}`).join('\n')}\n\n`;
+  if (p.swot.weaknesses?.length) md += `**Faiblesses:**\n${p.swot.weaknesses.map(s=>`- ${s}`).join('\n')}\n\n`;
+  if (p.swot.opportunities?.length) md += `**Opportunités:**\n${p.swot.opportunities.map(s=>`- ${s}`).join('\n')}\n\n`;
+  if (p.swot.threats?.length) md += `**Menaces:**\n${p.swot.threats.map(s=>`- ${s}`).join('\n')}\n\n`;
+  
+  if (p.tree.problem) {
+    md += `## 🌳 Arbre à Problèmes\n\n**Problème central:** ${p.tree.problem}\n\n`;
+    if (p.tree.causes?.length) md += `**Causes:** ${p.tree.causes.join(', ')}\n\n`;
+    if (p.tree.consequences?.length) md += `**Conséquences:** ${p.tree.consequences.join(', ')}\n\n`;
+  }
+  
+  if (p.objectives?.length) {
+    md += `## 🎯 Objectifs SMART\n\n`;
+    p.objectives.forEach((o, i) => { md += `${i+1}. ${o.text}\n`; });
+    md += '\n';
+  }
+  
+  if (p.targets?.length) {
+    md += `## 👥 Fiches de Ciblage\n\n`;
+    p.targets.forEach(t => {
+      md += `### ${t.name}\n`;
+      md += `- Représentant: ${t.rep || '—'}\n`;
+      md += `- Intérêt: ${t.interest}/5 | Influence: ${t.influence}/5\n`;
+      md += `- Position: ${t.position} | Accès: ${t.access}\n`;
+      if (t.action) md += `- Action souhaitée: ${t.action}\n`;
+      md += '\n';
+    });
+  }
+  
+  if (p.messages?.length) {
+    md += `## 💬 Messages clés\n\n`;
+    p.messages.forEach((m, i) => {
+      md += `### Message ${i+1}\n`;
+      if (m.hook) md += `**Accroche:** ${m.hook}\n`;
+      if (m.problem) md += `**Problème:** ${m.problem}\n`;
+      if (m.action) md += `**Action:** ${m.action}\n`;
+      md += '\n';
+    });
+  }
+  
+  downloadFile(md, 'plaidoyer-plan.md', 'text/markdown');
+  toast('Plan de plaidoyer exporté');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOOLS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderTools() {
+  document.getElementById('toolsGrid').innerHTML = `
+    <div class="tool-card">
+      <h3>📤 Export données</h3>
+      <p>Exportez vos données dans différents formats</p>
+      <div class="tool-row">
+        <button class="btn btn-primary" onclick="exportJSON()">JSON</button>
+        <button class="btn" onclick="exportCSV()">CSV</button>
+        <button class="btn" onclick="exportMarkdown()">Markdown</button>
+      </div>
+    </div>
+    <div class="tool-card">
+      <h3>🌍 Export Univers HTML</h3>
+      <p>Générez un site web navigable de votre univers</p>
+      <button class="btn btn-primary" onclick="openExportModal()">🌍 Générer</button>
+    </div>
+    <div class="tool-card">
+      <h3>📋 Export Plaidoyer</h3>
+      <p>Exportez votre plan de plaidoyer complet</p>
+      <button class="btn" onclick="exportPlaidoyerMD()">📋 Markdown</button>
+    </div>
+    <div class="tool-card">
+      <h3>🔐 Chiffrement AES</h3>
+      <p>Chiffrez/déchiffrez du texte</p>
+      <textarea class="form-textarea mb-2" id="cryptoInput" placeholder="Texte à chiffrer/déchiffrer..."></textarea>
+      <input class="form-input mb-2" id="cryptoKey" placeholder="Clé secrète">
+      <div class="tool-row">
+        <button class="btn" onclick="encryptText()">🔒 Chiffrer</button>
+        <button class="btn" onclick="decryptText()">🔓 Déchiffrer</button>
+      </div>
+      <textarea class="form-textarea mt-2" id="cryptoOutput" readonly placeholder="Résultat..."></textarea>
+    </div>
+    <div class="tool-card">
+      <h3>📊 Statistiques</h3>
+      <p>Aperçu de votre base de données</p>
+      <div id="statsOutput" style="font-size:12px;color:var(--text-soft)"></div>
+    </div>
+    <div class="tool-card">
+      <h3>🗑️ Réinitialiser</h3>
+      <p>Supprimer toutes les données</p>
+      <button class="btn btn-danger" onclick="resetDatabase()">⚠️ Tout supprimer</button>
+    </div>
+  `;
+  
+  // Stats
+  const types = {};
+  db.entities.forEach(e => { types[e.type] = (types[e.type] || 0) + 1; });
+  document.getElementById('statsOutput').innerHTML = `
+    <p><strong>${db.entities.length}</strong> entités</p>
+    <p><strong>${db.relations.length}</strong> relations</p>
+    <p><strong>${db.notes.length}</strong> notes</p>
+    <hr style="border-color:var(--border);margin:8px 0">
+    ${Object.entries(types).map(([t, c]) => `<p>${typeIcons[t]} ${t}: <strong>${c}</strong></p>`).join('')}
+  `;
+}
+
+async function encryptText() {
+  const text = document.getElementById('cryptoInput').value;
+  const key = document.getElementById('cryptoKey').value;
+  if (!text || !key) { toast('Texte et clé requis', 'error'); return; }
+  
+  try {
+    const enc = new TextEncoder();
+    const keyData = await crypto.subtle.digest('SHA-256', enc.encode(key));
+    const cryptoKey = await crypto.subtle.importKey('raw', keyData, 'AES-GCM', false, ['encrypt']);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, enc.encode(text));
+    const result = btoa(String.fromCharCode(...iv) + String.fromCharCode(...new Uint8Array(encrypted)));
+    document.getElementById('cryptoOutput').value = result;
+    toast('Texte chiffré');
+  } catch (e) { toast('Erreur: ' + e.message, 'error'); }
+}
+
+async function decryptText() {
+  const text = document.getElementById('cryptoInput').value;
+  const key = document.getElementById('cryptoKey').value;
+  if (!text || !key) { toast('Texte et clé requis', 'error'); return; }
+  
+  try {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    const keyData = await crypto.subtle.digest('SHA-256', enc.encode(key));
+    const cryptoKey = await crypto.subtle.importKey('raw', keyData, 'AES-GCM', false, ['decrypt']);
+    const data = Uint8Array.from(atob(text), c => c.charCodeAt(0));
+    const iv = data.slice(0, 12);
+    const encrypted = data.slice(12);
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, encrypted);
+    document.getElementById('cryptoOutput').value = dec.decode(decrypted);
+    toast('Texte déchiffré');
+  } catch (e) { toast('Erreur de déchiffrement', 'error'); }
+}
+
+function resetDatabase() {
+  if (!confirm('⚠️ Supprimer TOUTES les données ? Cette action est irréversible.')) return;
+  db = { entities: [], relations: [], notes: [], plaidoyer: { toc: {}, swot: {}, pestel: {}, tree: {}, fiveWhy: [], objectives: [], strategies: [], messages: [], targets: [], progress: [], actions: [] } };
+  saveDB();
+  selectedEntity = null;
+  renderAll();
+  toast('Base de données réinitialisée');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NAVIGATION & INITIALIZATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+function switchTab(tabId) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-' + tabId));
+  
+  if (tabId === 'graph') {
+    setTimeout(() => { resizeGraph(); renderGraph(); }, 50);
+  }
+}
+
+function switchPlaidSection(sectionId) {
+  document.querySelectorAll('.plaid-nav-item').forEach(i => i.classList.toggle('active', i.dataset.section === sectionId));
+  document.querySelectorAll('.plaid-section').forEach(s => s.classList.toggle('active', s.id === 'plaid-' + sectionId));
+}
+
+function renderAll() {
+  renderEntityList();
+  renderDetailPanel();
+  renderTimeline();
+  renderPlaidoyer();
+  renderTools();
+  renderGraph();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Tab navigation
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+  
+  // Plaidoyer navigation
+  document.querySelectorAll('.plaid-nav-item').forEach(item => {
+    item.addEventListener('click', () => switchPlaidSection(item.dataset.section));
+  });
+  
+  // Search
+  document.getElementById('globalSearch').addEventListener('focus', openSearch);
+  document.getElementById('searchInput').addEventListener('input', e => performSearch(e.target.value));
+  
+  // Filter listeners
+  document.getElementById('filterType').addEventListener('change', renderEntityList);
+  document.getElementById('filterRole').addEventListener('change', renderEntityList);
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllModals();
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openEntityModal(); }
+  });
+  
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal(overlay.id);
+    });
+  });
+  
+  // Initialize graph
+  initGraph();
+  
+  // Setup import
+  setupImport();
+  
+  // Load database
+  loadDB();
+});
+</script>
+</body>
+</html>

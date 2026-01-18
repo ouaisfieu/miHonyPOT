@@ -1,0 +1,1591 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>looping(recursivity)VIRAL++ — mySPOT</title>
+<style>
+:root{--bg:#0a0b0d;--surface:#12141a;--card:#1a1d24;--border:#2a303d;--text:#e8eaed;--muted:#8b94a8;--accent:#00d4aa}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:1400px;margin:0 auto;padding:24px}
+header{text-align:center;padding:60px 24px;background:linear-gradient(135deg,#0d2137 0%,#0a0b0d 100%);border-bottom:1px solid var(--border)}
+header h1{font-size:2.5rem;margin-bottom:8px;background:linear-gradient(90deg,var(--accent),#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--muted)}
+.stats{display:flex;justify-content:center;gap:24px;margin-top:24px;flex-wrap:wrap}
+.stat{background:var(--card);padding:16px 24px;border-radius:10px;text-align:center;border:1px solid var(--border)}
+.stat-value{font-size:1.8rem;font-weight:700;color:var(--accent)}.stat-label{font-size:0.8rem;color:var(--muted)}
+nav{background:var(--surface);padding:16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+nav ul{display:flex;justify-content:center;gap:16px;list-style:none;flex-wrap:wrap}
+nav a{color:var(--text);padding:8px 14px;border-radius:6px}nav a:hover{background:var(--card);text-decoration:none}
+section{margin:40px 0}section h2{font-size:1.4rem;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.count{color:var(--muted);font-weight:400;font-size:0.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.card:hover{border-color:var(--accent)}
+.card h3{font-size:1.1rem;margin-bottom:8px}
+.badges{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.badge{font-size:0.65rem;padding:3px 8px;border-radius:4px;text-transform:uppercase;font-weight:600}
+.alias{font-size:0.85rem;color:var(--muted);font-style:italic;margin-bottom:6px}
+.desc{font-size:0.9rem;margin-bottom:8px}
+.date{font-size:0.8rem;color:var(--muted)}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.tag{font-size:0.7rem;background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--muted)}
+.rels{font-size:0.8rem;margin-top:10px}.rels ul{padding-left:16px;margin-top:4px}
+.graph{text-align:center;margin:40px 0}
+.graph svg{background:var(--card);border-radius:10px;border:1px solid var(--border);max-width:100%}
+footer{text-align:center;padding:40px;color:var(--muted);font-size:0.8rem;border-top:1px solid var(--border);margin-top:40px}
+@media(max-width:768px){header h1{font-size:1.8rem}.grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><h1>◈ looping(recursivity)VIRAL++</h1><p>melting-brain-wawashing-pot</p>
+<div class="stats"><div class="stat"><div class="stat-value">192</div><div class="stat-label">Entités</div></div><div class="stat"><div class="stat-value">100</div><div class="stat-label">Relations</div></div><div class="stat"><div class="stat-value">65</div><div class="stat-label">Alliés</div></div><div class="stat"><div class="stat-value">32</div><div class="stat-label">Adversaires</div></div></div></header>
+<nav><ul><li><a href="#type-event">📅 events</a></li><li><a href="#type-object">🔮 objects</a></li><li><a href="#type-org">🏢 orgs</a></li><li><a href="#type-person">👤 persons</a></li><li><a href="#type-place">📍 places</a></li><li><a href="#type-system">📦 systems</a></li><li><a href="#graph">🕸️ Graphe</a></li></ul></nav>
+<main class="container"><section id="type-event">
+      <h2>📅 Events <span class="count">(21)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid #fbbf24" id="e-elections2024">
+          <h3>Élections européennes 2024</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          
+          <p class="desc">Élections du 6-9 juin 2024. 720 députés élus. Victoire du PPE, percée de l&#39;extrême-droite (PfE, ECR). Taux de participation: 51%.</p>
+          <p class="date">📅 6-9 juin 2024</p>
+          <div class="tags"><span class="tag">#élections</span><span class="tag">#2024</span><span class="tag">#PE</span><span class="tag">#démocratie</span><span class="tag">#participation</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ep">renouvelle → Parlement européen</a></li><li><a href="#e-spitzenkandidat">utilisé lors des → Système Spitzenkandidat</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-formation_pfe">
+          <h3>Création de Patriots for Europe</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          
+          <p class="desc">Formation du groupe PfE le 8 juillet 2024 par Orbán, Babiš et Kickl. Rejoint par le RN, Lega, Vox, PVV. Remplace ID.</p>
+          <p class="date">📅 8 juillet 2024</p>
+          <div class="tags"><span class="tag">#groupe</span><span class="tag">#extrême-droite</span><span class="tag">#Orbán</span><span class="tag">#recomposition</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pfe">crée → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-election_vdl">
+          <h3>Réélection de von der Leyen</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          
+          <p class="desc">Ursula von der Leyen réélue présidente de la Commission le 18 juillet 2024 avec 401 voix (284 contre). Soutien PPE, S&amp;D, Renew, Verts.</p>
+          <p class="date">📅 18 juillet 2024</p>
+          <div class="tags"><span class="tag">#Commission</span><span class="tag">#vote</span><span class="tag">#majorité</span><span class="tag">#coalition</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-vonderleyen">réélit → Ursula von der Leyen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-condamnation_lepen">
+          <h3>Condamnation de Marine Le Pen</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          
+          <p class="desc">Marine Le Pen condamnée pour détournement de fonds européens (affaire des assistants parlementaires). Inéligible 5 ans (appel en cours).</p>
+          <p class="date">📅 2025</p>
+          <div class="tags"><span class="tag">#justice</span><span class="tag">#RN</span><span class="tag">#corruption</span><span class="tag">#inéligibilité</span><span class="tag">#France</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-lepen">concerne → Marine Le Pen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-chute_scholz">
+          <h3>Chute de la coalition Scholz</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          
+          <p class="desc">Effondrement de la coalition &quot;feu tricolore&quot; en Allemagne. Départ du FDP. Élections anticipées prévues en 2025.</p>
+          <p class="date">📅 Novembre 2024</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#crise</span><span class="tag">#coalition</span><span class="tag">#Scholz</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-scholz">affecte → Olaf Scholz</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-qatargate">
+          <h3>Qatargate</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Scandale de corruption</p>
+          <p class="desc">Scandale de corruption au PE révélé en décembre 2022. Eva Kaili (vice-présidente) arrêtée. Implication du Qatar et du Maroc.</p>
+          <p class="date">📅 Décembre 2022</p>
+          <div class="tags"><span class="tag">#corruption</span><span class="tag">#PE</span><span class="tag">#Qatar</span><span class="tag">#Maroc</span><span class="tag">#scandale</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ep">affecte → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-russiagate">
+          <h3>Russiagate européen</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Ingérence russe</p>
+          <p class="desc">Enquêtes sur l&#39;influence russe au PE. Plusieurs eurodéputés accusés de promouvoir les intérêts russes. Nathan Gill (UK) condamné.</p>
+          <p class="date">📅 2023-2025</p>
+          <div class="tags"><span class="tag">#Russie</span><span class="tag">#ingérence</span><span class="tag">#corruption</span><span class="tag">#PE</span><span class="tag">#désinformation</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-councilel">
+          <h3>Conseil d&#39;Elrond</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Council of Elrond</p>
+          <p class="desc">Réunion à Fondcombe où représentants des peuples libres décident du sort de l&#39;Anneau et forment la Communauté.</p>
+          <p class="date">📅 3018-10-25</p>
+          <div class="tags"><span class="tag">#conseil</span><span class="tag">#fondcombe</span><span class="tag">#décision</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-battlehelm">
+          <h3>Bataille du Gouffre de Helm</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Battle of Helm&#39;s Deep</p>
+          <p class="desc">Bataille défensive du Rohan contre 10 000 Uruk-hai de Saroumane. Victoire grâce à Gandalf et aux Huorns.</p>
+          <p class="date">📅 3019-03-03</p>
+          <div class="tags"><span class="tag">#bataille</span><span class="tag">#rohan</span><span class="tag">#victoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-battlepelen">
+          <h3>Bataille des Champs du Pelennor</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Battle of Pelennor Fields</p>
+          <p class="desc">Plus grande bataille de la Guerre de l&#39;Anneau. Le Rohan sauve Minas Tirith. Mort de Théoden et du Roi-Sorcier.</p>
+          <p class="date">📅 3019-03-15</p>
+          <div class="tags"><span class="tag">#bataille</span><span class="tag">#gondor</span><span class="tag">#victoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-battlegate">
+          <h3>Bataille de la Porte Noire</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Battle of the Black Gate, Battle of the Morannon</p>
+          <p class="desc">Bataille de diversion menée par Aragorn pour permettre à Frodon d&#39;atteindre la Montagne du Destin.</p>
+          <p class="date">📅 3019-03-25</p>
+          <div class="tags"><span class="tag">#bataille</span><span class="tag">#mordor</span><span class="tag">#diversion</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-destruction">
+          <h3>Destruction de l&#39;Anneau</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Destruction of the One Ring</p>
+          <p class="desc">Gollum arrache l&#39;Anneau à Frodon et tombe dans le feu de la Montagne du Destin, détruisant l&#39;Anneau et Sauron.</p>
+          <p class="date">📅 3019-03-25</p>
+          <div class="tags"><span class="tag">#anneau</span><span class="tag">#victoire</span><span class="tag">#fin</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-entattack">
+          <h3>Bataille d&#39;Isengard</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Destruction of Isengard</p>
+          <p class="desc">Les Ents attaquent et inondent Isengard, piégeant Saroumane dans Orthanc.</p>
+          <p class="date">📅 3019-03-03</p>
+          <div class="tags"><span class="tag">#ents</span><span class="tag">#isengard</span><span class="tag">#victoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-birthday">
+          <h3>Fête d&#39;adieu de Bilbon</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Bilbo&#39;s Farewell Party</p>
+          <p class="desc">111e anniversaire de Bilbon où il disparaît et lègue l&#39;Anneau à Frodon.</p>
+          <p class="date">📅 3001-09-22</p>
+          <div class="tags"><span class="tag">#fête</span><span class="tag">#comté</span><span class="tag">#anneau</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-weatherattack">
+          <h3>Attaque du Mont Venteux</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Attack on Weathertop</p>
+          <p class="desc">Les cinq Nazgûl attaquent les Hobbits. Frodon est poignardé par une lame de Morgul.</p>
+          <p class="date">📅 3018-10-06</p>
+          <div class="tags"><span class="tag">#nazgûl</span><span class="tag">#blessure</span><span class="tag">#danger</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-moriapassage">
+          <h3>Traversée de la Moria</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Passage through Moria</p>
+          <p class="desc">La Communauté traverse les mines et affronte orques et trolls. Gandalf tombe face au Balrog.</p>
+          <p class="date">📅 3019-01-15</p>
+          <div class="tags"><span class="tag">#moria</span><span class="tag">#balrog</span><span class="tag">#perte</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-boromirdeath">
+          <h3>Mort de Boromir</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Death of Boromir</p>
+          <p class="desc">Boromir meurt à Amon Hen en défendant Merry et Pippin contre les Uruk-hai.</p>
+          <p class="date">📅 3019-02-26</p>
+          <div class="tags"><span class="tag">#mort</span><span class="tag">#héros</span><span class="tag">#sacrifice</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-gandalfreturn">
+          <h3>Retour de Gandalf</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Return of Gandalf</p>
+          <p class="desc">Gandalf revient comme Gandalf le Blanc après avoir vaincu le Balrog.</p>
+          <p class="date">📅 3019-02-14</p>
+          <div class="tags"><span class="tag">#gandalf</span><span class="tag">#résurrection</span><span class="tag">#blanc</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-coronation">
+          <h3>Couronnement d&#39;Aragorn</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Coronation of Aragorn</p>
+          <p class="desc">Aragorn est couronné Roi Elessar du Gondor réunifié avec l&#39;Arnor.</p>
+          <p class="date">📅 3019-05-01</p>
+          <div class="tags"><span class="tag">#roi</span><span class="tag">#gondor</span><span class="tag">#victoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-departure">
+          <h3>Départ des Havres Gris</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Departure from Grey Havens</p>
+          <p class="desc">Gandalf, Galadriel, Elrond, Bilbon et Frodon quittent la Terre du Milieu pour les Terres Immortelles.</p>
+          <p class="date">📅 3021-09-29</p>
+          <div class="tags"><span class="tag">#départ</span><span class="tag">#fin</span><span class="tag">#elfes</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #fbbf24" id="e-scouring">
+          <h3>Nettoyage de la Comté</h3>
+          <div class="badges"><span class="badge" style="background:#fbbf2422;color:#fbbf24">event</span></div>
+          <p class="alias">Scouring of the Shire</p>
+          <p class="desc">Les quatre Hobbits libèrent la Comté de l&#39;emprise de Saroumane. Mort de Saroumane et Gríma.</p>
+          <p class="date">📅 3019-11-03</p>
+          <div class="tags"><span class="tag">#comté</span><span class="tag">#libération</span><span class="tag">#retour</span></div>
+          
+        </article></div></section><section id="type-object">
+      <h2>🔮 Objects <span class="count">(21)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid #f472b6" id="e-green_deal">
+          <h3>Pacte vert européen</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Green Deal, European Green Deal</p>
+          <p class="desc">Ensemble de politiques visant la neutralité carbone en 2050. Priorité de la Commission von der Leyen I. Contesté par la droite et l&#39;extrême-droite.</p>
+          <p class="date">📅 2019</p>
+          <div class="tags"><span class="tag">#climat</span><span class="tag">#environnement</span><span class="tag">#législation</span><span class="tag">#2050</span><span class="tag">#transition</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ec">porté par → Commission européenne</a></li><li><a href="#e-vonderleyen">défend le → Ursula von der Leyen</a></li><li><a href="#e-pfe">s&#39;oppose au → Patriots for Europe</a></li><li><a href="#e-ecr">critique le → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-pacte_migration">
+          <h3>Pacte sur la migration et l&#39;asile</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Migration Pact</p>
+          <p class="desc">Réforme du système d&#39;asile européen adoptée en 2024. Solidarité obligatoire entre États. Critiqué à gauche et à droite.</p>
+          <p class="date">📅 2024</p>
+          <div class="tags"><span class="tag">#migration</span><span class="tag">#asile</span><span class="tag">#réforme</span><span class="tag">#solidarité</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ep">adopté par → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-spitzenkandidat">
+          <h3>Système Spitzenkandidat</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Tête de liste</p>
+          <p class="desc">Procédure où chaque groupe présente un candidat à la présidence de la Commission. Controversé (non appliqué en 2019).</p>
+          <p class="date">📅 2014</p>
+          <div class="tags"><span class="tag">#procédure</span><span class="tag">#Commission</span><span class="tag">#démocratie</span><span class="tag">#élections</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-elections2024">utilisé lors des → Élections européennes 2024</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-ent-pill">
+          <h3>Pilule Rouge</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          
+          <p class="desc">Révèle la vérité sur la Matrice.</p>
+          
+          <div class="tags"><span class="tag">#reveil</span><span class="tag">#choix</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-neo">choisit → Neo</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-onering">
+          <h3>L&#39;Anneau Unique</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">The One Ring, l&#39;Anneau de Pouvoir, Isildur&#39;s Bane</p>
+          <p class="desc">Anneau forgé par Sauron dans la Montagne du Destin pour contrôler tous les autres anneaux et dominer la Terre du Milieu. Corrompt ses porteurs.</p>
+          
+          <div class="tags"><span class="tag">#anneau</span><span class="tag">#pouvoir</span><span class="tag">#corruption</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-sting">
+          <h3>Dard</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Sting</p>
+          <p class="desc">Épée elfique trouvée par Bilbon. Brille en présence d&#39;orques. Donnée à Frodon.</p>
+          
+          <div class="tags"><span class="tag">#épée</span><span class="tag">#elfe</span><span class="tag">#frodon</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-anduril">
+          <h3>Andúril</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Flame of the West, Narsil reforgée</p>
+          <p class="desc">Épée d&#39;Aragorn, reforgée à partir des fragments de Narsil, l&#39;épée qui coupa l&#39;Anneau de Sauron.</p>
+          
+          <div class="tags"><span class="tag">#épée</span><span class="tag">#roi</span><span class="tag">#aragorn</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-narsil">
+          <h3>Narsil</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Épée d&#39;Elendil</p>
+          <p class="desc">Épée d&#39;Elendil brisée en coupant l&#39;Anneau de Sauron. Ses fragments conservés à Fondcombe.</p>
+          
+          <div class="tags"><span class="tag">#épée</span><span class="tag">#brisée</span><span class="tag">#elendil</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-glamdring">
+          <h3>Glamdring</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Marteleur d&#39;Ennemis</p>
+          <p class="desc">Épée de Gandalf, ancienne épée du Roi de Gondolin. Trouvée dans le trésor des trolls.</p>
+          
+          <div class="tags"><span class="tag">#épée</span><span class="tag">#gandalf</span><span class="tag">#elfe</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-mithril">
+          <h3>Cotte de Mithril</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Mithril Coat</p>
+          <p class="desc">Cotte de mailles en mithril donnée à Bilbon par Thorin, puis à Frodon. Sauve sa vie à Moria.</p>
+          
+          <div class="tags"><span class="tag">#armure</span><span class="tag">#mithril</span><span class="tag">#protection</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-phial">
+          <h3>Fiole de Galadriel</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Phial of Galadriel, Lumière d&#39;Eärendil</p>
+          <p class="desc">Fiole contenant la lumière de l&#39;étoile d&#39;Eärendil. Donnée à Frodon, repousse Arachne.</p>
+          
+          <div class="tags"><span class="tag">#lumière</span><span class="tag">#galadriel</span><span class="tag">#protection</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-palantir">
+          <h3>Palantír</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Pierre de Vision, Seeing Stone</p>
+          <p class="desc">Pierres de vision permettant de communiquer à distance. Saroumane et Denethor corrompus par leur usage.</p>
+          
+          <div class="tags"><span class="tag">#vision</span><span class="tag">#danger</span><span class="tag">#communication</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-narya">
+          <h3>Narya</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Anneau de Feu, Anneau Rouge</p>
+          <p class="desc">Un des Trois Anneaux elfiques. Porté par Gandalf, inspire courage et résistance.</p>
+          
+          <div class="tags"><span class="tag">#anneau</span><span class="tag">#elfe</span><span class="tag">#feu</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-nenya">
+          <h3>Nenya</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Anneau d&#39;Eau, Anneau de Diamant</p>
+          <p class="desc">Un des Trois Anneaux elfiques. Porté par Galadriel, protège et préserve la Lothlórien.</p>
+          
+          <div class="tags"><span class="tag">#anneau</span><span class="tag">#elfe</span><span class="tag">#eau</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-vilya">
+          <h3>Vilya</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Anneau d&#39;Air, Anneau de Saphir</p>
+          <p class="desc">Le plus puissant des Trois Anneaux elfiques. Porté par Elrond, protège Fondcombe.</p>
+          
+          <div class="tags"><span class="tag">#anneau</span><span class="tag">#elfe</span><span class="tag">#air</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-silmarils">
+          <h3>Silmarils</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Les Silmarils de Fëanor</p>
+          <p class="desc">Trois joyaux créés par Fëanor contenant la lumière des Arbres. Leur histoire domine le Premier Âge.</p>
+          
+          <div class="tags"><span class="tag">#joyaux</span><span class="tag">#lumière</span><span class="tag">#histoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-evenstar">
+          <h3>Étoile du Soir</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Evenstar</p>
+          <p class="desc">Pendentif d&#39;Arwen donné à Aragorn comme gage d&#39;amour et symbole de son choix de mortalité.</p>
+          
+          <div class="tags"><span class="tag">#bijou</span><span class="tag">#amour</span><span class="tag">#mortalité</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-horn">
+          <h3>Cor de Gondor</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Horn of Gondor</p>
+          <p class="desc">Cor de Boromir. Son appel peut être entendu à grande distance.</p>
+          
+          <div class="tags"><span class="tag">#cor</span><span class="tag">#gondor</span><span class="tag">#boromir</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-redbook">
+          <h3>Livre Rouge de la Marche de l&#39;Ouest</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Red Book of Westmarch</p>
+          <p class="desc">Chronique écrite par Bilbon puis Frodon et Sam. Source du récit du Seigneur des Anneaux.</p>
+          
+          <div class="tags"><span class="tag">#livre</span><span class="tag">#histoire</span><span class="tag">#chronique</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f472b6" id="e-orthanc">
+          <h3>Orthanc</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span></div>
+          <p class="alias">Tour d&#39;Isengard</p>
+          <p class="desc">Tour noire indestructible d&#39;Isengard. Contient un Palantír.</p>
+          
+          <div class="tags"><span class="tag">#tour</span><span class="tag">#isengard</span><span class="tag">#pierre</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-balrog">
+          <h3>Balrog de Moria</h3>
+          <div class="badges"><span class="badge" style="background:#f472b622;color:#f472b6">object</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Fléau de Durin, Démon de Feu</p>
+          <p class="desc">Maiar corrompu par Morgoth. Éveillé par les Nains dans les profondeurs de Moria. Tué par Gandalf.</p>
+          
+          <div class="tags"><span class="tag">#maiar</span><span class="tag">#démon</span><span class="tag">#feu</span></div>
+          
+        </article></div></section><section id="type-org">
+      <h2>🏢 Orgs <span class="count">(51)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid #a78bfa" id="e-ep">
+          <h3>Parlement européen</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span></div>
+          <p class="alias">PE, European Parliament</p>
+          <p class="desc">Institution législative de l&#39;Union européenne composée de 720 députés élus au suffrage universel direct. Siège à Strasbourg, travaux à Bruxelles.</p>
+          <p class="date">📅 1952</p>
+          <div class="tags"><span class="tag">#institution</span><span class="tag">#UE</span><span class="tag">#législatif</span><span class="tag">#démocratie</span><span class="tag">#Strasbourg</span><span class="tag">#Bruxelles</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-metsola">préside → Roberta Metsola</a></li><li><a href="#e-epp">groupe au → Groupe PPE</a></li><li><a href="#e-sd">groupe au → Groupe S&amp;D</a></li><li><a href="#e-pfe">groupe au → Patriots for Europe</a></li><li><a href="#e-ecr">groupe au → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #a78bfa" id="e-ec">
+          <h3>Commission européenne</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span></div>
+          <p class="alias">CE, European Commission</p>
+          <p class="desc">Organe exécutif de l&#39;UE, propose les lois et veille à leur application. Un commissaire par État membre.</p>
+          <p class="date">📅 1958</p>
+          <div class="tags"><span class="tag">#institution</span><span class="tag">#UE</span><span class="tag">#exécutif</span><span class="tag">#Bruxelles</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-vonderleyen">préside → Ursula von der Leyen</a></li><li><a href="#e-kallas">Haute Représentante → Kaja Kallas</a></li><li><a href="#e-green_deal">porté par → Pacte vert européen</a></li><li><a href="#e-bruxelles">siège à → Bruxelles</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #a78bfa" id="e-council">
+          <h3>Conseil européen</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span></div>
+          <p class="alias">European Council</p>
+          <p class="desc">Réunit les chefs d&#39;État ou de gouvernement des États membres. Définit les orientations politiques générales de l&#39;UE.</p>
+          <p class="date">📅 1974</p>
+          <div class="tags"><span class="tag">#institution</span><span class="tag">#UE</span><span class="tag">#intergouvernemental</span><span class="tag">#sommets</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-costa">préside → António Costa</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-epp">
+          <h3>Groupe PPE</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">EPP, Parti populaire européen, Christian Democrats</p>
+          <p class="desc">Premier groupe politique du PE avec 188 sièges (26.1%). Centre-droit, chrétiens-démocrates, conservateurs modérés. Pro-européen.</p>
+          <p class="date">📅 1976</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#centre-droit</span><span class="tag">#chrétien-démocrate</span><span class="tag">#pro-UE</span><span class="tag">#majorité</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-vonderleyen">affiliée au → Ursula von der Leyen</a></li><li><a href="#e-metsola">affiliée au → Roberta Metsola</a></li><li><a href="#e-weber">préside le groupe → Manfred Weber</a></li><li><a href="#e-cdu">membre du → CDU/CSU</a></li><li><a href="#e-lr">membre du → Les Républicains</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-sd">
+          <h3>Groupe S&amp;D</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Socialistes et Démocrates, Progressive Alliance</p>
+          <p class="desc">Deuxième groupe du PE avec 136 sièges (18.9%). Centre-gauche, sociaux-démocrates. Pro-européen.</p>
+          <p class="date">📅 1953</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#centre-gauche</span><span class="tag">#social-démocrate</span><span class="tag">#pro-UE</span><span class="tag">#majorité</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-costa">affilié au → António Costa</a></li><li><a href="#e-garcia">préside le groupe → Iratxe García Pérez</a></li><li><a href="#e-spd">membre du → SPD</a></li><li><a href="#e-ps_fr">membre du → Parti Socialiste (France)</a></li><li><a href="#e-pd">membre du → Partito Democratico</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-pfe">
+          <h3>Patriots for Europe</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">PfE, Patriotes pour l&#39;Europe</p>
+          <p class="desc">Troisième groupe du PE avec 84 sièges (11.7%). Droite nationaliste, eurosceptique. Fondé en juillet 2024 par Orbán, remplace ID.</p>
+          <p class="date">📅 2024</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span><span class="tag">#eurosceptique</span><span class="tag">#populiste</span><span class="tag">#souverainiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-bardella">préside le groupe → Jordan Bardella</a></li><li><a href="#e-orban">fondateur de → Viktor Orbán</a></li><li><a href="#e-rn">membre de → Rassemblement National</a></li><li><a href="#e-lega">membre de → Lega</a></li><li><a href="#e-vox">membre de → Vox</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-ecr">
+          <h3>Groupe ECR</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">Conservateurs et Réformistes européens</p>
+          <p class="desc">Quatrième groupe du PE avec 78 sièges (10.8%). Droite conservatrice, eurosceptique soft, anti-fédéraliste.</p>
+          <p class="date">📅 2009</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#droite</span><span class="tag">#conservateur</span><span class="tag">#eurosceptique</span><span class="tag">#souverainiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-morawiecki">préside le groupe → Mateusz Morawiecki</a></li><li><a href="#e-meloni">ancienne présidente de → Giorgia Meloni</a></li><li><a href="#e-fdi">membre de l&#39; → Fratelli d&#39;Italia</a></li><li><a href="#e-pis">membre de l&#39; → Prawo i Sprawiedliwość</a></li><li><a href="#e-nva">membre de l&#39; → N-VA</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-renew">
+          <h3>Renew Europe</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">RE, Libéraux</p>
+          <p class="desc">Cinquième groupe du PE avec 77 sièges (10.7%). Centre, libéraux, pro-européens. Inclut ALDE et EDP.</p>
+          <p class="date">📅 2019</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#centre</span><span class="tag">#libéral</span><span class="tag">#pro-UE</span><span class="tag">#majorité</span><span class="tag">#centriste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-kallas">affiliée à → Kaja Kallas</a></li><li><a href="#e-hayer">préside le groupe → Valérie Hayer</a></li><li><a href="#e-renaissance">membre de → Renaissance</a></li><li><a href="#e-ep">groupe au → Parlement européen</a></li><li><a href="#e-epp">coalition avec → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-greens">
+          <h3>Verts/ALE</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Greens/EFA, Verts, Alliance libre européenne</p>
+          <p class="desc">Sixième groupe du PE avec 53 sièges. Écologistes et régionalistes. Pertes importantes en 2024 (-19 sièges).</p>
+          <p class="date">📅 1999</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#écologiste</span><span class="tag">#gauche</span><span class="tag">#pro-UE</span><span class="tag">#régionaliste</span><span class="tag">#climat</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-reintke">co-préside → Terry Reintke</a></li><li><a href="#e-grune">membre des → Bündnis 90/Die Grünen</a></li><li><a href="#e-volt">membre des → Volt Europa</a></li><li><a href="#e-ep">groupe au → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-left">
+          <h3>The Left - GUE/NGL</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">La Gauche, Gauche unitaire européenne</p>
+          <p class="desc">Septième groupe du PE avec 46 sièges. Gauche radicale, eurosceptique de gauche.</p>
+          <p class="date">📅 1995</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#gauche-radicale</span><span class="tag">#eurosceptique</span><span class="tag">#anti-austérité</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-aubry">co-préside → Manon Aubry</a></li><li><a href="#e-lfi">membre de → La France Insoumise</a></li><li><a href="#e-ep">groupe au → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-esn">
+          <h3>Europe of Sovereign Nations</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">ESN, Europe des Nations Souveraines</p>
+          <p class="desc">Huitième groupe du PE, créé en 2024. Extrême-droite dure. Inclut l&#39;AfD allemand.</p>
+          <p class="date">📅 2024</p>
+          <div class="tags"><span class="tag">#groupe-PE</span><span class="tag">#extrême-droite</span><span class="tag">#souverainiste</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-afd">membre de → Alternative für Deutschland</a></li><li><a href="#e-ep">groupe au → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-cdu">
+          <h3>CDU/CSU</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Union chrétienne-démocrate, Union</p>
+          <p class="desc">Parti chrétien-démocrate allemand (CDU) et son allié bavarois (CSU). Premier parti allemand. 30 eurodéputés. PPE.</p>
+          <p class="date">📅 1945</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#PPE</span><span class="tag">#chrétien-démocrate</span><span class="tag">#centre-droit</span><span class="tag">#Merkel</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-vonderleyen">membre de → Ursula von der Leyen</a></li><li><a href="#e-weber">membre de → Manfred Weber</a></li><li><a href="#e-epp">membre du → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-spd">
+          <h3>SPD</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Parti social-démocrate d&#39;Allemagne</p>
+          <p class="desc">Plus vieux parti allemand. Social-démocrate. 14 eurodéputés. S&amp;D. Scholz.</p>
+          <p class="date">📅 1863</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#S&D</span><span class="tag">#social-démocrate</span><span class="tag">#centre-gauche</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-scholz">membre de → Olaf Scholz</a></li><li><a href="#e-sd">membre du → Groupe S&amp;D</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-grune">
+          <h3>Bündnis 90/Die Grünen</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Verts allemands, Grüne</p>
+          <p class="desc">Parti écologiste allemand. 16 eurodéputés (pertes en 2024). Verts/ALE. Annalena Baerbock (Affaires étrangères).</p>
+          <p class="date">📅 1980</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#Verts</span><span class="tag">#écologiste</span><span class="tag">#gauche</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-reintke">membre de → Terry Reintke</a></li><li><a href="#e-greens">membre des → Verts/ALE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-afd">
+          <h3>Alternative für Deutschland</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">AfD</p>
+          <p class="desc">Parti d&#39;extrême-droite allemand. Eurosceptique. Exclu du groupe ID en 2024, rejoint ESN. 15 eurodéputés.</p>
+          <p class="date">📅 2013</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#ESN</span><span class="tag">#extrême-droite</span><span class="tag">#eurosceptique</span><span class="tag">#anti-immigration</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-esn">membre de → Europe of Sovereign Nations</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-rn">
+          <h3>Rassemblement National</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">RN, ex-FN</p>
+          <p class="desc">Premier parti français aux européennes 2024 (30+ sièges). Extrême-droite. Bardella, Le Pen. Patriots for Europe.</p>
+          <p class="date">📅 1972</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-bardella">préside → Jordan Bardella</a></li><li><a href="#e-lepen">présidente d&#39;honneur de → Marine Le Pen</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-renaissance">
+          <h3>Renaissance</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">RE, LREM, En Marche</p>
+          <p class="desc">Parti centriste français de Macron. 13 eurodéputés (pertes en 2024). Renew Europe.</p>
+          <p class="date">📅 2016</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#Renew</span><span class="tag">#centriste</span><span class="tag">#pro-UE</span><span class="tag">#libéral</span><span class="tag">#macronisme</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-hayer">membre de → Valérie Hayer</a></li><li><a href="#e-macron">fondateur de → Emmanuel Macron</a></li><li><a href="#e-renew">membre de → Renew Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-lfi">
+          <h3>La France Insoumise</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">LFI, Insoumis</p>
+          <p class="desc">Parti de gauche radicale français. Mélenchon. 9 eurodéputés. The Left. Eurosceptique de gauche.</p>
+          <p class="date">📅 2016</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#Left</span><span class="tag">#gauche-radicale</span><span class="tag">#populiste</span><span class="tag">#Mélenchon</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-aubry">membre de → Manon Aubry</a></li><li><a href="#e-left">membre de → The Left - GUE/NGL</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-lr">
+          <h3>Les Républicains</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">LR, ex-UMP</p>
+          <p class="desc">Parti de droite gaulliste français. Affaibli. 6 eurodéputés. PPE. Crise interne sur l&#39;alliance avec le RN.</p>
+          <p class="date">📅 2015</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#PPE</span><span class="tag">#droite</span><span class="tag">#gaulliste</span><span class="tag">#conservateur</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-epp">membre du → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ps_fr">
+          <h3>Parti Socialiste (France)</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">PS</p>
+          <p class="desc">Parti social-démocrate français. Renaissance sous Hollande, déclin puis légère remontée. 13 eurodéputés. S&amp;D.</p>
+          <p class="date">📅 1969</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#S&D</span><span class="tag">#socialiste</span><span class="tag">#centre-gauche</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-sd">membre du → Groupe S&amp;D</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-fdi">
+          <h3>Fratelli d&#39;Italia</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">FDI, Frères d&#39;Italie</p>
+          <p class="desc">Parti de Giorgia Meloni. Premier parti italien. Post-fasciste devenu conservateur. 24 eurodéputés. ECR.</p>
+          <p class="date">📅 2012</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#ECR</span><span class="tag">#droite</span><span class="tag">#nationaliste</span><span class="tag">#conservateur</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-meloni">préside → Giorgia Meloni</a></li><li><a href="#e-ecr">membre de l&#39; → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-pd">
+          <h3>Partito Democratico</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">PD, Parti démocrate</p>
+          <p class="desc">Principal parti de centre-gauche italien. Elly Schlein. 21 eurodéputés. S&amp;D.</p>
+          <p class="date">📅 2007</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#S&D</span><span class="tag">#centre-gauche</span><span class="tag">#social-démocrate</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-sd">membre du → Groupe S&amp;D</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-lega">
+          <h3>Lega</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Lega Nord, Ligue</p>
+          <p class="desc">Parti de Salvini. Ex-régionaliste devenu nationaliste italien. 8 eurodéputés. Patriots for Europe.</p>
+          <p class="date">📅 1991</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-salvini">secrétaire fédéral de → Matteo Salvini</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-m5s">
+          <h3>Movimento 5 Stelle</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">M5S, Cinq Étoiles</p>
+          <p class="desc">Mouvement anti-establishment italien. Giuseppe Conte. 8 eurodéputés. Non-inscrits puis tentatives d&#39;alliance.</p>
+          <p class="date">📅 2009</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#populiste</span><span class="tag">#anti-establishment</span><span class="tag">#écologiste</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-pp">
+          <h3>Partido Popular</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">PP</p>
+          <p class="desc">Parti de centre-droit espagnol. Alberto Núñez Feijóo. Premier parti espagnol aux européennes 2024. 22 eurodéputés. PPE.</p>
+          <p class="date">📅 1989</p>
+          <div class="tags"><span class="tag">#Espagne</span><span class="tag">#PPE</span><span class="tag">#centre-droit</span><span class="tag">#conservateur</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-epp">membre du → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-psoe">
+          <h3>PSOE</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Parti socialiste ouvrier espagnol</p>
+          <p class="desc">Parti de Pedro Sánchez. Social-démocrate. Au gouvernement. 20 eurodéputés. S&amp;D.</p>
+          <p class="date">📅 1879</p>
+          <div class="tags"><span class="tag">#Espagne</span><span class="tag">#S&D</span><span class="tag">#socialiste</span><span class="tag">#centre-gauche</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-garcia">membre de → Iratxe García Pérez</a></li><li><a href="#e-sanchez">secrétaire général de → Pedro Sánchez</a></li><li><a href="#e-sd">membre du → Groupe S&amp;D</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-vox">
+          <h3>Vox</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Parti d&#39;extrême-droite espagnol. Abascal. A quitté l&#39;ECR pour Patriots for Europe en 2024. 6 eurodéputés.</p>
+          <p class="date">📅 2013</p>
+          <div class="tags"><span class="tag">#Espagne</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span><span class="tag">#anti-immigration</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-abascal">président de → Santiago Abascal</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-po">
+          <h3>Platforma Obywatelska</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">PO, Plateforme civique, KO</p>
+          <p class="desc">Parti de Donald Tusk. Coalition Koalicja Obywatelska. Libéral-conservateur, pro-UE. 21 eurodéputés. PPE.</p>
+          <p class="date">📅 2001</p>
+          <div class="tags"><span class="tag">#Pologne</span><span class="tag">#PPE</span><span class="tag">#libéral</span><span class="tag">#pro-UE</span><span class="tag">#centriste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-tusk">leader de → Donald Tusk</a></li><li><a href="#e-epp">membre du → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-pis">
+          <h3>Prawo i Sprawiedliwość</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">PiS, Droit et Justice</p>
+          <p class="desc">Parti conservateur national polonais. Kaczyński. Opposition depuis 2023. 20 eurodéputés. ECR.</p>
+          <p class="date">📅 2001</p>
+          <div class="tags"><span class="tag">#Pologne</span><span class="tag">#ECR</span><span class="tag">#conservateur</span><span class="tag">#nationaliste</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-morawiecki">membre de → Mateusz Morawiecki</a></li><li><a href="#e-ecr">membre de l&#39; → Groupe ECR</a></li><li><a href="#e-tusk">adversaire de → Donald Tusk</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-fidesz">
+          <h3>Fidesz</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Union civique hongroise</p>
+          <p class="desc">Parti de Viktor Orbán. Dominant en Hongrie depuis 2010. A quitté le PPE en 2021. 11 eurodéputés. Patriots for Europe.</p>
+          <p class="date">📅 1988</p>
+          <div class="tags"><span class="tag">#Hongrie</span><span class="tag">#PfE</span><span class="tag">#nationaliste</span><span class="tag">#illibéral</span><span class="tag">#autoritaire</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-orban">préside → Viktor Orbán</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-pvv">
+          <h3>PVV</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Parti pour la Liberté</p>
+          <p class="desc">Parti de Geert Wilders. Extrême-droite néerlandaise. Vainqueur des législatives 2023. 6 eurodéputés. Patriots for Europe.</p>
+          <p class="date">📅 2006</p>
+          <div class="tags"><span class="tag">#Pays-Bas</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#islamophobe</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-wilders">leader de → Geert Wilders</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-vvd">
+          <h3>VVD</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Parti populaire pour la liberté et la démocratie</p>
+          <p class="desc">Parti libéral-conservateur néerlandais. Parti de Mark Rutte. 4 eurodéputés. Renew puis PPE.</p>
+          <p class="date">📅 1948</p>
+          <div class="tags"><span class="tag">#Pays-Bas</span><span class="tag">#PPE</span><span class="tag">#libéral</span><span class="tag">#centre-droit</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-nva">
+          <h3>N-VA</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">Nieuw-Vlaamse Alliantie</p>
+          <p class="desc">Parti nationaliste flamand belge. Centre-droit, indépendantiste. 3 eurodéputés. ECR.</p>
+          <p class="date">📅 2001</p>
+          <div class="tags"><span class="tag">#Belgique</span><span class="tag">#ECR</span><span class="tag">#nationaliste</span><span class="tag">#flamand</span><span class="tag">#séparatiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ecr">membre de l&#39; → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-vb">
+          <h3>Vlaams Belang</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">VB</p>
+          <p class="desc">Parti d&#39;extrême-droite flamand. Tom Van Grieken. 3 eurodéputés. Patriots for Europe.</p>
+          <p class="date">📅 2004</p>
+          <div class="tags"><span class="tag">#Belgique</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#flamand</span><span class="tag">#séparatiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-fpo">
+          <h3>FPÖ</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Parti de la Liberté d&#39;Autriche</p>
+          <p class="desc">Parti d&#39;extrême-droite autrichien. Herbert Kickl. Vainqueur des législatives 2024. 6 eurodéputés. Patriots for Europe.</p>
+          <p class="date">📅 1956</p>
+          <div class="tags"><span class="tag">#Autriche</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ovp">
+          <h3>ÖVP</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Parti populaire autrichien</p>
+          <p class="desc">Parti conservateur autrichien. Centre-droit. 5 eurodéputés. PPE.</p>
+          <p class="date">📅 1945</p>
+          <div class="tags"><span class="tag">#Autriche</span><span class="tag">#PPE</span><span class="tag">#conservateur</span><span class="tag">#centre-droit</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-epp">membre du → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-sd_sweden">
+          <h3>Sverigedemokraterna</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">SD, Démocrates de Suède</p>
+          <p class="desc">Parti d&#39;extrême-droite suédois. Jimmie Åkesson. 3 eurodéputés. ECR.</p>
+          <p class="date">📅 1988</p>
+          <div class="tags"><span class="tag">#Suède</span><span class="tag">#ECR</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ecr">membre de l&#39; → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-finns">
+          <h3>Perussuomalaiset</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Vrais Finlandais, Finns Party</p>
+          <p class="desc">Parti populiste de droite finlandais. Au gouvernement depuis 2023. 4 eurodéputés. Patriots for Europe (ex-ECR).</p>
+          <p class="date">📅 1995</p>
+          <div class="tags"><span class="tag">#Finlande</span><span class="tag">#PfE</span><span class="tag">#populiste</span><span class="tag">#eurosceptique</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-ods">
+          <h3>ODS</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">Parti démocrate civique</p>
+          <p class="desc">Parti conservateur tchèque. Petr Fiala (Premier ministre). 3 eurodéputés. ECR.</p>
+          <p class="date">📅 1991</p>
+          <div class="tags"><span class="tag">#Tchéquie</span><span class="tag">#ECR</span><span class="tag">#conservateur</span><span class="tag">#libéral</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ecr">membre de l&#39; → Groupe ECR</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-ano">
+          <h3>ANO 2011</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">ANO</p>
+          <p class="desc">Parti populiste tchèque d&#39;Andrej Babiš. A quitté Renew pour Patriots for Europe en 2024. 7 eurodéputés.</p>
+          <p class="date">📅 2011</p>
+          <div class="tags"><span class="tag">#Tchéquie</span><span class="tag">#PfE</span><span class="tag">#populiste</span><span class="tag">#centriste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-babis">fondateur de → Andrej Babiš</a></li><li><a href="#e-pfe">membre de → Patriots for Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-volt">
+          <h3>Volt Europa</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Volt</p>
+          <p class="desc">Parti paneuropéen progressiste. Fédéraliste. 5 eurodéputés. Verts/ALE.</p>
+          <p class="date">📅 2017</p>
+          <div class="tags"><span class="tag">#paneuropéen</span><span class="tag">#Verts</span><span class="tag">#fédéraliste</span><span class="tag">#pro-UE</span><span class="tag">#jeunes</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-greens">membre des → Verts/ALE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-fellowship">
+          <h3>Communauté de l&#39;Anneau</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Fellowship of the Ring, Les Neuf Marcheurs</p>
+          <p class="desc">Groupe de neuf compagnons formé à Fondcombe pour escorter Frodon et détruire l&#39;Anneau: 4 Hobbits, 2 Hommes, 1 Elfe, 1 Nain, 1 Istari.</p>
+          <p class="date">📅 3018</p>
+          <div class="tags"><span class="tag">#quête</span><span class="tag">#alliance</span><span class="tag">#anneau</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-nazgul">
+          <h3>Les Nazgûl</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Spectres de l&#39;Anneau, Les Neuf</p>
+          <p class="desc">Neuf rois humains corrompus par les anneaux de pouvoir donnés par Sauron. Serviteurs les plus terrifiants du Seigneur Ténébreux.</p>
+          
+          <div class="tags"><span class="tag">#spectre</span><span class="tag">#sauron</span><span class="tag">#terreur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ents">
+          <h3>Les Ents</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Gardiens des Arbres, Onodrim</p>
+          <p class="desc">Créatures arborescentes anciennes qui gardent les forêts. Mènent l&#39;assaut contre Isengard.</p>
+          
+          <div class="tags"><span class="tag">#arbre</span><span class="tag">#gardien</span><span class="tag">#fangorn</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-rangers">
+          <h3>Rôdeurs du Nord</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Dúnedain du Nord, Rangers</p>
+          <p class="desc">Descendants des Dúnedain d&#39;Arnor. Protègent secrètement les terres de l&#39;Eriador dont la Comté.</p>
+          
+          <div class="tags"><span class="tag">#dúnedain</span><span class="tag">#protecteur</span><span class="tag">#nord</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-rohirrim">
+          <h3>Rohirrim</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Seigneurs des Chevaux</p>
+          <p class="desc">Peuple cavalier du Rohan, descendants des Éothéod. Réputés pour leurs charges de cavalerie.</p>
+          
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#cavalier</span><span class="tag">#guerre</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-whitecouncil">
+          <h3>Conseil Blanc</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">White Council</p>
+          <p class="desc">Conseil des Sages composé des Istari et des grands Elfes. Dirigé par Saroumane, puis abandonné.</p>
+          
+          <div class="tags"><span class="tag">#istari</span><span class="tag">#elfe</span><span class="tag">#conseil</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-urukhai">
+          <h3>Uruk-hai</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Uruks de Saroumane</p>
+          <p class="desc">Race d&#39;orques supérieurs créés par Saroumane. Plus grands, plus forts, supportent la lumière du soleil.</p>
+          
+          <div class="tags"><span class="tag">#orque</span><span class="tag">#isengard</span><span class="tag">#saroumane</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-deadarmy">
+          <h3>Armée des Morts</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Morts de Dunharrow</p>
+          <p class="desc">Esprits des hommes de la montagne maudits par Isildur pour avoir brisé leur serment. Libérés par Aragorn après Pelennor.</p>
+          
+          <div class="tags"><span class="tag">#morts</span><span class="tag">#serment</span><span class="tag">#armée</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-istari">
+          <h3>Les Istari</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Les Magiciens, Wizards</p>
+          <p class="desc">Cinq Maiar envoyés par les Valar pour contrer Sauron: Saroumane, Gandalf, Radagast, et deux Mages Bleus.</p>
+          
+          <div class="tags"><span class="tag">#maiar</span><span class="tag">#magicien</span><span class="tag">#valar</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #a78bfa" id="e-oathbreakers">
+          <h3>Parjures</h3>
+          <div class="badges"><span class="badge" style="background:#a78bfa22;color:#a78bfa">org</span></div>
+          <p class="alias">Oathbreakers</p>
+          <p class="desc">Hommes des Montagnes Blanches qui jurèrent allégeance à Isildur mais le trahirent.</p>
+          
+          <div class="tags"><span class="tag">#morts</span><span class="tag">#serment</span><span class="tag">#malédiction</span></div>
+          
+        </article></div></section><section id="type-person">
+      <h2>👤 Persons <span class="count">(63)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid #4ade80" id="e-vonderleyen">
+          <h3>Ursula von der Leyen</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">VdL, UvdL</p>
+          <p class="desc">Présidente de la Commission européenne depuis 2019, réélue en 2024 avec 401 voix. CDU allemande, membre du PPE.</p>
+          <p class="date">📅 1958</p>
+          <div class="tags"><span class="tag">#Commission</span><span class="tag">#présidente</span><span class="tag">#CDU</span><span class="tag">#PPE</span><span class="tag">#Allemagne</span><span class="tag">#femme</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ec">préside → Commission européenne</a></li><li><a href="#e-cdu">membre de → CDU/CSU</a></li><li><a href="#e-epp">affiliée au → Groupe PPE</a></li><li><a href="#e-election_vdl">réélit → Réélection de von der Leyen</a></li><li><a href="#e-green_deal">défend le → Pacte vert européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-metsola">
+          <h3>Roberta Metsola</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Présidente du Parlement européen depuis 2022. Parti nationaliste maltais, membre du PPE. Plus jeune présidente du PE.</p>
+          <p class="date">📅 1979</p>
+          <div class="tags"><span class="tag">#PE</span><span class="tag">#présidente</span><span class="tag">#PPE</span><span class="tag">#Malte</span><span class="tag">#femme</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ep">préside → Parlement européen</a></li><li><a href="#e-epp">affiliée au → Groupe PPE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-costa">
+          <h3>António Costa</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Président du Conseil européen depuis décembre 2024. Ancien Premier ministre du Portugal (2015-2024). PS portugais, S&amp;D.</p>
+          <p class="date">📅 1961</p>
+          <div class="tags"><span class="tag">#Conseil-européen</span><span class="tag">#président</span><span class="tag">#PS</span><span class="tag">#S&D</span><span class="tag">#Portugal</span><span class="tag">#socialiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-council">préside → Conseil européen</a></li><li><a href="#e-sd">affilié au → Groupe S&amp;D</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-kallas">
+          <h3>Kaja Kallas</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Haute Représentante pour les affaires étrangères depuis 2024. Ancienne Première ministre d&#39;Estonie. Parti de la Réforme, Renew.</p>
+          <p class="date">📅 1977</p>
+          <div class="tags"><span class="tag">#diplomatie</span><span class="tag">#PESC</span><span class="tag">#Estonie</span><span class="tag">#Renew</span><span class="tag">#femme</span><span class="tag">#atlantiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ec">Haute Représentante → Commission européenne</a></li><li><a href="#e-renew">affiliée à → Renew Europe</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-weber">
+          <h3>Manfred Weber</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Président du groupe PPE au PE et du parti PPE. CSU bavaroise. Candidat malheureux à la présidence de la Commission en 2019.</p>
+          <p class="date">📅 1972</p>
+          <div class="tags"><span class="tag">#PPE</span><span class="tag">#président-groupe</span><span class="tag">#CSU</span><span class="tag">#Allemagne</span><span class="tag">#Bavière</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-epp">préside le groupe → Groupe PPE</a></li><li><a href="#e-cdu">membre de → CDU/CSU</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-garcia">
+          <h3>Iratxe García Pérez</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Iratxe García</p>
+          <p class="desc">Présidente du groupe S&amp;D au PE. PSOE espagnol. Eurodéputée depuis 2004.</p>
+          <p class="date">📅 1974</p>
+          <div class="tags"><span class="tag">#S&D</span><span class="tag">#présidente-groupe</span><span class="tag">#PSOE</span><span class="tag">#Espagne</span><span class="tag">#femme</span><span class="tag">#socialiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-sd">préside le groupe → Groupe S&amp;D</a></li><li><a href="#e-psoe">membre de → PSOE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-bardella">
+          <h3>Jordan Bardella</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Président du groupe Patriots for Europe et du Rassemblement National français. Plus jeune président de groupe au PE.</p>
+          <p class="date">📅 1995</p>
+          <div class="tags"><span class="tag">#PfE</span><span class="tag">#président-groupe</span><span class="tag">#RN</span><span class="tag">#France</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pfe">préside le groupe → Patriots for Europe</a></li><li><a href="#e-rn">préside → Rassemblement National</a></li><li><a href="#e-lepen">mentor de → Marine Le Pen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-hayer">
+          <h3>Valérie Hayer</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Présidente du groupe Renew Europe. Renaissance français (parti de Macron). Tête de liste aux européennes 2024.</p>
+          <p class="date">📅 1986</p>
+          <div class="tags"><span class="tag">#Renew</span><span class="tag">#présidente-groupe</span><span class="tag">#Renaissance</span><span class="tag">#France</span><span class="tag">#femme</span><span class="tag">#macroniste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-renew">préside le groupe → Renew Europe</a></li><li><a href="#e-renaissance">membre de → Renaissance</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-reintke">
+          <h3>Terry Reintke</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Co-présidente du groupe Verts/ALE. Grünen allemande. Militante LGBT+.</p>
+          <p class="date">📅 1987</p>
+          <div class="tags"><span class="tag">#Verts</span><span class="tag">#co-présidente</span><span class="tag">#Grüne</span><span class="tag">#Allemagne</span><span class="tag">#femme</span><span class="tag">#LGBT</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-greens">co-préside → Verts/ALE</a></li><li><a href="#e-grune">membre de → Bündnis 90/Die Grünen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-aubry">
+          <h3>Manon Aubry</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          
+          <p class="desc">Co-présidente du groupe The Left. La France Insoumise. Ancienne porte-parole d&#39;Oxfam France.</p>
+          <p class="date">📅 1989</p>
+          <div class="tags"><span class="tag">#Left</span><span class="tag">#co-présidente</span><span class="tag">#LFI</span><span class="tag">#France</span><span class="tag">#femme</span><span class="tag">#gauche-radicale</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-left">co-préside → The Left - GUE/NGL</a></li><li><a href="#e-lfi">membre de → La France Insoumise</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-meloni">
+          <h3>Giorgia Meloni</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          
+          <p class="desc">Première ministre d&#39;Italie depuis 2022. Présidente de Fratelli d&#39;Italia et ancienne présidente de l&#39;ECR (jusqu&#39;en déc. 2024). Première femme à diriger le gouvernement italien.</p>
+          <p class="date">📅 1977</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#Premier-ministre</span><span class="tag">#FDI</span><span class="tag">#ECR</span><span class="tag">#droite</span><span class="tag">#femme</span><span class="tag">#conservateur</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-fdi">préside → Fratelli d&#39;Italia</a></li><li><a href="#e-ecr">ancienne présidente de → Groupe ECR</a></li><li><a href="#e-orban">rivalité avec → Viktor Orbán</a></li><li><a href="#e-vonderleyen">négociations avec → Ursula von der Leyen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-orban">
+          <h3>Viktor Orbán</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Premier ministre de Hongrie depuis 2010. Président du Fidesz. Fondateur de Patriots for Europe. Critiqué pour dérive autoritaire.</p>
+          <p class="date">📅 1963</p>
+          <div class="tags"><span class="tag">#Hongrie</span><span class="tag">#Premier-ministre</span><span class="tag">#Fidesz</span><span class="tag">#PfE</span><span class="tag">#autoritarisme</span><span class="tag">#illibéralisme</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-fidesz">préside → Fidesz</a></li><li><a href="#e-pfe">fondateur de → Patriots for Europe</a></li><li><a href="#e-meloni">rivalité avec → Giorgia Meloni</a></li><li><a href="#e-babis">alliance avec → Andrej Babiš</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-macron">
+          <h3>Emmanuel Macron</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Président de la République française depuis 2017. Fondateur de Renaissance/En Marche. Pro-européen, centriste.</p>
+          <p class="date">📅 1977</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#président</span><span class="tag">#Renaissance</span><span class="tag">#Renew</span><span class="tag">#pro-UE</span><span class="tag">#centriste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-renaissance">fondateur de → Renaissance</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-scholz">
+          <h3>Olaf Scholz</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Chancelier d&#39;Allemagne depuis 2021. SPD. Coalition &quot;feu tricolore&quot; (SPD-Verts-FDP) dissoute en novembre 2024.</p>
+          <p class="date">📅 1958</p>
+          <div class="tags"><span class="tag">#Allemagne</span><span class="tag">#chancelier</span><span class="tag">#SPD</span><span class="tag">#S&D</span><span class="tag">#social-démocrate</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-spd">membre de → SPD</a></li><li><a href="#e-chute_scholz">affecte → Chute de la coalition Scholz</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-tusk">
+          <h3>Donald Tusk</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Premier ministre de Pologne depuis 2023. Plateforme civique (PO). Ancien président du Conseil européen (2014-2019). Pro-UE.</p>
+          <p class="date">📅 1957</p>
+          <div class="tags"><span class="tag">#Pologne</span><span class="tag">#Premier-ministre</span><span class="tag">#PO</span><span class="tag">#PPE</span><span class="tag">#pro-UE</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-po">leader de → Platforma Obywatelska</a></li><li><a href="#e-pis">adversaire de → Prawo i Sprawiedliwość</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-sanchez">
+          <h3>Pedro Sánchez</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Président du gouvernement espagnol depuis 2018. PSOE. Coalition avec Sumar.</p>
+          <p class="date">📅 1972</p>
+          <div class="tags"><span class="tag">#Espagne</span><span class="tag">#Premier-ministre</span><span class="tag">#PSOE</span><span class="tag">#S&D</span><span class="tag">#socialiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-psoe">secrétaire général de → PSOE</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-lepen">
+          <h3>Marine Le Pen</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">MLP</p>
+          <p class="desc">Présidente d&#39;honneur du RN. Candidate à la présidentielle 2017, 2022, potentiellement 2027. Condamnée en 2025 pour détournement de fonds européens.</p>
+          <p class="date">📅 1968</p>
+          <div class="tags"><span class="tag">#France</span><span class="tag">#RN</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span><span class="tag">#présidentielle</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-rn">présidente d&#39;honneur de → Rassemblement National</a></li><li><a href="#e-condamnation_lepen">concerne → Condamnation de Marine Le Pen</a></li><li><a href="#e-bardella">mentor de → Jordan Bardella</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-salvini">
+          <h3>Matteo Salvini</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Vice-Premier ministre d&#39;Italie et ministre des Infrastructures. Secrétaire fédéral de la Lega. Patriots for Europe.</p>
+          <p class="date">📅 1973</p>
+          <div class="tags"><span class="tag">#Italie</span><span class="tag">#Lega</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#souverainiste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-lega">secrétaire fédéral de → Lega</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-morawiecki">
+          <h3>Mateusz Morawiecki</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          
+          <p class="desc">Ancien Premier ministre de Pologne (2017-2023). PiS. Président de l&#39;ECR depuis décembre 2024, succédant à Meloni.</p>
+          <p class="date">📅 1968</p>
+          <div class="tags"><span class="tag">#Pologne</span><span class="tag">#PiS</span><span class="tag">#ECR</span><span class="tag">#conservateur</span><span class="tag">#président-groupe</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ecr">préside le groupe → Groupe ECR</a></li><li><a href="#e-pis">membre de → Prawo i Sprawiedliwość</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-wilders">
+          <h3>Geert Wilders</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Leader du PVV néerlandais. Vainqueur des élections 2023 aux Pays-Bas. Islamophobe, eurosceptique. Patriots for Europe.</p>
+          <p class="date">📅 1963</p>
+          <div class="tags"><span class="tag">#Pays-Bas</span><span class="tag">#PVV</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#islamophobe</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-pvv">leader de → PVV</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-abascal">
+          <h3>Santiago Abascal</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Président de Vox (Espagne). Parti d&#39;extrême-droite espagnol. A rejoint Patriots for Europe en 2024 (quittant l&#39;ECR).</p>
+          <p class="date">📅 1976</p>
+          <div class="tags"><span class="tag">#Espagne</span><span class="tag">#Vox</span><span class="tag">#PfE</span><span class="tag">#extrême-droite</span><span class="tag">#nationaliste</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-vox">président de → Vox</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-babis">
+          <h3>Andrej Babiš</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Ancien Premier ministre tchèque. Parti ANO. Co-fondateur de Patriots for Europe avec Orbán en 2024.</p>
+          <p class="date">📅 1954</p>
+          <div class="tags"><span class="tag">#Tchéquie</span><span class="tag">#ANO</span><span class="tag">#PfE</span><span class="tag">#populiste</span><span class="tag">#oligarque</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ano">fondateur de → ANO 2011</a></li><li><a href="#e-orban">alliance avec → Viktor Orbán</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ent-neo">
+          <h3>Neo</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">L’Élu capable de manipuler la Matrice.</p>
+          
+          <div class="tags"><span class="tag">#elu</span><span class="tag">#resistance</span><span class="tag">#code</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-matrix">manipule → La Matrice</a></li><li><a href="#e-ent-morpheus">guide → Morpheus</a></li><li><a href="#e-ent-trinity">soutient → Trinity</a></li><li><a href="#e-ent-pill">choisit → Pilule Rouge</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ent-trinity">
+          <h3>Trinity</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Combattante de la résistance humaine.</p>
+          
+          <div class="tags"><span class="tag">#resistance</span><span class="tag">#combat</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-neo">soutient → Neo</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ent-morpheus">
+          <h3>Morpheus</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          
+          <p class="desc">Chef de la résistance et mentor de Neo.</p>
+          
+          <div class="tags"><span class="tag">#resistance</span><span class="tag">#mentor</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-neo">guide → Neo</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-ent-smith">
+          <h3>Agent Smith</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          
+          <p class="desc">Programme autonome cherchant à détruire l’équilibre.</p>
+          
+          <div class="tags"><span class="tag">#agent</span><span class="tag">#virus</span><span class="tag">#controle</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-matrix">controle → La Matrice</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-frodo">
+          <h3>Frodon Sacquet</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Frodo Baggins, Porteur de l&#39;Anneau, M. Soucolline</p>
+          <p class="desc">Hobbit de la Comté, neveu et héritier de Bilbon. Porteur de l&#39;Anneau Unique, il entreprend la quête pour le détruire dans les flammes de la Montagne du Destin. Personnage central de la trilogie.</p>
+          <p class="date">📅 2968-09-22</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#porteur</span><span class="tag">#communauté</span><span class="tag">#héros</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-sam">
+          <h3>Samsagace Gamegie</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Sam Gamgee, Maître Samsagace</p>
+          <p class="desc">Jardinier de Frodon et son plus fidèle compagnon. Incarne la loyauté et le courage ordinaire. Porte brièvement l&#39;Anneau. Devient maire de la Comté.</p>
+          <p class="date">📅 2980-04-06</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#communauté</span><span class="tag">#jardinier</span><span class="tag">#héros</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-gandalf">
+          <h3>Gandalf</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Mithrandir, Gandalf le Gris, Gandalf le Blanc, Olórin, Tharkûn</p>
+          <p class="desc">Istari (magicien) envoyé par les Valar. Guide de la Communauté. Meurt face au Balrog à Moria et revient comme Gandalf le Blanc. Porteur de Narya, l&#39;anneau de feu.</p>
+          
+          <div class="tags"><span class="tag">#istari</span><span class="tag">#maiar</span><span class="tag">#communauté</span><span class="tag">#magicien</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-aragorn">
+          <h3>Aragorn II</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Grand-Pas, Elessar, Estel, Thorongil, Roi du Gondor</p>
+          <p class="desc">Héritier d&#39;Isildur, 16e chef des Dúnedain du Nord. Rôdeur devenu roi du Gondor et de l&#39;Arnor réunifiés. Épouse Arwen après la guerre.</p>
+          <p class="date">📅 2931-03-01</p>
+          <div class="tags"><span class="tag">#dúnedain</span><span class="tag">#communauté</span><span class="tag">#roi</span><span class="tag">#rôdeur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-legolas">
+          <h3>Legolas Vertefeuille</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Legolas Greenleaf</p>
+          <p class="desc">Prince elfe de la Forêt Noire, fils du roi Thranduil. Archer d&#39;exception. Membre de la Communauté. Développe une amitié improbable avec Gimli le nain.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#communauté</span><span class="tag">#archer</span><span class="tag">#prince</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-gimli">
+          <h3>Gimli</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Ami des Elfes, Seigneur des Cavernes Étincelantes</p>
+          <p class="desc">Nain des Montagnes Bleues, fils de Gloïn. Guerrier à la hache. Sa rivalité avec Legolas se transforme en amitié légendaire. Reçoit trois cheveux de Galadriel.</p>
+          <p class="date">📅 2879</p>
+          <div class="tags"><span class="tag">#nain</span><span class="tag">#communauté</span><span class="tag">#guerrier</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-boromir">
+          <h3>Boromir</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Fils de Denethor</p>
+          <p class="desc">Fils aîné de Denethor II, Intendant du Gondor. Capitaine de la Tour Blanche. Tenté par l&#39;Anneau, il se rachète en défendant Merry et Pippin jusqu&#39;à la mort.</p>
+          <p class="date">📅 2978</p>
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#communauté</span><span class="tag">#capitaine</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-merry">
+          <h3>Meriadoc Brandebouc</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Merry, Holdwine du Rohan</p>
+          <p class="desc">Hobbit cousin de Frodon. Membre de la Communauté. Écuyer du roi Théoden. Aide Éowyn à vaincre le Roi-Sorcier d&#39;Angmar avec une lame de l&#39;Ouistrenesse.</p>
+          <p class="date">📅 2982</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#communauté</span><span class="tag">#écuyer</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-pippin">
+          <h3>Peregrïn Touque</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Pippin, Garde de la Citadelle</p>
+          <p class="desc">Plus jeune membre de la Communauté. Regarder dans le Palantír déclenche des événements cruciaux. Devient Garde de la Citadelle du Gondor.</p>
+          <p class="date">📅 2990</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#communauté</span><span class="tag">#garde</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-sauron">
+          <h3>Sauron</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Le Seigneur Ténébreux, Annatar, Gorthaur, L&#39;Œil, Le Nécromancien</p>
+          <p class="desc">Maiar corrompu par Morgoth. Forgea l&#39;Anneau Unique pour contrôler tous les autres anneaux de pouvoir. Son esprit est lié à l&#39;Anneau.</p>
+          
+          <div class="tags"><span class="tag">#maiar</span><span class="tag">#antagoniste</span><span class="tag">#mordor</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-saruman">
+          <h3>Saroumane</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Saruman le Blanc, Sharkey, Saroumane le Multicolore</p>
+          <p class="desc">Chef du Conseil des Istari. Corrompu par son usage du Palantír et sa soif de pouvoir. Crée les Uruk-hai. Détruit par Sauron puis par Gríma.</p>
+          
+          <div class="tags"><span class="tag">#istari</span><span class="tag">#traître</span><span class="tag">#isengard</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-gollum">
+          <h3>Gollum</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">Sméagol, Trahald</p>
+          <p class="desc">Anciennement un hobbit des Forts, corrompu par l&#39;Anneau pendant 500 ans. Guide Frodon et Sam vers le Mordor. Sa chute dans le feu détruit finalement l&#39;Anneau.</p>
+          <p class="date">📅 2430</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#porteur</span><span class="tag">#guide</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-elrond">
+          <h3>Elrond Semi-elfe</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Maître de Fondcombe</p>
+          <p class="desc">Seigneur de Fondcombe, père d&#39;Arwen. Porteur de Vilya, l&#39;anneau d&#39;air. Convoque le Conseil qui décide du sort de l&#39;Anneau. A combattu lors de la Dernière Alliance.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#semi-elfe</span><span class="tag">#seigneur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-galadriel">
+          <h3>Galadriel</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Dame de Lórien, Dame de Lumière</p>
+          <p class="desc">Dame de la Lothlórien avec Celeborn. Porteuse de Nenya, l&#39;anneau d&#39;eau. L&#39;une des plus puissantes elfes de la Terre du Milieu. Résiste à la tentation de l&#39;Anneau.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#noldor</span><span class="tag">#dame</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-arwen">
+          <h3>Arwen Undómiel</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Étoile du Soir</p>
+          <p class="desc">Fille d&#39;Elrond, renonce à l&#39;immortalité pour épouser Aragorn. Symbole de l&#39;amour entre elfes et hommes.</p>
+          <p class="date">📅 241-TA</p>
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#semi-elfe</span><span class="tag">#princesse</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-theoden">
+          <h3>Théoden</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Roi de Rohan, Théoden Ednew</p>
+          <p class="desc">17e roi du Rohan. Libéré de l&#39;influence de Saroumane par Gandalf. Mène la charge héroïque sur les champs du Pelennor où il trouve la mort.</p>
+          <p class="date">📅 2948</p>
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#roi</span><span class="tag">#rohirrim</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-eowyn">
+          <h3>Éowyn</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Dame Blanche de Rohan, Dernhelm</p>
+          <p class="desc">Nièce de Théoden, sœur d&#39;Éomer. Déguisée en homme, elle tue le Roi-Sorcier d&#39;Angmar avec l&#39;aide de Merry. Épouse Faramir.</p>
+          <p class="date">📅 2995</p>
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#dame</span><span class="tag">#guerrière</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-faramir">
+          <h3>Faramir</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Capitaine de l&#39;Ithilien, Prince de l&#39;Ithilien</p>
+          <p class="desc">Second fils de Denethor, frère de Boromir. Capitaine des Rôdeurs d&#39;Ithilien. Résiste à la tentation de l&#39;Anneau. Épouse Éowyn.</p>
+          <p class="date">📅 2983</p>
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#capitaine</span><span class="tag">#rôdeur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #6b7894" id="e-denethor">
+          <h3>Denethor II</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#6b789422;color:#6b7894">undecided</span></div>
+          <p class="alias">Intendant du Gondor</p>
+          <p class="desc">26e Intendant Régnant du Gondor. Père de Boromir et Faramir. Consumé par le désespoir via le Palantír, se suicide sur un bûcher.</p>
+          <p class="date">📅 2930</p>
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#intendant</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-bilbo">
+          <h3>Bilbon Sacquet</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Bilbo Baggins, Le Cambrioleur</p>
+          <p class="desc">Oncle de Frodon. Trouva l&#39;Anneau dans la caverne de Gollum. Auteur du Livre Rouge. Part pour Fondcombe puis les Havres Gris.</p>
+          <p class="date">📅 2890-09-22</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#porteur</span><span class="tag">#aventurier</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-witchking">
+          <h3>Roi-Sorcier d&#39;Angmar</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Seigneur des Nazgûl, Capitaine Noir</p>
+          <p class="desc">Chef des Neuf Nazgûl. Ancien roi humain corrompu par un anneau de pouvoir. Tué par Éowyn et Merry lors de la bataille des Champs du Pelennor.</p>
+          
+          <div class="tags"><span class="tag">#nazgûl</span><span class="tag">#antagoniste</span><span class="tag">#spectre</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-treebeard">
+          <h3>Sylvebarbe</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Fangorn, Treebeard</p>
+          <p class="desc">Le plus ancien des Ents, gardiens de la forêt de Fangorn. Mène l&#39;attaque des Ents contre Isengard.</p>
+          
+          <div class="tags"><span class="tag">#ent</span><span class="tag">#gardien</span><span class="tag">#ancien</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-grima">
+          <h3>Gríma Langue-de-Serpent</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Wormtongue</p>
+          <p class="desc">Conseiller de Théoden, espion de Saroumane. Empoisonne l&#39;esprit du roi. Finit par tuer Saroumane et est lui-même abattu.</p>
+          
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#traître</span><span class="tag">#espion</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-eomer">
+          <h3>Éomer</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Roi Éomer, 3e Maréchal</p>
+          <p class="desc">Neveu de Théoden, frère d&#39;Éowyn. Devient 18e roi du Rohan après la mort de son oncle.</p>
+          <p class="date">📅 2991</p>
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#roi</span><span class="tag">#maréchal</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-celeborn">
+          <h3>Celeborn</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Seigneur de Lórien</p>
+          <p class="desc">Époux de Galadriel, co-seigneur de la Lothlórien. Elfe Sindar d&#39;origine.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#sindar</span><span class="tag">#seigneur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-haldir">
+          <h3>Haldir</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Gardien de la Lórien</p>
+          <p class="desc">Capitaine des gardes de la Lothlórien. Guide la Communauté à travers les bois.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#gardien</span><span class="tag">#capitaine</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-thranduil">
+          <h3>Thranduil</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Roi de la Forêt Noire</p>
+          <p class="desc">Roi des Elfes Sylvains de la Forêt Noire, père de Legolas.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#roi</span><span class="tag">#sindar</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-glorfindel">
+          <h3>Glorfindel</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Seigneur elfe</p>
+          <p class="desc">Puissant seigneur elfe de Fondcombe. Sauve Frodon des Nazgûl au Gué de Bruinen.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#noldor</span><span class="tag">#seigneur</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-tom">
+          <h3>Tom Bombadil</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Iarwain Ben-adar, L&#39;Aîné</p>
+          <p class="desc">Être mystérieux vivant dans la Vieille Forêt. L&#39;Anneau n&#39;a aucun pouvoir sur lui. Sa nature exacte reste inconnue.</p>
+          
+          <div class="tags"><span class="tag">#mystère</span><span class="tag">#ancien</span><span class="tag">#forêt</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-radagast">
+          <h3>Radagast le Brun</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Aiwendil</p>
+          <p class="desc">Istari ami des animaux et de la nature. Envoyé par Yavanna.</p>
+          
+          <div class="tags"><span class="tag">#istari</span><span class="tag">#maiar</span><span class="tag">#nature</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-shelob">
+          <h3>Arachne</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Shelob, Elle</p>
+          <p class="desc">Araignée géante descendante d&#39;Ungoliant. Vit dans les tunnels de Cirith Ungol. Empoisonne Frodon mais est blessée par Sam.</p>
+          
+          <div class="tags"><span class="tag">#araignée</span><span class="tag">#antagoniste</span><span class="tag">#mordor</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-gothmog">
+          <h3>Gothmog</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Lieutenant de Morgul</p>
+          <p class="desc">Lieutenant de Minas Morgul, commande les forces de Sauron lors du siège de Minas Tirith.</p>
+          
+          <div class="tags"><span class="tag">#antagoniste</span><span class="tag">#mordor</span><span class="tag">#orc</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-shagrat">
+          <h3>Shagrat</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Capitaine de la Tour</p>
+          <p class="desc">Capitaine Uruk de la Tour de Cirith Ungol. Se bat contre Gorbag pour le mithril de Frodon.</p>
+          
+          <div class="tags"><span class="tag">#uruk</span><span class="tag">#mordor</span><span class="tag">#capitaine</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-lurtz">
+          <h3>Lurtz</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Chef Uruk-hai</p>
+          <p class="desc">Premier-né des Uruk-hai de Saroumane. Tue Boromir à Amon Hen. Tué par Aragorn.</p>
+          
+          <div class="tags"><span class="tag">#uruk-hai</span><span class="tag">#isengard</span><span class="tag">#capitaine</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #f87171" id="e-mouth">
+          <h3>Bouche de Sauron</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#f8717122;color:#f87171">adversary</span></div>
+          <p class="alias">Lieutenant de Barad-dûr, Messager</p>
+          <p class="desc">Homme noir de Númenor, lieutenant de la Tour Sombre. Négocie à la Porte Noire.</p>
+          
+          <div class="tags"><span class="tag">#homme</span><span class="tag">#mordor</span><span class="tag">#lieutenant</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-isildur">
+          <h3>Isildur</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Roi du Gondor et de l&#39;Arnor</p>
+          <p class="desc">Fils d&#39;Elendil. Coupa l&#39;Anneau de la main de Sauron mais refusa de le détruire. Tué par les Orques, l&#39;Anneau fut perdu dans l&#39;Anduin.</p>
+          
+          <div class="tags"><span class="tag">#dúnedain</span><span class="tag">#roi</span><span class="tag">#histoire</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-elendil">
+          <h3>Elendil</h3>
+          <div class="badges"><span class="badge" style="background:#4da6ff22;color:#4da6ff">person</span><span class="badge" style="background:#4ade8022;color:#4ade80">ally</span></div>
+          <p class="alias">Le Grand</p>
+          <p class="desc">Fondateur des royaumes de Gondor et d&#39;Arnor. Tué par Sauron lors de la Dernière Alliance.</p>
+          
+          <div class="tags"><span class="tag">#dúnedain</span><span class="tag">#roi</span><span class="tag">#histoire</span></div>
+          
+        </article></div></section><section id="type-place">
+      <h2>📍 Places <span class="count">(35)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid #4ade80" id="e-strasbourg">
+          <h3>Strasbourg</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          
+          <p class="desc">Siège officiel du Parlement européen. Sessions plénières mensuelles. Symbole de la réconciliation franco-allemande.</p>
+          
+          <div class="tags"><span class="tag">#PE</span><span class="tag">#siège</span><span class="tag">#France</span><span class="tag">#Alsace</span><span class="tag">#sessions</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ep">siège à → Parlement européen</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-bruxelles">
+          <h3>Bruxelles</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Brussels</p>
+          <p class="desc">Capitale de facto de l&#39;UE. Siège de la Commission, du Conseil et des commissions du PE. Quartier européen.</p>
+          
+          <div class="tags"><span class="tag">#UE</span><span class="tag">#Commission</span><span class="tag">#Conseil</span><span class="tag">#Belgique</span><span class="tag">#institutions</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ec">siège à → Commission européenne</a></li></ul></div>
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ent-zion">
+          <h3>Zion</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          
+          <p class="desc">Dernière cité humaine libre.</p>
+          
+          <div class="tags"><span class="tag">#resistance</span><span class="tag">#humanite</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-shire">
+          <h3>La Comté</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">The Shire, Pays des Hobbits</p>
+          <p class="desc">Région paisible habitée par les Hobbits. Divisée en quatre Quartiers. Protégée secrètement par les Rôdeurs.</p>
+          <p class="date">📅 1601-TA</p>
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#région</span><span class="tag">#paix</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-hobbiton">
+          <h3>Hobbitebourg</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Hobbiton</p>
+          <p class="desc">Village de la Comté où se trouve Cul-de-Sac, demeure de Bilbon et Frodon.</p>
+          
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#village</span><span class="tag">#comté</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-bagend">
+          <h3>Cul-de-Sac</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Bag End</p>
+          <p class="desc">Trou de hobbit luxueux creusé dans la Colline de Hobbitebourg. Demeure des Sacquet.</p>
+          
+          <div class="tags"><span class="tag">#hobbit</span><span class="tag">#demeure</span><span class="tag">#comté</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-rivendell">
+          <h3>Fondcombe</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Rivendell, Imladris</p>
+          <p class="desc">Refuge elfique caché dans une vallée. Demeure d&#39;Elrond. Lieu du Conseil qui forme la Communauté de l&#39;Anneau.</p>
+          <p class="date">📅 1697-SA</p>
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#refuge</span><span class="tag">#vallée</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-moria">
+          <h3>Moria</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Khazad-dûm, Mines de la Moria, Cavenain</p>
+          <p class="desc">Ancien royaume nain sous les Monts Brumeux. Abandonné après l&#39;éveil du Balrog. La Communauté y perd Gandalf.</p>
+          
+          <div class="tags"><span class="tag">#nain</span><span class="tag">#mines</span><span class="tag">#danger</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-lothlorien">
+          <h3>Lothlórien</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Lórien, Bois Doré</p>
+          <p class="desc">Forêt elfique gouvernée par Galadriel et Celeborn. Sanctuaire protégé par le pouvoir de Nenya.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#forêt</span><span class="tag">#refuge</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-rohan">
+          <h3>Rohan</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Riddermark, Pays des Seigneurs des Chevaux</p>
+          <p class="desc">Royaume des Rohirrim, peuple cavalier. Allié du Gondor par serment. Capitale: Edoras.</p>
+          <p class="date">📅 2510-TA</p>
+          <div class="tags"><span class="tag">#rohirrim</span><span class="tag">#royaume</span><span class="tag">#chevaux</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-edoras">
+          <h3>Edoras</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Capitale du Rohan</p>
+          <p class="desc">Cité royale du Rohan, siège de Meduseld, le palais doré.</p>
+          
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#capitale</span><span class="tag">#citadelle</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-helmsdeep">
+          <h3>Gouffre de Helm</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Helm&#39;s Deep, Fort le Cor</p>
+          <p class="desc">Forteresse du Rohan dans les Montagnes Blanches. Théâtre d&#39;une bataille décisive contre les Uruk-hai.</p>
+          
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#forteresse</span><span class="tag">#bataille</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-gondor">
+          <h3>Gondor</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Royaume du Sud</p>
+          <p class="desc">Royaume des Dúnedain du Sud, fondé par Elendil et ses fils. Gouverné par des Intendants en l&#39;absence du roi.</p>
+          <p class="date">📅 3320-SA</p>
+          <div class="tags"><span class="tag">#dúnedain</span><span class="tag">#royaume</span><span class="tag">#hommes</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-minastirith">
+          <h3>Minas Tirith</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Cité des Rois, Tour de Garde, Mundburg</p>
+          <p class="desc">Capitale du Gondor. Cité à sept niveaux construite sur un éperon rocheux. Théâtre de la bataille des Champs du Pelennor.</p>
+          
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#capitale</span><span class="tag">#citadelle</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-osgiliath">
+          <h3>Osgiliath</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Citadelle des Étoiles</p>
+          <p class="desc">Ancienne capitale du Gondor sur l&#39;Anduin. En ruines après les guerres contre le Mordor.</p>
+          
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#ruines</span><span class="tag">#rivière</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-mordor">
+          <h3>Mordor</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Pays Noir, Terre de l&#39;Ombre</p>
+          <p class="desc">Royaume de Sauron. Entouré de montagnes. Contient Barad-dûr et la Montagne du Destin.</p>
+          
+          <div class="tags"><span class="tag">#sauron</span><span class="tag">#ténèbres</span><span class="tag">#royaume</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-barad-dur">
+          <h3>Barad-dûr</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Tour Sombre, Lugbúrz</p>
+          <p class="desc">Forteresse de Sauron en Mordor. Construite avec le pouvoir de l&#39;Anneau, elle s&#39;effondre à sa destruction.</p>
+          
+          <div class="tags"><span class="tag">#mordor</span><span class="tag">#forteresse</span><span class="tag">#sauron</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-mountdoom">
+          <h3>Montagne du Destin</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Orodruin, Mont Doom, Amon Amarth</p>
+          <p class="desc">Volcan de Mordor où Sauron forgea l&#39;Anneau. Seul endroit où l&#39;Anneau peut être détruit.</p>
+          
+          <div class="tags"><span class="tag">#mordor</span><span class="tag">#volcan</span><span class="tag">#anneau</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-isengard">
+          <h3>Isengard</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Angrenost</p>
+          <p class="desc">Forteresse à la limite sud des Monts Brumeux. Siège de Saroumane et de la tour d&#39;Orthanc. Détruite par les Ents.</p>
+          
+          <div class="tags"><span class="tag">#saroumane</span><span class="tag">#forteresse</span><span class="tag">#orthanc</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-fangorn">
+          <h3>Forêt de Fangorn</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Entwood</p>
+          <p class="desc">Ancienne forêt où vivent les Ents. Merry et Pippin y rencontrent Sylvebarbe.</p>
+          
+          <div class="tags"><span class="tag">#ent</span><span class="tag">#forêt</span><span class="tag">#ancienne</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-mirkwood">
+          <h3>Forêt Noire</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Mirkwood, Vertbois-le-Grand</p>
+          <p class="desc">Grande forêt à l&#39;est des Monts Brumeux. Royaume de Thranduil au nord, corrompue par Dol Guldur au sud.</p>
+          
+          <div class="tags"><span class="tag">#forêt</span><span class="tag">#elfe</span><span class="tag">#danger</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-dolguldur">
+          <h3>Dol Guldur</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Colline de la Sorcellerie</p>
+          <p class="desc">Forteresse de Sauron dans le sud de la Forêt Noire, avant son retour en Mordor.</p>
+          
+          <div class="tags"><span class="tag">#forteresse</span><span class="tag">#sauron</span><span class="tag">#forêt</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-deadmarshes">
+          <h3>Marais des Morts</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Dead Marshes</p>
+          <p class="desc">Marécages hantés entre l&#39;Emyn Muil et le Mordor. Renferme les corps de soldats de l&#39;ancienne bataille de Dagorlad.</p>
+          
+          <div class="tags"><span class="tag">#marais</span><span class="tag">#morts</span><span class="tag">#danger</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-cirithungol">
+          <h3>Cirith Ungol</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Passage de l&#39;Araignée</p>
+          <p class="desc">Col secret menant au Mordor. Gardé par Arachne et une tour d&#39;orques.</p>
+          
+          <div class="tags"><span class="tag">#mordor</span><span class="tag">#passage</span><span class="tag">#araignée</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-pelennor">
+          <h3>Champs du Pelennor</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Pelennor Fields</p>
+          <p class="desc">Plaines devant Minas Tirith. Site de la plus grande bataille de la Guerre de l&#39;Anneau.</p>
+          
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#bataille</span><span class="tag">#plaines</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-blackgate">
+          <h3>Porte Noire</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Morannon, Black Gate</p>
+          <p class="desc">Entrée principale du Mordor. Site de la bataille finale où Aragorn défie Sauron.</p>
+          
+          <div class="tags"><span class="tag">#mordor</span><span class="tag">#porte</span><span class="tag">#bataille</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-greyhavens">
+          <h3>Havres Gris</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Mithlond, Grey Havens</p>
+          <p class="desc">Port elfique d&#39;où partent les navires vers les Terres Immortelles. Frodon y embarque à la fin.</p>
+          
+          <div class="tags"><span class="tag">#elfe</span><span class="tag">#port</span><span class="tag">#départ</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-bree">
+          <h3>Bree</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Village de Bree</p>
+          <p class="desc">Village à la croisée des chemins où Hobbits et Hommes cohabitent. Les hobbits y rencontrent Grand-Pas au Poney Fringant.</p>
+          
+          <div class="tags"><span class="tag">#village</span><span class="tag">#auberge</span><span class="tag">#carrefour</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-weathertop">
+          <h3>Mont Venteux</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Amon Sûl, Weathertop</p>
+          <p class="desc">Colline fortifiée en ruines où Frodon est poignardé par le Roi-Sorcier.</p>
+          
+          <div class="tags"><span class="tag">#ruines</span><span class="tag">#danger</span><span class="tag">#arnor</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-ithilien">
+          <h3>Ithilien</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Terre de la Lune</p>
+          <p class="desc">Province du Gondor à l&#39;ouest du Mordor. Faramir y commande les Rôdeurs.</p>
+          
+          <div class="tags"><span class="tag">#gondor</span><span class="tag">#province</span><span class="tag">#jardins</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-minasmorgul">
+          <h3>Minas Morgul</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Tour de la Sorcellerie, Minas Ithil</p>
+          <p class="desc">Ancienne Minas Ithil, corrompue par les Nazgûl. Émet une lueur verdâtre.</p>
+          
+          <div class="tags"><span class="tag">#nazgûl</span><span class="tag">#forteresse</span><span class="tag">#mordor</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-erebor">
+          <h3>Erebor</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Montagne Solitaire, Lonely Mountain</p>
+          <p class="desc">Royaume nain reconquis par Thorin et sa compagnie dans Le Hobbit. Gouverné par Dáin II.</p>
+          
+          <div class="tags"><span class="tag">#nain</span><span class="tag">#montagne</span><span class="tag">#royaume</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-dunharrow">
+          <h3>Dunharrow</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Fort le Cor</p>
+          <p class="desc">Refuge fortifié du Rohan dans les Montagnes Blanches. Entrée des Chemins des Morts.</p>
+          
+          <div class="tags"><span class="tag">#rohan</span><span class="tag">#refuge</span><span class="tag">#montagne</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-pathsdead">
+          <h3>Chemins des Morts</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Paths of the Dead</p>
+          <p class="desc">Passage hanté sous les Montagnes Blanches. Aragorn y recrute l&#39;Armée des Morts.</p>
+          
+          <div class="tags"><span class="tag">#morts</span><span class="tag">#passage</span><span class="tag">#montagne</span></div>
+          
+        </article><article class="card" style="border-left:4px solid #4ade80" id="e-amonhen">
+          <h3>Amon Hen</h3>
+          <div class="badges"><span class="badge" style="background:#4ade8022;color:#4ade80">place</span></div>
+          <p class="alias">Colline de l&#39;Œil</p>
+          <p class="desc">Colline au bord de l&#39;Anduin. La Communauté s&#39;y sépare après l&#39;attaque des Uruk-hai.</p>
+          
+          <div class="tags"><span class="tag">#colline</span><span class="tag">#anduin</span><span class="tag">#rupture</span></div>
+          
+        </article></div></section><section id="type-system">
+      <h2>📦 Systems <span class="count">(1)</span></h2>
+      <div class="grid"><article class="card" style="border-left:4px solid undefined" id="e-ent-matrix">
+          <h3>La Matrice</h3>
+          <div class="badges"><span class="badge" style="background:undefined22;color:undefined">system</span></div>
+          
+          <p class="desc">Simulation contrôlant l’humanité.</p>
+          
+          <div class="tags"><span class="tag">#simulation</span><span class="tag">#controle</span><span class="tag">#ia</span></div>
+          <div class="rels"><strong>Relations:</strong><ul><li><a href="#e-ent-neo">manipule → Neo</a></li><li><a href="#e-ent-smith">controle → Agent Smith</a></li></ul></div>
+        </article></div></section>
+<section class="graph" id="graph"><h2>🕸️ Graphe des Relations</h2><svg viewBox="0 0 800 600"><line x1="624.6174224217582" y1="384.54001150109605" x2="639.8715009943278" y2="307.8525798772263" stroke="#3a4255" stroke-width="0.5"/><line x1="624.6174224217582" y1="384.54001150109605" x2="513.1352168382394" y2="511.6611034436052" stroke="#3a4255" stroke-width="0.5"/><line x1="624.6174224217582" y1="384.54001150109605" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="621.7310878027088" y1="391.84402376762154" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="621.7310878027088" y1="391.84402376762154" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="618.6073179810821" y1="399.0496871530547" x2="639.4861415772648" y2="315.6967510152343" stroke="#3a4255" stroke-width="0.5"/><line x1="618.6073179810821" y1="399.0496871530547" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="615.2494579678453" y1="406.1492856525603" x2="639.8715009943278" y2="307.8525798772263" stroke="#3a4255" stroke-width="0.5"/><line x1="615.2494579678453" y1="406.1492856525603" x2="633.73047502656" y2="354.4983031282496" stroke="#3a4255" stroke-width="0.5"/><line x1="611.6611034436053" y1="413.13521683823944" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="611.6611034436053" y1="413.13521683823944" x2="513.1352168382394" y2="511.6611034436052" stroke="#3a4255" stroke-width="0.5"/><line x1="607.8460969082653" y1="420" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="607.8460969082653" y1="420" x2="407.8525798772263" y2="539.8715009943278" stroke="#3a4255" stroke-width="0.5"/><line x1="603.8085235663789" y1="426.73628415608835" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="603.8085235663789" y1="426.73628415608835" x2="484.54001150109605" y2="524.6174224217582" stroke="#3a4255" stroke-width="0.5"/><line x1="599.5527069526108" y1="433.33685592470454" x2="633.73047502656" y2="354.4983031282496" stroke="#3a4255" stroke-width="0.5"/><line x1="599.5527069526108" y1="433.33685592470454" x2="477.1454716727588" y2="527.2632310788254" stroke="#3a4255" stroke-width="0.5"/><line x1="595.0832043019876" y1="439.79464724827255" x2="631.8221983093764" y2="362.116570824605" stroke="#3a4255" stroke-width="0.5"/><line x1="595.0832043019876" y1="439.79464724827255" x2="499.0496871530547" y2="518.6073179810821" stroke="#3a4255" stroke-width="0.5"/><line x1="590.4048016698964" y1="446.102742962093" x2="629.6656805757301" y2="369.66832254107095" stroke="#3a4255" stroke-width="0.5"/><line x1="590.4048016698964" y1="446.102742962093" x2="469.668322541071" y2="529.6656805757301" stroke="#3a4255" stroke-width="0.5"/><line x1="539.7946472482726" y1="495.0832043019876" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="539.7946472482726" y1="495.0832043019876" x2="384.3032489847657" y2="539.4861415772648" stroke="#3a4255" stroke-width="0.5"/><line x1="585.5225088070569" y1="452.2543881992749" x2="446.8216772838708" y2="535.3884672967753" stroke="#3a4255" stroke-width="0.5"/><line x1="585.5225088070569" y1="452.2543881992749" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="580.4415537949546" y1="458.24299562401654" x2="376.4758863209055" y2="538.8443344013273" stroke="#3a4255" stroke-width="0.5"/><line x1="580.4415537949546" y1="458.24299562401654" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="575.1673774474806" y1="464.0621524854891" x2="477.1454716727588" y2="527.2632310788254" stroke="#3a4255" stroke-width="0.5"/><line x1="569.7056274847714" y1="469.7056274847714" x2="506.1492856525603" y2="515.2494579678453" stroke="#3a4255" stroke-width="0.5"/><line x1="564.0621524854892" y1="475.1673774474806" x2="392.1474201227737" y2="539.8715009943278" stroke="#3a4255" stroke-width="0.5"/><line x1="558.2429956240165" y1="480.4415537949546" x2="407.8525798772263" y2="539.8715009943278" stroke="#3a4255" stroke-width="0.5"/><line x1="552.2543881992749" y1="485.52250880705685" x2="484.54001150109605" y2="524.6174224217582" stroke="#3a4255" stroke-width="0.5"/><line x1="546.102742962093" y1="490.4048016698964" x2="431.3262861328124" y2="537.9467667297145" stroke="#3a4255" stroke-width="0.5"/><line x1="533.3368559247045" y1="499.55270695261083" x2="368.67371386718764" y2="537.9467667297145" stroke="#3a4255" stroke-width="0.5"/><line x1="526.7362841560883" y1="503.80852356637894" x2="400" y2="540" stroke="#3a4255" stroke-width="0.5"/><line x1="520" y1="507.8460969082653" x2="300.9503128469453" y2="518.6073179810822" stroke="#3a4255" stroke-width="0.5"/><line x1="513.1352168382394" y1="511.6611034436052" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="506.1492856525603" y1="515.2494579678453" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="499.0496871530547" y1="518.6073179810821" x2="631.8221983093764" y2="362.116570824605" stroke="#3a4255" stroke-width="0.5"/><line x1="491.8440237676216" y1="521.7310878027088" x2="627.2632310788254" y2="377.1454716727588" stroke="#3a4255" stroke-width="0.5"/><line x1="484.54001150109605" y1="524.6174224217582" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="477.1454716727588" y1="527.2632310788254" x2="633.73047502656" y2="354.4983031282496" stroke="#3a4255" stroke-width="0.5"/><line x1="469.668322541071" y1="529.6656805757301" x2="629.6656805757301" y2="369.66832254107095" stroke="#3a4255" stroke-width="0.5"/><line x1="462.116570824605" y1="531.8221983093764" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="454.49830312824963" y1="533.73047502656" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="446.8216772838708" y1="535.3884672967753" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="439.09491361470134" y1="536.794399700371" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="431.3262861328124" y1="537.9467667297145" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="415.6967510152344" y1="539.4861415772648" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="407.8525798772263" y1="539.8715009943278" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="400" y1="540" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="392.1474201227737" y1="539.8715009943278" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="384.3032489847657" y1="539.4861415772648" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="376.4758863209055" y1="538.8443344013273" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="368.67371386718764" y1="537.9467667297145" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="353.17832271612923" y1="535.3884672967753" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="345.5016968717504" y1="533.73047502656" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="337.88342917539507" y1="531.8221983093764" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="330.3316774589291" y1="529.6656805757301" x2="638.8443344013273" y2="323.52411367909457" stroke="#3a4255" stroke-width="0.5"/><line x1="322.8545283272412" y1="527.2632310788254" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="315.45998849890395" y1="524.6174224217582" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="308.1559762323785" y1="521.7310878027089" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="300.9503128469453" y1="518.6073179810822" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="293.85071434743975" y1="515.2494579678453" x2="631.8221983093764" y2="362.116570824605" stroke="#3a4255" stroke-width="0.5"/><line x1="638.8443344013273" y1="323.52411367909457" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="637.9467667297145" y1="331.32628613281236" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="636.794399700371" y1="339.0949136147013" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="635.3884672967753" y1="346.82167728387077" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="633.73047502656" y1="354.4983031282496" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="631.8221983093764" y1="362.116570824605" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="629.6656805757301" y1="369.66832254107095" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="627.2632310788254" y1="377.1454716727588" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="638.8443344013273" y1="323.52411367909457" x2="637.9467667297145" y2="331.32628613281236" stroke="#3a4255" stroke-width="0.5"/><line x1="638.8443344013273" y1="323.52411367909457" x2="633.73047502656" y2="354.4983031282496" stroke="#3a4255" stroke-width="0.5"/><line x1="637.9467667297145" y1="331.32628613281236" x2="633.73047502656" y2="354.4983031282496" stroke="#3a4255" stroke-width="0.5"/><line x1="636.794399700371" y1="339.0949136147013" x2="635.3884672967753" y2="346.82167728387077" stroke="#3a4255" stroke-width="0.5"/><line x1="580.4415537949546" y1="458.24299562401654" x2="585.5225088070569" y2="452.2543881992749" stroke="#3a4255" stroke-width="0.5"/><line x1="580.4415537949546" y1="458.24299562401654" x2="520" y2="507.8460969082653" stroke="#3a4255" stroke-width="0.5"/><line x1="286.86478316176056" y1="511.6611034436052" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="280.00000000000006" y1="507.8460969082653" x2="636.794399700371" y2="339.0949136147013" stroke="#3a4255" stroke-width="0.5"/><line x1="273.26371584391165" y1="503.80852356637894" x2="624.6174224217582" y2="384.54001150109605" stroke="#3a4255" stroke-width="0.5"/><line x1="266.66314407529546" y1="499.55270695261083" x2="552.2543881992749" y2="485.52250880705685" stroke="#3a4255" stroke-width="0.5"/><line x1="253.89725703790705" y1="490.4048016698964" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="241.75700437598348" y1="480.4415537949546" x2="639.8715009943278" y2="307.8525798772263" stroke="#3a4255" stroke-width="0.5"/><line x1="624.6174224217582" y1="384.54001150109605" x2="241.75700437598348" y2="480.4415537949546" stroke="#3a4255" stroke-width="0.5"/><line x1="636.794399700371" y1="339.0949136147013" x2="241.75700437598348" y2="480.4415537949546" stroke="#3a4255" stroke-width="0.5"/><line x1="635.3884672967753" y1="346.82167728387077" x2="241.75700437598348" y2="480.4415537949546" stroke="#3a4255" stroke-width="0.5"/><line x1="640" y1="300" x2="230.29437251522862" y2="469.7056274847714" stroke="#3a4255" stroke-width="0.5"/><line x1="639.8715009943278" y1="307.8525798772263" x2="224.83262255251952" y2="464.06215248548915" stroke="#3a4255" stroke-width="0.5"/><line x1="552.2543881992749" y1="485.52250880705685" x2="603.8085235663789" y2="426.73628415608835" stroke="#3a4255" stroke-width="0.5"/><line x1="564.0621524854892" y1="475.1673774474806" x2="384.3032489847657" y2="539.4861415772648" stroke="#3a4255" stroke-width="0.5"/><line x1="585.5225088070569" y1="452.2543881992749" x2="624.6174224217582" y2="384.54001150109605" stroke="#3a4255" stroke-width="0.5"/><line x1="260.2053527517275" y1="495.0832043019876" x2="569.7056274847714" y2="469.7056274847714" stroke="#3a4255" stroke-width="0.5"/><line x1="235.93784751451088" y1="475.16737744748053" x2="640" y2="300" stroke="#3a4255" stroke-width="0.5"/><line x1="219.55844620504544" y1="458.24299562401654" x2="286.86478316176056" y2="511.6611034436052" stroke="#3a4255" stroke-width="0.5"/><line x1="214.47749119294312" y1="452.2543881992749" x2="196.1914764336211" y2="426.73628415608835" stroke="#3a4255" stroke-width="0.5"/><line x1="204.91679569801238" y1="439.79464724827255" x2="214.47749119294312" y2="452.2543881992749" stroke="#3a4255" stroke-width="0.5"/><line x1="200.4472930473892" y1="433.3368559247046" x2="196.1914764336211" y2="426.73628415608835" stroke="#3a4255" stroke-width="0.5"/><line x1="209.59519833010359" y1="446.102742962093" x2="214.47749119294312" y2="452.2543881992749" stroke="#3a4255" stroke-width="0.5"/><line x1="214.47749119294312" y1="452.2543881992749" x2="188.33889655639481" y2="413.1352168382395" stroke="#3a4255" stroke-width="0.5"/><g transform="translate(640,300)"><circle r="10" fill="#a78bfa"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Parlement </text></g><g transform="translate(639.8715009943278,307.8525798772263)"><circle r="10" fill="#a78bfa"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Commission</text></g><g transform="translate(639.4861415772648,315.6967510152343)"><circle r="10" fill="#a78bfa"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Conseil eu</text></g><g transform="translate(638.8443344013273,323.52411367909457)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Groupe PPE</text></g><g transform="translate(637.9467667297145,331.32628613281236)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Groupe S&amp;D</text></g><g transform="translate(636.794399700371,339.0949136147013)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Patriots f</text></g><g transform="translate(635.3884672967753,346.82167728387077)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Groupe ECR</text></g><g transform="translate(633.73047502656,354.4983031282496)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Renew Euro</text></g><g transform="translate(631.8221983093764,362.116570824605)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Verts/ALE</text></g><g transform="translate(629.6656805757301,369.66832254107095)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">The Left -</text></g><g transform="translate(627.2632310788254,377.1454716727588)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Europe of </text></g><g transform="translate(624.6174224217582,384.54001150109605)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Ursula von</text></g><g transform="translate(621.7310878027088,391.84402376762154)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Roberta Me</text></g><g transform="translate(618.6073179810821,399.0496871530547)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">António Co</text></g><g transform="translate(615.2494579678453,406.1492856525603)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Kaja Kalla</text></g><g transform="translate(611.6611034436053,413.13521683823944)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Manfred We</text></g><g transform="translate(607.8460969082653,420)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Iratxe Gar</text></g><g transform="translate(603.8085235663789,426.73628415608835)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Jordan Bar</text></g><g transform="translate(599.5527069526108,433.33685592470454)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Valérie Ha</text></g><g transform="translate(595.0832043019876,439.79464724827255)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Terry Rein</text></g><g transform="translate(590.4048016698964,446.102742962093)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Manon Aubr</text></g><g transform="translate(585.5225088070569,452.2543881992749)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Giorgia Me</text></g><g transform="translate(580.4415537949546,458.24299562401654)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Viktor Orb</text></g><g transform="translate(575.1673774474806,464.0621524854891)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Emmanuel M</text></g><g transform="translate(569.7056274847714,469.7056274847714)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Olaf Schol</text></g><g transform="translate(564.0621524854892,475.1673774474806)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Donald Tus</text></g><g transform="translate(558.2429956240165,480.4415537949546)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Pedro Sánc</text></g><g transform="translate(552.2543881992749,485.52250880705685)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Marine Le </text></g><g transform="translate(546.102742962093,490.4048016698964)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Matteo Sal</text></g><g transform="translate(539.7946472482726,495.0832043019876)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Mateusz Mo</text></g><g transform="translate(533.3368559247045,499.55270695261083)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Geert Wild</text></g><g transform="translate(526.7362841560883,503.80852356637894)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Santiago A</text></g><g transform="translate(520,507.8460969082653)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Andrej Bab</text></g><g transform="translate(513.1352168382394,511.6611034436052)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">CDU/CSU</text></g><g transform="translate(506.1492856525603,515.2494579678453)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">SPD</text></g><g transform="translate(499.0496871530547,518.6073179810821)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bündnis 90</text></g><g transform="translate(491.8440237676216,521.7310878027088)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Alternativ</text></g><g transform="translate(484.54001150109605,524.6174224217582)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Rassemblem</text></g><g transform="translate(477.1454716727588,527.2632310788254)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Renaissanc</text></g><g transform="translate(469.668322541071,529.6656805757301)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">La France </text></g><g transform="translate(462.116570824605,531.8221983093764)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Les Républ</text></g><g transform="translate(454.49830312824963,533.73047502656)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Parti Soci</text></g><g transform="translate(446.8216772838708,535.3884672967753)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Fratelli d</text></g><g transform="translate(439.09491361470134,536.794399700371)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Partito De</text></g><g transform="translate(431.3262861328124,537.9467667297145)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Lega</text></g><g transform="translate(423.5241136790945,538.8443344013273)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Movimento </text></g><g transform="translate(415.6967510152344,539.4861415772648)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Partido Po</text></g><g transform="translate(407.8525798772263,539.8715009943278)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">PSOE</text></g><g transform="translate(400,540)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Vox</text></g><g transform="translate(392.1474201227737,539.8715009943278)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Platforma </text></g><g transform="translate(384.3032489847657,539.4861415772648)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Prawo i Sp</text></g><g transform="translate(376.4758863209055,538.8443344013273)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Fidesz</text></g><g transform="translate(368.67371386718764,537.9467667297145)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">PVV</text></g><g transform="translate(360.9050863852987,536.794399700371)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">VVD</text></g><g transform="translate(353.17832271612923,535.3884672967753)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">N-VA</text></g><g transform="translate(345.5016968717504,533.73047502656)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Vlaams Bel</text></g><g transform="translate(337.88342917539507,531.8221983093764)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">FPÖ</text></g><g transform="translate(330.3316774589291,529.6656805757301)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">ÖVP</text></g><g transform="translate(322.8545283272412,527.2632310788254)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Sverigedem</text></g><g transform="translate(315.45998849890395,524.6174224217582)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Perussuoma</text></g><g transform="translate(308.1559762323785,521.7310878027089)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">ODS</text></g><g transform="translate(300.9503128469453,518.6073179810822)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">ANO 2011</text></g><g transform="translate(293.85071434743975,515.2494579678453)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Volt Europ</text></g><g transform="translate(286.86478316176056,511.6611034436052)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Élections </text></g><g transform="translate(280.00000000000006,507.8460969082653)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Création d</text></g><g transform="translate(273.26371584391165,503.80852356637894)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Réélection</text></g><g transform="translate(266.66314407529546,499.55270695261083)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Condamnati</text></g><g transform="translate(260.2053527517275,495.0832043019876)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Chute de l</text></g><g transform="translate(253.89725703790705,490.4048016698964)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Qatargate</text></g><g transform="translate(247.7456118007251,485.5225088070569)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Russiagate</text></g><g transform="translate(241.75700437598348,480.4415537949546)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Pacte vert</text></g><g transform="translate(235.93784751451088,475.16737744748053)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Pacte sur </text></g><g transform="translate(230.29437251522862,469.7056274847714)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Strasbourg</text></g><g transform="translate(224.83262255251952,464.06215248548915)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bruxelles</text></g><g transform="translate(219.55844620504544,458.24299562401654)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Système Sp</text></g><g transform="translate(214.47749119294312,452.2543881992749)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Neo</text></g><g transform="translate(209.59519833010359,446.102742962093)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Trinity</text></g><g transform="translate(204.91679569801238,439.79464724827255)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Morpheus</text></g><g transform="translate(200.4472930473892,433.3368559247046)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Agent Smit</text></g><g transform="translate(196.1914764336211,426.73628415608835)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">La Matrice</text></g><g transform="translate(192.15390309173472,420)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Zion</text></g><g transform="translate(188.33889655639481,413.1352168382395)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Pilule Rou</text></g><g transform="translate(184.75054203215484,406.1492856525604)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Frodon Sac</text></g><g transform="translate(181.39268201891778,399.0496871530547)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Samsagace </text></g><g transform="translate(178.26891219729117,391.8440237676216)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gandalf</text></g><g transform="translate(175.3825775782418,384.54001150109605)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Aragorn II</text></g><g transform="translate(172.73676892117467,377.14547167275884)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Legolas Ve</text></g><g transform="translate(170.33431942426992,369.66832254107106)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gimli</text></g><g transform="translate(168.17780169062362,362.11657082460505)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Boromir</text></g><g transform="translate(166.26952497343993,354.4983031282496)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Meriadoc B</text></g><g transform="translate(164.6115327032247,346.82167728387077)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Peregrïn T</text></g><g transform="translate(163.20560029962905,339.09491361470134)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Sauron</text></g><g transform="translate(162.05323327028552,331.32628613281247)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Saroumane</text></g><g transform="translate(161.15566559867275,323.5241136790946)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gollum</text></g><g transform="translate(160.51385842273515,315.6967510152343)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Elrond Sem</text></g><g transform="translate(160.12849900567224,307.8525798772262)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Galadriel</text></g><g transform="translate(160,300.00000000000006)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Arwen Undó</text></g><g transform="translate(160.12849900567224,292.14742012277384)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Théoden</text></g><g transform="translate(160.51385842273515,284.30324898476573)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Éowyn</text></g><g transform="translate(161.15566559867273,276.4758863209055)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Faramir</text></g><g transform="translate(162.05323327028552,268.6737138671876)"><circle r="10" fill="#6b7894"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Denethor I</text></g><g transform="translate(163.20560029962905,260.9050863852987)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bilbon Sac</text></g><g transform="translate(164.61153270322467,253.1783227161293)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Roi-Sorcie</text></g><g transform="translate(166.26952497343993,245.50169687175048)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Sylvebarbe</text></g><g transform="translate(168.1778016906236,237.883429175395)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gríma Lang</text></g><g transform="translate(170.3343194242699,230.331677458929)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Éomer</text></g><g transform="translate(172.73676892117464,222.8545283272412)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Celeborn</text></g><g transform="translate(175.38257757824178,215.459988498904)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Haldir</text></g><g transform="translate(178.26891219729114,208.15597623237846)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Thranduil</text></g><g transform="translate(181.39268201891775,200.95031284694534)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Glorfindel</text></g><g transform="translate(184.7505420321548,193.85071434743963)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Tom Bombad</text></g><g transform="translate(188.3388965563948,186.86478316176056)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Radagast l</text></g><g transform="translate(192.1539030917347,180.00000000000006)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Arachne</text></g><g transform="translate(196.19147643362106,173.2637158439117)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gothmog</text></g><g transform="translate(200.44729304738908,166.66314407529552)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Shagrat</text></g><g transform="translate(204.9167956980124,160.20535275172742)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Lurtz</text></g><g transform="translate(209.59519833010356,153.89725703790705)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bouche de </text></g><g transform="translate(214.4774911929431,147.74561180072513)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Isildur</text></g><g transform="translate(219.5584462050454,141.75700437598348)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Elendil</text></g><g transform="translate(224.83262255251938,135.93784751451096)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">La Comté</text></g><g transform="translate(230.2943725152285,130.2943725152287)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Hobbitebou</text></g><g transform="translate(235.9378475145109,124.83262255251944)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Cul-de-Sac</text></g><g transform="translate(241.75700437598343,119.55844620504544)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Fondcombe</text></g><g transform="translate(247.745611800725,114.4774911929432)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Moria</text></g><g transform="translate(253.897257037907,109.59519833010361)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Lothlórien</text></g><g transform="translate(260.20535275172745,104.91679569801238)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Rohan</text></g><g transform="translate(266.66314407529546,100.44729304738914)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Edoras</text></g><g transform="translate(273.26371584391177,96.19147643362103)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gouffre de</text></g><g transform="translate(279.9999999999999,92.15390309173478)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Gondor</text></g><g transform="translate(286.8647831617605,88.33889655639481)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Minas Tiri</text></g><g transform="translate(293.8507143474397,84.75054203215481)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Osgiliath</text></g><g transform="translate(300.9503128469453,81.39268201891778)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Mordor</text></g><g transform="translate(308.1559762323785,78.26891219729114)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Barad-dûr</text></g><g transform="translate(315.45998849890384,75.38257757824186)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Montagne d</text></g><g transform="translate(322.85452832724116,72.73676892117467)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Isengard</text></g><g transform="translate(330.331677458929,70.33431942426989)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Forêt de F</text></g><g transform="translate(337.88342917539507,68.1778016906236)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Forêt Noir</text></g><g transform="translate(345.5016968717505,66.2695249734399)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Dol Guldur</text></g><g transform="translate(353.1783227161291,64.61153270322473)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Marais des</text></g><g transform="translate(360.90508638529866,63.205600299629054)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Cirith Ung</text></g><g transform="translate(368.6737138671876,62.05323327028552)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Champs du </text></g><g transform="translate(376.47588632090526,61.155665598672755)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Porte Noir</text></g><g transform="translate(384.30324898476573,60.513858422735154)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Havres Gri</text></g><g transform="translate(392.1474201227736,60.12849900567224)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bree</text></g><g transform="translate(399.99999999999994,60)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Mont Vente</text></g><g transform="translate(407.8525798772263,60.12849900567224)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Ithilien</text></g><g transform="translate(415.69675101523416,60.513858422735126)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Minas Morg</text></g><g transform="translate(423.5241136790946,61.155665598672755)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Erebor</text></g><g transform="translate(431.3262861328123,62.05323327028549)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Dunharrow</text></g><g transform="translate(439.0949136147013,63.205600299629054)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Chemins de</text></g><g transform="translate(446.82167728387077,64.6115327032247)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Amon Hen</text></g><g transform="translate(454.4983031282494,66.26952497343987)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Communauté</text></g><g transform="translate(462.1165708246049,68.17780169062357)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Les Nazgûl</text></g><g transform="translate(469.6683225410709,70.33431942426986)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Les Ents</text></g><g transform="translate(477.14547167275873,72.73676892117464)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Rôdeurs du</text></g><g transform="translate(484.54001150109605,75.38257757824184)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Rohirrim</text></g><g transform="translate(491.84402376762137,78.26891219729112)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Conseil Bl</text></g><g transform="translate(499.0496871530546,81.39268201891775)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Uruk-hai</text></g><g transform="translate(506.14928565256025,84.75054203215475)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Armée des </text></g><g transform="translate(513.1352168382394,88.33889655639479)"><circle r="10" fill="#4ade80"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Les Istari</text></g><g transform="translate(520,92.15390309173475)"><circle r="10" fill="#a78bfa"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Parjures</text></g><g transform="translate(526.7362841560882,96.19147643362098)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Conseil d&#39;</text></g><g transform="translate(533.3368559247044,100.44729304738908)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bataille d</text></g><g transform="translate(539.7946472482724,104.91679569801232)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bataille d</text></g><g transform="translate(546.1027429620927,109.59519833010341)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bataille d</text></g><g transform="translate(552.2543881992748,114.477491192943)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Destructio</text></g><g transform="translate(558.2429956240165,119.55844620504547)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Bataille d</text></g><g transform="translate(564.0621524854892,124.83262255251952)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Fête d&#39;adi</text></g><g transform="translate(569.7056274847714,130.29437251522856)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Attaque du</text></g><g transform="translate(575.1673774474805,135.93784751451088)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Traversée </text></g><g transform="translate(580.4415537949546,141.7570043759835)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Mort de Bo</text></g><g transform="translate(585.5225088070567,147.745611800725)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Retour de </text></g><g transform="translate(590.4048016698964,153.897257037907)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Couronneme</text></g><g transform="translate(595.0832043019876,160.20535275172745)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Départ des</text></g><g transform="translate(599.5527069526107,166.6631440752953)"><circle r="10" fill="#fbbf24"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Nettoyage </text></g><g transform="translate(603.8085235663789,173.26371584391154)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">L&#39;Anneau U</text></g><g transform="translate(607.8460969082653,179.9999999999999)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Dard</text></g><g transform="translate(611.6611034436053,186.86478316176067)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Andúril</text></g><g transform="translate(615.2494579678452,193.85071434743966)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Narsil</text></g><g transform="translate(618.6073179810821,200.95031284694528)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Glamdring</text></g><g transform="translate(621.7310878027089,208.15597623237852)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Cotte de M</text></g><g transform="translate(624.6174224217582,215.45998849890384)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Fiole de G</text></g><g transform="translate(627.2632310788254,222.85452832724116)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Palantír</text></g><g transform="translate(629.6656805757301,230.331677458929)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Narya</text></g><g transform="translate(631.8221983093763,237.88342917539484)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Nenya</text></g><g transform="translate(633.73047502656,245.50169687175028)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Vilya</text></g><g transform="translate(635.3884672967753,253.17832271612912)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Silmarils</text></g><g transform="translate(636.794399700371,260.90508638529883)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Étoile du </text></g><g transform="translate(637.9467667297145,268.6737138671876)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Cor de Gon</text></g><g transform="translate(638.8443344013273,276.4758863209055)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Livre Roug</text></g><g transform="translate(639.4861415772648,284.30324898476573)"><circle r="10" fill="#f472b6"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Orthanc</text></g><g transform="translate(639.8715009943278,292.1474201227736)"><circle r="10" fill="#f87171"/><text y="20" text-anchor="middle" fill="#e8eaed" font-size="7">Balrog de </text></g></svg></section>
+</main>
+<footer>Généré le 18/01/2026 — mySPOT</footer>
+</body></html>

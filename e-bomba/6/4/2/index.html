@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Politique & Domination Cognitive | Infographie Interactive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Palette Selection: Cyber-Vibrant (High Contrast Blue/Purple/Teal) for Tech/Security Theme -->
+    <!-- Application Structure Plan: 
+        1. Hero Section: Introduction to the "Grey Zone" concept.
+        2. The Actors: Comparative Radar Chart (State vs Hacktivist).
+        3. The Doctrine: Process Flow (CSS cards) explaining "Auftragstaktik" & Chaos Theory.
+        4. The Arsenal: Bar Chart showing vector feasibility (SEO, LLM, Graph Poisoning).
+        5. Impact: Line Chart showing the "Erosion of Trust".
+        Rationale: Moves from macro-political context to micro-technical implementation, ending with consequences.
+    -->
+    <!-- Visualization & Content Choices:
+        1. Stacked Bar (Chart.js): Visualizing the shift from Kinetic War to "Grey Zone" conflict. Goal: Change.
+        2. Radar Chart (Chart.js): Comparing actor attributes (Resources, Agility, Impact). Goal: Compare.
+        3. CSS Flow Diagram: Explaining the #B!Mi Agency Doctrine logic. Goal: Organize (Process).
+        4. Horizontal Bar (Chart.js): Ranking attack vectors by Feasibility vs Impact. Goal: Compare.
+        5. Line Chart (Chart.js): Trust decay over time. Goal: Change/Trend.
+        Justification: Chart.js used for all data viz due to canvas rendering (No SVG). CSS used for flow to avoid Mermaid/SVG.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate-50 */
+            color: #1e293b; /* Slate-800 */
+        }
+        
+        h1, h2, h3, .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chart Container Styling - STRICT ADHERENCE */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constrain width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px; /* Vertical constraint */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        /* Card Hover Effects */
+        .infographic-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .infographic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #2563eb, #7c3aed, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Diagram Connector Lines (CSS Only, No SVG) */
+        .connector-line {
+            width: 2px;
+            background-color: #cbd5e1;
+            flex-grow: 1;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Hero Section -->
+    <header class="bg-slate-900 text-white pt-16 pb-12 px-4 shadow-lg border-b-4 border-blue-500">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="inline-block bg-blue-900 text-blue-200 text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
+                Rapport de Synthèse 2024-2026
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+                HACKING <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">POLITIQUE</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                Analyse de la tectonique des plaques de la souveraineté numérique et opérationnalisation de la 
+                <span class="text-blue-400 font-bold">Doctrine de Domination Cognitive</span>.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: THE GREY ZONE (CONTEXT) -->
+        <section id="grey-zone">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">1. La Zone Grise : Le Nouveau Champ de Bataille</h2>
+                <p class="text-slate-600 max-w-4xl mx-auto text-lg">
+                    Le XXIe siècle a vu la distinction traditionnelle entre paix et guerre (Clausewitzienne) s'effacer. 
+                    Nous évoluons désormais dans une "Zone Grise" permanente, où le conflit est cognitif plutôt que cinétique. 
+                    L'objectif n'est plus la conquête territoriale, mais la conquête des infrastructures mentales.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Text Content -->
+                <div class="bg-white rounded-xl shadow-md p-8 border-l-4 border-purple-500 infographic-card h-full">
+                    <h3 class="text-xl font-bold text-purple-700 mb-4">La Fin de la Binarité</h3>
+                    <ul class="space-y-4 text-slate-600">
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-3 text-xl">►</span>
+                            <span><strong>Conflictualité Hybride :</strong> Mélange d'actions cyber, de pression économique et de manipulation de l'information.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-3 text-xl">►</span>
+                            <span><strong>Super-Année Électorale :</strong> 2024 a servi de catalyseur, révélant la vulnérabilité des processus démocratiques face aux ingérences numériques.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-3 text-xl">►</span>
+                            <span><strong>Souveraineté Numérique :</strong> La capacité à contrôler ses propres infrastructures de données est devenue le prérequis absolu de l'indépendance politique.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Visualization: Stacked Bar Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 h-full flex flex-col justify-center">
+                    <h3 class="text-lg font-bold text-slate-700 mb-2 text-center">Évolution de l'Intensité Conflictuelle</h3>
+                    <p class="text-xs text-slate-500 text-center mb-4">Comparaison Guerre Froide vs Conflit Moderne</p>
+                    <div class="chart-container">
+                        <canvas id="greyZoneChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 italic text-center border-t pt-2">
+                        La "Zone Grise" domine désormais le spectre des interactions internationales.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE ACTORS (COMPARISON) -->
+        <section id="actors">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">2. Les Acteurs : Asymétrie des Forces</h2>
+                <p class="text-slate-600 max-w-4xl mx-auto text-lg">
+                    Le hacking politique est protéiforme. Il oscille entre l'activisme citoyen (Hacktivisme) cherchant la transparence, 
+                    et les opérations clandestines d'États cherchant la déstabilisation. L'analyse révèle une asymétrie critique des ressources et des impacts.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Actor Cards -->
+                <div class="col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">🏛️</span>
+                            <h3 class="font-bold text-slate-800">Acteur Étatique</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Disposent de ressources massives (APT). Visent le long terme et le sabotage systémique.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">🎭</span>
+                            <h3 class="font-bold text-slate-800">Hacktiviste</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Ressources limitées mais forte agilité. Motivation idéologique. Impact souvent médiatique mais éphémère.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">💰</span>
+                            <h3 class="font-bold text-slate-800">Mercenaire / Privé</h3>
+                        </div>
+                        <p class="text-sm text-slate-600">Sociétés privées offrant des services d'ingérence "clé en main". Haute technicité, motivation financière.</p>
+                    </div>
+                </div>
+
+                <!-- Visualization: Radar Chart -->
+                <div class="col-span-1 lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-slate-700 mb-2 text-center">Profilage des Capacités Opérationnelles</h3>
+                    <div class="chart-container">
+                        <canvas id="actorsRadarChart"></canvas>
+                    </div>
+                    <div class="mt-4 grid grid-cols-2 gap-4 text-xs text-center">
+                        <div class="flex items-center justify-center">
+                            <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> État (Puissance)
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <span class="w-3 h-3 bg-teal-400 rounded-full mr-2"></span> Hacktiviste (Agilité)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THE DOCTRINE (PROCESS) -->
+        <section id="doctrine" class="bg-slate-900 text-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-16">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="text-cyan-400 font-mono text-sm tracking-widest uppercase">Agence #B!Mi</span>
+                    <h2 class="text-3xl font-bold mt-2 mb-4">3. La Doctrine de Domination Cognitive</h2>
+                    <p class="text-slate-300 max-w-4xl mx-auto text-lg">
+                        L'étude de faisabilité démontre que la domination cognitive repose sur l'hybridation de la philosophie militaire prussienne 
+                        (<em>Auftragstaktik</em>) et de la théorie mathématique du Chaos.
+                    </p>
+                </div>
+
+                <!-- CSS-Based Process Flow (NO SVG) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                    <!-- Step 1 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 relative infographic-card">
+                        <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-slate-900">1</div>
+                        <h3 class="text-xl font-bold text-blue-400 mt-4 mb-3 text-center">Auftragstaktik</h3>
+                        <p class="text-sm text-slate-400 text-center mb-4">(Commandement Décentralisé)</p>
+                        <hr class="border-slate-700 mb-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            L'intention est centralisée, mais l'exécution est laissée à l'initiative des unités périphériques (bots, trolls, cellules dormantes). Cela maximise l'agilité et sature les défenses adverses par l'imprévisibilité.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 relative infographic-card">
+                        <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-slate-900">2</div>
+                        <h3 class="text-xl font-bold text-purple-400 mt-4 mb-3 text-center">Théorie du Chaos</h3>
+                        <p class="text-sm text-slate-400 text-center mb-4">(Effet Papillon)</p>
+                        <hr class="border-slate-700 mb-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            De petites perturbations initiales (ex: empoisonnement ciblé d'un graphe sémantique) sont amplifiées par les algorithmes de recommandation pour générer des effets systémiques disproportionnés.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 relative infographic-card">
+                        <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-cyan-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-slate-900">3</div>
+                        <h3 class="text-xl font-bold text-cyan-400 mt-4 mb-3 text-center">Domination Cognitive</h3>
+                        <p class="text-sm text-slate-400 text-center mb-4">(Modification du Réel)</p>
+                        <hr class="border-slate-700 mb-4">
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Le résultat n'est pas la destruction physique, mais l'altération de la perception de la réalité par la cible, conduisant à une perte de confiance dans les institutions et à la paralysie politique.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Connector hint for mobile/desktop -->
+                <div class="text-center mt-8 text-slate-500 text-2xl animate-pulse hidden md:block">
+                    ➔ ➔ ➔
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: THE ARSENAL (VECTORS) -->
+        <section id="arsenal">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">4. L'Arsenal : Vecteurs Techniques</h2>
+                <p class="text-slate-600 max-w-4xl mx-auto text-lg">
+                    L'opérationnalisation ne relève pas de la science-fiction. Elle s'appuie sur une ingénierie précise exploitant les failles du Web Sémantique. 
+                    Voici l'analyse de faisabilité et d'impact des principaux vecteurs d'attaque identifiés.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Chart Container -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-slate-700 mb-4 text-center">Matrice Faisabilité vs Impact</h3>
+                    <div class="chart-container">
+                        <canvas id="arsenalBarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Explanation Text -->
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800">Graph Poisoning (Empoisonnement de Graphe)</h4>
+                        <p class="text-sm text-blue-700 mt-1">Manipulation des entités nommées dans le <em>Knowledge Graph</em> de Google. En associant des concepts négatifs à une cible politique via des réseaux de sites satellites, on altère durablement les résultats de recherche.</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-800">Injection LLM (Modèles de Langage)</h4>
+                        <p class="text-sm text-purple-700 mt-1">Vecteur émergent. Consiste à saturer le web de contenus biaisés générés par IA pour qu'ils soient ingérés par les futurs modèles d'IA, modifiant ainsi les réponses fournies aux citoyens.</p>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-lg border-l-4 border-teal-500">
+                        <h4 class="font-bold text-teal-800">Negative SEO (Référencement Négatif)</h4>
+                        <p class="text-sm text-teal-700 mt-1">Technique éprouvée consistant à créer des liens toxiques vers le site officiel d'un adversaire pour provoquer son déclassement par les algorithmes des moteurs de recherche.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: IMPACT & CONCLUSION -->
+        <section id="impact" class="pb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">5. Impact : L'Érosion de la Confiance</h2>
+                    <p class="text-lg text-slate-600 mb-6">
+                        L'objectif ultime du Hacking Politique n'est pas toujours de faire élire un candidat spécifique, mais de <strong>briser le consensus démocratique</strong>.
+                    </p>
+                    <p class="text-slate-600 mb-6">
+                        Les données montrent une corrélation directe entre l'intensité des campagnes de guerre cognitive et la baisse de confiance dans les résultats électoraux et les médias traditionnels.
+                    </p>
+                    
+                    <div class="bg-red-50 p-6 rounded-xl border border-red-100">
+                        <h3 class="text-red-800 font-bold mb-2">⚠ Point Critique</h3>
+                        <p class="text-red-700 text-sm">
+                            Lorsque la "vérité" devient une variable ajustable dépendante de l'algorithme, la base même du débat démocratique s'effondre.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-slate-700 mb-4 text-center">Indice de Confiance Démocratique (Projection)</h3>
+                    <div class="chart-container">
+                        <canvas id="impactLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 text-slate-400 py-8 text-center border-t border-slate-800">
+            <p class="font-mono text-sm">Généré sur la base des rapports : "Hacking Politique" & "Faisabilité Doctrine Domination Cognitive".</p>
+            <p class="text-xs mt-2">© 2026 Observatoire de la Souveraineté Numérique.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for Charts -->
+    <script>
+        // --- Shared Configurations ---
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.scale.grid.color = '#e2e8f0';
+
+        // Helper function for label wrapping (Strict 16-char logic)
+        function wrapLabel(str) {
+            if (str.length <= 16) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length < 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Shared Tooltip Callback for Multiline Labels
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- 1. Grey Zone Chart (Stacked Bar) ---
+        const ctxGrey = document.getElementById('greyZoneChart').getContext('2d');
+        new Chart(ctxGrey, {
+            type: 'bar',
+            data: {
+                labels: ['Guerre Froide (1980)', 'Conflit Moderne (2025)'],
+                datasets: [
+                    {
+                        label: 'Paix Conventionnelle',
+                        data: [70, 20],
+                        backgroundColor: '#94a3b8' // Slate-400
+                    },
+                    {
+                        label: 'Zone Grise (Cognitif/Cyber)',
+                        data: [10, 70],
+                        backgroundColor: '#8b5cf6' // Violet-500 (Vibrant)
+                    },
+                    {
+                        label: 'Guerre Cinétique',
+                        data: [20, 10],
+                        backgroundColor: '#ef4444' // Red-500
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true, max: 100 }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- 2. Actors Radar Chart ---
+        const ctxRadar = document.getElementById('actorsRadarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: [
+                    wrapLabel('Ressources Financières'),
+                    wrapLabel('Compétence Technique'),
+                    wrapLabel('Impact Stratégique'),
+                    wrapLabel('Déniabilité Plausible'),
+                    wrapLabel('Agilité Opérationnelle')
+                ],
+                datasets: [{
+                    label: 'Acteur Étatique',
+                    data: [95, 90, 95, 85, 40],
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // Blue-500 low opacity
+                    borderColor: '#3b82f6',
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#3b82f6'
+                }, {
+                    label: 'Hacktiviste',
+                    data: [20, 60, 40, 50, 95],
+                    fill: true,
+                    backgroundColor: 'rgba(20, 184, 166, 0.2)', // Teal-500 low opacity
+                    borderColor: '#14b8a6',
+                    pointBackgroundColor: '#14b8a6',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#14b8a6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { display: false } // Custom legend in HTML
+                }
+            }
+        });
+
+        // --- 3. Arsenal Bar Chart (Horizontal) ---
+        const ctxArsenal = document.getElementById('arsenalBarChart').getContext('2d');
+        new Chart(ctxArsenal, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Negative SEO & Spam'),
+                    wrapLabel('Empoisonnement de Graphe'),
+                    wrapLabel('Injection LLM (IA)'),
+                    wrapLabel('Attaque DDoS Classique'),
+                    wrapLabel('Social Engineering')
+                ],
+                datasets: [{
+                    label: 'Faisabilité Technique',
+                    data: [90, 75, 60, 95, 80],
+                    backgroundColor: '#06b6d4', // Cyan-500
+                    barPercentage: 0.6
+                }, {
+                    label: 'Impact Cognitif Durable',
+                    data: [70, 95, 90, 20, 65],
+                    backgroundColor: '#7c3aed', // Violet-600
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, max: 100 }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- 4. Impact Line Chart ---
+        const ctxImpact = document.getElementById('impactLineChart').getContext('2d');
+        new Chart(ctxImpact, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024 (Élections)', '2025 (Projection)'],
+                datasets: [{
+                    label: 'Confiance dans les Institutions',
+                    data: [65, 62, 58, 50, 35, 30],
+                    borderColor: '#ef4444', // Red-500
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4
+                }, {
+                    label: 'Volume de Désinformation',
+                    data: [20, 25, 35, 50, 85, 90],
+                    borderColor: '#3b82f6', // Blue-500
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

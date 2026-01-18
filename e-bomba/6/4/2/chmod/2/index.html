@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Politique & Domination Cognitive | Dashboard Stratégique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Electric Intelligence (Vibrant Blues & Energetic Coral) -->
+    <!-- 
+        Background: Slate-50 (#f8fafc)
+        Surface: White (#ffffff)
+        Primary: Blue-600 (#2563eb) -> "Electric Blue"
+        Secondary: Rose-500 (#f43f5e) -> "Alert Coral"
+        Tertiary: Violet-600 (#7c3aed) -> "Deep Intel"
+        Text: Slate-900 (#0f172a)
+    -->
+
+    <!-- Application Structure Plan:
+         1. Header: Hook regarding the "Tectonic Shift" of sovereignty.
+         2. Nav: Sticky navigation for 4 core modules.
+         3. Module 1 (Context): Radar Chart comparing Kinetic vs. Cognitive attributes.
+         4. Module 2 (Actors): Bubble Chart mapping the ecosystem (Skill vs. Impact).
+         5. Module 3 (Arsenal): Interactive cards for Data Poisoning/GEO + Distribution Chart.
+         6. Module 4 (Stakes): Line Chart (Trust Trends) + Stacked Bar (Tech Sovereignty).
+         7. Footer: Resilience summary.
+         
+         Narrative Flow: "Understand the shift -> Identify the enemy -> Analyze weapons -> Measure damage."
+    -->
+
+    <!-- Visualization & Content Choices:
+         - Radar Chart: Best to contrast multidimensional attributes (Speed, Reach, Deniability) of two warfare types. NO SVG used.
+         - Bubble Chart: chosen to visualize 3 dimensions of actors (Tech Level, Political Impact, Frequency). NO SVG used.
+         - Interactive Cards: To explain dense concepts like "Generative Engine Optimization" without text walls.
+         - Line/Bar Charts: Standard for time-series (Trust) and composition (Market Share). NO SVG used.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #0f172a; /* slate-900 */
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chart Container Styling - CRITICAL REQUIREMENT */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Default to full width of parent */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 450px;
+        }
+
+        /* Responsive adjustments for chart containers */
+        @media (min-width: 768px) {
+            .chart-container.half-width {
+                max-width: 600px; /* Constraint for 2-col layouts */
+            }
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .interactive-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid transparent;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .interactive-card.active {
+            background-color: #eff6ff; /* blue-50 */
+            border-left-color: #2563eb; /* blue-600 */
+        }
+
+        /* Section Transitions */
+        .section-fade {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar for side content */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🧠</span>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 leading-none">HACKING POLITIQUE</h1>
+                    <p class="text-xs font-mono text-blue-600 font-bold uppercase tracking-wider">Observatoire de la Domination Cognitive</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#context" class="text-sm font-medium text-slate-500 hover:text-blue-600 transition">La Mutation</a>
+                <a href="#actors" class="text-sm font-medium text-slate-500 hover:text-blue-600 transition">Les Acteurs</a>
+                <a href="#arsenal" class="text-sm font-medium text-slate-500 hover:text-blue-600 transition">L'Arsenal</a>
+                <a href="#stakes" class="text-sm font-medium text-slate-500 hover:text-blue-600 transition">Enjeux</a>
+            </nav>
+            <div class="text-xs font-bold px-3 py-1 bg-slate-100 rounded-full text-slate-600 border border-slate-200">
+                Source: Rapport de Thèse 2024
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- INTRO HERO -->
+        <section class="text-center max-w-4xl mx-auto section-fade">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+                La Tectonique des Plaques <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Numériques</span>
+            </h2>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                Le conflit moderne ne vise plus seulement la conquête de territoires physiques, mais la <strong>domination des infrastructures cognitives</strong>. 
+                Ce dashboard interactif décode comment la technologie redéfinit la souveraineté à l'ère de l'Intelligence Artificielle et de la guerre hybride.
+            </p>
+        </section>
+
+        <!-- MODULE 1: CONTEXT (THE SHIFT) -->
+        <section id="context" class="scroll-mt-24">
+            <div class="border-l-4 border-blue-600 pl-4 mb-8">
+                <h3 class="text-2xl font-bold text-slate-900">1. Le Changement de Paradigme</h3>
+                <p class="text-slate-500 mt-1">Comparaison structurelle : Guerre Cinétique vs. Guerre Cognitive</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="space-y-6">
+                    <p class="text-slate-700 leading-relaxed">
+                        Nous assistons à un glissement ontologique. Contrairement aux conflits traditionnels limités par la géographie, le <strong>Hacking Politique</strong> opère dans une 5ème dimension : le cyberespace. 
+                        Il se caractérise par une <span class="text-rose-600 font-bold">asymétrie radicale</span> : un acteur mineur peut causer des dégâts stratégiques majeurs avec un coût minimal.
+                    </p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <span>💡</span> Concept Clé : Technopolitique
+                        </h4>
+                        <p class="text-sm text-slate-600">
+                            La technologie n'est plus un simple outil neutre. Elle est devenue l'environnement même qui structure les relations de pouvoir. 
+                            Le "Hacking Politique" est l'exploitation de cet environnement pour altérer la perception de la réalité (guerre cognitive).
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-slate-100 rounded-lg text-center">
+                            <div class="text-2xl mb-2">💣</div>
+                            <div class="font-bold text-slate-800 text-sm">Guerre Cinétique</div>
+                            <div class="text-xs text-slate-500">Destruction Physique</div>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg text-center border border-blue-100">
+                            <div class="text-2xl mb-2">🧠</div>
+                            <div class="font-bold text-blue-800 text-sm">Guerre Cognitive</div>
+                            <div class="text-xs text-blue-600">Manipulation Mentale</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization: Radar Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
+                    <h4 class="text-center font-bold text-slate-800 mb-4 text-sm uppercase tracking-wide">Profil Asymétrique du Conflit</h4>
+                    <div class="chart-container half-width">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-400 mt-4 italic">
+                        Notez l'expansion massive de la "Portée" et de l' "Ambiguïté" dans le modèle cognitif.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 2: ACTORS (THE THREAT) -->
+        <section id="actors" class="scroll-mt-24 bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+            <div class="border-l-4 border-violet-600 pl-4 mb-8">
+                <h3 class="text-2xl font-bold text-slate-900">2. L'Écosystème des Acteurs</h3>
+                <p class="text-slate-500 mt-1">Qui manipule l'information ? Cartographie des menaces.</p>
+            </div>
+
+            <p class="text-slate-700 mb-8 max-w-3xl">
+                L'attaquant n'est plus seulement l'État. Le paysage est un spectre continu allant de l'activiste idéologique (Hacktiviste) au mercenaire opportuniste, 
+                jusqu'aux unités d'élite étatiques (APT). Ce graphique positionne les acteurs selon leur <strong>sophistication technique</strong> et leur <strong>impact politique</strong>.
+            </p>
+
+            <!-- Visualization: Bubble Chart -->
+            <div class="relative">
+                <div class="chart-container">
+                    <canvas id="bubbleChart"></canvas>
+                </div>
+                <!-- Legend Overlay -->
+                <div class="absolute top-2 right-2 bg-white/90 p-3 rounded-lg border border-slate-200 text-xs shadow-sm hidden md:block">
+                    <div class="font-bold mb-2 text-slate-700">Légende (Couleur)</div>
+                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-violet-600"></span> Étatique (APT)</div>
+                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-rose-500"></span> Criminel / Mercenaire</div>
+                    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500"></span> Hacktiviste</div>
+                </div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                 <div class="p-4 bg-violet-50 rounded border border-violet-100">
+                     <strong class="text-violet-800">APT (Advanced Persistent Threat)</strong>
+                     <p class="text-slate-600 mt-1">Acteurs étatiques. Ressources illimitées, vision à long terme. Ciblent les infrastructures critiques.</p>
+                 </div>
+                 <div class="p-4 bg-amber-50 rounded border border-amber-100">
+                     <strong class="text-amber-800">Hacktivistes</strong>
+                     <p class="text-slate-600 mt-1">Motivés par l'idéologie ou la politique. Techniques souvent simples (DDoS, Leaks) mais impact médiatique fort.</p>
+                 </div>
+                 <div class="p-4 bg-rose-50 rounded border border-rose-100">
+                     <strong class="text-rose-800">Cyber-Mercenaires</strong>
+                     <p class="text-slate-600 mt-1">Entreprises privées vendant des outils d'intrusion "clés en main" aux gouvernements.</p>
+                 </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: ARSENAL (THE TOOLS) -->
+        <section id="arsenal" class="scroll-mt-24">
+            <div class="border-l-4 border-rose-500 pl-4 mb-8">
+                <h3 class="text-2xl font-bold text-slate-900">3. L'Arsenal Cognitif & IA</h3>
+                <p class="text-slate-500 mt-1">Les mécanismes techniques de la manipulation de masse.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Interactive List (Left) -->
+                <div class="md:col-span-4 space-y-3">
+                    <p class="text-sm text-slate-500 mb-4">Cliquez pour explorer les vecteurs d'attaque :</p>
+                    
+                    <div class="interactive-card active cursor-pointer bg-white p-4 rounded shadow-sm border border-slate-200" onclick="updateArsenal('poison', this)">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-800">🧪 Data Poisoning</span>
+                            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-1 rounded font-bold">CRITIQUE</span>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">Corruption des modèles LLM à la source.</div>
+                    </div>
+
+                    <div class="interactive-card cursor-pointer bg-white p-4 rounded shadow-sm border border-slate-200" onclick="updateArsenal('geo', this)">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-800">🔍 GEO (GenAI Optimization)</span>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">NOUVEAU</span>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">Manipulation des réponses des moteurs IA.</div>
+                    </div>
+
+                    <div class="interactive-card cursor-pointer bg-white p-4 rounded shadow-sm border border-slate-200" onclick="updateArsenal('deepfake', this)">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-800">🎭 Deepfakes Politiques</span>
+                            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-bold">VISUEL</span>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">Le "Dividende du Menteur" et le doute.</div>
+                    </div>
+                </div>
+
+                <!-- Detail Panel & Chart (Right) -->
+                <div class="md:col-span-8 bg-white p-8 rounded-2xl shadow-lg border border-slate-100 flex flex-col justify-between">
+                    <div id="arsenal-content" class="mb-6">
+                        <!-- Dynamic Content Loaded Here -->
+                        <h4 class="text-xl font-bold text-slate-900 mb-2">Empoisonnement de Datasets (Data Poisoning)</h4>
+                        <p class="text-slate-600 mb-4">
+                            L'IA générative repose sur des données massives. En injectant un faible pourcentage de données corrompues (ex: 0.1%), des acteurs malveillants peuvent créer des "portes dérobées" cognitives. 
+                            L'IA semble fonctionner normalement, mais biaise subtilement ses réponses sur des sujets spécifiques (élections, géopolitique).
+                        </p>
+                        <div class="bg-rose-50 border-l-4 border-rose-500 p-4">
+                            <p class="text-sm text-rose-800 font-bold">Impact : Destruction invisible de la neutralité technologique.</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-6">
+                        <h5 class="text-sm font-bold text-slate-500 uppercase mb-4 text-center">Prévalence Estimée des Attaques (2025)</h5>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="arsenalChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 4: STAKES (IMPACT) -->
+        <section id="stakes" class="scroll-mt-24 mb-20">
+            <div class="border-l-4 border-amber-500 pl-4 mb-8">
+                <h3 class="text-2xl font-bold text-slate-900">4. Enjeux Démocratiques</h3>
+                <p class="text-slate-500 mt-1">Mesurer l'érosion de la confiance et la dépendance stratégique.</p>
+            </div>
+
+            <p class="text-slate-700 mb-8 max-w-3xl">
+                La finalité du hacking politique est la désintégration du tissu social. 
+                Deux indicateurs clés illustrent cette crise : l'effondrement de la confiance dans les médias (Eurobarometer) et la dépendance technologique critique de l'UE (Souveraineté).
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Trust Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h4 class="font-bold text-slate-800 mb-2">Érosion de la Confiance (UE)</h4>
+                    <p class="text-xs text-slate-500 mb-4">Pourcentage de citoyens faisant confiance aux médias traditionnels vs réseaux sociaux.</p>
+                    <div class="chart-container half-width">
+                        <canvas id="trustChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Sovereignty Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h4 class="font-bold text-slate-800 mb-2">Le Piège Technologique (Cloud)</h4>
+                    <p class="text-xs text-slate-500 mb-4">Part de marché des fournisseurs Cloud en Europe (Souveraineté vs Dépendance US).</p>
+                    <div class="chart-container half-width">
+                        <canvas id="sovereigntyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-slate-900 text-slate-300 py-12 rounded-t-3xl">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="text-4xl mb-4">🛡️</div>
+                <h2 class="text-2xl font-bold text-white mb-4">Vers une Résilience Cognitive</h2>
+                <p class="leading-relaxed mb-8">
+                    Face à la militarisation de l'information, la solution ne peut être uniquement technologique. 
+                    La thèse conclut sur la nécessité d'une "Hygiène Cognitive" citoyenne et de politiques de souveraineté robustes (comme l'AI Act) pour protéger la démocratie.
+                </p>
+                <div class="text-xs text-slate-500 border-t border-slate-800 pt-6">
+                    Infographie générée par Canvas Intelligence • Données basées sur les documents fournis.
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- UTILITIES ---
+
+        // Label Wrapping Helper (Req: 16 char limit)
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Common Tooltip Configuration (Req: Multiline Support)
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            },
+            backgroundColor: 'rgba(15, 23, 42, 0.9)', // slate-900
+            padding: 12,
+            titleFont: { family: "'Inter', sans-serif", size: 13 },
+            bodyFont: { family: "'Inter', sans-serif", size: 12 }
+        };
+
+        // --- DATA OBJECTS ---
+
+        // 1. Radar Data (Context)
+        const radarData = {
+            labels: ['Vitesse', 'Portée Géo.', 'Déniabilité', 'Impact Psy.', 'Coût (Inverse)', 'Létalité Directe'].map(l => wrapLabel(l)),
+            datasets: [
+                {
+                    label: 'Guerre Cinétique',
+                    data: [4, 5, 2, 4, 2, 9], // Slow, Limited range, Hard to hide, Physical impact, Expensive, High Lethality
+                    backgroundColor: 'rgba(148, 163, 184, 0.2)', // slate-400
+                    borderColor: 'rgba(148, 163, 184, 1)',
+                    pointBackgroundColor: 'rgba(148, 163, 184, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Guerre Cognitive',
+                    data: [10, 10, 9, 10, 9, 1], // Instant, Global, Deniable, Mental impact, Cheap, Low direct lethality
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)', // blue-600
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        // 2. Bubble Data (Actors)
+        // X: Tech Sophistication (1-10), Y: Political Impact (1-10), R: Frequency
+        const bubbleData = {
+            datasets: [
+                {
+                    label: 'Étatique (APT)',
+                    data: [
+                        { x: 9.5, y: 9, r: 15, label: 'APT28 (Fancy Bear)' },
+                        { x: 9, y: 8.5, r: 12, label: 'Unit 61398' }
+                    ],
+                    backgroundColor: '#7c3aed' // violet-600
+                },
+                {
+                    label: 'Hacktiviste',
+                    data: [
+                        { x: 4, y: 6, r: 10, label: 'Anonymous' },
+                        { x: 5, y: 4, r: 8, label: 'Cyber Partisans' }
+                    ],
+                    backgroundColor: '#f59e0b' // amber-500
+                },
+                {
+                    label: 'Criminel/Mercenaire',
+                    data: [
+                        { x: 8, y: 5, r: 6, label: 'NSO Group' },
+                        { x: 3, y: 2, r: 20, label: 'Script Kiddies' } // Low skill, high noise
+                    ],
+                    backgroundColor: '#f43f5e' // rose-500
+                }
+            ]
+        };
+
+        // 3. Arsenal Data (Doughnut)
+        const arsenalStats = {
+            labels: ['Désinformation Sociale', 'Data Poisoning (IA)', 'Cyber-Attaques Infra', 'Phishing/Social Eng.'].map(l => wrapLabel(l)),
+            data: [40, 15, 20, 25] // Estimated mix based on reports
+        };
+
+        // 4. Trust Data (Line)
+        const trustLabels = ['2014', '2016', '2018', '2020', '2022', '2024'];
+        const trustData = {
+            labels: trustLabels,
+            datasets: [
+                {
+                    label: 'Médias Traditionnels',
+                    data: [65, 62, 58, 55, 49, 45],
+                    borderColor: '#2563eb', // Blue
+                    tension: 0.4
+                },
+                {
+                    label: 'Réseaux Sociaux',
+                    data: [25, 28, 30, 28, 25, 22], // Generally lower and volatile
+                    borderColor: '#f43f5e', // Rose
+                    tension: 0.4
+                }
+            ]
+        };
+
+        // 5. Sovereignty Data (Stacked Bar)
+        const sovLabels = ['Cloud Stockage', 'Modèles IA', 'Réseaux Sociaux', 'Semi-conducteurs'].map(l => wrapLabel(l));
+        const sovData = {
+            labels: sovLabels,
+            datasets: [
+                {
+                    label: 'Fournisseurs US (GAFAM)',
+                    data: [72, 85, 90, 50],
+                    backgroundColor: '#cbd5e1' // slate-300 (Grayed out to show dependence)
+                },
+                {
+                    label: 'Souveraineté UE',
+                    data: [28, 15, 10, 10], // Low autonomy
+                    backgroundColor: '#2563eb' // blue-600 (Highlighting the gap)
+                },
+                {
+                    label: 'Asie/Autre',
+                    data: [0, 0, 0, 40],
+                    backgroundColor: '#f59e0b'
+                }
+            ]
+        };
+
+
+        // --- CHART INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // 1. Radar Chart
+            new Chart(document.getElementById('radarChart'), {
+                type: 'radar',
+                data: radarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: { font: { size: 11, weight: '600' }, color: '#475569' },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: { tooltip: commonTooltipConfig, legend: { position: 'bottom' } }
+                }
+            });
+
+            // 2. Bubble Chart
+            new Chart(document.getElementById('bubbleChart'), {
+                type: 'bubble',
+                data: bubbleData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Sophistication Technique' },
+                            min: 0, max: 11, grid: { color: '#f1f5f9' } 
+                        },
+                        y: { 
+                            title: { display: true, text: 'Impact Politique' },
+                            min: 0, max: 11, grid: { color: '#f1f5f9' } 
+                        }
+                    },
+                    plugins: { 
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label;
+                                }
+                            },
+                            ...commonTooltipConfig
+                        },
+                        legend: { display: false } // Custom legend used in HTML
+                    }
+                }
+            });
+
+            // 3. Arsenal Doughnut Chart (Global Scope for updates)
+            window.arsenalChart = new Chart(document.getElementById('arsenalChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: arsenalStats.labels,
+                    datasets: [{
+                        data: arsenalStats.data,
+                        backgroundColor: ['#2563eb', '#f43f5e', '#7c3aed', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: commonTooltipConfig 
+                    }
+                }
+            });
+
+            // 4. Trust Line Chart
+            new Chart(document.getElementById('trustChart'), {
+                type: 'line',
+                data: trustData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: commonTooltipConfig, legend: { position: 'bottom' } },
+                    scales: { y: { min: 0, max: 100, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // 5. Sovereignty Stacked Bar
+            new Chart(document.getElementById('sovereigntyChart'), {
+                type: 'bar',
+                data: sovData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: commonTooltipConfig, legend: { position: 'bottom' } },
+                    scales: { 
+                        x: { stacked: true, grid: { display: false } }, 
+                        y: { stacked: true, max: 100, grid: { color: '#f1f5f9' } } 
+                    }
+                }
+            });
+        });
+
+
+        // --- INTERACTION LOGIC ---
+
+        function updateArsenal(type, element) {
+            // Update active state of cards
+            document.querySelectorAll('.interactive-card').forEach(el => el.classList.remove('active', 'bg-blue-50', 'border-l-blue-600'));
+            element.classList.add('active');
+
+            // Content Data
+            const content = {
+                poison: {
+                    title: "Empoisonnement de Datasets (Data Poisoning)",
+                    text: "L'IA générative repose sur des données massives. En injectant un faible pourcentage de données corrompues (ex: 0.1%), des acteurs malveillants peuvent créer des 'portes dérobées' cognitives. L'IA semble fonctionner normalement, mais biaise subtilement ses réponses sur des sujets spécifiques (élections, géopolitique).",
+                    impact: "Destruction invisible de la neutralité technologique.",
+                    color: "rose"
+                },
+                geo: {
+                    title: "GEO (Generative Engine Optimization)",
+                    text: "Une évolution du SEO pour l'ère de l'IA. Il s'agit de manipuler les sources citées par les moteurs de réponse (comme Gemini ou Perplexity) pour imposer un narratif spécifique. Contrairement à la désinformation classique, cela exploite l'autorité perçue de la machine.",
+                    impact: "Contrôle de la 'Vérité Algorithmique'.",
+                    color: "blue"
+                },
+                deepfake: {
+                    title: "Deepfakes & Le Dividende du Menteur",
+                    text: "L'hyper-trucage permet de créer de fausses preuves vidéo. Mais le danger réel est le 'Dividende du Menteur' : la simple existence de cette technologie permet aux politiciens de nier des preuves réelles en criant au fake. La frontière entre vrai et faux disparaît.",
+                    impact: "Effondrement de la preuve partagée.",
+                    color: "slate"
+                }
+            };
+
+            const data = content[type];
+            const contentDiv = document.getElementById('arsenal-content');
+            
+            // HTML Update with Fade
+            contentDiv.style.opacity = 0;
+            setTimeout(() => {
+                contentDiv.innerHTML = `
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">${data.title}</h4>
+                    <p class="text-slate-600 mb-4">${data.text}</p>
+                    <div class="bg-${data.color}-50 border-l-4 border-${data.color}-500 p-4">
+                        <p class="text-sm text-${data.color}-800 font-bold">Impact : ${data.impact}</p>
+                    </div>
+                `;
+                contentDiv.style.opacity = 1;
+            }, 200);
+
+            // Chart Update (Simulating focus shift in data)
+            if(window.arsenalChart) {
+                let newData = [40, 15, 20, 25];
+                if(type === 'poison') newData = [20, 50, 15, 15]; // Highlight Poisoning
+                if(type === 'geo') newData = [25, 15, 10, 50]; // Highlight GEO/Manipulation
+                if(type === 'deepfake') newData = [60, 10, 10, 20]; // Highlight Social Disinfo
+                
+                window.arsenalChart.data.datasets[0].data = newData;
+                window.arsenalChart.update();
+            }
+        }
+    </script>
+</body>
+</html>

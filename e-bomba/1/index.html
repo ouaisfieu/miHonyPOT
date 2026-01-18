@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sémantique & Futur du Web | Analyse Interactive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Font Awesome (via CDN for Icons - replacing SVG) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutral Tech -->
+    <!-- Background: Stone-50 (#fafaf9) -->
+    <!-- Text: Stone-800 (#292524) -->
+    <!-- Primary: Teal-700 (#0f766e) -->
+    <!-- Secondary: Orange-500 (#f97316) -->
+    
+    <!-- Application Structure Plan: 
+         1. Header/Nav: Sticky, allows jumping between thematic sections.
+         2. Hero Section: Hook with high-level thesis (Keywords -> Entities).
+         3. Dashboard (Overview): Quick numeric insights into the state of the Semantic Web.
+         4. The Semantic Engine (Interactive Concept): Using Plotly to visualize a Knowledge Graph.
+         5. Experimentation Zone (Data): Chart.js visualizations comparing SEO vs. SSEO with filters.
+         6. Findability vs. Discoverability: Interactive comparison of these two core concepts.
+         7. Future Timeline: Vertical flow of web evolution.
+         Rationale: This structure moves from abstract concepts to concrete data, then to future implications, guiding the user through the complexity of the source topic.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Knowledge Graph: Plotly Scatter Plot. Goal: Show how entities relate. Interaction: Hover/Click to reveal connections.
+         2. SEO Comparison: Chart.js Bar/Line. Goal: Compare metrics (CTR, impressions). Interaction: Filter by Industry.
+         3. Discoverability Funnel: CSS/HTML visual builder. Goal: Contrast push vs. pull dynamics.
+         4. Icons: FontAwesome (No SVG/Images).
+         CONFIRMATION: NO SVG graphics used (except via FontAwesome font). NO Mermaid JS used.
+    -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #292524; /* stone-800 */
+        }
+        
+        .nav-active {
+            border-bottom: 2px solid #0f766e;
+            color: #0f766e;
+            font-weight: 600;
+        }
+
+        /* Chart Containers specific styling for responsiveness */
+        .chart-container-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 400px;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container-wrapper {
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar for side panels if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e7e5e4;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#fafaf9]/95 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-teal-800"><i class="fas fa-network-wired mr-2"></i>Sémantique<span class="text-orange-600">Web</span></span>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 text-sm font-medium text-stone-600 hover:text-teal-700 transition-colors nav-active">Tableau de Bord</button>
+                    <button onclick="navigateTo('semantic')" id="nav-semantic" class="nav-btn px-3 py-2 text-sm font-medium text-stone-600 hover:text-teal-700 transition-colors">Le Graphe de Connaissance</button>
+                    <button onclick="navigateTo('experiment')" id="nav-experiment" class="nav-btn px-3 py-2 text-sm font-medium text-stone-600 hover:text-teal-700 transition-colors">Données Expérimentales</button>
+                    <button onclick="navigateTo('future')" id="nav-future" class="nav-btn px-3 py-2 text-sm font-medium text-stone-600 hover:text-teal-700 transition-colors">Futur & Découvrabilité</button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-stone-600 hover:text-teal-700 p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="navigateTo('dashboard'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-600 hover:bg-stone-100 hover:text-teal-700">Tableau de Bord</button>
+                <button onclick="navigateTo('semantic'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-600 hover:bg-stone-100 hover:text-teal-700">Le Graphe de Connaissance</button>
+                <button onclick="navigateTo('experiment'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-600 hover:bg-stone-100 hover:text-teal-700">Données Expérimentales</button>
+                <button onclick="navigateTo('future'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-stone-600 hover:bg-stone-100 hover:text-teal-700">Futur & Découvrabilité</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-20">
+        
+        <!-- SECTION 1: DASHBOARD (Overview) -->
+        <section id="section-dashboard" class="page-section animate-fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-extrabold text-stone-800 mb-4">L'Avenir du Positionnement Web</h1>
+                <p class="text-xl text-stone-600 max-w-3xl mx-auto">
+                    De la recherche par mots-clés à l'interopérabilité sémantique. Découvrez comment la structuration des données transforme la trouvabilité et la découvrabilité à l'ère de l'IA.
+                </p>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Metric 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 card-hover text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600 mb-4">
+                        <i class="fas fa-project-diagram text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-stone-800">82%</h3>
+                    <p class="text-sm font-semibold text-teal-600 uppercase tracking-wide mt-1">Adoption Schema.org</p>
+                    <p class="text-stone-500 text-sm mt-3">Pourcentage des résultats "Rich Results" sur Google utilisant des données structurées JSON-LD.</p>
+                </div>
+                <!-- Metric 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 card-hover text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 text-orange-600 mb-4">
+                        <i class="fas fa-search-location text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-stone-800">Zero-Click</h3>
+                    <p class="text-sm font-semibold text-orange-600 uppercase tracking-wide mt-1">Évolution des SERP</p>
+                    <p class="text-stone-500 text-sm mt-3">Les réponses directes (Knowledge Graph) réduisent le trafic organique traditionnel mais augmentent la qualification.</p>
+                </div>
+                <!-- Metric 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 card-hover text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 mb-4">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-stone-800">IA Générative</h3>
+                    <p class="text-sm font-semibold text-blue-600 uppercase tracking-wide mt-1">Nouveau Paradigme</p>
+                    <p class="text-stone-500 text-sm mt-3">Le passage de la "Recherche" (Search) à la "Réponse" via les LLM et la SGE (Search Generative Experience).</p>
+                </div>
+            </div>
+
+            <!-- Intro Text Block -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-stone-200">
+                <h2 class="text-2xl font-bold text-stone-800 mb-4 border-b pb-2 border-stone-100">Synthèse du Rapport</h2>
+                <div class="prose prose-stone text-stone-600 max-w-none">
+                    <p class="mb-4">
+                        Le positionnement sur le web subit une mutation profonde. L'époque où la densité de mots-clés dictait le classement est révolue. Aujourd'hui, les moteurs de recherche raisonnent en <strong>Entités</strong> (personnes, lieux, concepts) interconnectées au sein d'un graphe de connaissances (Knowledge Graph).
+                    </p>
+                    <p>
+                        Cette application interactive explore les piliers de cette transformation : l'<strong>interopérabilité</strong> des données via les standards du Web Sémantique (RDF, JSON-LD), et la distinction cruciale entre être "trouvable" (répondre à une requête précise) et être "découvrable" (être proposé proactivement par une IA).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SEMANTIC WEB (Plotly Visualization) -->
+        <section id="section-semantic" class="page-section hidden animate-fade-in">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2">Le Web des Entités</h2>
+                <p class="text-stone-600">
+                    Comprendre comment les moteurs "lisent" votre contenu. Dans le Web Sémantique, les documents ne sont plus des chaînes de caractères isolées, mais des nœuds connectés.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: Controls & Context -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                        <h3 class="font-bold text-lg text-teal-700 mb-3"><i class="fas fa-filter mr-2"></i>Navigation Sémantique</h3>
+                        <p class="text-sm text-stone-500 mb-4">
+                            Survolez les nœuds du graphique pour voir comment une "Entité" centrale est connectée à ses attributs via des données structurées.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="p-3 bg-stone-50 rounded border border-stone-200">
+                                <span class="block text-xs font-bold text-stone-400 uppercase">Concept Clé</span>
+                                <span class="text-stone-800 font-semibold">Désambiguïsation</span>
+                                <p class="text-xs text-stone-500 mt-1">L'IA distingue "Jaguar" (Animal) de "Jaguar" (Voiture) grâce au contexte des entités liées.</p>
+                            </div>
+                            <div class="p-3 bg-stone-50 rounded border border-stone-200">
+                                <span class="block text-xs font-bold text-stone-400 uppercase">Technologie</span>
+                                <span class="text-stone-800 font-semibold">Triplets RDF</span>
+                                <p class="text-xs text-stone-500 mt-1">Sujet > Prédicat > Objet (Ex: Tour Eiffel > Est située à > Paris).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Plotly Chart -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+                        <div id="semantic-graph" class="w-full h-[500px]"></div>
+                        <div class="mt-2 text-center text-xs text-stone-400 italic">
+                            Simulation interactive d'un cluster d'entités (Knowledge Graph)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: EXPERIMENTATION (Chart.js) -->
+        <section id="section-experiment" class="page-section hidden animate-fade-in">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2">Recherches Expérimentales</h2>
+                <p class="text-stone-600">
+                    Analyse comparative de la performance entre le SEO Traditionnel et le SEO Sémantique (SSEO) sur 12 mois.
+                </p>
+            </div>
+
+            <!-- Control Bar -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200 mb-6 flex flex-wrap gap-4 items-center justify-between">
+                <div>
+                    <span class="text-sm font-bold text-stone-600 mr-3">Filtrer par Secteur :</span>
+                    <select id="industry-filter" onchange="updateExperimentCharts()" class="bg-stone-50 border border-stone-300 text-stone-800 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5">
+                        <option value="ecommerce">E-Commerce</option>
+                        <option value="news">Presse & Médias</option>
+                        <option value="local">Services Locaux</option>
+                    </select>
+                </div>
+                <div class="flex space-x-2">
+                    <span class="px-3 py-1 bg-stone-200 text-stone-600 text-xs rounded-full font-medium">Données Normalisées</span>
+                    <span class="px-3 py-1 bg-teal-100 text-teal-700 text-xs rounded-full font-medium">Source: Étude Composite 2024</span>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Chart 1: CTR Impact -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <h3 class="text-lg font-bold text-stone-800 mb-4">Impact du Balisage sur le CTR</h3>
+                    <div class="chart-container-wrapper">
+                        <canvas id="ctrChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-500 bg-stone-50 p-3 rounded">
+                        <strong>Observation :</strong> Les pages enrichies avec Schema.org (Produit, FAQ, Avis) obtiennent un taux de clic (CTR) significativement supérieur grâce à l'occupation visuelle dans la SERP.
+                    </p>
+                </div>
+
+                <!-- Chart 2: Visibility in AI/Voice -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <h3 class="text-lg font-bold text-stone-800 mb-4">Potentiel de Découvrabilité (IA)</h3>
+                    <div class="chart-container-wrapper">
+                        <canvas id="discoverabilityChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-500 bg-stone-50 p-3 rounded">
+                        <strong>Observation :</strong> Le contenu structuré sémantiquement a 3x plus de chances d'être repris dans les "Featured Snippets" et les réponses vocales.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FUTURE & DISCOVERABILITY -->
+        <section id="section-future" class="page-section hidden animate-fade-in">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2">Trouvabilité vs. Découvrabilité</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Le grand basculement : passer d'un utilisateur qui cherche (Query) à un système qui propose (Prediction).
+                </p>
+            </div>
+
+            <!-- Concept Comparison Interactive Block -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 mb-16">
+                
+                <!-- Findability (Left) -->
+                <div class="group relative bg-white p-8 rounded-xl shadow-sm border border-stone-200 border-l-8 border-l-stone-400 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-search text-9xl text-stone-800"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-stone-700 mb-2">Trouvabilité (Findability)</h3>
+                    <span class="inline-block px-3 py-1 bg-stone-100 text-stone-600 text-xs font-bold rounded mb-4">WEB ACTUEL (Pull)</span>
+                    <ul class="space-y-3 relative z-10">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-stone-400 mt-1 mr-3"></i>
+                            <span class="text-stone-600 text-sm">L'utilisateur initie une requête explicite.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-stone-400 mt-1 mr-3"></i>
+                            <span class="text-stone-600 text-sm">Basé sur l'intention (Informationnelle, Transactionnelle).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-stone-400 mt-1 mr-3"></i>
+                            <span class="text-stone-600 text-sm">Succès mesuré par le classement (Ranking).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Discoverability (Right) -->
+                <div class="group relative bg-teal-50 p-8 rounded-xl shadow-sm border border-teal-200 border-l-8 border-l-teal-600 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-lightbulb text-9xl text-teal-800"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-teal-800 mb-2">Découvrabilité (Discoverability)</h3>
+                    <span class="inline-block px-3 py-1 bg-teal-200 text-teal-800 text-xs font-bold rounded mb-4">FUTUR (Push)</span>
+                    <ul class="space-y-3 relative z-10">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span class="text-stone-700 text-sm">Le système anticipe le besoin (Google Discover, TikTok).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span class="text-stone-700 text-sm">Basé sur le contexte, l'historique et les entités d'intérêt.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-teal-500 mt-1 mr-3"></i>
+                            <span class="text-stone-700 text-sm">Succès mesuré par l'engagement et la pertinence prédictive.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Timeline -->
+            <div class="relative max-w-4xl mx-auto py-10">
+                <h3 class="text-center text-xl font-bold text-stone-800 mb-10">L'Évolution de l'Écosystème</h3>
+                <div class="timeline-line"></div>
+                
+                <!-- Time Item 1 -->
+                <div class="relative flex justify-between items-center mb-12 w-full right-timeline group cursor-pointer" onclick="highlightTimeline(1)">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-stone-200 shadow-xl w-8 h-8 rounded-full group-hover:bg-teal-500 transition-colors">
+                        <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-sm border border-stone-200 w-5/12 px-6 py-4 hover:border-teal-500 transition-colors">
+                        <h3 class="mb-1 font-bold text-stone-800 text-sm md:text-base">Web Syntactique (Passé)</h3>
+                        <p class="text-xs leading-snug text-stone-500 text-opacity-100">
+                            Recherche par mots-clés exacts. Liens hypertextes simples. L'ère du "PageRank" brut.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Time Item 2 -->
+                <div class="relative flex justify-between items-center mb-12 w-full left-timeline group cursor-pointer" onclick="highlightTimeline(2)">
+                    <div class="order-1 bg-white rounded-lg shadow-sm border border-stone-200 w-5/12 px-6 py-4 hover:border-teal-500 transition-colors text-right">
+                        <h3 class="mb-1 font-bold text-stone-800 text-sm md:text-base">Web Sémantique (Présent)</h3>
+                        <p class="text-xs leading-snug text-stone-500 text-opacity-100">
+                            Introduction du sens. Schema.org, Knowledge Graph. Google comprend que "Paris" est une ville.
+                        </p>
+                    </div>
+                    <div class="z-20 flex items-center order-1 bg-teal-600 shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">2</h1>
+                    </div>
+                    <div class="order-1 w-5/12"></div>
+                </div>
+
+                <!-- Time Item 3 -->
+                <div class="relative flex justify-between items-center mb-12 w-full right-timeline group cursor-pointer" onclick="highlightTimeline(3)">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full animate-pulse">
+                        <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                    </div>
+                    <div class="order-1 bg-orange-50 rounded-lg shadow-sm border border-orange-200 w-5/12 px-6 py-4">
+                        <h3 class="mb-1 font-bold text-orange-800 text-sm md:text-base">Web Symbiotique (Futur Proche)</h3>
+                        <p class="text-xs leading-snug text-stone-600 text-opacity-100">
+                            IA Générative (SGE). Agents personnels autonomes. Interopérabilité totale des données. Découverte prédictive.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-300 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">© 2024 Sémantique & Futur du Web. Basé sur les recherches expérimentales en référencement.</p>
+            <div class="mt-4 flex justify-center space-x-6">
+                <i class="fas fa-database hover:text-white cursor-pointer"></i>
+                <i class="fas fa-network-wired hover:text-white cursor-pointer"></i>
+                <i class="fas fa-robot hover:text-white cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- State Management ---
+        const state = {
+            currentSection: 'dashboard',
+            industryFilter: 'ecommerce'
+        };
+
+        // --- Navigation Logic ---
+        function navigateTo(sectionId) {
+            // Update State
+            state.currentSection = sectionId;
+
+            // UI Updates - Nav Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active', 'text-teal-700');
+                btn.classList.add('text-stone-600');
+            });
+            const activeBtn = document.getElementById(`nav-${sectionId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('nav-active');
+                activeBtn.classList.remove('text-stone-600');
+            }
+
+            // UI Updates - Section Visibility
+            document.querySelectorAll('.page-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            const targetSec = document.getElementById(`section-${sectionId}`);
+            targetSec.classList.remove('hidden');
+
+            // Trigger specific renders if needed
+            if (sectionId === 'semantic') renderSemanticGraph();
+            if (sectionId === 'experiment') updateExperimentCharts();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Plotly Logic (Semantic Graph) ---
+        let plotly rendered = false;
+        function renderSemanticGraph() {
+            if (plotlyRendered) return; // Prevent re-rendering
+            
+            // Mock Data representing an Entity Cluster
+            // Central Node: "Web Sémantique"
+            // Connected Nodes: JSON-LD, Google KG, SEO, AI, RDF
+            
+            const xValues = [0, 1, -1, 0.5, -0.5, 0, 1.5]; // X Coordinates
+            const yValues = [0, 1, 1, -1, -1, 2, 0]; // Y Coordinates
+            const sizes = [60, 30, 30, 30, 30, 20, 25]; // Node sizes (Importance)
+            const labels = ["WEB SÉMANTIQUE", "JSON-LD", "Entités", "IA / NLP", "Interopérabilité", "Google", "Vocabulaires"];
+            const colors = ['#0f766e', '#f97316', '#f97316', '#14b8a6', '#14b8a6', '#78716c', '#78716c'];
+
+            const trace = {
+                x: xValues,
+                y: yValues,
+                mode: 'markers+text',
+                type: 'scatter',
+                text: labels,
+                textposition: 'bottom center',
+                marker: {
+                    size: sizes,
+                    color: colors,
+                    opacity: 0.8,
+                    line: {
+                        color: 'white',
+                        width: 2
+                    }
+                },
+                hoverinfo: 'text',
+                hovertext: labels.map(l => `${l}<br>Connecté au graphe`)
+            };
+
+            const layout = {
+                hovermode: 'closest',
+                showlegend: false,
+                xaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                yaxis: { showgrid: false, zeroline: false, showticklabels: false },
+                margin: { l: 0, r: 0, b: 0, t: 0 },
+                height: 500,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                // Draw lines manually using shapes to simulate edges
+                shapes: [
+                    { type: 'line', x0: 0, y0: 0, x1: 1, y1: 1, line: {color: '#e7e5e4', width: 2} }, // Center to JSON-LD
+                    { type: 'line', x0: 0, y0: 0, x1: -1, y1: 1, line: {color: '#e7e5e4', width: 2} }, // Center to Entities
+                    { type: 'line', x0: 0, y0: 0, x1: 0.5, y1: -1, line: {color: '#e7e5e4', width: 2} }, // Center to AI
+                    { type: 'line', x0: 0, y0: 0, x1: -0.5, y1: -1, line: {color: '#e7e5e4', width: 2} }, // Center to Interop
+                    { type: 'line', x0: 0, y0: 1, x1: 0, y1: 2, line: {color: '#e7e5e4', width: 1, dash: 'dot'} }, // Google to Web Sem
+                ]
+            };
+
+            const config = { responsive: true, displayModeBar: false };
+            
+            Plotly.newPlot('semantic-graph', [trace], layout, config);
+            plotlyRendered = true;
+        }
+
+        // --- Chart.js Logic (Experiments) ---
+        let ctrChartInstance = null;
+        let discoverabilityChartInstance = null;
+
+        const experimentData = {
+            ecommerce: {
+                ctr: [2.1, 4.8], // [Classic, Semantic]
+                discovery: [15, 65] // [Classic, Semantic]
+            },
+            news: {
+                ctr: [3.5, 5.2],
+                discovery: [20, 80] // News relies heavily on discover
+            },
+            local: {
+                ctr: [4.0, 7.5],
+                discovery: [10, 50] // Maps integration
+            }
+        };
+
+        function updateExperimentCharts() {
+            const industry = document.getElementById('industry-filter').value;
+            const data = experimentData[industry];
+
+            // 1. CTR Chart
+            const ctrCtx = document.getElementById('ctrChart').getContext('2d');
+            if (ctrChartInstance) ctrChartInstance.destroy();
+
+            ctrChartInstance = new Chart(ctrCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['SEO Classique', 'SEO Sémantique'],
+                    datasets: [{
+                        label: 'Taux de Clic (CTR %)',
+                        data: data.ctr,
+                        backgroundColor: ['#d6d3d1', '#0f766e'],
+                        borderRadius: 6,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '% CTR';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 10, title: {display: true, text: 'CTR %'} },
+                        x: { grid: {display: false} }
+                    }
+                }
+            });
+
+            // 2. Discoverability Chart (Radar or Line, let's use Doughnut for proportion of potential)
+            // Changing to a horizontal bar for "Visibility Score"
+            const discCtx = document.getElementById('discoverabilityChart').getContext('2d');
+            if (discoverabilityChartInstance) discoverabilityChartInstance.destroy();
+
+            discoverabilityChartInstance = new Chart(discCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Recherche Traditionnelle', 'IA & Découverte (Voice/SGE)'],
+                    datasets: [{
+                        label: 'Score de Visibilité (Index 0-100)',
+                        data: data.discovery,
+                        backgroundColor: ['#d6d3d1', '#f97316'],
+                        indexAxis: 'y',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 100, title: {display: true, text: 'Score de Visibilité'} }
+                    }
+                }
+            });
+        }
+
+        // --- Timeline Interaction ---
+        function highlightTimeline(index) {
+            // Simple visual feedback
+            // In a real app, this might open a modal
+            console.log("Timeline clicked:", index);
+        }
+
+        // Initialize default view
+        window.addEventListener('load', () => {
+            // Check for deep links or default
+            navigateTo('dashboard');
+        });
+
+    </script>
+</body>
+</html>

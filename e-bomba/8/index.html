@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Observatoire du Piratage Politique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* Custom Chart Container Styling as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a29e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c;
+        }
+        .active-tab {
+            border-bottom: 2px solid #ea580c;
+            color: #ea580c;
+            font-weight: 600;
+        }
+        .step-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e7e5e4;
+            z-index: 0;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Burnt Orange and Sage Green accents for a calm, journalistic tone. -->
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🛡️</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-900">PolitiHack<span class="text-orange-600">.Monitor</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#dashboard" class="text-stone-600 hover:text-orange-600 transition-colors text-sm font-medium">Tableau de Bord</a>
+                    <a href="#methods" class="text-stone-600 hover:text-orange-600 transition-colors text-sm font-medium">Méthodes</a>
+                    <a href="#timeline" class="text-stone-600 hover:text-orange-600 transition-colors text-sm font-medium">Anatomie</a>
+                    <a href="#defense" class="text-stone-600 hover:text-orange-600 transition-colors text-sm font-medium">Défense</a>
+                </div>
+                <!-- Mobile Menu Button (Functional via JS) -->
+                <button id="mobile-menu-btn" class="md:hidden text-stone-600 focus:outline-none">
+                    <span class="text-xl">☰</span>
+                </button>
+            </div>
+            <!-- Mobile Menu Panel -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="#dashboard" class="block py-2 text-stone-600 hover:text-orange-600">Tableau de Bord</a>
+                <a href="#methods" class="block py-2 text-stone-600 hover:text-orange-600">Méthodes</a>
+                <a href="#timeline" class="block py-2 text-stone-600 hover:text-orange-600">Anatomie</a>
+                <a href="#defense" class="block py-2 text-stone-600 hover:text-orange-600">Défense</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Intro -->
+    <header class="bg-white border-b border-stone-100">
+        <div class="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-stone-900 mb-6 tracking-tight">
+                L'Ère du <span class="text-orange-600">Piratage Politique</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-stone-600 leading-relaxed mb-8">
+                Une analyse interactive des stratégies de cyber-influence modernes. 
+                De la désinformation automatisée aux attaques d'infrastructures critiques, 
+                découvrez comment la technologie redéfinit la démocratie.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#dashboard" class="bg-stone-900 text-white px-6 py-3 rounded-full font-medium hover:bg-stone-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    Explorer les Données
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- Application Structure Plan: 
+             The app is structured into four logical phases designed to guide the user from the "What" (Stats) to the "How" (Methods/Process) and finally the "Solution" (Defense).
+             1. Dashboard: Immediate quantitative context.
+             2. Methods: Comparative analysis of attack vectors.
+             3. Timeline: Process flow of an attack to understand the mechanism.
+             4. Defense: Interactive simulator to empower the user.
+        -->
+
+        <!-- SECTION 1: DASHBOARD (Quantitative Context) -->
+        <section id="dashboard" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="text-orange-600">01.</span> Panorama des Menaces
+                </h2>
+                <p class="text-stone-600 mt-2 max-w-3xl">
+                    Cette section offre une vue d'ensemble quantitative sur l'évolution des cyber-incidents à motivation politique. 
+                    Les données agrégées montrent une augmentation nette des opérations d'influence par rapport aux attaques techniques pures.
+                </p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 hover:border-orange-200 transition-colors">
+                    <div class="text-sm font-medium text-stone-500 uppercase tracking-wide">Incidents (Annuel)</div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-stone-900">+145%</span>
+                        <span class="text-sm text-orange-600 font-medium">↗ depuis 2016</span>
+                    </div>
+                    <p class="mt-3 text-xs text-stone-500">Augmentation des cyberattaques visant des entités politiques mondiales.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 hover:border-orange-200 transition-colors">
+                    <div class="text-sm font-medium text-stone-500 uppercase tracking-wide">Coût Moyen</div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-stone-900">4.2M €</span>
+                    </div>
+                    <p class="mt-3 text-xs text-stone-500">Impact financier moyen d'une brèche de données dans le secteur public.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 hover:border-orange-200 transition-colors">
+                    <div class="text-sm font-medium text-stone-500 uppercase tracking-wide">Vecteur Principal</div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span class="text-3xl font-bold text-stone-900">Phishing</span>
+                        <span class="text-sm text-stone-400 font-medium">(Hameçonnage)</span>
+                    </div>
+                    <p class="mt-3 text-xs text-stone-500">Responsable de 85% des accès initiaux non autorisés.</p>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Chart 1: Evolution -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-lg font-semibold text-stone-800 mb-4">Évolution des Tactiques (2015-2025)</h3>
+                    <div class="chart-container">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-500 italic text-center">
+                        La bascule progressive du piratage technique vers la manipulation de l'opinion (Influence Ops).
+                    </p>
+                </div>
+
+                <!-- Chart 2: Targets -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-lg font-semibold text-stone-800 mb-4">Cibles Privilégiées</h3>
+                    <div class="chart-container">
+                        <canvas id="targetsChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-stone-500 italic text-center">
+                        Répartition des attaques par type d'organisation politique.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TACTICAL ARSENAL (Qualitative/Categorical) -->
+        <section id="methods" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="text-orange-600">02.</span> L'Arsenal Numérique
+                </h2>
+                <p class="text-stone-600 mt-2 max-w-3xl">
+                    Le piratage politique ne se limite pas au vol de mots de passe. C'est un écosystème complexe d'outils techniques et psychologiques.
+                    Explorez les cartes ci-dessous pour comprendre les mécanismes de chaque attaque.
+                </p>
+            </div>
+
+            <!-- Interactive Tactics Tabs -->
+            <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                <div class="flex border-b border-stone-100 overflow-x-auto" id="tactics-tabs">
+                    <!-- Tabs injected by JS -->
+                </div>
+                <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-stone-50/50">
+                    <div id="tactic-content" class="space-y-4">
+                        <!-- Content injected by JS -->
+                    </div>
+                    <div class="flex justify-center items-center">
+                        <div id="tactic-visual" class="w-full max-w-xs bg-white p-6 rounded-lg shadow-md border border-stone-200 text-center">
+                            <!-- Visual injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: ANATOMY OF A HACK (Process/Timeline) -->
+        <section id="timeline" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="text-orange-600">03.</span> Anatomie d'une Ingérence
+                </h2>
+                <p class="text-stone-600 mt-2 max-w-3xl">
+                    Comment une opération se déroule-t-elle concrètement ? Voici la chronologie type d'une opération "Hack-and-Leak" (Piratage et Divulgation), 
+                    conçue pour déstabiliser un scrutin.
+                </p>
+            </div>
+
+            <div class="relative py-8">
+                <!-- Vertical Line -->
+                <div class="hidden md:block step-line"></div>
+                
+                <div class="space-y-12 relative" id="timeline-container">
+                    <!-- Steps injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: DEFENSE SIMULATOR (Interactive/Education) -->
+        <section id="defense" class="scroll-mt-24 mb-20">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <span class="text-orange-600">04.</span> Bouclier Démocratique
+                </h2>
+                <p class="text-stone-600 mt-2 max-w-3xl">
+                    La sécurité n'est pas une fatalité. Simulez l'impact de différentes mesures de protection sur le "Niveau de Risque" 
+                    d'une organisation politique. Activez les contre-mesures pour voir l'effet en temps réel.
+                </p>
+            </div>
+
+            <div class="bg-stone-900 text-stone-50 rounded-2xl p-6 md:p-10 shadow-xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Controls -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-bold text-white mb-4">Protocoles de Défense</h3>
+                        
+                        <div class="defense-toggle flex items-center justify-between bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <div>
+                                <h4 class="font-semibold text-orange-50">Authentification Double Facteur (2FA)</h4>
+                                <p class="text-xs text-stone-400">Bloque 99% des attaques par mot de passe.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer defense-check" data-impact="40">
+                                <div class="w-11 h-6 bg-stone-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="defense-toggle flex items-center justify-between bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <div>
+                                <h4 class="font-semibold text-orange-50">Formation Anti-Phishing</h4>
+                                <p class="text-xs text-stone-400">Réduit le taux de clic humain par 5.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer defense-check" data-impact="25">
+                                <div class="w-11 h-6 bg-stone-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="defense-toggle flex items-center justify-between bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <div>
+                                <h4 class="font-semibold text-orange-50">Audit & Chiffrement</h4>
+                                <p class="text-xs text-stone-400">Protège l'intégrité des bases de données.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer defense-check" data-impact="20">
+                                <div class="w-11 h-6 bg-stone-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="defense-toggle flex items-center justify-between bg-stone-800 p-4 rounded-lg border border-stone-700">
+                            <div>
+                                <h4 class="font-semibold text-orange-50">Vérification de l'Information (Fact-Checking)</h4>
+                                <p class="text-xs text-stone-400">Limite la propagation virale de fake news.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer defense-check" data-impact="15">
+                                <div class="w-11 h-6 bg-stone-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Visualizer -->
+                    <div class="flex flex-col justify-center items-center bg-stone-800/50 rounded-xl p-8 border border-stone-700">
+                        <h3 class="text-stone-300 text-sm uppercase tracking-widest mb-6">Niveau de Vulnérabilité</h3>
+                        
+                        <div class="relative w-full h-8 bg-stone-700 rounded-full overflow-hidden mb-4">
+                            <!-- The Risk Bar -->
+                            <div id="risk-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-teal-500 via-orange-500 to-red-600 transition-all duration-700 ease-out" style="width: 100%;"></div>
+                        </div>
+                        
+                        <div class="flex justify-between w-full text-xs text-stone-400 font-mono mt-2">
+                            <span>SÉCURISÉ</span>
+                            <span>CRITIQUE</span>
+                        </div>
+
+                        <div id="risk-status" class="mt-8 text-center">
+                            <span class="text-5xl font-bold text-red-500 transition-colors duration-500" id="risk-percentage">100%</span>
+                            <p class="text-stone-300 mt-2" id="risk-text">Système exposé aux menaces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="mb-4 text-lg font-semibold text-stone-200">L'Observatoire du Piratage Politique</p>
+            <p class="text-sm max-w-lg mx-auto leading-relaxed">
+                Ce tableau de bord est un outil éducatif simulant les dynamiques de cybersécurité dans le contexte électoral.
+                Les données sont agrégées à partir de tendances réelles observées entre 2016 et 2024.
+            </p>
+            <div class="mt-8 pt-8 border-t border-stone-800 text-xs">
+                &copy; 2025 PolitiHack Monitor. Généré à des fins d'analyse.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Visualization & Content Choices: 
+         1. Charts (Chart.js): 
+            - 'Evolution des Tactiques': A multi-line chart comparing "Technical Hacks" vs "Influence Ops". Allows users to see the strategic shift.
+            - 'Cibles Privilégiées': A polar area or pie chart to show the distribution of victims.
+         2. Tab System (Methods):
+            - Uses vanilla JS to switch content without page reload. Keeps the user focused on comparison.
+            - Avoids SVG diagrams by using Unicode icons within styled HTML cards.
+         3. Timeline (Anatomy):
+            - Vertical layout mimicking a process flow.
+            - Uses simple CSS borders and Flexbox to create the "timeline" look without complex graphics libraries.
+         4. Defense Simulator:
+            - Interactive checkboxes coupled with a dynamic progress bar (CSS width manipulation).
+            - Gamifies the concept of "Defense in Depth" to make it memorable.
+         
+         CONFIRMATION: NO SVG graphics used (using Unicode/CSS shapes). NO Mermaid JS used.
+    -->
+
+    <script>
+        // --- DATA & CONTENT ---
+        
+        // Methods Data
+        const tacticsData = [
+            {
+                id: 'phishing',
+                title: 'Hameçonnage (Phishing)',
+                icon: '🎣',
+                desc: 'Envoi d\'emails frauduleux imitant des communications officielles pour voler des identifiants.',
+                stat: '90%',
+                statLabel: 'des intrusions commencent ici',
+                color: 'bg-blue-50 border-blue-200 text-blue-900'
+            },
+            {
+                id: 'doxing',
+                title: 'Doxing & Leaks',
+                icon: '📂',
+                desc: 'Vol et publication stratégique de documents confidentiels (emails, mémos) pour nuire à la réputation.',
+                stat: '48h',
+                statLabel: 'avant impact médiatique maximal',
+                color: 'bg-red-50 border-red-200 text-red-900'
+            },
+            {
+                id: 'botnets',
+                title: 'Botnets & Trolls',
+                icon: '🤖',
+                desc: 'Réseaux de comptes automatisés amplifiant artificiellement des messages polarisants sur les réseaux sociaux.',
+                stat: '10M+',
+                statLabel: 'Interactions fausses / jour',
+                color: 'bg-purple-50 border-purple-200 text-purple-900'
+            },
+            {
+                id: 'deepfakes',
+                title: 'Deepfakes AI',
+                icon: '🎭',
+                desc: 'Manipulation vidéo/audio par IA pour faire dire à un candidat des propos qu\'il n\'a jamais tenus.',
+                stat: 'x10',
+                statLabel: 'Croissance annuelle',
+                color: 'bg-orange-50 border-orange-200 text-orange-900'
+            }
+        ];
+
+        // Timeline Data
+        const timelineSteps = [
+            {
+                step: '01',
+                title: 'Reconnaissance',
+                desc: 'Les attaquants scannent les réseaux sociaux et les sites publics pour identifier les employés vulnérables et l\'architecture technique.',
+                icon: '🔍'
+            },
+            {
+                step: '02',
+                title: 'Intrusion (Weaponization)',
+                desc: 'Envoi d\'un email piégé (Spear Phishing) à un membre de l\'équipe de campagne. Installation discrète d\'un logiciel malveillant.',
+                icon: '🔓'
+            },
+            {
+                step: '03',
+                title: 'Exfiltration',
+                desc: 'Pendant des semaines, les données sensibles (stratégies, emails, bases donateurs) sont copiées vers des serveurs externes chiffrés.',
+                icon: '📡'
+            },
+            {
+                step: '04',
+                title: 'Blanchiment de l\'Info',
+                desc: 'Les données volées sont transmises à des "hacktivistes" ou des médias tiers pour masquer la source réelle de l\'attaque.',
+                icon: '🧼'
+            },
+            {
+                step: '05',
+                title: 'Amplification',
+                desc: 'Des armées de bots relaient les révélations sur les réseaux sociaux pour créer un scandale politique juste avant le vote.',
+                icon: '📢'
+            }
+        ];
+
+        // --- CHART JS SETUP ---
+
+        const initCharts = () => {
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#78716c';
+
+            // Chart 1: Trends
+            const ctxTrends = document.getElementById('trendsChart').getContext('2d');
+            new Chart(ctxTrends, {
+                type: 'line',
+                data: {
+                    labels: ['2016', '2018', '2020', '2022', '2024', '2025'],
+                    datasets: [
+                        {
+                            label: 'Opérations d\'Influence (Désinfo)',
+                            data: [20, 35, 60, 85, 120, 140],
+                            borderColor: '#ea580c', // Orange-600
+                            backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Attaques Techniques Pures (DDoS/Defacement)',
+                            data: [80, 75, 70, 65, 55, 50],
+                            borderColor: '#57534e', // Stone-600
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: '#fff',
+                            titleColor: '#1c1917',
+                            bodyColor: '#44403c',
+                            borderColor: '#e7e5e4',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f5f5f4' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Targets
+            const ctxTargets = document.getElementById('targetsChart').getContext('2d');
+            new Chart(ctxTargets, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Partis Politiques', 'Comptes Candidats', 'Infrastructures de Vote', 'Administrations'],
+                    datasets: [{
+                        data: [45, 30, 10, 15],
+                        backgroundColor: [
+                            '#ea580c', // Orange
+                            '#fdba74', // Light Orange
+                            '#44403c', // Dark Stone
+                            '#a8a29e'  // Light Stone
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                    },
+                    cutout: '70%'
+                }
+            });
+        };
+
+        // --- INTERACTIVITY LOGIC ---
+
+        // 1. Tactics Tab System
+        const renderTactics = () => {
+            const tabContainer = document.getElementById('tactics-tabs');
+            const contentContainer = document.getElementById('tactic-content');
+            const visualContainer = document.getElementById('tactic-visual');
+            
+            let currentTactic = tacticsData[0];
+
+            const updateUI = (tactic) => {
+                // Update Content
+                contentContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold text-stone-900">${tactic.title}</h3>
+                    <p class="text-stone-600 text-lg leading-relaxed">${tactic.desc}</p>
+                    <div class="inline-block mt-4 px-4 py-2 bg-white rounded-lg border border-stone-200 shadow-sm">
+                        <span class="block text-2xl font-bold text-stone-900">${tactic.stat}</span>
+                        <span class="text-xs font-medium text-stone-500 uppercase">${tactic.statLabel}</span>
+                    </div>
+                `;
+
+                // Update Visual Card
+                visualContainer.className = `w-full max-w-xs p-6 rounded-lg shadow-md border text-center transition-all duration-300 transform scale-100 ${tactic.color}`;
+                visualContainer.innerHTML = `
+                    <div class="text-6xl mb-4">${tactic.icon}</div>
+                    <div class="font-bold text-lg opacity-90">MENACE DÉTECTÉE</div>
+                `;
+
+                // Update Tabs
+                const tabs = tabContainer.querySelectorAll('button');
+                tabs.forEach(tab => {
+                    if (tab.dataset.id === tactic.id) {
+                        tab.className = 'px-6 py-4 text-sm font-medium whitespace-nowrap active-tab bg-white';
+                    } else {
+                        tab.className = 'px-6 py-4 text-sm font-medium text-stone-500 hover:text-stone-700 whitespace-nowrap hover:bg-stone-50 transition-colors';
+                    }
+                });
+            };
+
+            // Build Tabs
+            tacticsData.forEach(tactic => {
+                const btn = document.createElement('button');
+                btn.textContent = tactic.title;
+                btn.dataset.id = tactic.id;
+                btn.addEventListener('click', () => updateUI(tactic));
+                tabContainer.appendChild(btn);
+            });
+
+            // Initialize
+            updateUI(currentTactic);
+        };
+
+        // 2. Timeline Rendering
+        const renderTimeline = () => {
+            const container = document.getElementById('timeline-container');
+            
+            timelineSteps.forEach((item, index) => {
+                const isLeft = index % 2 === 0;
+                
+                const html = `
+                <div class="relative flex items-center justify-between md:justify-normal w-full mb-8 group">
+                    <div class="order-1 w-5/12 hidden md:block ${isLeft ? '' : 'md:order-3'}"></div>
+                    
+                    <div class="z-20 flex items-center order-1 bg-white border-4 border-stone-100 shadow-sm w-12 h-12 rounded-full justify-center text-xl md:order-2 group-hover:border-orange-200 transition-colors">
+                        ${item.icon}
+                    </div>
+                    
+                    <div class="order-1 w-full md:w-5/12 px-4 py-4 ml-4 md:ml-0 bg-white rounded-lg shadow-sm border border-stone-100 ${isLeft ? 'md:mr-8 md:text-right' : 'md:order-3 md:ml-8'} hover:shadow-md transition-shadow">
+                        <span class="text-orange-600 font-bold text-xs tracking-wider mb-1 block">ÉTAPE ${item.step}</span>
+                        <h3 class="font-bold text-stone-900 text-lg mb-2">${item.title}</h3>
+                        <p class="text-sm text-stone-600 leading-relaxed">${item.desc}</p>
+                    </div>
+                </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        };
+
+        // 3. Defense Simulator Logic
+        const initDefenseSimulator = () => {
+            const toggles = document.querySelectorAll('.defense-check');
+            const bar = document.getElementById('risk-bar');
+            const percentText = document.getElementById('risk-percentage');
+            const statusText = document.getElementById('risk-text');
+
+            const calculateRisk = () => {
+                let currentRisk = 100;
+                toggles.forEach(toggle => {
+                    if (toggle.checked) {
+                        currentRisk -= parseInt(toggle.dataset.impact);
+                    }
+                });
+                
+                // Clamp to 0
+                if (currentRisk < 0) currentRisk = 0;
+
+                // Update UI
+                bar.style.width = `${currentRisk}%`;
+                percentText.textContent = `${currentRisk}%`;
+
+                // Color Logic based on risk
+                if (currentRisk > 60) {
+                    bar.className = 'absolute top-0 left-0 h-full bg-red-600 transition-all duration-700 ease-out';
+                    percentText.className = 'text-5xl font-bold text-red-600 transition-colors duration-500';
+                    statusText.textContent = "Système CRITIQUE. Intervention requise.";
+                    statusText.className = 'text-red-200 mt-2 font-medium';
+                } else if (currentRisk > 25) {
+                    bar.className = 'absolute top-0 left-0 h-full bg-orange-500 transition-all duration-700 ease-out';
+                    percentText.className = 'text-5xl font-bold text-orange-500 transition-colors duration-500';
+                    statusText.textContent = "Vulnérabilités modérées présentes.";
+                    statusText.className = 'text-orange-200 mt-2 font-medium';
+                } else {
+                    bar.className = 'absolute top-0 left-0 h-full bg-teal-500 transition-all duration-700 ease-out';
+                    percentText.className = 'text-5xl font-bold text-teal-500 transition-colors duration-500';
+                    statusText.textContent = "Infrastructure sécurisée et résiliente.";
+                    statusText.className = 'text-teal-200 mt-2 font-medium';
+                }
+            };
+
+            toggles.forEach(t => t.addEventListener('change', calculateRisk));
+        };
+
+        // 4. Mobile Menu
+        const initMenu = () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        };
+
+        // Init All
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderTactics();
+            renderTimeline();
+            initDefenseSimulator();
+            initMenu();
+        });
+
+    </script>
+</body>
+</html>

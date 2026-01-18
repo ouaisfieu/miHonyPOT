@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Observatoire SEO & GEO : L'Ère de l'IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Font Import - Inter for clean, modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* Stone-50: Warm neutral background */
+            color: #1c1917; /* Stone-900: High contrast text */
+        }
+
+        /* Chart Container Strategy - Strictly enforcing guidelines */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-wrapper {
+                height: 280px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a29e; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c; 
+        }
+
+        /* Interactive Element Transitions */
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Navigation Active State */
+        .nav-btn.active {
+            background-color: #0d9488; /* Teal-600 */
+            color: white;
+            border-color: #0d9488;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Professional Tech - Stone (Backgrounds), Teal (Primary/Action), Slate (Text), Amber (Highlights) -->
+    <!-- Application Structure Plan:
+         1. **Dashboard (Synthese):** High-level view of the paradigm shift (SEO vs GEO). Immediate context.
+         2. **Stratégies GEO (Action):** Interactive checklist and calculator for "Prompt-Friendly" content. Focuses on the "How-To" from Report 1.
+         3. **L'Avenir Agentique (Vision):** Explores the advanced concepts from Report 2 (Web 3.0, Agents, RDF) using a timeline and feature explorer.
+         4. **Data & KPIs (Mesure):** Visualization of the "Zero-Click" trend and new metrics.
+         Structure chosen to guide the user from "What is happening?" to "What do I do?" and finally "Where is this going?".
+    -->
+    <!-- Visualization & Content Choices:
+         1. **Comparison Chart (Line/Radar):** Visualizes the shift from Keywords to Entities/Trust over time. (Chart.js)
+         2. **Content Scorer (Interactive Form):** Gamifies the "Checklist" from the report to teach GEO principles. (JS/HTML)
+         3. **Zero-Click Donut (Chart.js):** Dramatizes the loss of traffic to AI answers.
+         4. **Agentic Flow Diagram (HTML/CSS):** Uses styled blocks to explain the complex "Discovery -> Auth -> Action" flow without SVG.
+         5. **Entity Network (Chart.js Bubble):** Abstract representation of a Knowledge Graph to explain semantic connections.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">AI</div>
+                    <h1 class="text-xl font-bold tracking-tight text-stone-800">Observatoire <span class="text-teal-600">SEO & GEO</span></h1>
+                </div>
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('dashboard')" class="nav-btn active px-4 py-2 rounded-md text-sm font-medium transition-colors border border-transparent hover:bg-stone-100" data-target="dashboard">Synthèse</button>
+                    <button onclick="switchTab('strategies')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium transition-colors border border-transparent hover:bg-stone-100" data-target="strategies">Stratégies GEO</button>
+                    <button onclick="switchTab('agentic')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium transition-colors border border-transparent hover:bg-stone-100" data-target="agentic">Web Agentique</button>
+                    <button onclick="switchTab('kpi')" class="nav-btn px-4 py-2 rounded-md text-sm font-medium transition-colors border border-transparent hover:bg-stone-100" data-target="kpi">KPI & Données</button>
+                </nav>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-md text-stone-600 hover:bg-stone-100">
+                    <span class="text-2xl">☰</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-50 border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="switchTab('dashboard')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-stone-200">Synthèse</button>
+                <button onclick="switchTab('strategies')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-stone-200">Stratégies GEO</button>
+                <button onclick="switchTab('agentic')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-stone-200">Web Agentique</button>
+                <button onclick="switchTab('kpi')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-stone-200">KPI & Données</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- SECTION 1: DASHBOARD (Overview) -->
+        <section id="dashboard" class="space-y-8 animate-fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-stone-100">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">La Grande Transition : Du SEO au GEO</h2>
+                <p class="text-lg text-stone-600 max-w-4xl leading-relaxed">
+                    Nous assistons à une rupture fondamentale. Les moteurs de recherche traditionnels indexant des documents (Google classique) cèdent la place aux <strong>Moteurs de Réponse (AEO)</strong> et aux <strong>Agents IA</strong> qui synthétisent l'information. L'objectif n'est plus seulement d'être cliqué, mais d'être <strong>cité</strong> comme source d'autorité par les LLM (ChatGPT, Perplexity, Gemini).
+                </p>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-teal-500">
+                        <h3 class="font-bold text-stone-900">Le Défi</h3>
+                        <p class="text-sm text-stone-600 mt-2">Visibilité dans les "AI Overviews" et les réponses directes.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-orange-400">
+                        <h3 class="font-bold text-stone-900">La Menace</h3>
+                        <p class="text-sm text-stone-600 mt-2">Le "Zéro-Clic" : 60% des recherches ne génèrent plus de visite.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-indigo-500">
+                        <h3 class="font-bold text-stone-900">La Solution</h3>
+                        <p class="text-sm text-stone-600 mt-2">Structuration sémantique (Entities, Knowledge Graph).</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-lg border-l-4 border-rose-500">
+                        <h3 class="font-bold text-stone-900">L'Avenir (2026)</h3>
+                        <p class="text-sm text-stone-600 mt-2">Web Agentique & Interopérabilité (Solid, RDF).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization: The Paradigm Shift -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-100">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-stone-900">Évolution des Priorités (2020 vs 2026)</h3>
+                        <p class="text-sm text-stone-500">Visualisation de la bascule entre l'optimisation par mots-clés et l'optimisation par entités.</p>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="shiftChart"></canvas>
+                    </div>
+                    <div class="mt-4 flex justify-center gap-4">
+                        <button onclick="updateShiftChart(2020)" class="px-3 py-1 bg-stone-200 hover:bg-stone-300 rounded text-sm font-medium">Ère 2020 (Mots-clés)</button>
+                        <button onclick="updateShiftChart(2026)" class="px-3 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded text-sm font-medium">Ère 2026 (Entités)</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-100 flex flex-col justify-center">
+                    <h3 class="text-xl font-bold text-stone-900 mb-4">Concepts Clés</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-sm font-bold mt-0.5">1</span>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-bold text-stone-900">GEO (Generative Engine Optimization)</h4>
+                                <p class="text-sm text-stone-600">L'art de structurer le contenu pour qu'il soit facilement ingéré, compris et restitué par les modèles d'IA générative.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-sm font-bold mt-0.5">2</span>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-bold text-stone-900">Trouvabilité vs Découvrabilité</h4>
+                                <p class="text-sm text-stone-600">La trouvabilité (l'utilisateur cherche l'info) laisse place à la découvrabilité (l'IA propose l'info proactivement via des agents).</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-sm font-bold mt-0.5">3</span>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-bold text-stone-900">Confiance Cryptographique</h4>
+                                <p class="text-sm text-stone-600">Face à la duplication par l'IA, l'autorité sera validée par des identifiants pérennes (DIDs) et des protocoles blockchain.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: STRATEGIES GEO (Interactive Guide) -->
+        <section id="strategies" class="space-y-8 hidden animate-fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-stone-100">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">Guide d'Optimisation GEO</h2>
+                <p class="text-stone-600 mb-6">Pour être cité par ChatGPT ou Google AI Overviews, votre contenu doit être "Machine-Readable". Utilisez cet outil d'audit pour vérifier la conformité de vos contenus.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- The Auditor Tool -->
+                    <div class="lg:col-span-1 bg-stone-50 p-6 rounded-xl border border-stone-200">
+                        <h3 class="font-bold text-lg mb-4 text-teal-800">Calculateur de Score GEO</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="15">
+                                <span class="text-sm text-stone-700">Structure Claire (H1, H2, H3)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="20">
+                                <span class="text-sm text-stone-700">Réponse Directe (< 50 mots) en intro</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="15">
+                                <span class="text-sm text-stone-700">Listes à puces ou Tableaux HTML</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="25">
+                                <span class="text-sm text-stone-700">Schema.org JSON-LD (Entités)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="15">
+                                <span class="text-sm text-stone-700">Sources & Citations d'Autorité</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 bg-white rounded shadow-sm cursor-pointer hover:bg-stone-50">
+                                <input type="checkbox" class="geo-check form-checkbox h-5 w-5 text-teal-600" data-score="10">
+                                <span class="text-sm text-stone-700">Langage Naturel & Factuel</span>
+                            </label>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-stone-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-stone-700">Potentiel de Citation</span>
+                                <span id="geo-score-display" class="font-bold text-2xl text-teal-600">0%</span>
+                            </div>
+                            <div class="w-full bg-stone-200 rounded-full h-2.5">
+                                <div id="geo-progress" class="bg-teal-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p id="geo-feedback" class="text-xs text-stone-500 mt-2 italic">Sélectionnez les éléments pour l'audit.</p>
+                        </div>
+                    </div>
+
+                    <!-- Explainer Content -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white p-6 rounded-xl border border-stone-100 shadow-sm">
+                            <h3 class="text-xl font-bold text-stone-900 mb-3">Pourquoi ces critères ?</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-bold text-teal-700 text-sm uppercase mb-1">Structure "Prompt-Friendly"</h4>
+                                    <p class="text-sm text-stone-600">Les LLM "lisent" mieux les contenus très structurés. Les listes et tableaux facilitent l'extraction de données comparatives, augmentant les chances d'être inclus dans une réponse synthétique.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-teal-700 text-sm uppercase mb-1">Le Zéro-Clic & Featured Snippets</h4>
+                                    <p class="text-sm text-stone-600">Fournir une définition concise (2-3 phrases) dès le début d'un paragraphe maximise les chances d'apparaître en "Featured Snippet" ou en tête de résumé IA.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-teal-700 text-sm uppercase mb-1">Données Structurées (Schema)</h4>
+                                    <p class="text-sm text-stone-600">Au-delà du balisage de base, utiliser <code>Mentions</code>, <code>About</code> et <code>SameAs</code> aide à connecter votre contenu au Knowledge Graph global.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-teal-700 text-sm uppercase mb-1">E-E-A-T & Sources</h4>
+                                    <p class="text-sm text-stone-600">L'expérience et l'expertise sont cruciales. Citer des sources externes fiables renforce votre propre graphe d'autorité aux yeux de Google.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Snippet Visual -->
+                        <div class="bg-stone-900 rounded-xl p-6 text-stone-300 font-mono text-sm overflow-x-auto">
+                            <div class="flex items-center gap-2 mb-2 text-stone-500 border-b border-stone-700 pb-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                <span class="ml-2">Exemple JSON-LD Avancé</span>
+                            </div>
+                            <pre class="whitespace-pre">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Stratégies GEO 2025",
+  "about": {
+    "@type": "Thing",
+    "name": "Generative Engine Optimization",
+    "sameAs": "https://en.wikipedia.org/wiki/GEO"
+  },
+  "mentions": [
+    {"@type": "Organization", "name": "OpenAI"},
+    {"@type": "SoftwareApplication", "name": "ChatGPT"}
+  ],
+  "potentialAction": {
+    "@type": "ReadAction",
+    "target": "https://site.com/geo-guide"
+  }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: WEB AGENTIQUE (Future Vision) -->
+        <section id="agentic" class="space-y-8 hidden animate-fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-stone-100">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Vers le Web Agentique (2025-2026)</h2>
+                <p class="text-stone-600 mb-8 max-w-4xl">
+                    Le Web évolue d'un catalogue de documents vers un écosystème d'<strong>Agents Autonomes</strong>. Dans ce futur proche, votre site ne sera plus seulement visité par des humains, mais opéré par des IA personnelles (Assistants) capables d'exécuter des actions (réserver, acheter, comparer) via des protocoles interopérables comme Solid et RDF 1.2.
+                </p>
+
+                <!-- Agentic Workflow Visualization (No SVG) -->
+                <div class="mb-10">
+                    <h3 class="text-xl font-bold text-stone-800 mb-6 text-center">Le Flux d'Interaction Agentique</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <!-- Step 1 -->
+                        <div class="relative p-6 bg-teal-50 rounded-lg border border-teal-100 interactive-card">
+                            <div class="text-4xl mb-2">🔍</div>
+                            <h4 class="font-bold text-teal-800 text-lg">1. Découvrabilité</h4>
+                            <p class="text-sm text-stone-600 mt-2">L'Agent IA scanne le Knowledge Graph. Il ne cherche pas des mots-clés, mais des <strong>Entités</strong> et leurs relations.</p>
+                            <div class="mt-3 text-xs font-mono text-teal-600 bg-white p-2 rounded inline-block">Schema: "mentions", "about"</div>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="relative p-6 bg-indigo-50 rounded-lg border border-indigo-100 interactive-card">
+                            <div class="text-4xl mb-2">🔐</div>
+                            <h4 class="font-bold text-indigo-800 text-lg">2. Confiance & Accès</h4>
+                            <p class="text-sm text-stone-600 mt-2">Authentification via des protocoles décentralisés (Solid, DIDs). L'agent vérifie la légitimité de la source.</p>
+                            <div class="mt-3 text-xs font-mono text-indigo-600 bg-white p-2 rounded inline-block">Protocol: Solid / WebID</div>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="relative p-6 bg-orange-50 rounded-lg border border-orange-100 interactive-card">
+                            <div class="text-4xl mb-2">⚡</div>
+                            <h4 class="font-bold text-orange-800 text-lg">3. Action (potentialAction)</h4>
+                            <p class="text-sm text-stone-600 mt-2">L'Agent exécute la tâche pour l'humain. Le site doit exposer ses "capabilités" via des API sémantiques.</p>
+                            <div class="mt-3 text-xs font-mono text-orange-600 bg-white p-2 rounded inline-block">Schema: "potentialAction"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Knowledge Graph Simulation -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-wrapper bg-stone-50 rounded-xl border border-stone-200 p-2">
+                        <canvas id="entityBubbleChart"></canvas>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3">Le Réseau Sémantique</h3>
+                        <p class="text-stone-600 mb-4">
+                            Cette visualisation abstraite représente comment les moteurs modernes (et les agents) perçoivent votre contenu : non pas comme une page isolée, mais comme un nœud dans un réseau de concepts interconnectés.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-stone-50 border-l-4 border-teal-500 rounded">
+                                <h5 class="font-bold text-sm text-stone-800">Topical Authority</h5>
+                                <p class="text-xs text-stone-600">Couvrir un sujet de manière exhaustive (clusters) renforce l'autorité du nœud central.</p>
+                            </div>
+                            <div class="p-3 bg-stone-50 border-l-4 border-indigo-500 rounded">
+                                <h5 class="font-bold text-sm text-stone-800">Adversarial SEO</h5>
+                                <p class="text-xs text-stone-600">Attention aux manipulations de biais dans les données d'entraînement (Data Poisoning) qui pourraient exclure vos entités.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: KPI & DATA (Measurement) -->
+        <section id="kpi" class="space-y-8 hidden animate-fade-in">
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-stone-100">
+                <h2 class="text-3xl font-bold text-stone-900 mb-6">Nouveaux Indicateurs de Performance</h2>
+                <p class="text-stone-600 mb-8">
+                    Dans un monde où le clic devient rare, les KPI traditionnels (trafic, sessions) ne suffisent plus. Il faut mesurer la <strong>visibilité sémantique</strong> et la <strong>part de voix dans les réponses générées</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Zero Click Chart -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h3 class="font-bold text-stone-800 mb-2 text-center">L'Impact du "Zéro-Clic"</h3>
+                        <div class="chart-wrapper" style="height: 300px;">
+                            <canvas id="zeroClickChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-stone-500 mt-4">Estimation de la répartition des résultats de recherche.</p>
+                    </div>
+
+                    <!-- New Metrics List -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-stone-800 mb-4">KPIs de l'Ère de l'IA</h3>
+                        
+                        <div class="p-4 bg-stone-50 rounded-lg flex items-center justify-between group hover:bg-teal-50 transition-colors">
+                            <div>
+                                <h4 class="font-bold text-stone-700 group-hover:text-teal-800">Share of Model (SoM)</h4>
+                                <p class="text-sm text-stone-500">À quelle fréquence votre marque est-elle citée par l'IA pour des requêtes pertinentes ?</p>
+                            </div>
+                            <span class="text-2xl">📊</span>
+                        </div>
+
+                        <div class="p-4 bg-stone-50 rounded-lg flex items-center justify-between group hover:bg-teal-50 transition-colors">
+                            <div>
+                                <h4 class="font-bold text-stone-700 group-hover:text-teal-800">Sentiment d'Entité</h4>
+                                <p class="text-sm text-stone-500">Quelle est l'association émotionnelle ou qualitative que l'IA fait avec votre marque ?</p>
+                            </div>
+                            <span class="text-2xl">❤️</span>
+                        </div>
+
+                        <div class="p-4 bg-stone-50 rounded-lg flex items-center justify-between group hover:bg-teal-50 transition-colors">
+                            <div>
+                                <h4 class="font-bold text-stone-700 group-hover:text-teal-800">Taux de "Zéro-Clic" Utile</h4>
+                                <p class="text-sm text-stone-500">Combien d'impressions génèrent de la notoriété sans clic (via Featured Snippets) ?</p>
+                            </div>
+                            <span class="text-2xl">👁️</span>
+                        </div>
+                        
+                        <div class="mt-6 p-4 border border-teal-200 bg-teal-50 rounded-lg text-sm text-teal-800">
+                            <strong>Conseil Stratégique :</strong> Ne mesurez plus seulement ce qui arrive sur votre site, mais comment votre marque existe <em>en dehors</em> de votre site, dans le graphe de connaissances global.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-100 border-t border-stone-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-stone-500 text-sm">
+            <p>&copy; 2026 Observatoire SEO & GEO. Basé sur les rapports stratégiques "Stratégies SEO et GEO" et "SEO, Web Sémantique et Avenir".</p>
+            <p class="mt-2">Optimisé pour l'Ère de l'IA.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- STATE MANAGEMENT ---
+        const state = {
+            currentTab: 'dashboard',
+            geoScore: 0,
+            shiftYear: 2020 // 2020 or 2026
+        };
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Update State
+            state.currentTab = tabId;
+
+            // Hide all sections
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            // Show target section
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Update Nav Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-teal-600', 'text-white');
+                if(btn.dataset.target === tabId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Mobile menu handling
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Trigger chart updates/animations if needed for specific tabs
+            if(tabId === 'agentic') renderEntityChart();
+            if(tabId === 'kpi') renderKpiChart();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- CHART INITIALIZATION ---
+        // Global defaults
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#57534e';
+        
+        let shiftChartInstance = null;
+        let entityChartInstance = null;
+        let kpiChartInstance = null;
+
+        // 1. Shift Chart (Dashboard)
+        function initShiftChart() {
+            const ctx = document.getElementById('shiftChart').getContext('2d');
+            
+            // Data for 2020 (Classic SEO)
+            const data2020 = [90, 80, 20, 10, 30]; 
+            // Data for 2026 (GEO/Agentic)
+            const data2026 = [30, 40, 95, 90, 85];
+            // Labels: Mots-clés, Backlinks Qté, Entités, E-E-A-T, Structure Données
+            
+            shiftChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Mots-clés Exacts', 'Volume de Backlinks', 'Autorité Sémantique', 'Confiance (E-E-A-T)', 'Données Structurées'],
+                    datasets: [{
+                        label: 'Priorité Stratégique',
+                        data: data2020,
+                        fill: true,
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)', // Teal-600 low opacity
+                        borderColor: 'rgb(13, 148, 136)',
+                        pointBackgroundColor: 'rgb(13, 148, 136)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(13, 148, 136)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e7e5e4' },
+                            grid: { color: '#e7e5e4' },
+                            pointLabels: {
+                                font: { size: 12, weight: '600' },
+                                color: '#44403c'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateShiftChart(year) {
+            state.shiftYear = year;
+            const newData = year === 2020 ? [90, 80, 20, 10, 30] : [30, 40, 95, 90, 85];
+            const color = year === 2020 ? 'rgba(120, 113, 108, 0.2)' : 'rgba(13, 148, 136, 0.2)'; // Stone vs Teal
+            const borderColor = year === 2020 ? 'rgb(120, 113, 108)' : 'rgb(13, 148, 136)';
+            
+            shiftChartInstance.data.datasets[0].data = newData;
+            shiftChartInstance.data.datasets[0].backgroundColor = color;
+            shiftChartInstance.data.datasets[0].borderColor = borderColor;
+            shiftChartInstance.data.datasets[0].pointBackgroundColor = borderColor;
+            shiftChartInstance.update();
+        }
+
+        // 2. Entity Bubble Chart (Agentic Section)
+        function renderEntityChart() {
+            if (entityChartInstance) return; // Only render once
+            
+            const ctx = document.getElementById('entityBubbleChart').getContext('2d');
+            entityChartInstance = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Entités Connectées',
+                        data: [
+                            { x: 20, y: 30, r: 15, concept: "Votre Marque" },
+                            { x: 40, y: 10, r: 10, concept: "Produit A" },
+                            { x: 30, y: 50, r: 10, concept: "CEO" },
+                            { x: 10, y: 40, r: 8, concept: "Secteur" },
+                            { x: 50, y: 30, r: 20, concept: "Concept Clé" },
+                            { x: 35, y: 25, r: 5, concept: "Attribut" }
+                        ],
+                        backgroundColor: 'rgba(99, 102, 241, 0.6)', // Indigo
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { display: false, min: 0, max: 60 },
+                        y: { display: false, min: 0, max: 60 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.concept;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. KPI Zero Click Chart (Donut)
+        function renderKpiChart() {
+            if (kpiChartInstance) return;
+
+            const ctx = document.getElementById('zeroClickChart').getContext('2d');
+            kpiChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Zéro-Clic (IA/Snippet)', 'Clic Organique', 'Publicité'],
+                    datasets: [{
+                        data: [60, 30, 10],
+                        backgroundColor: [
+                            '#f97316', // Orange-500 (Zero Click - Warning/Opportunity)
+                            '#0d9488', // Teal-600 (Organic - Good)
+                            '#a8a29e'  // Stone-400 (Ads)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTIVE CALCULATOR LOGIC ---
+        function initCalculator() {
+            const checkboxes = document.querySelectorAll('.geo-check');
+            const scoreDisplay = document.getElementById('geo-score-display');
+            const progressBar = document.getElementById('geo-progress');
+            const feedbackText = document.getElementById('geo-feedback');
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', calculateScore);
+            });
+
+            function calculateScore() {
+                let total = 0;
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        total += parseInt(cb.dataset.score);
+                    }
+                });
+
+                // Animate numbers slightly
+                scoreDisplay.textContent = total + '%';
+                progressBar.style.width = total + '%';
+
+                // Update color and text based on score
+                if (total < 40) {
+                    progressBar.className = "h-2.5 rounded-full transition-all duration-500 bg-red-500";
+                    feedbackText.textContent = "Contenu invisible pour les IA. Structurez davantage.";
+                    feedbackText.className = "text-xs text-red-500 mt-2 font-bold";
+                } else if (total < 80) {
+                    progressBar.className = "h-2.5 rounded-full transition-all duration-500 bg-yellow-500";
+                    feedbackText.textContent = "Bon début. Ajoutez des données structurées pour passer au niveau supérieur.";
+                    feedbackText.className = "text-xs text-yellow-600 mt-2 font-bold";
+                } else {
+                    progressBar.className = "h-2.5 rounded-full transition-all duration-500 bg-teal-600";
+                    feedbackText.textContent = "Excellent ! Votre contenu est prêt pour l'ère GEO.";
+                    feedbackText.className = "text-xs text-teal-600 mt-2 font-bold";
+                }
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initShiftChart();
+            initCalculator();
+            
+            // Add fade-in animation class support
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in {
+                    animation: fadeIn 0.5s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+    </script>
+</body>
+</html>

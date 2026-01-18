@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Avenir du Positionnement Web : Sémantique & Découvrabilité</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Font Awesome (for Icons - No SVG allowed) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: "Digital Neon Future" -->
+    <!-- Primary Background: #0f172a (Slate 900) -->
+    <!-- Card Background: #1e293b (Slate 800) -->
+    <!-- Text: #f1f5f9 (Slate 100) -->
+    <!-- Accent 1 (Vibrant Cyan): #06b6d4 -->
+    <!-- Accent 2 (Electric Purple): #a855f7 -->
+    <!-- Accent 3 (Hot Pink): #ec4899 -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: High-impact title and definition of the core shift (Keywords -> Entities).
+         2. The Paradigm Shift (Comparison): Visualizing Old SEO vs. New SSEO (Semantic SEO) using a Radar Chart.
+         3. The Semantic Engine (Mechanism): Explaining Interoperability and Knowledge Graphs using a Plotly Network Graph.
+         4. Findability vs. Discoverability (Concept): A split comparison section with a Trend Line Chart showing the shift from Pull (Search) to Push (Discovery).
+         5. The Data Ecosystem (Composition): Breakdown of structured data adoption (JSON-LD importance) using a Doughnut Chart.
+         6. Future Roadmap (Timeline): Vertical timeline of Web 1.0 to Web 4.0 using structured HTML/CSS.
+         
+         Narrative Flow: The infographic starts by defining the problem (old methods failing), explains the technical solution (Semantic Web/Interoperability), illustrates the outcome (Discoverability), and predicts the future state.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js): Goal: Compare. Compares attributes of Traditional vs. Semantic SEO. NO SVG.
+         2. Network Graph (Plotly Canvas): Goal: Relationships. Visualizes how entities connect in a Knowledge Graph. NO SVG.
+         3. Line Chart (Chart.js): Goal: Change. Shows the historical and projected shift from "Search Traffic" to "Discovery Traffic". NO SVG.
+         4. Doughnut Chart (Chart.js): Goal: Inform/Composition. Shows market share of Structured Data formats. NO SVG.
+         5. HTML/CSS Timeline: Goal: Organize. Shows the evolution of the web. NO SVG.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f1f5f9; /* Slate 100 */
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Chart Container Styling Rules */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px; /* Base height */
+            max-height: 500px; /* Max height constraint */
+            /* Prevent overflow */
+            overflow: hidden; 
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #06b6d4, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter">
+                        <span class="text-cyan-400">Sémantique</span><span class="text-purple-500">Web</span>
+                    </span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#intro" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Introduction</a>
+                        <a href="#paradigm" class="hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Paradigme</a>
+                        <a href="#engine" class="hover:text-pink-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Interopérabilité</a>
+                        <a href="#discovery" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Découvrabilité</a>
+                        <a href="#timeline" class="hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Futur</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 pb-20 overflow-x-hidden">
+
+        <!-- Hero Section -->
+        <section id="intro" class="min-h-[80vh] flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
+            <!-- Background Decoration (CSS only) -->
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl -z-10"></div>
+
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                L'Avenir du <br/><span class="gradient-text">Positionnement Web</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-10 font-light">
+                Au-delà des mots-clés : Comprendre l'impact du Web Sémantique, de l'interopérabilité et de l'IA sur la façon dont le contenu est trouvé et découvert.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full mx-auto mt-8">
+                <div class="card-glass p-6 rounded-xl hover:border-cyan-500/50 transition-colors">
+                    <i class="fa-solid fa-cube text-4xl text-cyan-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Structure</h3>
+                    <p class="text-slate-400 text-sm">Des données structurées (JSON-LD) pour parler la langue des machines.</p>
+                </div>
+                <div class="card-glass p-6 rounded-xl hover:border-purple-500/50 transition-colors">
+                    <i class="fa-solid fa-network-wired text-4xl text-purple-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Entités</h3>
+                    <p class="text-slate-400 text-sm">Passer de "chaînes de caractères" à des "choses" réelles et connectées.</p>
+                </div>
+                <div class="card-glass p-6 rounded-xl hover:border-pink-500/50 transition-colors">
+                    <i class="fa-solid fa-compass text-4xl text-pink-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Découverte</h3>
+                    <p class="text-slate-400 text-sm">L'information vient à l'utilisateur avant même la recherche.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Paradigm Shift (Comparison) -->
+        <section id="paradigm" class="py-20 px-4 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white border-l-4 border-cyan-500 pl-4">
+                        Le Changement de Paradigme
+                    </h2>
+                    <p class="text-slate-300 mb-6 text-lg leading-relaxed">
+                        Le SEO traditionnel, basé sur la répétition de mots-clés et les backlinks bruts, s'essouffle. Les moteurs de recherche modernes (comme Google via Knowledge Graph) raisonnent désormais en <strong>Entités</strong>.
+                    </p>
+                    <p class="text-slate-300 mb-6 text-lg leading-relaxed">
+                        Cette transition exige une nouvelle approche : le <strong>SEO Sémantique</strong>. Il ne s'agit plus de classer une page pour un mot, mais d'établir l'autorité d'un sujet à travers des connexions de données vérifiables.
+                    </p>
+                    
+                    <ul class="space-y-4 mt-8">
+                        <li class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></span>
+                            <span class="text-slate-400">Densité de mots-clés (Obsolète)</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center"><i class="fa-solid fa-check"></i></span>
+                            <span class="text-white font-semibold">Saillance des Entités (Actuel)</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center"><i class="fa-solid fa-check"></i></span>
+                            <span class="text-white font-semibold">Topical Authority (Autorité Thématique)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card-glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-center mb-4 text-cyan-300">SEO Classique vs. SEO Sémantique</h3>
+                    <div class="chart-container">
+                        <canvas id="paradigmChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-2">Comparaison des facteurs de succès stratégiques</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Semantic Engine (Interoperability) -->
+        <section id="engine" class="py-20 px-4 bg-slate-800/50">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+                        L'Moteur Sémantique & <span class="text-purple-400">Interopérabilité</span>
+                    </h2>
+                    <p class="text-slate-300 text-lg">
+                        L'interopérabilité est la capacité des systèmes à échanger et comprendre des données. Dans le web sémantique, cela se fait via des <strong>triplets RDF</strong> (Sujet, Prédicat, Objet). Visualisez comment les concepts sont liés dans un graphe de connaissances.
+                    </p>
+                </div>
+
+                <div class="card-glass p-4 rounded-2xl shadow-2xl border border-purple-500/20">
+                    <div class="chart-container w-full h-[500px]">
+                        <div id="plotlyGraph" class="w-full h-full"></div>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 rounded-xl mt-4">
+                        <p class="text-sm text-center text-slate-400">
+                            <strong class="text-purple-400">Explication :</strong> Ce graphe simule la compréhension d'une IA. Le noeud central "Web Sémantique" n'est pas juste un mot, il est connecté à "JSON-LD" (Format), "W3C" (Standard) et "Google" (Consommateur). C'est ainsi que l'interopérabilité crée du sens.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Findability vs Discoverability -->
+        <section id="discovery" class="py-20 px-4 max-w-7xl mx-auto">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 border-l-4 border-pink-500 pl-4">
+                    Trouvabilité vs. Découvrabilité
+                </h2>
+                <p class="text-slate-300 text-lg leading-relaxed max-w-4xl">
+                    C'est la distinction fondamentale de la prochaine décennie. La <strong>Trouvabilité</strong> (Findability) est réactive : l'utilisateur cherche, le système répond. La <strong>Découvrabilité</strong> (Discoverability) est proactive : le système anticipe le besoin et pousse l'information (ex: Google Discover, TikTok, IA prédictive).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Concept Card 1 -->
+                <div class="card-glass p-8 rounded-xl border-t-4 border-cyan-500 relative overflow-hidden group">
+                    <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-magnifying-glass text-9xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">Trouvabilité (Pull)</h3>
+                    <p class="text-slate-400 mb-4 font-mono text-sm">Le "Search" Traditionnel</p>
+                    <ul class="space-y-2 text-slate-300">
+                        <li>• L'utilisateur pose une question.</li>
+                        <li>• Dépend de l'intention explicite.</li>
+                        <li>• Compétition sur les SERP (classement).</li>
+                    </ul>
+                </div>
+                <!-- Concept Card 2 -->
+                <div class="card-glass p-8 rounded-xl border-t-4 border-pink-500 relative overflow-hidden group">
+                    <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-sparkles text-9xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-pink-400 mb-2">Découvrabilité (Push)</h3>
+                    <p class="text-slate-400 mb-4 font-mono text-sm">L'Ère de l'IA & Recommandation</p>
+                    <ul class="space-y-2 text-slate-300">
+                        <li>• L'IA propose une réponse avant la question.</li>
+                        <li>• Dépend du contexte et de l'historique.</li>
+                        <li>• Compétition sur l'engagement et l'entité.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Trend Chart -->
+            <div class="card-glass p-6 rounded-2xl">
+                <h3 class="text-xl font-bold mb-2">Évolution des Sources de Trafic (Projection)</h3>
+                <p class="text-sm text-slate-400 mb-6">Transition progressive de la recherche active vers la découverte passive et les réponses IA (SGE).</p>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Data Ecosystem -->
+        <section class="py-20 px-4 bg-slate-800/50">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 card-glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4 text-center">Adoption des Standards Sémantiques</h3>
+                    <div class="chart-container">
+                        <canvas id="formatChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-4">Prédominance du JSON-LD pour l'interopérabilité moderne.</p>
+                </div>
+                
+                <div class="order-1 md:order-2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
+                        L'Infrastructure Technique
+                    </h2>
+                    <p class="text-slate-300 text-lg mb-6">
+                        Pour être découvrable, le contenu doit être compréhensible par les machines. Les données structurées sont le vocabulaire de cette compréhension.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex flex-col">
+                            <span class="text-cyan-400 font-bold text-lg mb-1">Schema.org</span>
+                            <span class="text-slate-400">Le vocabulaire universel accepté par Google, Bing, Yahoo et Yandex.</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-purple-400 font-bold text-lg mb-1">JSON-LD</span>
+                            <span class="text-slate-400">Le format de prédilection (Linked Data) qui permet d'injecter du contexte sans altérer le visuel de la page.</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-pink-400 font-bold text-lg mb-1">Knowledge Graph</span>
+                            <span class="text-slate-400">La base de données finale où votre marque devient une entité reconnue.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Future Timeline -->
+        <section id="timeline" class="py-20 px-4 max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Chronologie de l'Évolution Web</h2>
+                <p class="text-slate-400">Du document statique à l'assistant intelligent.</p>
+            </div>
+
+            <div class="relative border-l-2 border-slate-700 ml-4 md:ml-0 space-y-12">
+                <!-- Item 1 -->
+                <div class="relative md:pl-12 pl-8">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 rounded-full bg-slate-600 border-4 border-slate-900"></div>
+                    <h3 class="text-xl font-bold text-slate-500">Web 1.0 : Le Web Documentaire</h3>
+                    <p class="text-slate-500 mt-1">Pages statiques, liens hypertextes simples. On "surfe" d'un document à l'autre.</p>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="relative md:pl-12 pl-8">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 rounded-full bg-cyan-600 border-4 border-slate-900 shadow-[0_0_15px_rgba(6,182,212,0.5)]"></div>
+                    <h3 class="text-2xl font-bold text-cyan-400">Web 2.0 : Le Web Social & Mobile</h3>
+                    <p class="text-slate-300 mt-1">UGC (User Generated Content), applications, réseaux sociaux. L'algorithme classe par popularité.</p>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="relative md:pl-12 pl-8">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 rounded-full bg-purple-600 border-4 border-slate-900 shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+                    <h3 class="text-2xl font-bold text-purple-400">Web 3.0 (Sémantique) : Le Web des Données</h3>
+                    <p class="text-slate-300 mt-1">Données liées (Linked Data), sens compréhensible par machine, interopérabilité. L'algorithme classe par pertinence contextuelle.</p>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="relative md:pl-12 pl-8">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 rounded-full bg-pink-600 border-4 border-slate-900 shadow-[0_0_15px_rgba(236,72,153,0.5)]"></div>
+                    <h3 class="text-2xl font-bold text-pink-400">Web 4.0 : Le Web Symbiotique (IA)</h3>
+                    <p class="text-slate-300 mt-1">Agents autonomes, interaction homme-machine fluide, découvrabilité prédictive totale. La recherche devient conversation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
+            <p>© 2024 Infographie Interactive. Basé sur les recherches en interopérabilité et référencement web.</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <i class="fa-brands fa-html5 text-xl hover:text-orange-500 transition-colors"></i>
+                <i class="fa-brands fa-js text-xl hover:text-yellow-400 transition-colors"></i>
+                <i class="fa-solid fa-chart-pie text-xl hover:text-cyan-400 transition-colors"></i>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // --- Helper: Label Wrapping (>16 chars) ---
+        function formatLabel(str) {
+            if (str.length <= 16) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length < 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Common Tooltip Config ---
+        const commonTooltip = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- Chart 1: Paradigm Shift (Radar) ---
+        const ctxParadigm = document.getElementById('paradigmChart').getContext('2d');
+        const labelsParadigm = [
+            "Mots-clés Exacts", 
+            "Données Structurées", 
+            "Backlinks Quantité", 
+            "Autorité Thématique", 
+            "Intention Utilisateur",
+            "Silos de Données"
+        ];
+        
+        new Chart(ctxParadigm, {
+            type: 'radar',
+            data: {
+                labels: labelsParadigm.map(formatLabel),
+                datasets: [{
+                    label: 'SEO Traditionnel',
+                    data: [90, 10, 85, 20, 40, 90],
+                    fill: true,
+                    backgroundColor: 'rgba(148, 163, 184, 0.2)', // Slate
+                    borderColor: 'rgba(148, 163, 184, 1)',
+                    pointBackgroundColor: 'rgba(148, 163, 184, 1)',
+                    borderWidth: 2
+                }, {
+                    label: 'SEO Sémantique',
+                    data: [30, 95, 40, 95, 95, 10],
+                    fill: true,
+                    backgroundColor: 'rgba(6, 182, 212, 0.2)', // Cyan
+                    borderColor: 'rgba(6, 182, 212, 1)',
+                    pointBackgroundColor: 'rgba(6, 182, 212, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: {
+                            color: '#e2e8f0',
+                            font: { size: 11, family: "'Space Grotesk', sans-serif" }
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#f1f5f9', font: { family: "'Outfit', sans-serif" } }
+                    },
+                    tooltip: commonTooltip
+                }
+            }
+        });
+
+        // --- Chart 2: Network Graph (Plotly) ---
+        // Simulating a Knowledge Graph Cluster
+        const plotlyDiv = document.getElementById('plotlyGraph');
+        
+        const nodeLabels = ["Web Sémantique", "Interopérabilité", "Google", "JSON-LD", "RDF", "Schema.org", "IA", "Entité"];
+        const nodeColors = [
+            '#a855f7', // Purple (Core)
+            '#06b6d4', // Cyan
+            '#ec4899', // Pink
+            '#3b82f6', // Blue
+            '#64748b', // Slate
+            '#64748b',
+            '#ec4899',
+            '#a855f7'
+        ];
+
+        // Layout positions (Scatter)
+        const xValues = [0, -1, 1, -1.5, -0.5, 0.5, 1.5, 0];
+        const yValues = [0, 1, 1, -0.5, -1.5, -1.5, -0.5, 1.5];
+        const nodeSizes = [40, 25, 25, 20, 20, 20, 25, 30];
+
+        const traceNodes = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers+text',
+            type: 'scatter',
+            text: nodeLabels,
+            textposition: 'bottom center',
+            textfont: { color: '#f1f5f9', family: 'Outfit' },
+            marker: { size: nodeSizes, color: nodeColors, line: { color: '#fff', width: 1 } },
+            hoverinfo: 'text'
+        };
+
+        // Edges (Lines) - Manually drawing shapes is cleaner for static concept graphs in Plotly
+        const layout = {
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            showlegend: false,
+            xaxis: { showgrid: false, zeroline: false, showticklabels: false },
+            yaxis: { showgrid: false, zeroline: false, showticklabels: false },
+            margin: { t: 0, b: 0, l: 0, r: 0 },
+            shapes: [
+                // Connections from Center (Web Sem)
+                { type: 'line', x0: 0, y0: 0, x1: -1, y1: 1, line: { color: '#475569', width: 1 } },
+                { type: 'line', x0: 0, y0: 0, x1: 1, y1: 1, line: { color: '#475569', width: 1 } },
+                { type: 'line', x0: 0, y0: 0, x1: 0, y1: 1.5, line: { color: '#475569', width: 1 } },
+                // Connections from Interop
+                { type: 'line', x0: -1, y0: 1, x1: -1.5, y1: -0.5, line: { color: '#475569', width: 1 } },
+                { type: 'line', x0: -1, y0: 1, x1: -0.5, y1: -1.5, line: { color: '#475569', width: 1 } },
+                // Connections from Google
+                { type: 'line', x0: 1, y0: 1, x1: 1.5, y1: -0.5, line: { color: '#475569', width: 1 } },
+                { type: 'line', x0: 1, y0: 1, x1: 0.5, y1: -1.5, line: { color: '#475569', width: 1 } },
+            ]
+        };
+
+        Plotly.newPlot('plotlyGraph', [traceNodes], layout, { displayModeBar: false, responsive: true });
+
+        // --- Chart 3: Trend Chart (Line) ---
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        const labelsTrend = ["2018", "2020", "2022", "2024 (Est)", "2026 (Proj)", "2028 (Futur)"];
+
+        new Chart(ctxTrend, {
+            type: 'line',
+            data: {
+                labels: labelsTrend,
+                datasets: [{
+                    label: 'Recherche Active (Mots-clés)',
+                    data: [90, 85, 75, 60, 45, 30],
+                    borderColor: '#06b6d4', // Cyan
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Découverte (IA & Push)',
+                    data: [10, 15, 25, 40, 55, 70],
+                    borderColor: '#ec4899', // Pink
+                    backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#f1f5f9' } },
+                    tooltip: commonTooltip
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' },
+                        title: { display: true, text: '% du Trafic Web', color: '#64748b' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // --- Chart 4: Formats (Doughnut) ---
+        const ctxFormat = document.getElementById('formatChart').getContext('2d');
+        const labelsFormat = ["JSON-LD (Recommandé)", "Microdonnées", "RDFa", "Pas de Données"];
+
+        new Chart(ctxFormat, {
+            type: 'doughnut',
+            data: {
+                labels: labelsFormat.map(formatLabel),
+                datasets: [{
+                    data: [65, 15, 5, 15],
+                    backgroundColor: [
+                        '#a855f7', // Purple (Hero)
+                        '#3b82f6', // Blue
+                        '#64748b', // Slate
+                        '#1e293b'  // Dark
+                    ],
+                    borderColor: '#0f172a',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#f1f5f9', boxWidth: 12 } },
+                    tooltip: commonTooltip
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

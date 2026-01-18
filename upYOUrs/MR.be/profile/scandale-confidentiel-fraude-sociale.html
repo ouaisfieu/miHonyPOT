@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie #B!Mi : Guerre Cognitive & Économique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* Teal 50 */
+            color: #1e293b; /* Slate 800 */
+        }
+
+        /* Palette Vibrant/Energetic: 
+           Primary: #0d9488 (Teal 600)
+           Secondary: #f97316 (Orange 500)
+           Accent: #7c3aed (Violet 600)
+        */
+
+        .bg-vibrant-primary { background-color: #0d9488; }
+        .text-vibrant-primary { color: #0d9488; }
+        .border-vibrant-primary { border-color: #0d9488; }
+
+        .bg-vibrant-secondary { background-color: #f97316; }
+        .text-vibrant-secondary { color: #f97316; }
+
+        .bg-vibrant-accent { background-color: #7c3aed; }
+        .text-vibrant-accent { color: #7c3aed; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            height: 350px; /* Mobile default */
+            margin: 0 auto;
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-arrow {
+            font-size: 2rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <!-- Chosen Palette: "Energetic & Playful" (Teal, Orange, Violet on Light Background) -->
+    <!-- Application Structure Plan:
+         1. Header: Dramatic Title & Mission.
+         2. Context: The Battlefield (Cognitive War).
+         3. Doctrine Section: 3-Column Layout for the hybrid methodology (Bourrelly/Gubur/OODA).
+         4. Structure Section: "Auftragstaktik" visualized via CSS Grid flow (NO SVG).
+         5. Analysis Section: Tabbed interface for Micro/Meso/Macro levels to manage text density.
+         6. Simulation Section: Interactive "e-Bomba" Line Chart showing narrative control over time.
+         7. Future Section: Radar Chart comparing SEO vs GEO attributes.
+         8. Conclusion: Summary.
+         Why: This structure moves from theory (Doctrine) to execution (Structure/Analysis) to simulation (Action) and finally future-proofing (GEO), creating a logical narrative arc. -->
+    <!-- Visualization & Content Choices:
+         1. Doctrine: Styled Cards with Unicode Icons -> Goal: Inform -> Clean presentation of complex theory.
+         2. Organization: HTML/Tailwind Grid Flow -> Goal: Organize -> Shows the decentralized command structure without Mermaid/SVG.
+         3. Analysis: Interactive Tabs -> Goal: Organize -> Reduces cognitive load of the dense report text.
+         4. e-Bomba: Chart.js Line Chart -> Goal: Change -> Visualizes the "dilution" concept dynamically over time.
+         5. SEO vs GEO: Chart.js Radar Chart -> Goal: Compare -> Perfect for showing the shift in required capabilities/attributes.
+         6. Justification: Canvas charts used for data, HTML for structure/icons to strictly avoid SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-vibrant-primary text-white py-12 px-4 shadow-lg">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">AGENCE #B!Mi</h1>
+            <p class="text-xl md:text-2xl font-light text-teal-100 uppercase tracking-widest">Stratégie de Guerre Cognitive & Hybridation</p>
+        </div>
+    </header>
+
+    <!-- Context Section -->
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-20">
+        
+        <section>
+            <div class="bg-white rounded-2xl p-8 shadow-xl border-l-8 border-vibrant-secondary">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Le Champ de Bataille Informationnel</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Dans un contexte de <strong>guerre économique totale</strong>, la simple communication ne suffit plus. L'Agence #B!Mi déploie une stratégie d'influence offensive basée sur l'hybridation des meilleures doctrines mondiales. Notre objectif n'est pas seulement de participer à la conversation, mais de <strong>définir le terrain de la réalité perçue</strong> par les cibles, les concurrents et les algorithmes.
+                </p>
+            </div>
+        </section>
+
+        <!-- DOCTRINE SECTION -->
+        <section>
+            <div class="mb-8 text-center">
+                <span class="bg-teal-100 text-vibrant-primary px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Chapitre 1.0</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">La Trinité Doctrinale</h2>
+                <p class="text-gray-500 mt-2 max-w-2xl mx-auto">Fusionner l'architecture sémantique, l'autorité thématique et la vitesse d'exécution.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="card p-6 border-t-4 border-blue-500">
+                    <div class="text-5xl mb-4 text-center">🕸️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Architecture Sémantique</h3>
+                    <p class="text-sm text-blue-600 font-semibold text-center mb-4">Inspiré de L. Bourrelly</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Le <strong>"Cocon Sémantique"</strong> est notre bunker. Il structure des réseaux de contenus étanches qui piègent l'attention et guident la perception via des glissements sémantiques calculés.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card p-6 border-t-4 border-vibrant-secondary">
+                    <div class="text-5xl mb-4 text-center">⚡</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Autorité Thématique</h3>
+                    <p class="text-sm text-vibrant-secondary font-semibold text-center mb-4">Inspiré de K.T. GÜBÜR</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Saturation de l'espace conceptuel. Nous forçons les algorithmes à reconnaître #B!Mi comme la <strong>"Source de Vérité"</strong> unique, marginalisant techniquement les concurrents.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card p-6 border-t-4 border-vibrant-accent">
+                    <div class="text-5xl mb-4 text-center">🔄</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Boucle O.O.D.A.</h3>
+                    <p class="text-sm text-vibrant-accent font-semibold text-center mb-4">Guerre Cognitive</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        <strong>Observer, Orienter, Décider, Agir.</strong> Notre structure est conçue pour exécuter cette boucle plus vite que l'adversaire, créant un chaos qu'il ne peut plus suivre.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORGANIZATION SECTION (Auftragstaktik) -->
+        <section class="bg-white rounded-3xl p-8 shadow-sm">
+            <div class="mb-8">
+                <span class="bg-orange-100 text-vibrant-secondary px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Chapitre 2.0</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2">Organisation "Auftragstaktik"</h2>
+                <p class="text-gray-600 mt-4">
+                    Pour appliquer la théorie du chaos, nous rejetons la hiérarchie pyramidale lente. Nous adoptons le <strong>Commandement de Mission</strong> : des pôles autonomes qui connaissent l'objectif final mais sont libres de leurs moyens.
+                </p>
+            </div>
+
+            <!-- CSS Grid Flowchart (No SVG) -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                <!-- Pole 1 -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 hover:bg-teal-50 transition-colors">
+                    <div class="text-3xl mb-2">👁️</div>
+                    <h4 class="font-bold text-gray-800">Pôle Veille</h4>
+                    <p class="text-xs text-gray-500 mt-2">Détection Signaux Faibles & Sentiment</p>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:flex step-arrow">➔</div>
+
+                <!-- Pole 2 -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 hover:bg-orange-50 transition-colors">
+                    <div class="text-3xl mb-2">🏭</div>
+                    <h4 class="font-bold text-gray-800">Pôle Contenu</h4>
+                    <p class="text-xs text-gray-500 mt-2">Production Massive & Sémantique</p>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:flex step-arrow">➔</div>
+
+                 <!-- Pole 3 -->
+                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 hover:bg-violet-50 transition-colors">
+                    <div class="text-3xl mb-2">⚙️</div>
+                    <h4 class="font-bold text-gray-800">Pôle Tech</h4>
+                    <p class="text-xs text-gray-500 mt-2">Architecture & Vecteurs (PBN)</p>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:flex step-arrow">➔</div>
+
+                <!-- Pole 4 -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 hover:bg-teal-50 transition-colors">
+                    <div class="text-3xl mb-2">📢</div>
+                    <h4 class="font-bold text-gray-800">Pôle Influence</h4>
+                    <p class="text-xs text-gray-500 mt-2">Diffusion & Netlinking</p>
+                </div>
+            </div>
+            <p class="text-center text-xs text-gray-400 mt-4 italic">Flux opérationnel continu et décentralisé</p>
+        </section>
+
+        <!-- SIMULATION SECTION (Interactive Chart) -->
+        <section>
+            <div class="mb-8 text-center">
+                <span class="bg-violet-100 text-vibrant-accent px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Simulation Tactique</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2">La Manœuvre "e-Bomba"</h2>
+                <p class="text-gray-500 mt-2 max-w-3xl mx-auto">
+                    Visualisation de l'effet de saturation. L'objectif est de diluer le récit hostile sous un déluge d'informations maîtrisées. Cliquez pour déclencher la riposte.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-2">
+                    <div class="chart-container">
+                        <canvas id="ebombaChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-red-500">
+                        <h4 class="font-bold text-red-600 mb-2">Menace Initiale</h4>
+                        <p class="text-sm text-gray-600">Un narratif hostile gagne de la traction (visibilité SERP) et menace la réputation de l'agence.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-vibrant-primary">
+                        <h4 class="font-bold text-vibrant-primary mb-2">Action: Chaos Contrôlé</h4>
+                        <p class="text-sm text-gray-600">Injection massive de micro-contenus thématisés pour noyer le signal adverse.</p>
+                    </div>
+                    <button id="triggerBomba" class="w-full py-4 bg-vibrant-secondary hover:bg-orange-600 text-white font-bold rounded-lg shadow-lg transform active:scale-95 transition-all text-lg">
+                        🚀 DÉCLENCHER E-BOMBA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANALYSIS SECTION (Tabs) -->
+        <section class="bg-gray-900 text-white rounded-3xl p-8 md:p-12">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-white mt-2">Analyse Multi-Scalaire</h2>
+                <p class="text-gray-400 mt-2">Impact concret de la stratégie sur les trois niveaux de guerre.</p>
+            </div>
+
+            <!-- Custom Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6" id="levelTabs">
+                <button onclick="showLevel('micro')" class="px-6 py-2 rounded-full bg-vibrant-primary text-white font-bold transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-teal-500 tab-btn" id="btn-micro">MICRO (Technique)</button>
+                <button onclick="showLevel('meso')" class="px-6 py-2 rounded-full bg-gray-700 text-gray-300 font-bold hover:bg-gray-600 transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-orange-500 tab-btn" id="btn-meso">MÉSO (Tactique)</button>
+                <button onclick="showLevel('macro')" class="px-6 py-2 rounded-full bg-gray-700 text-gray-300 font-bold hover:bg-gray-600 transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-violet-500 tab-btn" id="btn-macro">MACRO (Stratégique)</button>
+            </div>
+
+            <!-- Content Container -->
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 min-h-[200px]">
+                <div id="content-micro" class="level-content animate-fade-in">
+                    <h3 class="text-2xl font-bold text-teal-400 mb-4">Le Code et le Mot</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start"><span class="mr-2 text-teal-400">➤</span> Création de clusters sémantiques (Topical Maps) pour couvrir 100% du champ lexical.</li>
+                        <li class="flex items-start"><span class="mr-2 text-teal-400">➤</span> Utilisation intensive du balisage Schema.org pour "parler" directement aux machines.</li>
+                        <li class="flex items-start"><span class="mr-2 text-teal-400">➤</span> Occupation physique des pixels de l'écran (SERP Features) pour repousser l'ennemi.</li>
+                    </ul>
+                </div>
+                <div id="content-meso" class="level-content hidden animate-fade-in">
+                    <h3 class="text-2xl font-bold text-orange-400 mb-4">Coordination & Vitesse</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start"><span class="mr-2 text-orange-400">➤</span> Les pôles agissent sans validation lourde (Auftragstaktik).</li>
+                        <li class="flex items-start"><span class="mr-2 text-orange-400">➤</span> Le cycle OODA de l'agence est plus court que celui de la cible.</li>
+                        <li class="flex items-start"><span class="mr-2 text-orange-400">➤</span> Création de "brouillard de guerre" : l'adversaire réagit à des leurres pendant que l'action réelle a lieu ailleurs.</li>
+                    </ul>
+                </div>
+                <div id="content-macro" class="level-content hidden animate-fade-in">
+                    <h3 class="text-2xl font-bold text-violet-400 mb-4">Domination Cognitive</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start"><span class="mr-2 text-violet-400">➤</span> #B!Mi ne vend plus un service, elle impose une norme culturelle.</li>
+                        <li class="flex items-start"><span class="mr-2 text-violet-400">➤</span> Destruction de la valeur économique des concurrents par invisibilisation.</li>
+                        <li class="flex items-start"><span class="mr-2 text-violet-400">➤</span> Victoire sans combat direct : l'environnement informationnel est devenu hostile pour l'adversaire.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FUTURE VISION (GEO) -->
+        <section>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Vision 5.0</span>
+                    <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Du SEO au GEO</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        L'optimisation pour les moteurs de recherche (SEO) est dépassée. L'avenir est au <strong>Generative Engine Optimization (GEO)</strong>. 
+                        Il ne s'agit plus de classer un lien, mais d'influencer la réponse unique générée par des IA comme ChatGPT ou Perplexity.
+                    </p>
+                    <div class="p-4 bg-teal-50 border-l-4 border-vibrant-primary rounded">
+                        <p class="font-bold text-vibrant-primary">Impératif Stratégique :</p>
+                        <p class="text-gray-700 text-sm">Contrôler ce que l'IA "pense" est plus puissant que de contrôler ce que Google "montre".</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="chart-container">
+                        <canvas id="geoRadarChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-4">Comparaison des compétences critiques : SEO vs GEO</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8 text-center mt-12">
+        <p class="text-sm opacity-50">© 2026 Agence #B!Mi - Document Stratégique Confidentiel</p>
+    </footer>
+
+    <script>
+        // --- 1. UTILITY FUNCTIONS ---
+        
+        // Helper to wrap long labels for Chart.js
+        function wrapLabel(str, maxChars) {
+            if (str.length <= maxChars) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length < maxChars) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Common Tooltip Config for Multiline Support
+        const commonTooltipOptions = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- 2. CHART GENERATION ---
+
+        // A. e-Bomba Line Chart (Simulation)
+        const ctxBomba = document.getElementById('ebombaChart').getContext('2d');
+        const ebombaChart = new Chart(ctxBomba, {
+            type: 'line',
+            data: {
+                labels: ['T-4', 'T-3', 'T-2', 'T-1', 'Impact', 'T+1', 'T+2', 'T+3', 'T+4'],
+                datasets: [
+                    {
+                        label: 'Narratif Hostile',
+                        data: [10, 25, 45, 70, 75, 72, 68, 65, 60], // Growing threat
+                        borderColor: '#ef4444', // Red
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Narratif Agence #B!Mi',
+                        data: [20, 22, 21, 23, 25, 28, 30, 32, 35], // Steady baseline
+                        borderColor: '#0d9488', // Teal
+                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: commonTooltipOptions,
+                    title: { display: true, text: 'Part de Voix (Visibilité)' }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 100, title: {display: true, text: '% Visibilité SERP'} }
+                }
+            }
+        });
+
+        // Interactive Button Logic for e-Bomba
+        document.getElementById('triggerBomba').addEventListener('click', function() {
+            // Update data to simulate "Massive Injection"
+            const chaosDataHostile = [10, 25, 45, 70, 75, 40, 20, 10, 5]; // Hostile crushed
+            const chaosDataAgency =  [20, 22, 21, 23, 30, 85, 95, 98, 99]; // Agency dominance
+
+            ebombaChart.data.datasets[0].data = chaosDataHostile;
+            ebombaChart.data.datasets[1].data = chaosDataAgency;
+            ebombaChart.update();
+
+            this.textContent = "✅ SATURATION EFFECTUÉE";
+            this.classList.remove('bg-vibrant-secondary', 'hover:bg-orange-600');
+            this.classList.add('bg-green-600', 'cursor-default');
+        });
+
+        // B. GEO vs SEO Radar Chart
+        const ctxRadar = document.getElementById('geoRadarChart').getContext('2d');
+        const radarLabels = [
+            'Mots-clés (Keywords)', 
+            'Autorité (Backlinks)', 
+            'Citations (Entités)', 
+            'Données Structurées', 
+            'Volume de Contenu',
+            'Réponse Directe (IA)'
+        ];
+        
+        // Wrap labels for radar chart as they can get long
+        const processedRadarLabels = radarLabels.map(l => wrapLabel(l, 14));
+
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: processedRadarLabels,
+                datasets: [{
+                    label: 'SEO Traditionnel',
+                    data: [95, 90, 30, 50, 60, 20],
+                    fill: true,
+                    backgroundColor: 'rgba(148, 163, 184, 0.2)', // Slate
+                    borderColor: 'rgb(148, 163, 184)',
+                    pointBackgroundColor: 'rgb(148, 163, 184)',
+                }, {
+                    label: 'Stratégie GEO (Futur)',
+                    data: [30, 50, 100, 95, 80, 100],
+                    fill: true,
+                    backgroundColor: 'rgba(124, 58, 237, 0.2)', // Violet
+                    borderColor: '#7c3aed',
+                    pointBackgroundColor: '#7c3aed',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: {
+                            font: { size: 11, family: 'Inter' },
+                            color: '#475569'
+                        },
+                        ticks: { display: false, maxTicksLimit: 5 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: commonTooltipOptions
+                }
+            }
+        });
+
+        // --- 3. INTERACTION LOGIC (TABS) ---
+        
+        function showLevel(level) {
+            // Hide all contents
+            document.querySelectorAll('.level-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected content
+            document.getElementById(`content-${level}`).classList.remove('hidden');
+
+            // Update Tab Styles
+            const buttons = ['micro', 'meso', 'macro'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`btn-${btn}`);
+                if (btn === level) {
+                    // Active State styling based on level color
+                    if(level === 'micro') el.className = "px-6 py-2 rounded-full bg-vibrant-primary text-white font-bold transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-teal-500 tab-btn";
+                    if(level === 'meso') el.className = "px-6 py-2 rounded-full bg-vibrant-secondary text-white font-bold transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-orange-500 tab-btn";
+                    if(level === 'macro') el.className = "px-6 py-2 rounded-full bg-vibrant-accent text-white font-bold transition-all focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-violet-500 tab-btn";
+                } else {
+                    // Inactive State
+                    el.className = "px-6 py-2 rounded-full bg-gray-700 text-gray-300 font-bold hover:bg-gray-600 transition-all tab-btn";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

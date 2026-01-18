@@ -1,0 +1,78 @@
+"Dans le contexte des portails développeurs, la facilité avec laquelle un utilisateur localise une information précise qu'il recherche activement se nomme la _____.",trouvabilité (findability)
+Comment définit-on la « découvrabilité » (discoverability) pour un portail API ?,La capacité d'un utilisateur à rencontrer par hasard du contenu pertinent qu'il ne cherchait pas initialement.
+Citez un « antipattern » courant de recherche sur les portails développeurs lié à l'accessibilité.,Restreindre la fonction de recherche derrière une authentification obligatoire.
+Pourquoi l'utilisation excessive de jargon interne est-elle considérée comme un obstacle à la trouvabilité ?,Elle impose un effort cognitif inutile aux utilisateurs qui ne connaissent pas les termes spécifiques à l'entreprise.
+Quelle recommandation du jury des DevPortal Awards permet d'aider l'utilisateur à évaluer rapidement l'adéquation d'un produit à ses besoins ?,Inclure le « pourquoi » (la proposition de valeur) sur la même page que les informations techniques.
+Quel portail a remporté le prix de la meilleure « trouvabilité » en 2023 pour ses multiples chemins de navigation ?,FactSet
+"Sur le portail de Mercedes-Benz, quelle stratégie est utilisée pour motiver les ingénieurs au-delà de la simple documentation technique ?",Le recours au « storytelling » marketing pour expliquer la pertinence des API.
+Quelle fonctionnalité innovante du portail Worldpay aide les publics divers à trouver la solution correspondant à leur cas d'usage ?,Le « Solution Finder »
+Pourquoi est-il crucial d'afficher des horodatages (timestamps) visibles sur la documentation technique ?,Ils signalent que le produit est activement maintenu et digne de confiance.
+"Selon Laura Vass, de quoi dépend directement la qualité des résultats d'une IA générative sur un portail ?",De la qualité et de la structure des données d'entrée (la documentation).
+Définition : SEO d'entité,Approche d'optimisation se concentrant sur les concepts (entités) et leurs relations plutôt que sur les simples mots-clés.
+"Dans le cadre du SEO sémantique, qu'est-ce qu'une « entité » ?","Un objet ou concept unique, distinguable et universel, souvent associé à un identifiant dans une base de données."
+Quel est l'avantage principal des entités pour un moteur de recherche par rapport aux chaînes de caractères ?,Elles sont indépendantes de la langue (language-agnostic).
+Nommez les quatre composants majeurs du SEO basé sur les entités selon Ahrefs.,"Identification des entités, pertinence contextuelle, données structurées, et autorité/expertise."
+"Quelle base de données collaborative, acquise par Google en 2010, a servi de fondement au Knowledge Graph ?",Freebase
+Comment l'utilisation du balisage Schema.org aide-t-elle le SEO d'entité ?,Elle définit explicitement les entités et leurs relations pour les moteurs de recherche via un vocabulaire standardisé.
+Quel format de données Google recommande-t-il officiellement pour l'implémentation de Schema.org ?,JSON-LD
+"Pour valider l'expertise d'un contenu (E-E-A-T), quel signal de confiance peut-on ajouter sous le nom de l'auteur ?",Une mention « vérifié par » (Fact-Checked by) liée au profil d'un expert certifié.
+Quel est l'objectif du Knowledge Graph de Google lancé en 2012 ?,Passer d'une recherche basée sur les mots (strings) à une recherche basée sur les choses (things).
+"Le concept de « soft power », théorisé par Joseph Nye, repose sur la puissance de _____.",persuasion (ou attraction)
+Quelles sont les trois ressources principales du soft power selon Joseph Nye ?,"La culture, l'idéologie (valeurs politiques) et les institutions internationales."
+Quel pays occupe la première place du Global Soft Power Index 2024 ?,Les États-Unis
+"Quelle nation a connu la plus forte progression de son soft power entre 2023 et 2024, atteignant la 3ème marche du podium ?",La Chine
+Sur quel pilier spécifique repose principalement l'image de marque de la France à l'international selon Brand Finance ?,Le luxe
+Pourquoi la Chine investit-elle massivement dans les Instituts Confucius et les médias mondiaux ?,Pour améliorer son capital sympathie et contrer les coalitions défensives de ses voisins.
+Quel défi interne nuit à l'image de marque des États-Unis malgré leur domination culturelle ?,"Les problèmes de sécurité intérieure, notamment la violence par armes à feu."
+"Selon Joseph Nye, pourquoi le soft power n'est-il pas nécessairement un jeu à somme nulle ?","Parce que deux pays peuvent devenir mutuellement plus attractifs, réduisant ainsi les risques de conflit."
+Quel pourcentage des recherches quotidiennes sur Google sont totalement nouvelles selon les statistiques de 2024 ?,$15 \%$
+Quelle proportion des recherches Google provient désormais des appareils mobiles en 2024 ?,$60 \%$
+Vrai ou Faux : Les mots-clés de longue traîne obtiennent généralement moins de clics que les mots-clés génériques.,Faux (ils en obtiennent presque deux fois plus car ils correspondent mieux à l'intention).
+Type de Schema : TechArticle,"Balisage utilisé pour les guides pratiques, le dépannage procédural ou les spécifications techniques."
+Quelle propriété du Schema « Organization » permet de lier un site web à ses profils de réseaux sociaux vérifiés ?,sameAs
+Quel type de balisage Schema permet d'afficher des étoiles d'évaluation directement dans les résultats de recherche ?,AggregateRating
+Quelle valeur de la propriété « ItemAvailability » indique qu'un produit peut être commandé avant sa sortie officielle ?,PreOrder
+Pourquoi le balisage FAQ est-il avantageux pour la visibilité sur les moteurs de recherche ?,Il permet d'afficher des menus déroulants de questions-réponses directement dans les résultats (extraits enrichis).
+"En juin 2001, où soixante-quatorze corps ont-ils été découverts dans des charniers en Serbie orientale ?",Près de Petrovo Selo
+Quelle était la revendication principale de la « marche pacifique » des étudiants de Soweto en juin 1976 ?,Le refus de l'utilisation de l'afrikaans comme langue d'enseignement.
+"Qui était le président de la République fédérale de Yougoslavie en juin 2001, opposé à Zoran Djindjic ?",Vojislav Kostunica
+"Quel opposant socialiste marocain, dont le sort reste lié à la « raison d'État », a disparu à Paris en 1965 ?",Mehdi Ben Barka
+"Dans le domaine médical (2001), quel organe artificiel faisait l'objet de tests pour réguler la glycémie sans intervention du patient ?",Le pancréas artificiel (pompe à insuline asservie à un capteur).
+Quel était le critère de salaire minimum proposé en Allemagne en 2001 pour accorder un permis de séjour illimité aux cadres de haut niveau ?,"$60\,000$ euros par an"
+Quel homme politique italien était poursuivi en 2001 pour faux bilans liés à la holding Fininvest ?,Silvio Berlusconi
+Quelle commission allemande a proposé en 2001 d'offrir 20 000 visas annuels basés sur un système de points ?,La commission Süssmuth
+Quel événement annuel en Irlande du Nord provoque régulièrement des risques de violences entre protestants et catholiques en juillet ?,La « saison des marches »
+Quelle est la part de marché mondiale approximative de Google Search en 2024 ?,Plus de $91 \%$
+Quelle technologie de recherche visuelle a atteint 12 milliards d'utilisations par mois en 2023 ?,Google Lens
+"Dans le cadre de l'IA générative, que signifie l'acronyme RAG ?",Retrieval-Augmented Generation (Génération augmentée par récupération)
+Quel portail de voyage est cité comme exemple pour sa capacité à rendre un espace complexe « découvrable » ?,Sabre
+Pourquoi le portail UPS utilise-t-il des témoignages clients sous forme de vidéos multimédias ?,Pour démontrer concrètement comment leurs API résolvent des problèmes métier spécifiques.
+"Selon Le Monde (2001), quelle est la durée de protection des droits d'un interprète par rapport à celle d'un auteur-compositeur ?",50 ans pour l'interprète contre 70 ans pour l'auteur (après le décès).
+Quel philosophe et écrivain a été critiqué par un lecteur du Monde en 2001 pour son reportage sur le Burundi ?,Bernard-Henri Lévy
+"Quelle était la fonction de David Trimble, démissionnaire en 2001, pour contraindre l'IRA au désarmement ?",Premier ministre d'Ulster (Irlande du Nord)
+Comment appelle-t-on le panneau d'information qui s'affiche à droite des résultats Google pour une recherche sur une personnalité ?,Le Knowledge Panel (Panneau de connaissance)
+Quel outil permet d'analyser les entités détectées par Google dans un texte existant ?,Inlinks (ou TextRazor)
+"Dans le Schema « Product », quelle propriété définit les détails commerciaux comme le prix et la devise ?",offers
+Quelle est la principale différence de comportement entre Google Assistant et une recherche classique selon les stats de 2024 ?,L'utilisation du langage naturel ($70 \%$ des requêtes).
+Quel est le taux de clic (CTR) moyen pour le premier résultat organique sur Google en 2024 ?,$22 \%$
+Quelle part du PIB français représentait le secteur associatif en 2001 selon Le Monde ?,"$3,7 \%$"
+Quel film de David Lynch (1984) est mentionné comme une adaptation contestée d'un roman de Frank Herbert ?,Dune
+Quelle ville italienne a accueilli l'exposition de l'industrie textile mentionnée dans Le Monde en 2001 ?,Florence
+Quelle organisation internationale fête son cinquantenaire en 2001 avec une série de portraits de réfugiés ?,Le HCR (Haut-Commissariat des Nations unies pour les réfugiés)
+Quel était le montant de l'aide financière américaine promis à Belgrade en juin 2001 après l'extradition de Milosevic ?,"$181,6$ millions de dollars"
+Quel est l'identifiant unique de Big Ben dans la bibliothèque Freebase ?,/m/026ydc
+Quelle est la fonction du Schema « LearningResource » ?,"Identifier des supports éducatifs comme des cours, des vidéos de formation ou des quiz."
+Quel avantage offre le Schema « PodcastEpisode » par rapport à un simple fichier MP3 ?,Il permet d'indexer les titres et descriptions pour les afficher dans les résultats enrichis de recherche.
+"Selon les tendances 2024, quel type de recherche locale a crû de 200 % depuis 2021 ?",Les requêtes « Near Me » (Près de chez moi)
+Pourquoi le concept de « soft power numérique » de TikTok inquiète-t-il certains gouvernements ?,En raison de craintes sur la fuite d'informations stratégiques et l'impact sur la santé mentale des jeunes.
+Quel est le but de la « Search Generative Experience » (SGE) mentionnée par l'agence Vu du Web ?,Utiliser l'IA pour générer des réponses directes et synthétiques aux requêtes des utilisateurs.
+Quel portail est cité pour son excellente documentation sur les cas d'usage d'intégration (embedded use cases) ?,Pandadoc
+"Dans le SEO d'entité, que signifie le fait qu'une entité soit « media-agnostic » ?","Google la reconnaît de la même manière qu'elle apparaisse dans un texte, une image ou une vidéo."
+Quelle est la recommandation pour optimiser le SEO des images en 2024 avec l'essor de Google Lens ?,Fournir des images de haute qualité avec des métadonnées précises et informatives.
+Quel journal satirique français a vu ses archives de réponses au questionnaire de Pivot publiées en 2001 ?,Le Monde (dans un florilège)
+Quel pourcentage des utilisateurs de 25-34 ans utilise quotidiennement la recherche vocale en 2024 ?,$58 \%$
+Quelle banque en ligne française comptait 17 000 clients après quatre mois d'existence en 2001 ?,Zebank
+Quel type de balisage permet d'indiquer qu'une page contient du contenu satirique pour éviter les malentendus algorithmiques ?,SatiricalArticle
+Quel est l'impact de l'évolution du coût de transmission de l'information sur le pouvoir des États selon Joseph Nye ?,"Il entraîne une diffusion du pouvoir vers des acteurs non étatiques (corporations, ONG, groupes informels)."
+Citez un exemple de pilier du Soft Power lié à la recherche et à l'innovation.,Éducation et Sciences
+"Dans le cas du portail Sabre, comment les flux de réservation de voitures sont-ils documentés ?",Par des guides expliquant deux manières différentes de connecter les API pertinentes.

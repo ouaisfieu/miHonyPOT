@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographie : Doctrine de Domination Cognitive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8; /* Light blue-grey background */
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Vibrant Palette: "Electric Blue & Energetic Red" */
+        .text-vibrant-blue { color: #2563eb; }
+        .bg-vibrant-blue { background-color: #2563eb; }
+        .border-vibrant-blue { border-color: #2563eb; }
+        
+        .text-vibrant-red { color: #dc2626; }
+        .bg-vibrant-red { background-color: #dc2626; }
+        
+        .text-vibrant-cyan { color: #06b6d4; }
+        .bg-vibrant-cyan { background-color: #06b6d4; }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+        /* Media query for smaller heights on mobile */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        
+        /* Card Styles */
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Diagram Styles without SVG */
+        .flow-node {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            border-left: 5px solid #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #94a3b8;
+            text-align: center;
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+    </style>
+
+    <!-- Chosen Palette: Electric Blue & Red (High Contrast, Professional & Energetic) -->
+    <!-- Application Structure Plan:
+         1. Hero Section: Title and core definition of the doctrine.
+         2. Paradigm Shift: Radar chart comparing traditional vs. cognitive warfare attributes.
+         3. Theoretical Pillars: Two-column layout explaining Auftragstaktik and Chaos Theory using styled cards.
+         4. The Mechanism (Butterfly Effect): Line chart showing how small semantic inputs create massive system divergence.
+         5. ROI Analysis: Bar chart comparing costs and impact of kinetic vs. cognitive operations.
+         6. Case Studies: Grid of qualitative analysis cards (GameStop, SolarWinds).
+         7. Defense/Resilience: Stacked bar chart or checklist visual for defensive posture.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js): Goal -> Compare. Compares 5 axes of warfare (Speed, Cost, Reach, etc.).
+         2. Line Chart (Chart.js): Goal -> Change/Relationships. Visualizes 'Sensitivity to Initial Conditions' (Chaos).
+         3. Bar Chart (Chart.js): Goal -> Compare. Contrasts the ROI/Leverage of cognitive attacks vs traditional.
+         4. Process Flow (HTML/Tailwind): Goal -> Organize. Shows the synthesis of the two theories into the doctrine. No SVG used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased selection:bg-blue-100">
+
+    <!-- 1. HERO SECTION -->
+    <header class="bg-slate-900 text-white pt-20 pb-16 px-4 sm:px-6 lg:px-8 shadow-xl relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+            <div class="inline-block bg-vibrant-blue px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 shadow-lg">Rapport Stratégique</div>
+            <h1 class="text-4xl md:text-6xl font-extrabold font-heading mb-6 leading-tight">
+                DOCTRINE DE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">DOMINATION COGNITIVE</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                L'hybridation de la pensée militaire prussienne (Auftragstaktik) et de la dynamique chaotique dans l'ère de la Guerre Économique Totale.
+            </p>
+        </div>
+        <!-- Decorative background element using CSS only -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 via-cyan-400 to-red-500"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- 2. INTRODUCTION: THE PARADIGM SHIFT -->
+        <section>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-heading font-bold text-slate-900 mb-4">La Convergence des Champs</h2>
+                <p class="text-slate-600 max-w-4xl mx-auto">
+                    Le XXIe siècle marque une rupture. La distinction entre paix et guerre s'efface au profit d'une "zone grise" permanente. L'objectif n'est plus la conquête territoriale, mais la conquête des esprits et la destruction de la valeur immatérielle.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="info-card p-8 border-l-8 border-vibrant-red">
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">Guerre Classique (XXe)</h3>
+                    <ul class="space-y-3 text-slate-600">
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-red">■</span> Cinétique et Destructrice</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-red">■</span> Coûts logistiques exorbitants</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-red">■</span> Hiérarchie centralisée rigide</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-red">■</span> Attribution de l'attaque claire</li>
+                    </ul>
+                </div>
+
+                <div class="chart-container-wrapper bg-white rounded-xl shadow-sm p-4">
+                    <div class="chart-container">
+                        <canvas id="paradigmRadar"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-card p-8 border-l-8 border-vibrant-blue md:col-start-2 md:row-start-1">
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">Guerre Cognitive (XXIe)</h3>
+                    <ul class="space-y-3 text-slate-600">
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-blue">■</span> Immatérielle et Sémantique</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-blue">■</span> Coût marginal proche de zéro</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-blue">■</span> Exécution décentralisée (Swarming)</li>
+                        <li class="flex items-start"><span class="mr-2 text-vibrant-blue">■</span> Opacité totale (Zone Grise)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. THEORETICAL PILLARS -->
+        <section class="bg-white rounded-3xl shadow-lg p-8 md:p-12 border border-slate-100">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-heading font-bold text-slate-900">Les Deux Piliers de la Doctrine</h2>
+                <p class="text-slate-500 mt-2">Synthèse opérationnelle pour la domination du chaos.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Pillar 1 -->
+                <div class="bg-blue-50 rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 text-9xl text-blue-100 font-heading font-bold -mt-4 -mr-4 select-none">01</div>
+                    <div class="relative z-10">
+                        <div class="flex items-center mb-4">
+                            <span class="text-4xl mr-3">♞</span> <!-- Unicode Chess Knight -->
+                            <h3 class="text-2xl font-bold text-blue-900">Auftragstaktik</h3>
+                        </div>
+                        <h4 class="text-sm font-bold text-blue-600 uppercase tracking-wide mb-4">Le Commandement de Mission</h4>
+                        <p class="text-slate-700 leading-relaxed mb-4">
+                            Héritage prussien. Le commandement définit <strong>l'intention</strong> (le "pourquoi"), mais laisse une liberté totale sur <strong>l'exécution</strong> (le "comment") aux unités locales.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                            <strong class="text-blue-800">Application Numérique :</strong>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Des "Commandos Sémantiques" autonomes (trolls, bots, activistes) reçoivent une cible mais choisissent leurs propres vecteurs d'attaque, saturant les défenses par imprévisibilité.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-red-50 rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 text-9xl text-red-100 font-heading font-bold -mt-4 -mr-4 select-none">02</div>
+                    <div class="relative z-10">
+                        <div class="flex items-center mb-4">
+                            <span class="text-4xl mr-3">🌀</span> <!-- Unicode Spiral -->
+                            <h3 class="text-2xl font-bold text-red-900">Théorie du Chaos</h3>
+                        </div>
+                        <h4 class="text-sm font-bold text-red-600 uppercase tracking-wide mb-4">Sensibilité aux Conditions Initiales</h4>
+                        <p class="text-slate-700 leading-relaxed mb-4">
+                            L'effet papillon. Une variation infime dans les données d'entrée d'un système complexe (marché, opinion) provoque des divergences massives en sortie.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-red-100">
+                            <strong class="text-red-800">Application Numérique :</strong>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Injection de "bruit" sémantique mineur à des nœuds critiques pour provoquer un effondrement de la confiance ou une panique boursière disproportionnée.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Synthesis Flow (HTML/CSS) -->
+            <div class="mt-12">
+                <h3 class="text-center text-xl font-bold text-slate-800 mb-6">La Synthèse Opérationnelle</h3>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-center">
+                    <div class="bg-slate-800 text-white px-6 py-3 rounded-lg shadow font-bold">Intention Stratégique</div>
+                    <div class="text-2xl text-slate-400">➔</div>
+                    <div class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow font-bold">Autonomie Tactique</div>
+                    <div class="text-2xl text-slate-400">➔</div>
+                    <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow font-bold">Perturbation Chaotique</div>
+                    <div class="text-2xl text-slate-400">➔</div>
+                    <div class="bg-slate-900 text-white px-6 py-3 rounded-lg shadow font-bold border-2 border-cyan-400">Effondrement Systémique</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. THE MECHANISM (DATA VISUALIZATION) -->
+        <section>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-heading font-bold text-slate-900 mb-4">Mécanique de l'Effet Papillon</h2>
+                    <p class="text-slate-600 mb-6">
+                        Ce graphique illustre la divergence exponentielle causée par une attaque cognitive.
+                    </p>
+                    <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-vibrant-cyan">
+                        <h4 class="font-bold text-lg mb-2">Légende</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <span class="w-4 h-4 bg-slate-300 rounded-full mr-2"></span>
+                                    <span class="font-bold text-slate-700">Trajectoire Nominale</span>
+                                </div>
+                                <p class="text-xs text-slate-500">L'évolution prévue de la valeur (réputation ou boursière) sans interférence.</p>
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <span class="w-4 h-4 bg-vibrant-red rounded-full mr-2"></span>
+                                    <span class="font-bold text-red-700">Trajectoire Perturbée</span>
+                                </div>
+                                <p class="text-xs text-slate-500">L'effondrement causé par l'injection d'un simple "doute" (bruit sémantique) au temps T=3.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                    <div class="chart-container">
+                        <canvas id="chaosChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-400 mt-4 italic">
+                        Simulation de divergence non-linéaire sur 10 cycles d'information.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. LEVERAGE & ROI -->
+        <section class="bg-slate-900 text-white rounded-3xl p-8 md:p-12">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-heading font-bold mb-4">L'Asymétrie des Coûts</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Pourquoi la guerre cognitive est l'arme de choix du XXIe siècle : un retour sur investissement (ROI) sans précédent par rapport aux opérations conventionnelles.
+                </p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="roiChart"></canvas>
+            </div>
+        </section>
+
+        <!-- 6. CASE STUDIES -->
+        <section>
+            <h2 class="text-3xl font-heading font-bold text-slate-900 mb-8 text-center">Preuves de Concept (Cas Réels)</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Case 1 -->
+                <div class="info-card p-6 border-t-4 border-blue-500 hover:bg-blue-50">
+                    <div class="text-4xl mb-4">🎮</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">L'Affaire GameStop</h3>
+                    <div class="text-xs font-bold text-blue-600 uppercase mb-3">Swarming Financier</div>
+                    <p class="text-slate-600 text-sm">
+                        Une démonstration civile de l'<strong>Auftragstaktik</strong>. Des milliers d'individus coordonnés par une intention commune (Reddit) sans leader central ont provoqué un chaos financier pour les fonds spéculatifs.
+                    </p>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="info-card p-6 border-t-4 border-red-500 hover:bg-red-50">
+                    <div class="text-4xl mb-4">💻</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">SolarWinds</h3>
+                    <div class="text-xs font-bold text-red-600 uppercase mb-3">Chaos de Confiance</div>
+                    <p class="text-slate-600 text-sm">
+                        Attaque sur la chaîne de confiance ("Supply Chain"). L'injection n'était pas seulement technique, mais visait à détruire la <strong>certitude de sécurité</strong>, modifiant les conditions initiales de tout le réseau fédéral US.
+                    </p>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="info-card p-6 border-t-4 border-cyan-500 hover:bg-cyan-50">
+                    <div class="text-4xl mb-4">🧠</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Cambridge Analytica</h3>
+                    <div class="text-xs font-bold text-cyan-600 uppercase mb-3">Ciblage Psychographique</div>
+                    <p class="text-slate-600 text-sm">
+                        Utilisation de données pour créer des réalités personnalisées. Fragmentation du consensus social par micro-ciblage, rendant la gouvernance démocratique instable (Chaos cognitif).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. DEFENSE & CONCLUSION -->
+        <section class="mb-20">
+            <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-heading font-bold mb-6">Protocole de Résilience</h2>
+                        <p class="mb-6 text-blue-100 leading-relaxed">
+                            Face à une menace décentralisée et chaotique, la défense statique (Firewalls, Démentis officiels lents) est inefficace. La survie dépend de la <strong>Résilience Dynamique</strong>.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                <span class="text-2xl mr-4">🛡️</span>
+                                <div>
+                                    <h4 class="font-bold">Sanctuarisation Sémantique</h4>
+                                    <p class="text-xs text-blue-200">Protection proactive des narratifs clés.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                <span class="text-2xl mr-4">📡</span>
+                                <div>
+                                    <h4 class="font-bold">Détection des Signaux Faibles</h4>
+                                    <p class="text-xs text-blue-200">Identifier le "bruit" avant l'effet papillon.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                <span class="text-2xl mr-4">⚡</span>
+                                <div>
+                                    <h4 class="font-bold">Riposte Décentralisée</h4>
+                                    <p class="text-xs text-blue-200">Autoriser les périphéries à contre-attaquer.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white text-slate-900 p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-center mb-4">Efficacité Défensive Comparée</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="defenseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center border-t border-slate-800">
+        <p class="text-sm">Basé sur le rapport : <em>"Guerre Hybride, Chaos et Sémantique"</em></p>
+        <p class="text-xs mt-2 opacity-60">Généré par IA pour analyse stratégique.</p>
+    </footer>
+
+    <!-- JavaScript for Charts -->
+    <script>
+        // Global Default Settings
+        Chart.defaults.font.family = "'Open Sans', sans-serif";
+        Chart.defaults.color = '#64748b';
+        
+        // Helper function for label wrapping (splitting long strings)
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= maxLen) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Shared Tooltip Callback for Multiline Labels
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // 1. Radar Chart: Paradigm Shift
+        const ctxRadar = document.getElementById('paradigmRadar').getContext('2d');
+        const labelsRadar = ['Vitesse d\'Action', 'Portée Cognitive', 'Anonymat / Opacité', 'Coût Financier', 'Létalité Physique'].map(l => wrapLabel(l));
+        
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: labelsRadar,
+                datasets: [{
+                    label: 'Guerre Cognitive',
+                    data: [95, 100, 90, 20, 10],
+                    fill: true,
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)', // Vibrant Blue
+                    borderColor: '#2563eb',
+                    pointBackgroundColor: '#2563eb',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#2563eb'
+                }, {
+                    label: 'Guerre Classique',
+                    data: [40, 30, 20, 90, 95],
+                    fill: true,
+                    backgroundColor: 'rgba(220, 38, 38, 0.2)', // Vibrant Red
+                    borderColor: '#dc2626',
+                    pointBackgroundColor: '#dc2626',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#dc2626'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: { borderWidth: 3 }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: {
+                            font: { size: 11, weight: 'bold' },
+                            color: '#475569'
+                        },
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+
+        // 2. Line Chart: Chaos/Butterfly Effect
+        const ctxChaos = document.getElementById('chaosChart').getContext('2d');
+        // Generating data for chaos divergence
+        const timeLabels = Array.from({length: 11}, (_, i) => `T=${i}`);
+        const dataStable = [100, 102, 104, 105, 106, 108, 109, 110, 112, 113, 115];
+        const dataChaos = [100, 102, 104, 98, 90, 75, 50, 30, 15, 5, 0]; // Divergence starts at T=3
+
+        new Chart(ctxChaos, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Système Stable (Pas d\'attaque)',
+                    data: dataStable,
+                    borderColor: '#94a3b8', // Slate 400
+                    backgroundColor: '#94a3b8',
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 3
+                }, {
+                    label: 'Système Perturbé (Attaque Sémantique)',
+                    data: dataChaos,
+                    borderColor: '#dc2626', // Vibrant Red
+                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Valeur Perçue / Confiance' },
+                        grid: { color: '#f1f5f9' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    tooltip: tooltipConfig,
+                    annotation: {
+                        // Note: annotation plugin not loaded via CDN in instructions, relying on standard tooltip
+                    }
+                }
+            }
+        });
+
+        // 3. Bar Chart: ROI Comparison
+        const ctxROI = document.getElementById('roiChart').getContext('2d');
+        const labelsROI = ['Coût Opérationnel', 'Risque Politique', 'Impact / Levier'].map(l => wrapLabel(l));
+
+        new Chart(ctxROI, {
+            type: 'bar',
+            data: {
+                labels: labelsROI,
+                datasets: [{
+                    label: 'Guerre Conventionnelle',
+                    data: [90, 80, 40],
+                    backgroundColor: '#94a3b8', // Slate
+                    borderRadius: 4
+                }, {
+                    label: 'Guerre Cognitive',
+                    data: [10, 20, 95], // Low cost, Low risk, High Impact
+                    backgroundColor: '#06b6d4', // Vibrant Cyan
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#334155' }, // Darker grid for dark bg
+                        ticks: { color: '#cbd5e1' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#cbd5e1' }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+
+        // 4. Bar Chart: Defense Effectiveness
+        const ctxDefense = document.getElementById('defenseChart').getContext('2d');
+        
+        new Chart(ctxDefense, {
+            type: 'bar',
+            data: {
+                labels: ['Défense Statique', 'Résilience Dynamique'].map(l => wrapLabel(l)),
+                datasets: [{
+                    label: 'Efficacité contre le Chaos',
+                    data: [15, 85],
+                    backgroundColor: [
+                        '#ef4444', // Red (Fail)
+                        '#22c55e'  // Green (Success)
+                    ],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { max: 100, display: false },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

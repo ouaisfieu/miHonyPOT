@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctrine de Domination Cognitive : Rapport Interactif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC; /* Slate-50 */
+            color: #1E293B; /* Slate-800 */
+        }
+
+        h1, h2, h3, .mono-font {
+            font-family: 'JetBrains+Mono', monospace;
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Constraints managed by grid/parent */
+            height: 400px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Interactive Element Styling */
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #6366f1; /* Indigo-500 */
+        }
+
+        .active-section {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+        }
+
+        /* Custom Scrollbar for a 'Tech' feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+    <!-- Chosen Palette: Intellectual Tech - Background: Slate-50, Primary: Indigo-600, Secondary: Slate-800, Accent: Rose-500 (Threat), Success: Emerald-500 -->
+    <!-- Application Structure Plan:
+         1. Header/Hero: Establishes the paradigm shift (War vs. Peace is obsolete).
+         2. Section 1 (Context): The "Gray Zone" visualization (Scatter Plot) showing the shift from physical to cognitive conflict.
+         3. Section 2 (Theory): The "Auftragstaktik" & Chaos duality. Interactive cards for principles and a Chaos simulation (Line Chart) for the 'Butterfly Effect'.
+         4. Section 3 (The Weapon): SEO vs. GEO. A technical breakdown using a Grouped Bar Chart to contrast the old and new internet.
+         5. Section 4 (The Target): Intangible Assets. A Radar Chart allowing the user to simulate an attack and see the degradation of trust.
+         6. Conclusion: Final synthesis.
+         Rationale: Moves from the abstract context to the specific theory, then the tool, and finally the impact, allowing the user to build a complete mental model. -->
+    <!-- Visualization & Content Choices:
+         1. Scatter Plot (Chart.js): Maps historical conflicts on Physical vs. Cognitive axes. Goal: Compare. Justification: Clearly shows the drift into the "Gray Zone".
+         2. Line Chart (Chart.js): Logistic Map simulation. Goal: Change/Relationships. Justification: Visualizes Chaos Theory/Butterfly effect dynamically better than static text.
+         3. Grouped Bar Chart (Chart.js): SEO vs GEO metrics. Goal: Compare. Justification: Direct quantitative comparison of the two technologies.
+         4. Radar Chart (Chart.js): Asset health. Goal: Relationships/Impact. Justification: Perfect for showing multi-dimensional degradation (Trust, Reputation, etc.).
+         5. Interactive Cards (HTML/CSS): Auftragstaktik principles. Goal: Organize/Inform. Justification: Replaces flowcharts (No Mermaid) with interactive structured text. 
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-slate-900 mono-font tracking-tighter">DOMINATION_<span class="text-indigo-600">COGNITIVE</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#contexte" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">Zone Grise</a>
+                    <a href="#doctrine" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">Doctrine</a>
+                    <a href="#seo-geo" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">SEO vs GEO</a>
+                    <a href="#impact" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">Simulation</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="max-w-3xl">
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-indigo-600 uppercase bg-indigo-50 rounded-full border border-indigo-100">
+                    Rapport Stratégique
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                    La Nouvelle Grammaire de la Guerre : <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-rose-500">Chaos, Hybridation & Sémantique</span>
+                </h1>
+                <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                    La distinction classique entre paix et guerre est caduque. Nous sommes entrés dans une ère de conflit permanent où la conquête territoriale a cédé la place à la domination des infrastructures cognitives. Ce rapport analyse l'hybridation de la tradition militaire prussienne (<em>Auftragstaktik</em>) et des mathématiques du Chaos.
+                </p>
+                <div class="flex flex-wrap gap-4 text-sm text-slate-500 font-mono">
+                    <span class="flex items-center">● Guerre Hybride</span>
+                    <span class="flex items-center">● Moteurs Génératifs</span>
+                    <span class="flex items-center">● Actifs Immatériels</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- Section 1: La Zone Grise (Context) -->
+        <section id="contexte" class="scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6 mono-font border-l-4 border-indigo-600 pl-4">
+                        01. La Zone Grise Permanente
+                    </h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Le modèle clausewitzien binaire (Paix vs Guerre) ne permet plus de lire la réalité. Le graphique ci-contre illustre la dérive historique des conflits vers la "Zone Grise".
+                    </p>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Alors que l'intensité cinétique (violence physique) diminue dans les conflits entre grandes puissances, l'intensité cognitive (manipulation, cyber, désinformation) explose. L'objectif est la <strong>paralysie de la décision</strong> adverse sans tirer un coup de feu.
+                    </p>
+                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                        <strong class="text-indigo-900 block mb-1">Point Clé :</strong>
+                        <p class="text-sm text-indigo-800">La guerre économique totale se joue désormais sur la représentation du réel dans les systèmes d'information.</p>
+                    </div>
+                </div>
+                <div class="lg:col-span-7">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-semibold text-slate-500 mb-4 uppercase tracking-wide">Matrice des Conflits : Cinétique vs Cognitif</h3>
+                        <div class="chart-container">
+                            <canvas id="grayZoneChart"></canvas>
+                        </div>
+                        <p class="text-xs text-center text-slate-400 mt-2">Source: Analyse Historique & Doctrinale</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: La Machine de Guerre (Doctrine) -->
+        <section id="doctrine" class="scroll-mt-24 bg-slate-50 rounded-3xl p-8 border border-slate-200">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 mono-font">
+                    02. Le Moteur Doctrinal
+                </h2>
+                <p class="text-slate-600">
+                    Pour opérer dans ce chaos, la doctrine propose une fusion audacieuse : la structure décentralisée de l'armée prussienne (<em>Auftragstaktik</em>) couplée à l'exploitation des dynamiques non-linéaires (Théorie du Chaos).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Column A: Structure (Auftragstaktik) -->
+                <div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-6 flex items-center">
+                        <span class="w-8 h-8 rounded bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 text-sm font-bold">A</span>
+                        L'Organisation : Auftragstaktik
+                    </h3>
+                    <div class="space-y-4">
+                        <!-- Card 1 -->
+                        <div class="interactive-card bg-white p-5 rounded-lg border border-slate-200 shadow-sm" onclick="toggleCard(this)">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-bold text-slate-800">Décentralisation Radicale</h4>
+                                <span class="text-2xl text-indigo-400 font-light">+</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mt-3 hidden">
+                                Le commandement définit "l'intention" (le but), mais laisse une liberté totale sur le "comment". Cela permet aux unités périphériques de réagir instantanément aux opportunités virales.
+                            </p>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="interactive-card bg-white p-5 rounded-lg border border-slate-200 shadow-sm" onclick="toggleCard(this)">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-bold text-slate-800">Vitesse d'Exécution</h4>
+                                <span class="text-2xl text-indigo-400 font-light">+</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mt-3 hidden">
+                                En supprimant la validation hiérarchique, la boucle OODA (Observer, Orienter, Décider, Agir) est raccourcie. L'information est une munition périssable.
+                            </p>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="interactive-card bg-white p-5 rounded-lg border border-slate-200 shadow-sm" onclick="toggleCard(this)">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-bold text-slate-800">Discipline Intellectuelle</h4>
+                                <span class="text-2xl text-indigo-400 font-light">+</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mt-3 hidden">
+                                L'autonomie exige une compréhension parfaite de la doctrine. Chaque agent (humain ou bot) doit agir en cohérence avec l'objectif stratégique global.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column B: Dynamics (Chaos) -->
+                <div>
+                    <h3 class="text-xl font-bold text-rose-900 mb-6 flex items-center">
+                        <span class="w-8 h-8 rounded bg-rose-100 text-rose-600 flex items-center justify-center mr-3 text-sm font-bold">B</span>
+                        La Dynamique : Théorie du Chaos
+                    </h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        L'Effet Papillon appliqué à l'information : une perturbation minime dans les conditions initiales peut générer une tempête narrative systémique.
+                    </p>
+                    
+                    <!-- Chaos Simulation -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Coefficient Viral (Entropie)</label>
+                            <div class="flex space-x-2">
+                                <button onclick="updateChaos(2.5)" class="px-2 py-1 text-xs bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200">Stable</button>
+                                <button onclick="updateChaos(3.9)" class="px-2 py-1 text-xs bg-rose-100 text-rose-700 rounded hover:bg-rose-200">Chaos</button>
+                            </div>
+                        </div>
+                        <div class="chart-container h-48">
+                            <canvas id="chaosChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2 italic">
+                            Simulation Logistique : x(n+1) = r * x(n) * (1 - x(n)). Observez la bifurcation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: L'Arme Absolue (SEO vs GEO) -->
+        <section id="seo-geo" class="scroll-mt-24">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-900 mb-6 mono-font border-l-4 border-indigo-600 pl-4">
+                    03. La Mutation Technologique : Du SEO au GEO
+                </h2>
+                <p class="text-slate-600 max-w-4xl leading-relaxed">
+                    Le champ de bataille a changé. Nous sommes passés du <strong>SEO</strong> (Search Engine Optimization), une guerre de position pour des liens bleus, au <strong>GEO</strong> (Generative Engine Optimization), une guerre sémantique pour influencer la réponse unique des IA génératives (LLM).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Text Column -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg border border-l-4 border-slate-300 shadow-sm">
+                        <h4 class="font-bold text-slate-700 mb-2">Le Déclin du SEO</h4>
+                        <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                            <li>Cible : Moteurs de recherche (Google).</li>
+                            <li>Résultat : Une liste de liens (choix utilisateur).</li>
+                            <li>Tactique : Mots-clés et Backlinks.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-l-4 border-rose-500 shadow-sm">
+                        <h4 class="font-bold text-rose-700 mb-2">La Menace du GEO</h4>
+                        <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                            <li>Cible : Modèles de Langage (ChatGPT, Perplexity).</li>
+                            <li>Résultat : Une réponse synthétique unique (Autorité).</li>
+                            <li>Tactique : Biais cognitifs, Citations, Consensus artificiel.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Chart Column -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-sm font-semibold text-slate-500 mb-4 uppercase text-center">Comparatif d'Impact Stratégique</h3>
+                    <div class="chart-container">
+                        <canvas id="seoGeoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Simulation d'Impact (Target) -->
+        <section id="impact" class="scroll-mt-24 bg-slate-900 text-white rounded-3xl p-8 md:p-12 overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-32 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+            <div class="absolute bottom-0 left-0 p-32 bg-rose-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 mono-font text-white">
+                        04. Destruction des Actifs Immatériels
+                    </h2>
+                    <p class="text-slate-300 mb-8 leading-relaxed">
+                        L'objectif de la Domination Cognitive n'est pas de détruire des usines, mais de vaporiser la confiance. En modifiant les biais des LLM, un attaquant peut effondrer la réputation d'une cible instantanément.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <p class="text-sm font-mono text-indigo-300">STATUT DU SYSTÈME : <span id="systemStatus" class="text-emerald-400">NOMINAL</span></p>
+                        <button id="attackBtn" class="w-full sm:w-auto px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded shadow-lg transition-colors flex items-center justify-center gap-3">
+                            <span class="text-xl">⚠️</span> Lancer l'Attaque Cognitive
+                        </button>
+                        <p class="text-xs text-slate-400 mt-2">
+                            *Cliquez pour simuler une campagne de saturation sémantique négative.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
+                    <h3 class="text-center text-sm font-semibold text-slate-300 mb-4">Radar de Santé de l'Entité</h3>
+                    <div class="chart-container">
+                        <canvas id="impactRadar"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion / Footer -->
+        <footer class="text-center pt-12 pb-8 border-t border-slate-200 mt-12">
+            <p class="text-slate-500 italic mb-4">
+                "Celui qui contrôle le narratif, contrôle la réalité."
+            </p>
+            <div class="text-xs text-slate-400">
+                <p>Basé sur le document : "Doctrine de Domination Cognitive et Guerre Hybride"</p>
+                <p>Généré le 18 Janvier 2026</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript Implementation -->
+    <script>
+        // --- UTILS ---
+        
+        // Label wrapping function (Split > 16 chars)
+        function formatLabel(str, maxwidth) {
+            const sections = [];
+            const words = str.split(" ");
+            let temp = "";
+
+            words.forEach(function(item, index) {
+                if (temp.length > 0) {
+                    const concat = temp + ' ' + item;
+                    if (concat.length > maxwidth) {
+                        sections.push(temp);
+                        temp = "";
+                    } else {
+                        if (index === (words.length - 1)) {
+                            sections.push(concat);
+                            return;
+                        } else {
+                            temp = concat;
+                            return;
+                        }
+                    }
+                }
+                if (index === (words.length - 1)) {
+                    sections.push(item);
+                    return;
+                }
+                if (item.length < maxwidth) {
+                    temp = item;
+                } else {
+                    sections.push(item);
+                }
+            });
+            return sections;
+        }
+
+        // Standard Tooltip Config
+        const commonTooltip = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- CHART 1: Gray Zone Scatter Plot ---
+        const ctxGray = document.getElementById('grayZoneChart').getContext('2d');
+        const grayChart = new Chart(ctxGray, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Conflits',
+                    data: [
+                        {x: 90, y: 10, label: 'Seconde Guerre Mondiale'}, // High Kinetic, Low Cognitive
+                        {x: 10, y: 50, label: 'Guerre Froide'}, // Low Kinetic, Med Cognitive
+                        {x: 60, y: 20, label: 'Guerre du Golfe'},
+                        {x: 40, y: 80, label: 'Guerre Hybride (2014)'},
+                        {x: 5, y: 95, label: 'Domination Cognitive (2025)'} // Low Kinetic, Max Cognitive
+                    ],
+                    backgroundColor: function(context) {
+                        const val = context.raw?.y;
+                        return val > 80 ? '#e11d48' : (val > 40 ? '#6366f1' : '#94a3b8'); // Rose, Indigo, Slate
+                    },
+                    pointRadius: 8,
+                    pointHoverRadius: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Intensité Cinétique (Violence Physique)' },
+                        min: 0, max: 100,
+                        grid: { color: '#f1f5f9' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Intensité Cognitive (Manipulation Info)' },
+                        min: 0, max: 100,
+                        grid: { color: '#f1f5f9' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.label;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // --- CHART 2: Chaos Theory (Logistic Map) ---
+        const ctxChaos = document.getElementById('chaosChart').getContext('2d');
+        
+        function generateChaosData(r) {
+            let data = [];
+            let x = 0.5; // Initial population
+            for (let i = 0; i < 50; i++) {
+                x = r * x * (1 - x);
+                data.push(x);
+            }
+            return data;
+        }
+
+        const chaosChart = new Chart(ctxChaos, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 50}, (_, i) => i),
+                datasets: [{
+                    label: 'Propagation Narrative',
+                    data: generateChaosData(2.5), // Stable start
+                    borderColor: '#10b981', // Emerald
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { display: false },
+                    y: { display: false, min: 0, max: 1 }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: { display: false }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'linear'
+                }
+            }
+        });
+
+        window.updateChaos = function(r) {
+            const newData = generateChaosData(r);
+            chaosChart.data.datasets[0].data = newData;
+            
+            if(r > 3.5) {
+                chaosChart.data.datasets[0].borderColor = '#e11d48'; // Rose for Chaos
+            } else {
+                chaosChart.data.datasets[0].borderColor = '#10b981'; // Emerald for Stable
+            }
+            chaosChart.update();
+        };
+
+        // --- CHART 3: SEO vs GEO Bar Chart ---
+        const ctxSeo = document.getElementById('seoGeoChart').getContext('2d');
+        const seoGeoChart = new Chart(ctxSeo, {
+            type: 'bar',
+            data: {
+                labels: ['Volume de Trafic', 'Autorité Perçue', 'Coût Manipulation', 'Persistance'],
+                datasets: [
+                    {
+                        label: 'SEO (Ancien)',
+                        data: [90, 40, 30, 80],
+                        backgroundColor: '#94a3b8' // Slate-400
+                    },
+                    {
+                        label: 'GEO (Nouveau)',
+                        data: [30, 95, 85, 90],
+                        backgroundColor: '#6366f1' // Indigo-500
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { display: false }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    tooltip: commonTooltip,
+                    legend: {
+                        position: 'bottom',
+                        labels: { usePointStyle: true }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 4: Impact Radar ---
+        const ctxRadar = document.getElementById('impactRadar').getContext('2d');
+        
+        // Initial Data
+        const healthyData = [90, 85, 95, 80, 85];
+        const attackedData = [20, 15, 30, 40, 25];
+
+        const impactRadar = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Confiance Publique', 'Réputation Brand', 'Visibilité Net', 'Moral Interne', 'Partenariats'],
+                datasets: [{
+                    label: 'État des Actifs',
+                    data: healthyData,
+                    fill: true,
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)', // Emerald transparent
+                    borderColor: '#10b981',
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: {
+                            color: '#cbd5e1', // Slate-300
+                            font: { size: 11 }
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { display: false } // Hide numbers for cleaner look
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltip
+                }
+            }
+        });
+
+        // Attack Simulation Logic
+        const btn = document.getElementById('attackBtn');
+        const status = document.getElementById('systemStatus');
+        let isAttacked = false;
+
+        btn.addEventListener('click', () => {
+            if(!isAttacked) {
+                // Simulate Attack
+                impactRadar.data.datasets[0].data = attackedData;
+                impactRadar.data.datasets[0].backgroundColor = 'rgba(225, 29, 72, 0.4)'; // Rose
+                impactRadar.data.datasets[0].borderColor = '#e11d48';
+                impactRadar.data.datasets[0].pointBackgroundColor = '#e11d48';
+                
+                status.textContent = "CRITIQUE - INTÉGRITÉ COMPROMISE";
+                status.classList.remove('text-emerald-400');
+                status.classList.add('text-rose-500', 'animate-pulse');
+                
+                btn.innerHTML = '<span class="text-xl">↺</span> Réinitialiser le Système';
+                btn.classList.remove('bg-rose-600', 'hover:bg-rose-700');
+                btn.classList.add('bg-slate-600', 'hover:bg-slate-700');
+            } else {
+                // Reset
+                impactRadar.data.datasets[0].data = healthyData;
+                impactRadar.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                impactRadar.data.datasets[0].borderColor = '#10b981';
+                impactRadar.data.datasets[0].pointBackgroundColor = '#10b981';
+
+                status.textContent = "NOMINAL";
+                status.classList.add('text-emerald-400');
+                status.classList.remove('text-rose-500', 'animate-pulse');
+
+                btn.innerHTML = '<span class="text-xl">⚠️</span> Lancer l\'Attaque Cognitive';
+                btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+                btn.classList.remove('bg-slate-600', 'hover:bg-slate-700');
+            }
+            impactRadar.update();
+            isAttacked = !isAttacked;
+        });
+
+        // --- Interaction Logic: Cards ---
+        window.toggleCard = function(element) {
+            const p = element.querySelector('p');
+            const icon = element.querySelector('span');
+            
+            if (p.classList.contains('hidden')) {
+                p.classList.remove('hidden');
+                icon.innerHTML = "-";
+                element.classList.add('border-indigo-500', 'ring-1', 'ring-indigo-500');
+            } else {
+                p.classList.add('hidden');
+                icon.innerHTML = "+";
+                element.classList.remove('border-indigo-500', 'ring-1', 'ring-indigo-500');
+            }
+        };
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctrine de Domination Cognitive | Analyse Interactive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles for Specific Interactive Elements -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light background as requested */
+            color: #1e293b;
+        }
+        h1, h2, h3, .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-tab {
+            border-bottom: 2px solid #2563eb;
+            color: #2563eb;
+        }
+    </style>
+
+    <!-- Chosen Palette: Slate (Neutral Background), Blue (Intel/Data), Red (Attack/Threat), Emerald (Defense) -->
+    <!-- Application Structure Plan: 
+         1. Header: Briefing Context.
+         2. Paradigm Comparison: Visualizing the shift from Clausewitz to Hybrid utilizing a Radar Chart.
+         3. Theoretical Framework: Interactive cards explaining Auftragstaktik vs. Chaos, merging into the "Doctrine".
+         4. Chaos Simulator: The core interactive element. A Plotly graph allowing users to "inject" semantic noise and watch the non-linear impact (Butterfly Effect).
+         5. Case Archive: Grid layout of real-world examples cited in the text.
+         6. Resilience Audit: A checklist tool to "score" an entity's defense against this doctrine.
+         Rationale: This structure moves from abstract definition to concrete mechanics, then to historical proof, and finally to actionable defense, aiding user comprehension of a complex theoretical paper.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Radar Chart: Goal -> Compare attributes of Old vs. New War. Method -> Chart.js Radar. Justification -> Best for multi-variable comparison.
+         2. Line Chart (Simulation): Goal -> Demonstrate "Sensitivity to Initial Conditions" (Chaos). Method -> Plotly.js. Interaction -> Slider to adjust "Semantic Noise". Justification -> Dynamic math visualization is needed to explain the "Butterfly Effect".
+         3. Bar Chart (Resilience): Goal -> Visualize defense readiness. Method -> Chart.js Bar. Interaction -> Checkboxes update the score.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation / Header -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter text-slate-900 mono">DOMINATION<span class="text-blue-600">COGNITIVE</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="scrollToSection('context')" class="text-slate-500 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Contexte</button>
+                    <button onclick="scrollToSection('doctrine')" class="text-slate-500 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">La Doctrine</button>
+                    <button onclick="scrollToSection('simulation')" class="text-slate-500 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Simulation Chaos</button>
+                    <button onclick="scrollToSection('defense')" class="text-slate-500 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Résilience</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white py-16 border-b border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase mb-4">Rapport Stratégique</div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+                L'Hybridation de l'Auftragstaktik et du Chaos
+            </h1>
+            <p class="text-xl text-slate-600 leading-relaxed mb-8">
+                Comment la convergence de la pensée militaire prussienne et de la dynamique non-linéaire redéfinit la <strong>Guerre Économique Totale</strong> au XXIe siècle. Une analyse de la conquête des esprits et des actifs immatériels.
+            </p>
+            <div class="flex justify-center gap-4">
+                <button onclick="scrollToSection('context')" class="bg-slate-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-lg">
+                    Explorer le Paradigme
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: CONTEXTE STRATEGIQUE (Radar Chart) -->
+        <section id="context" class="scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                        <span class="bg-slate-200 text-slate-700 text-sm font-mono px-2 py-1 rounded">01</span>
+                        La Convergence des Champs
+                    </h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        Le rapport postule une rupture fondamentale : le passage de la guerre cinétique (territoriale) à la guerre cognitive (immatérielle). Dans cette "zone grise" permanente, la valeur d'une entité dépend de sa représentation numérique. L'ennemi ne cherche plus à détruire les usines, mais à <strong>saturer l'espace sémantique</strong> pour effondrer la confiance.
+                    </p>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <p class="text-blue-800 text-sm italic">
+                            "La distinction clausewitzienne classique entre l'état de paix et l'état de guerre s'efface au profit d'une zone grise permanente."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="mb-4 text-center">
+                        <h3 class="text-lg font-semibold text-slate-800">Comparatif des Doctrines</h3>
+                        <p class="text-xs text-slate-500">Guerre Classique vs. Guerre Hybride Totale</p>
+                    </div>
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <canvas id="warfareRadarChart"></canvas>
+                    </div>
+                    <div class="mt-4 flex justify-center gap-6 text-xs text-slate-500">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-slate-400"></span> Classique (XXe)
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span> Hybride (XXIe)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: LA DOCTRINE (Interactive Cards) -->
+        <section id="doctrine" class="scroll-mt-24">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Les Piliers de la Domination</h2>
+                <p class="text-slate-600">
+                    Cette doctrine repose sur la synthèse de deux cadres théoriques puissants. Cliquez sur les cartes pour comprendre comment ils s'articulent pour créer des "Commandos Sémantiques".
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1: Auftragstaktik -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover cursor-pointer group" onclick="toggleDoctrine('auftrag')">
+                    <div class="bg-slate-100 p-4 border-b border-slate-200 group-hover:bg-slate-200 transition-colors">
+                        <div class="text-xs font-mono text-slate-500 uppercase tracking-widest mb-1">Pilier 1</div>
+                        <h3 class="text-xl font-bold text-slate-900">Auftragstaktik</h3>
+                        <p class="text-sm text-slate-500">Commandement de Mission</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 text-sm mb-4">
+                            Héritage prussien. Décentralisation radicale de la prise de décision.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-700 mb-4">
+                            <li class="flex items-start gap-2"><span class="text-blue-500">▶</span> Initiative locale maximale</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500">▶</span> Rapidité d'exécution</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500">▶</span> "Chef stratégique, exécutant autonome"</li>
+                        </ul>
+                        <div id="auftrag-detail" class="hidden mt-4 pt-4 border-t border-slate-100 bg-blue-50 -mx-6 -mb-6 p-6">
+                            <p class="text-xs text-blue-900 font-semibold">APPLICATION NUMÉRIQUE :</p>
+                            <p class="text-sm text-blue-800 mt-1">
+                                Des cellules autonomes (bots, trolls, influenceurs) reçoivent une intention ("Discréditer la cible X") mais choisissent librement leurs méthodes d'attaque sémantique.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 text-center text-xs text-slate-400 group-hover:text-blue-600 transition-colors">
+                        Cliquez pour révéler l'application
+                    </div>
+                </div>
+
+                <!-- Card 2: The Synthesis (Center) -->
+                <div class="flex flex-col justify-center items-center text-center space-y-4 py-8 md:py-0">
+                    <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-lg z-10">
+                        +
+                    </div>
+                    <div class="text-4xl font-mono text-slate-300">
+                        &#8595;
+                    </div>
+                    <div class="bg-slate-900 text-white p-6 rounded-xl shadow-xl transform scale-105 border border-slate-700">
+                        <h3 class="text-lg font-bold mb-2 font-mono text-blue-400">LE COMMANDO SÉMANTIQUE</h3>
+                        <p class="text-sm text-slate-300">
+                            Un système chaotique, piloté par l'intention.
+                        </p>
+                        <div class="mt-4 text-xs bg-slate-800 p-3 rounded text-left font-mono">
+                            > Target: Trust_Index<br>
+                            > Method: Decentralized<br>
+                            > Effect: Non-linear
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Chaos Theory -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover cursor-pointer group" onclick="toggleDoctrine('chaos')">
+                    <div class="bg-slate-100 p-4 border-b border-slate-200 group-hover:bg-slate-200 transition-colors">
+                        <div class="text-xs font-mono text-slate-500 uppercase tracking-widest mb-1">Pilier 2</div>
+                        <h3 class="text-xl font-bold text-slate-900">Théorie du Chaos</h3>
+                        <p class="text-sm text-slate-500">Dynamique Non-Linéaire</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 text-sm mb-4">
+                            Étude des systèmes dynamiques très sensibles aux conditions initiales.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-700 mb-4">
+                            <li class="flex items-start gap-2"><span class="text-red-500">●</span> Effet Papillon</li>
+                            <li class="flex items-start gap-2"><span class="text-red-500">●</span> Imprévisibilité déterministe</li>
+                            <li class="flex items-start gap-2"><span class="text-red-500">●</span> Amplification exponentielle</li>
+                        </ul>
+                        <div id="chaos-detail" class="hidden mt-4 pt-4 border-t border-slate-100 bg-red-50 -mx-6 -mb-6 p-6">
+                            <p class="text-xs text-red-900 font-semibold">APPLICATION NUMÉRIQUE :</p>
+                            <p class="text-sm text-red-800 mt-1">
+                                Une infime perturbation sémantique (une rumeur, un deepfake) injectée au bon endroit dans le réseau peut provoquer un effondrement systémique de la réputation.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 text-center text-xs text-slate-400 group-hover:text-red-600 transition-colors">
+                        Cliquez pour révéler l'application
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SIMULATEUR TACTIQUE (Plotly) -->
+        <section id="simulation" class="scroll-mt-24 bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <span class="text-xl">🦋</span> Simulateur d'Effet Papillon
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Démontrez la sensibilité aux conditions initiales. Une petite injection de "bruit sémantique" déstabilise le système.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 animate-pulse">
+                            Live Simulation
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+                <!-- Controls -->
+                <div class="p-8 space-y-8 bg-white">
+                    <div>
+                        <label for="noiseLevel" class="block text-sm font-medium text-slate-700 mb-2">
+                            Intensité de l'Injection Sémantique (bruit)
+                        </label>
+                        <input type="range" id="noiseLevel" min="0" max="100" value="5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <div class="flex justify-between text-xs text-slate-500 mt-2">
+                            <span>Stable (0%)</span>
+                            <span id="noiseValue" class="font-bold text-blue-600">5%</span>
+                            <span>Chaos (100%)</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3 italic">
+                            Correspond à l'introduction de faux narratifs dans les algorithmes de recherche.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-semibold text-slate-900 mb-3">Tactiques Activées :</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-3 rounded bg-slate-50 border border-slate-100 transition-colors" id="tactic-1">
+                                <div class="w-2 h-2 rounded-full bg-green-500" id="status-1"></div>
+                                <div class="text-sm text-slate-700">Saturation de Mots-clés</div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded bg-slate-50 border border-slate-100 transition-colors" id="tactic-2">
+                                <div class="w-2 h-2 rounded-full bg-slate-300" id="status-2"></div>
+                                <div class="text-sm text-slate-700">Faux Signaux Sociaux</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="runSimulation()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+                        <span>⚡</span> Lancer la Simulation
+                    </button>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-2 p-6 bg-slate-50">
+                    <div id="chaosGraph" class="w-full h-[400px]"></div>
+                    <div class="text-center mt-2 text-xs text-slate-400">
+                        Axe Y: Indice de Confiance/Réputation | Axe X: Temps (Cycles d'information)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ETUDES DE CAS (Grid) -->
+        <section id="case-studies" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8">Archives Opérationnelles</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Case 1 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-xs font-mono text-blue-600 mb-2">MARCHÉ FINANCIER</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">L'Affaire GameStop</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Une démonstration de l'<em>Auftragstaktik</em> civile. Une multitude d'acteurs individuels (Reddit) coordonnés par une intention commune sans chef central, provoquant un chaos financier pour les fonds spéculatifs.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Décentralisation</span>
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Swarming</span>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-xs font-mono text-blue-600 mb-2">CYBER-SÉMANTIQUE</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">SolarWinds</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Attaque sur la chaîne de confiance. L'injection n'était pas seulement technique, mais visait à briser la certitude de sécurité des institutions américaines. Une perturbation des "conditions initiales" de sécurité.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Infiltration</span>
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Confiance</span>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-xs font-mono text-blue-600 mb-2">GUERRE PSYCHOLOGIQUE</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Cambridge Analytica</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Micro-ciblage psychographique. Utilisation de données granulaires pour créer des réalités personnalisées, fragmentant le consensus social (Chaos cognitif) pour influencer des élections.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Segmentation</span>
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded">Manipulation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: DEFENSE (Interactive Checklist) -->
+        <section id="defense" class="scroll-mt-24 mb-24">
+            <div class="bg-slate-900 rounded-3xl p-8 md:p-12 text-white">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4 font-mono">Protocole de Résilience</h2>
+                        <p class="text-slate-400 mb-8">
+                            Face à la guerre cognitive, la défense statique est inutile. Seule la résilience dynamique fonctionne. Évaluez la posture de défense de votre organisation.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <!-- Checklist Items -->
+                            <label class="flex items-center gap-4 p-4 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-750 transition-colors">
+                                <input type="checkbox" class="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 defense-check" onchange="updateDefense()">
+                                <div>
+                                    <div class="font-bold text-sm">Audit Sémantique Continu</div>
+                                    <div class="text-xs text-slate-400">Surveillance des mots-clés et narratifs associés à la marque.</div>
+                                </div>
+                            </label>
+                            
+                            <label class="flex items-center gap-4 p-4 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-750 transition-colors">
+                                <input type="checkbox" class="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 defense-check" onchange="updateDefense()">
+                                <div>
+                                    <div class="font-bold text-sm">Décentralisation de la Réponse</div>
+                                    <div class="text-xs text-slate-400">Capacité des équipes locales à répondre sans validation centrale (Auftragstaktik défensif).</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center gap-4 p-4 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-750 transition-colors">
+                                <input type="checkbox" class="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 defense-check" onchange="updateDefense()">
+                                <div>
+                                    <div class="font-bold text-sm">Hygiène Numérique des Actifs</div>
+                                    <div class="text-xs text-slate-400">Protection des identités numériques et serveurs critiques.</div>
+                                </div>
+                            </label>
+                            
+                            <label class="flex items-center gap-4 p-4 bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-750 transition-colors">
+                                <input type="checkbox" class="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 defense-check" onchange="updateDefense()">
+                                <div>
+                                    <div class="font-bold text-sm">Contre-Narration Préparée</div>
+                                    <div class="text-xs text-slate-400">Narratifs "dormants" prêts à être activés en cas de crise.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="chart-container">
+                            <canvas id="defenseChart"></canvas>
+                        </div>
+                        <div class="text-center mt-6">
+                            <div class="text-4xl font-mono font-bold text-emerald-400" id="resilienceScore">0%</div>
+                            <div class="text-sm text-slate-400 uppercase tracking-widest mt-1">Score de Résilience</div>
+                        </div>
+                        <div id="defense-message" class="mt-4 text-center text-sm font-medium text-red-400">
+                            VULNÉRABILITÉ CRITIQUE
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+            <p class="mb-2">Basé sur le rapport : <em>Doctrine de Domination Cognitive</em></p>
+            <p>Ce tableau de bord est un outil de visualisation pédagogique.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Navigation ---
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // --- Interaction: Cards ---
+        function toggleDoctrine(type) {
+            const detail = document.getElementById(type + '-detail');
+            if (detail.classList.contains('hidden')) {
+                detail.classList.remove('hidden');
+            } else {
+                detail.classList.add('hidden');
+            }
+        }
+
+        // --- Chart.js: Warfare Radar Chart ---
+        function initRadarChart() {
+            const ctx = document.getElementById('warfareRadarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Vitesse', 'Portée Cognitive', 'Décentralisation', 'Létalité Physique', 'Opacité', 'Coût'],
+                    datasets: [{
+                        label: 'Guerre Classique (XXe)',
+                        data: [40, 20, 30, 90, 20, 80],
+                        fill: true,
+                        backgroundColor: 'rgba(148, 163, 184, 0.2)',
+                        borderColor: 'rgb(148, 163, 184)',
+                        pointBackgroundColor: 'rgb(148, 163, 184)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(148, 163, 184)'
+                    }, {
+                        label: 'Guerre Hybride (XXIe)',
+                        data: [95, 100, 90, 30, 90, 40],
+                        fill: true,
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgb(239, 68, 68)',
+                        pointBackgroundColor: 'rgb(239, 68, 68)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(239, 68, 68)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            pointLabels: {
+                                font: { size: 11, family: 'Inter' },
+                                color: '#475569'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false } // Custom legend in HTML
+                    }
+                }
+            });
+        }
+
+        // --- Plotly.js: Chaos Simulation ---
+        let chaosPlotInitialized = false;
+
+        function runSimulation() {
+            const noise = parseInt(document.getElementById('noiseLevel').value);
+            const status1 = document.getElementById('status-1');
+            const status2 = document.getElementById('status-2');
+            const noiseDisplay = document.getElementById('noiseValue');
+
+            // Update UI feedback
+            noiseDisplay.innerText = noise + "%";
+            if (noise > 30) {
+                status1.querySelector('.w-2').classList.replace('bg-green-500', 'bg-red-500');
+                status2.querySelector('.w-2').classList.replace('bg-slate-300', 'bg-red-500');
+            } else {
+                status1.querySelector('.w-2').classList.replace('bg-red-500', 'bg-green-500');
+                status2.querySelector('.w-2').classList.replace('bg-red-500', 'bg-slate-300');
+            }
+
+            // Logistic Map Formula: x(n+1) = r * x(n) * (1 - x(n))
+            // This is a standard math model for chaos.
+            // r represents the "intensity" (noise/pressure). 
+            // r=3.0 is stable, r=3.6 is chaotic.
+            
+            // Map noise (0-100) to r (2.8 - 4.0)
+            const r = 2.8 + (noise / 100) * 1.2;
+            
+            const xValues = [];
+            const yValues = [];
+            let x = 0.5; // Initial reputation state
+
+            for (let i = 0; i < 50; i++) {
+                xValues.push(i);
+                // Introduce random "semantic bursts" if noise is high
+                let perturbation = 0;
+                if (noise > 50 && i % 10 === 0) {
+                     perturbation = (Math.random() - 0.5) * 0.1;
+                }
+                
+                x = r * x * (1 - x) + perturbation;
+                
+                // Clamp visual values
+                if(x < 0) x = 0;
+                if(x > 1) x = 1;
+                
+                yValues.push(x);
+            }
+
+            const trace = {
+                x: xValues,
+                y: yValues,
+                mode: 'lines+markers',
+                line: {
+                    color: noise > 60 ? '#ef4444' : '#2563eb',
+                    width: 2,
+                    shape: 'spline'
+                },
+                marker: {
+                    size: 4,
+                    color: noise > 60 ? '#b91c1c' : '#1e40af'
+                },
+                name: 'Stabilité du Système'
+            };
+
+            const layout = {
+                title: { text: noise > 60 ? 'DÉSTABILISATION SYSTÉMIQUE' : 'FLUCTUATIONS NORMALES', font: { size: 14 } },
+                paper_bgcolor: '#f8fafc',
+                plot_bgcolor: '#f8fafc',
+                margin: { t: 40, r: 20, l: 40, b: 40 },
+                xaxis: { title: 'Temps (t)', showgrid: false },
+                yaxis: { title: 'Intégrité', range: [0, 1.1] },
+                showlegend: false
+            };
+            
+            const config = { responsive: true, displayModeBar: false };
+
+            Plotly.newPlot('chaosGraph', [trace], layout, config);
+        }
+
+        // Add event listener to range slider
+        document.getElementById('noiseLevel').addEventListener('input', runSimulation);
+
+
+        // --- Chart.js: Defense Resilience ---
+        let defenseChartInstance = null;
+
+        function initDefenseChart() {
+            const ctx = document.getElementById('defenseChart').getContext('2d');
+            defenseChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Vulnérabilité', 'Résilience'],
+                    datasets: [{
+                        data: [100, 0],
+                        backgroundColor: ['#ef4444', '#10b981'],
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, display: false },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateDefense() {
+            const checks = document.querySelectorAll('.defense-check');
+            let checkedCount = 0;
+            checks.forEach(check => {
+                if (check.checked) checkedCount++;
+            });
+
+            const score = (checkedCount / checks.length) * 100;
+            const vulnerability = 100 - score;
+
+            // Update UI Text
+            const scoreEl = document.getElementById('resilienceScore');
+            const msgEl = document.getElementById('defense-message');
+            
+            scoreEl.innerText = `${Math.round(score)}%`;
+            
+            if (score < 25) {
+                msgEl.innerText = "VULNÉRABILITÉ CRITIQUE";
+                msgEl.className = "mt-4 text-center text-sm font-medium text-red-500 animate-pulse";
+            } else if (score < 75) {
+                msgEl.innerText = "DÉFENSE PARTIELLE";
+                msgEl.className = "mt-4 text-center text-sm font-medium text-yellow-500";
+            } else {
+                msgEl.innerText = "RÉSILIENCE OPTIMALE";
+                msgEl.className = "mt-4 text-center text-sm font-medium text-emerald-500";
+            }
+
+            // Update Chart
+            defenseChartInstance.data.datasets[0].data = [vulnerability, score];
+            defenseChartInstance.update();
+        }
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initRadarChart();
+            runSimulation(); // Initial plot
+            initDefenseChart();
+        });
+
+    </script>
+</body>
+</html>

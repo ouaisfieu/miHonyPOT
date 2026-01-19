@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/EzWy3jUaYxFR0wk1BJ7CGQ7-CRXwTIVhs8mSQ9BLiUsA8X89ip7zVG9FmM1dC-fzrf2y3ilJJi6I8HgyDiVjFT-mUto8P68WPAceK8gTP-5afE4bRl5AZgnVU_ADr-HZoqYozBXOf9kRvMz3JbPMik5i4lxjAsLJxbh536O3HdWt4z-4nBLqmyxqpNZ2d3MUnEZMsCBJA11nQ-nMI9R_N4LaZgm8IrIDQdPOZhMUvCoe5MWLNKEw1POw_Yfw9yUo-mB4ej3xyc_JWbRA7PndVrZW_XxlMdBpfXeM7UE0ZW64fbS7SzILhjqqVHkw1EZBMD5IvX-2FFVFhGGaH3hkdLMVbM6YWJ-qXkuMSLXvumBXc9z8lMBKTDqWNx8NEoBx_NeVTjCUzA4OcD0rzk4s33CH-hVDNW9QAfk5dkxjFY8ZQxiukekUZr0_F9_sKhe9iuoqhh6tYRlnfVBZ0FUCQF0PD2t3RqldyEQRqHLnCMbDy6iVIrWYUEBnxEJ7mqAoQOj9iA5G8iCGasmGLL0sdssRg3-9qz1iYqx5u8M_O7xx70yremg_kf721j9AilM6wEMUm3E'></script><script type='text/javascript' src='https://ouaisfieu.github.io/b4bDoilbUQTfR3Q2y33cIfio6KZLYiRxGLjEL90y6i2fOioIfXuuzIOpoi-Li1jsuHC5F226oXYsdJfRijQBjwyo4oqxTLWBsWN8Pg-O_I_LbPecKYdn763BJNQkvfjXswm018VsMZ8Hu9eAm2aVOvDg2dGmEkgfEOQVdy8eb0beGLqpJ680vv4mnbQBI514cSyIh7ZAlzmUGUig78nw_c6DDlS_jJ2O6kZlYZD1XYqFKvM4Yd-652s5Yh_C3p6N_0SLKRlw8Hh7SwYbcaI7JimtgLYv2jnJSzUG-DSyaoyqdz1FhoUbTHwsq_Cy_Ark8pHTJKi0e75dudw-_Y8ptm5dCA85xK70-FFjzb2CA9hw-CDiQXNeDsf-QsZ_gjkrt1GkWLRxx9WKJWSqmjMeUO2cMDTTu32dZx7-hzEtPDx7HO9b2hBCrma1VNVJbohqgziJA-yR5iJB3T8FkSAKe7UI414edKyXlFnUzk6IWLQaZWA'></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>test — Exploration Psychédélique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --mauve: #9d4edd;
+      --mauve-dark: #7b2cbf;
+      --mauve-light: #c77dff;
+      --vert-lilas: #a7f3d0;
+      --vert-neon: #10b981;
+      --bg-dark: #0a0a1a;
+      --bg-card: rgba(15, 10, 30, 0.8);
+    }
+    
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0d1b2a 100%);
+      color: #e0e0ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(167, 243, 208, 0.1) 0%, transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+    
+    header {
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--mauve-light), var(--vert-lilas), var(--mauve-light));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 3s linear infinite;
+      text-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
+      position: relative;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    
+    /* Glitch effect on title */
+    h1::before, h1::after {
+      content: 'TEST';
+      position: absolute;
+      left: 0; right: 0;
+      background: inherit;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h1::before {
+      animation: glitch1 0.3s infinite;
+      text-shadow: 2px 0 #0ff;
+    }
+    h1::after {
+      animation: glitch2 0.3s infinite;
+      text-shadow: -2px 0 #f0f;
+    }
+    @keyframes glitch1 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0; }
+      20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px); opacity: 0.8; }
+      40% { clip-path: inset(40% 0 40% 0); transform: translate(3px); opacity: 0.8; }
+    }
+    @keyframes glitch2 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0; }
+      30% { clip-path: inset(60% 0 20% 0); transform: translate(3px); opacity: 0.8; }
+      60% { clip-path: inset(30% 0 50% 0); transform: translate(-3px); opacity: 0.8; }
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--vert-lilas);
+      margin-top: 1rem;
+      opacity: 0.8;
+    }
+    
+    .mascots {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .mascot {
+      font-size: 3rem;
+      animation: float 2s ease-in-out infinite;
+      cursor: pointer;
+      transition: all 0.3s;
+      filter: drop-shadow(0 0 15px var(--mauve));
+    }
+    .mascot:nth-child(2) { animation-delay: 0.3s; }
+    .mascot:nth-child(3) { animation-delay: 0.6s; }
+    .mascot:hover {
+      transform: scale(1.5) rotate(15deg);
+      filter: drop-shadow(0 0 30px var(--vert-neon)) hue-rotate(90deg);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--mauve-dark);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(157, 78, 221, 0.1) 50%, transparent 60%);
+      animation: shimmer 4s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: var(--mauve-light);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card p, .card li {
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .card li {
+      padding: 0.5rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+    .card li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--vert-neon);
+      animation: pulse 1s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .demo-area {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(157, 78, 221, 0.1) 100%);
+      border: 2px dashed var(--vert-neon);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    
+    .demo-area h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--vert-lilas);
+      margin-bottom: 1rem;
+    }
+    
+    .demo-btn {
+      padding: 1rem 2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      background: linear-gradient(135deg, var(--mauve) 0%, var(--vert-neon) 100%);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+    }
+    .demo-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+    }
+    
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .link-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--mauve-dark);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+    }
+    .link-card:hover {
+      border-color: var(--vert-neon);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+    .link-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .link-card .label { font-size: 0.8rem; color: var(--mauve-light); }
+    
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid var(--mauve-dark);
+    }
+    .timeline-item {
+      position: relative;
+      padding: 1rem 0;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem;
+      top: 1.5rem;
+      width: 12px;
+      height: 12px;
+      background: var(--vert-neon);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--vert-neon);
+    }
+    .timeline-date {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--mauve-light);
+    }
+    .timeline-content {
+      margin-top: 0.5rem;
+      color: var(--vert-lilas);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 3rem;
+      color: var(--mauve-light);
+      opacity: 0.6;
+      font-size: 0.8rem;
+    }
+    
+    /* Easter egg: Konami code */
+    .psychedelic-mode {
+      animation: rainbow 0.5s linear infinite;
+    }
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    /* Floating particles */
+    .particle {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      animation: particleFloat 3s ease-in-out infinite;
+    }
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TEST</h1>
+    <p class="subtitle">🌌 Exploration Psychédélique & Éducative 🌌</p>
+    <div class="mascots">
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🐑</span>
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🐧</span>
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🦩</span>
+    </div>
+  </header>
+  
+  <main>
+    <section class="card">
+      <h2>📚 C'est quoi "test" ?</h2>
+      <p>
+        <strong>test</strong> est un sujet fascinant qui mérite toute notre attention.
+        Dans cette exploration psychédélique, nous allons plonger dans les profondeurs de ce thème
+        avec l'aide de nos mascottes : le mouflon sage 🐑, le pingouin studieux 🐧, et le flamant funky 🦩 !
+      </p>
+      <ul>
+        <li>Concept fondamental et définitions</li>
+        <li>Applications dans le monde réel</li>
+        <li>Pourquoi c'est important pour toi</li>
+        <li>Les secrets que personne ne te dit</li>
+      </ul>
+    </section>
+    
+    <section class="card">
+      <h2>🎮 Démo Interactive</h2>
+      <div class="demo-area">
+        <h3>✨ Expérimente test en direct !</h3>
+        <p style="margin-bottom: 1rem; opacity: 0.8;">Clique pour activer l'expérience immersive</p>
+        <button class="demo-btn" onclick="activateDemo()">
+          🚀 Lancer la démo
+        </button>
+        <div id="demoResult" style="margin-top: 1rem; min-height: 50px;"></div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>🔗 Ressources Officielles</h2>
+      <div class="links">
+        <div class="link-card" onclick="alert('🐑 Le mouflon approuve cette ressource !')">
+          <div class="icon">📖</div>
+          <div class="label">Documentation</div>
+        </div>
+        <div class="link-card" onclick="alert('🐧 Le pingouin a vérifié cette source !')">
+          <div class="icon">🎓</div>
+          <div class="label">Tutoriels</div>
+        </div>
+        <div class="link-card" onclick="alert('🦩 Le flamant trouve ça stylé !')">
+          <div class="icon">💻</div>
+          <div class="label">Code Source</div>
+        </div>
+        <div class="link-card" onclick="alert('🌈 Easter egg trouvé ! +100 points !')">
+          <div class="icon">🎁</div>
+          <div class="label">Surprises</div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>📅 Timeline de test</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">🕐 Les débuts</div>
+          <div class="timeline-content">Naissance du concept et premières explorations</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">🚀 L'expansion</div>
+          <div class="timeline-content">Développement et adoption massive</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">✨ Aujourd'hui</div>
+          <div class="timeline-content">État actuel et perspectives futures</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">🔮 Le futur</div>
+          <div class="timeline-content">Ce qui nous attend... (avec des mouflons et pingouins, évidemment)</div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>🎯 Quiz Gamifié</h2>
+      <p>Teste tes connaissances sur test !</p>
+      <div style="margin-top: 1rem;">
+        <button class="demo-btn" onclick="startQuiz()" style="margin-right: 1rem;">
+          🎲 Jouer au Quiz
+        </button>
+        <span id="score" style="font-family: 'Orbitron', sans-serif; color: var(--vert-neon);">Score: 0</span>
+      </div>
+      <div id="quizArea" style="margin-top: 1rem;"></div>
+    </section>
+  </main>
+  
+  <footer>
+    <p>🌸 Généré par PéTAL OS — Module Écho 🌸</p>
+    <p style="margin-top: 0.5rem;">Avec amour, mouflons et pingouins 🐑🐧</p>
+  </footer>
+  
+  <script>
+    // Floating particles
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      particle.style.background = Math.random() > 0.5 ? '#9d4edd' : '#10b981';
+      particle.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 3000);
+    }
+    setInterval(createParticle, 500);
+    
+    // Demo activation
+    let demoActive = false;
+    function activateDemo() {
+      demoActive = !demoActive;
+      const result = document.getElementById('demoResult');
+      if (demoActive) {
+        result.innerHTML = `
+          <div style="padding: 1rem; background: rgba(16, 185, 129, 0.2); border-radius: 10px; animation: pulse 1s infinite;">
+            <p style="font-size: 1.5rem;">🎉 Démo activée !</p>
+            <p>Tu explores maintenant "test" en mode immersif.</p>
+            <p style="margin-top: 0.5rem;">🐑 "Baaa-rillant !" — Le Mouflon</p>
+          </div>
+        `;
+      } else {
+        result.innerHTML = '<p style="opacity: 0.6;">Démo désactivée. Clique pour relancer !</p>';
+      }
+    }
+    
+    // Quiz
+    let score = 0;
+    const questions = [
+      { q: 'test est-il incroyable ?', a: 'Oui', options: ['Oui', 'Absolument', 'Carrément'] },
+      { q: 'Qui préfères-tu ?', a: 'Tous', options: ['🐑 Mouflon', '🐧 Pingouin', 'Tous'] },
+      { q: 'Cette expérience est...', a: 'Psychédélique', options: ['Psychédélique', 'Magique', 'Les deux'] }
+    ];
+    let currentQ = 0;
+    
+    function startQuiz() {
+      currentQ = 0;
+      score = 0;
+      document.getElementById('score').textContent = 'Score: 0';
+      showQuestion();
+    }
+    
+    function showQuestion() {
+      if (currentQ >= questions.length) {
+        document.getElementById('quizArea').innerHTML = `
+          <div style="padding: 1rem; background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(16, 185, 129, 0.3)); border-radius: 10px;">
+            <p style="font-size: 1.5rem;">🏆 Quiz terminé !</p>
+            <p>Score final: ${score}/${questions.length}</p>
+            <p style="margin-top: 0.5rem;">${score === questions.length ? '🌟 Parfait ! Tu es un expert !' : '✨ Bien joué ! Continue d\'explorer !'}</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const q = questions[currentQ];
+      document.getElementById('quizArea').innerHTML = `
+        <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 10px;">
+          <p style="margin-bottom: 1rem; font-size: 1.1rem;">${q.q}</p>
+          ${q.options.map(opt => `
+            <button onclick="checkAnswer('${opt}')" style="
+              margin: 0.25rem;
+              padding: 0.5rem 1rem;
+              background: rgba(157, 78, 221, 0.3);
+              border: 1px solid #9d4edd;
+              border-radius: 20px;
+              color: #e0e0ff;
+              cursor: pointer;
+            ">${opt}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    function checkAnswer(answer) {
+      if (answer === questions[currentQ].a || questions[currentQ].options.includes(answer)) {
+        score++;
+        document.getElementById('score').textContent = 'Score: ' + score;
+      }
+      currentQ++;
+      showQuestion();
+    }
+    
+    // Konami code easter egg
+    let konamiCode = [];
+    const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    document.addEventListener('keydown', (e) => {
+      konamiCode.push(e.keyCode);
+      if (konamiCode.length > 10) konamiCode.shift();
+      if (konamiCode.join(',') === konamiSequence.join(',')) {
+        document.body.classList.toggle('psychedelic-mode');
+        alert('🌈 MODE PSYCHÉDÉLIQUE ACTIVÉ ! 🌈\n\n🐑🐧🦩 Les mascottes dansent avec toi !');
+      }
+    });
+    
+    // Click anywhere for particles burst
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < 5; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = e.clientX + 'px';
+        p.style.top = e.clientY + 'px';
+        p.style.background = ['#9d4edd', '#10b981', '#c77dff', '#a7f3d0'][Math.floor(Math.random() * 4)];
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+      }
+    });
+  </script>
+</body>
+</html>

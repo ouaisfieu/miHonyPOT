@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaidoyer Citoyen 3.0 — Poste de Travail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f12; --bg-secondary: #16161c; --bg-card: #1e1e28; --bg-elevated: #252530;
+            --voir: #60a5fa; --juger: #f59e0b; --agir: #10b981;
+            --accent: #f97316; --accent-glow: rgba(249, 115, 22, 0.4);
+            --text-primary: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; line-height: 1.6; }
+        
+        .bg-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .bg-orb { position: absolute; border-radius: 50%; filter: blur(100px); animation: float 30s ease-in-out infinite; }
+        .bg-orb-1 { width: 500px; height: 500px; background: var(--accent); top: -15%; left: -10%; opacity: 0.08; }
+        .bg-orb-2 { width: 400px; height: 400px; background: var(--agir); bottom: -10%; right: -10%; opacity: 0.06; animation-delay: -15s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -20px); } }
+        
+        .app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; position: relative; z-index: 1; }
+        @media (max-width: 900px) { .app { grid-template-columns: 1fr; } .sidebar { display: none; } }
+        
+        .header { grid-column: 1 / -1; background: rgba(15, 15, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), var(--agir)); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .logo-text { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; }
+        .logo-version { font-size: 0.65rem; background: var(--bg-elevated); padding: 2px 8px; border-radius: 10px; color: var(--accent); margin-left: 0.5rem; }
+        .header-center input { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 1rem; color: var(--text-primary); font-family: inherit; min-width: 250px; text-align: center; }
+        .header-center input:focus { outline: none; border-color: var(--accent); }
+        .header-actions { display: flex; gap: 0.5rem; }
+        
+        .btn { font-family: inherit; font-weight: 600; padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #fb923c); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--accent-glow); }
+        .btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .btn-ghost { background: transparent; color: var(--text-secondary); padding: 0.6rem; }
+        .btn-ghost:hover { background: var(--bg-secondary); color: var(--text-primary); }
+        
+        .sidebar { background: var(--bg-secondary); border-right: 1px solid var(--border); padding: 1rem 0; overflow-y: auto; height: calc(100vh - 60px); position: sticky; top: 60px; }
+        .nav-section { padding: 0 0.75rem; margin-bottom: 1rem; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 0.75rem; margin-bottom: 0.5rem; }
+        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; color: var(--text-secondary); font-size: 0.85rem; position: relative; }
+        .nav-item:hover { background: var(--bg-card); color: var(--text-primary); }
+        .nav-item.active { background: var(--bg-card); color: var(--text-primary); }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: var(--accent); border-radius: 0 2px 2px 0; }
+        .nav-badge { margin-left: auto; background: var(--accent); color: white; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+        .nav-dot { width: 8px; height: 8px; border-radius: 50%; margin-left: auto; }
+        .nav-dot.voir { background: var(--voir); } .nav-dot.juger { background: var(--juger); } .nav-dot.agir { background: var(--agir); }
+        
+        .sidebar-progress { padding: 0.75rem; margin: 0 0.75rem; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.5rem; }
+        .progress-label span:last-child { color: var(--accent); font-weight: 600; }
+        .progress-bar { height: 6px; background: var(--bg-primary); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--voir), var(--juger), var(--agir)); border-radius: 3px; transition: width 0.3s; }
+        
+        .main { padding: 2rem; overflow-y: auto; max-height: calc(100vh - 60px); }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-header { margin-bottom: 2rem; }
+        .section-breadcrumb { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .phase-badge { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 15px; text-transform: uppercase; }
+        .phase-badge.voir { background: rgba(96, 165, 250, 0.15); color: var(--voir); border: 1px solid var(--voir); }
+        .phase-badge.juger { background: rgba(245, 158, 11, 0.15); color: var(--juger); border: 1px solid var(--juger); }
+        .phase-badge.agir { background: rgba(16, 185, 129, 0.15); color: var(--agir); border: 1px solid var(--agir); }
+        .section-desc { color: var(--text-secondary); max-width: 700px; }
+        
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; transition: all 0.2s; }
+        .card:hover { border-color: rgba(249, 115, 22, 0.3); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; cursor: pointer; }
+        .card-header-left { display: flex; align-items: center; gap: 1rem; }
+        .card-number { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--accent); background: var(--bg-primary); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; }
+        .card-toggle { color: var(--text-muted); transition: transform 0.2s; }
+        .card.collapsed .card-toggle { transform: rotate(-90deg); }
+        .card.collapsed .card-content { display: none; }
+        .card-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; padding-left: 0.75rem; border-left: 2px solid rgba(249, 115, 22, 0.4); }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .form-label .req { color: var(--accent); }
+        .form-input, .form-textarea, .form-select { font-family: inherit; font-size: 0.9rem; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); transition: all 0.15s; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .form-hint { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; text-align: center; transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+        .stat-value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--accent); }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        @media (max-width: 900px) { .phase-grid { grid-template-columns: 1fr; } }
+        .phase-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .phase-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .phase-card.voir::before { background: var(--voir); }
+        .phase-card.juger::before { background: var(--juger); }
+        .phase-card.agir::before { background: var(--agir); }
+        .phase-card:hover { transform: translateY(-4px); }
+        .phase-card.voir:hover { box-shadow: 0 8px 30px rgba(96, 165, 250, 0.2); }
+        .phase-card.juger:hover { box-shadow: 0 8px 30px rgba(245, 158, 11, 0.2); }
+        .phase-card.agir:hover { box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2); }
+        .phase-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .phase-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .phase-card.voir .phase-name { color: var(--voir); }
+        .phase-card.juger .phase-name { color: var(--juger); }
+        .phase-card.agir .phase-name { color: var(--agir); }
+        .phase-desc { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; }
+        .phase-tools { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .actor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+        .actor-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; position: relative; }
+        .actor-pos { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; }
+        .actor-pos.ally { background: rgba(16, 185, 129, 0.15); color: var(--agir); }
+        .actor-pos.target { background: rgba(245, 158, 11, 0.15); color: var(--juger); }
+        .actor-pos.opponent { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .actor-pos.neutral { background: var(--bg-elevated); color: var(--text-muted); }
+        .actor-name { font-weight: 600; margin-bottom: 0.25rem; }
+        .actor-org { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .actor-power { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-muted); }
+        .power-dots { display: flex; gap: 3px; }
+        .power-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+        .power-dot.active { background: var(--accent); }
+        
+        .checklist { display: flex; flex-direction: column; gap: 0.5rem; }
+        .check-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; }
+        .check-item:hover { background: var(--bg-elevated); }
+        .check-item.done { border-color: var(--agir); }
+        .check-box { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+        .check-item.done .check-box { background: var(--agir); border-color: var(--agir); }
+        .check-item.done .check-box::after { content: '✓'; color: white; font-weight: bold; font-size: 0.75rem; }
+        .check-item.done .check-text { text-decoration: line-through; color: var(--text-muted); }
+        
+        .veille-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; display: flex; gap: 1rem; margin-bottom: 0.75rem; }
+        .veille-cat { width: 4px; border-radius: 2px; flex-shrink: 0; }
+        .veille-cat.politique { background: var(--voir); }
+        .veille-cat.environnement { background: var(--agir); }
+        .veille-cat.social { background: var(--juger); }
+        .veille-cat.economie { background: #a855f7; }
+        .veille-content { flex: 1; }
+        .veille-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .veille-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; gap: 1rem; }
+        
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-item { position: relative; padding-bottom: 1.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg-primary); }
+        .timeline-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .timeline-content { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; }
+        
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 2rem; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; }
+        .modal-close { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: transparent; border: none; color: var(--text-muted); cursor: pointer; }
+        .modal-close:hover { background: var(--bg-secondary); color: var(--text-primary); }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.75rem; }
+        
+        .export-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .export-opt { background: var(--bg-secondary); border: 2px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; cursor: pointer; text-align: center; transition: all 0.2s; }
+        .export-opt:hover { border-color: var(--accent); }
+        .export-opt.selected { border-color: var(--accent); background: rgba(249, 115, 22, 0.1); }
+        .export-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+        .export-format { font-weight: 600; margin-bottom: 0.25rem; }
+        .export-desc { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent); background: rgba(249, 115, 22, 0.05); }
+        .drop-zone-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .drop-zone-text { font-weight: 600; margin-bottom: 0.5rem; }
+        .drop-zone-hint { font-size: 0.85rem; color: var(--text-muted); }
+        
+        .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 2000; display: flex; flex-direction: column; gap: 0.5rem; }
+        .toast { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 8px 30px rgba(0,0,0,0.3); animation: toastIn 0.3s ease; transition: all 0.3s; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        .toast.success { border-left: 4px solid var(--agir); }
+        .toast.error { border-left: 4px solid #ef4444; }
+        .toast.warning { border-left: 4px solid var(--juger); }
+        
+        .welcome-hero { text-align: center; padding: 3rem 2rem; background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .welcome-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 50%, var(--accent-glow), transparent 50%); opacity: 0.2; }
+        .welcome-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text-primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; }
+        .welcome-subtitle { font-size: 1.1rem; color: var(--text-secondary); max-width: 550px; margin: 0 auto 2rem; position: relative; }
+        .welcome-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; position: relative; }
+        
+        .kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); }
+        
+        .nav-actions { display: flex; justify-content: space-between; margin-top: 2rem; }
+        
+        @media print { .header, .sidebar, .modal-overlay, .toast-container { display: none !important; } .app { display: block; } .main { max-height: none; } body { background: white; color: black; } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-primary); } ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="bg-canvas"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div></div>
+    
+    <div class="app">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <span class="logo-text">Plaidoyer Citoyen</span>
+                <span class="logo-version">3.0</span>
+            </div>
+            <div class="header-center">
+                <input type="text" id="project-name" placeholder="Nom du projet" value="Mon Projet de Plaidoyer">
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="openModal('import')" title="Importer">📥</button>
+                <button class="btn btn-secondary" onclick="openModal('export')">📤 Exporter</button>
+                <button class="btn btn-primary" onclick="saveProject()">💾 Sauvegarder</button>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="sidebar-progress">
+                <div class="progress-label"><span>Progression</span><span id="global-pct">0%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="global-fill" style="width:0%"></div></div>
+            </div>
+            <nav class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <div class="nav-item active" data-section="accueil"><span>🏠</span> Tableau de bord</div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Phase 1 — Voir</div>
+                <div class="nav-item" data-section="outil-1"><span>🎯</span> Domino du Changement <div class="nav-dot voir"></div></div>
+                <div class="nav-item" data-section="outil-2"><span>👤</span> Profil Militant <div class="nav-dot voir"></div></div>
+                <div class="nav-item" data-section="outil-3"><span>🌸</span> Fleur de Pouvoir <div class="nav-dot voir"></div></div>
+                <div class="nav-item" data-section="outil-4"><span>🗺️</span> Cartographie Acteurs <div class="nav-dot voir"></div></div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Phase 2 — Juger</div>
+                <div class="nav-item" data-section="outil-5"><span>💡</span> Théorie du Changement <div class="nav-dot juger"></div></div>
+                <div class="nav-item" data-section="outil-6"><span>📊</span> Analyse SWOT <div class="nav-dot juger"></div></div>
+                <div class="nav-item" data-section="outil-7"><span>🌍</span> Analyse PESTEL <div class="nav-dot juger"></div></div>
+                <div class="nav-item" data-section="outil-8"><span>🌳</span> Arbre à Problème <div class="nav-dot juger"></div></div>
+                <div class="nav-item" data-section="outil-9"><span>❓</span> Les 5 Pourquoi <div class="nav-dot juger"></div></div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Phase 3 — Agir</div>
+                <div class="nav-item" data-section="outil-10"><span>⚔️</span> Avec/Sans/Contre <div class="nav-dot agir"></div></div>
+                <div class="nav-item" data-section="outil-11"><span>🎯</span> Objectifs SMART <div class="nav-dot agir"></div></div>
+                <div class="nav-item" data-section="outil-12"><span>🤝</span> Cibles & Alliances <div class="nav-dot agir"></div></div>
+                <div class="nav-item" data-section="outil-13"><span>💬</span> Construction Message <div class="nav-dot agir"></div></div>
+                <div class="nav-item" data-section="outil-14"><span>✅</span> Check-list Rencontre <div class="nav-dot agir"></div></div>
+                <div class="nav-item" data-section="outil-15"><span>📈</span> Suivi & Évaluation <div class="nav-dot agir"></div></div>
+            </nav>
+            <nav class="nav-section">
+                <div class="nav-section-title">Modules</div>
+                <div class="nav-item" data-section="veille"><span>📡</span> Veille Citoyenne <span class="nav-badge">NEW</span></div>
+                <div class="nav-item" data-section="journal"><span>📔</span> Journal de Bord</div>
+                <div class="nav-item" data-section="ressources"><span>📚</span> Ressources</div>
+            </nav>
+        </aside>
+        
+        <main class="main" id="main">
+            <!-- ACCUEIL -->
+            <section id="accueil" class="section active">
+                <div class="welcome-hero">
+                    <h1 class="welcome-title">Plaidoyer Citoyen</h1>
+                    <p class="welcome-subtitle">15 outils vers le changement — La méthodologie Voir-Juger-Agir pour construire et mener votre plaidoyer citoyen.</p>
+                    <div class="welcome-actions">
+                        <button class="btn btn-primary" onclick="navigateTo('outil-1')">🚀 Commencer le parcours</button>
+                        <button class="btn btn-secondary" onclick="openModal('import')">📂 Charger un projet</button>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="stat-card"><div class="stat-value">15</div><div class="stat-label">Outils</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-pct">0%</div><div class="stat-label">Complété</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-actors">0</div><div class="stat-label">Acteurs</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-veille">0</div><div class="stat-label">Veilles</div></div>
+                </div>
+                <div class="section-header"><h2 class="section-title">Méthode Voir-Juger-Agir</h2><p class="section-desc">Inspirée de Joseph Cardijn et de l'éducation populaire, cette approche structure votre démarche en trois phases complémentaires.</p></div>
+                <div class="phase-grid">
+                    <div class="phase-card voir" onclick="navigateTo('outil-1')"><div class="phase-icon">👁️</div><div class="phase-name">VOIR</div><p class="phase-desc">Posez des constats. Analysez le contexte et identifiez les acteurs clés.</p><div class="phase-tools">4 outils • 1-4</div><div style="margin-top:1rem"><div class="progress-bar"><div class="progress-fill" id="voir-fill" style="width:0%;background:var(--voir)"></div></div></div></div>
+                    <div class="phase-card juger" onclick="navigateTo('outil-5')"><div class="phase-icon">⚖️</div><div class="phase-name">JUGER</div><p class="phase-desc">Analysez en détail. Réflexion critique sur base des constats.</p><div class="phase-tools">5 outils • 5-9</div><div style="margin-top:1rem"><div class="progress-bar"><div class="progress-fill" id="juger-fill" style="width:0%;background:var(--juger)"></div></div></div></div>
+                    <div class="phase-card agir" onclick="navigateTo('outil-10')"><div class="phase-icon">🚀</div><div class="phase-name">AGIR</div><p class="phase-desc">Actions concrètes pour réaliser votre plaidoyer.</p><div class="phase-tools">6 outils • 10-15</div><div style="margin-top:1rem"><div class="progress-bar"><div class="progress-fill" id="agir-fill" style="width:0%;background:var(--agir)"></div></div></div></div>
+                </div>
+            </section>
+            
+            <!-- OUTILS 1-15 (template simplifié) -->
+            <section id="outil-1" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 1 / VOIR / Outil 1</div><h2 class="section-title">🎯 Domino du Changement <span class="phase-badge voir">VOIR</span></h2><p class="section-desc">Cadrez votre projet en réfléchissant sur votre rapport au monde et en déterminant le sujet de votre plaidoyer.</p></div>
+                <div class="card"><div class="card-header" onclick="toggleCard(this.closest('.card'))"><div class="card-header-left"><span class="card-number">01</span><h3 class="card-title">Vos réponses</h3></div><span class="card-toggle">▼</span></div><div class="card-content"><p class="card-desc">Le domino permet de répondre : <em>pourquoi et pour quoi je veux m'engager ?</em></p><div class="form-grid"><div class="form-group"><label class="form-label">Pourquoi nous engager ? <span class="req">*</span></label><textarea class="form-textarea" data-field="domino_pourquoi" placeholder="Vos motivations profondes"></textarea></div><div class="form-group"><label class="form-label">Quelles valeurs ? <span class="req">*</span></label><textarea class="form-textarea" data-field="domino_valeurs" placeholder="Justice sociale, environnement..."></textarea></div><div class="form-group"><label class="form-label">Changements souhaités</label><textarea class="form-textarea" data-field="domino_changements" placeholder="La société vers laquelle vous tendez"></textarea></div><div class="form-group"><label class="form-label">Actions envisageables</label><textarea class="form-textarea" data-field="domino_actions" placeholder="Listez les actions possibles"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('accueil')">← Accueil</button><button class="btn btn-primary" onclick="navigateTo('outil-2')">Outil suivant →</button></div>
+            </section>
+            
+            <section id="outil-2" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 1 / VOIR / Outil 2</div><h2 class="section-title">👤 Profil Militant <span class="phase-badge voir">VOIR</span></h2><p class="section-desc">Identifiez votre profil d'engagement pour comprendre comment vous pouvez contribuer.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">Dans un projet collectif, vous préférez...</label><select class="form-select" data-field="profil_q1"><option value="">Sélectionnez</option><option value="a">Organiser et planifier</option><option value="b">Communiquer et mobiliser</option><option value="c">Analyser et rechercher</option><option value="d">Coordonner et fédérer</option></select></div><div class="form-group"><label class="form-label">Face à un problème...</label><select class="form-select" data-field="profil_q2"><option value="">Sélectionnez</option><option value="a">Établir un plan détaillé</option><option value="b">En parler au maximum</option><option value="c">Analyser les causes</option><option value="d">Rassembler les concernés</option></select></div><div class="form-group"><label class="form-label">Vos points forts</label><textarea class="form-textarea" data-field="profil_forces" placeholder="Vos compétences et qualités"></textarea></div><div class="form-group"><label class="form-label">Axes d'amélioration</label><textarea class="form-textarea" data-field="profil_amelio" placeholder="Ce sur quoi progresser"></textarea></div></div><button class="btn btn-secondary" onclick="calcProfile()" style="margin-top:1rem">🎯 Calculer mon profil</button><div id="profile-result" style="display:none;margin-top:1rem;padding:1rem;background:var(--bg-secondary);border-radius:var(--radius-sm);border:1px solid var(--accent)"><h4 style="color:var(--accent);margin-bottom:0.5rem">Votre profil</h4><p id="profile-type" style="font-size:1.25rem;font-weight:700"></p><p id="profile-desc" style="color:var(--text-secondary)"></p></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-1')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-3')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-3" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 1 / VOIR / Outil 3</div><h2 class="section-title">🌸 Fleur de Pouvoir <span class="phase-badge voir">VOIR</span></h2><p class="section-desc">Analysez votre positionnement social et les pouvoirs symboliques que vous représentez.</p></div>
+                <div class="card"><div class="card-content"><p class="card-desc">La fleur aide à réfléchir sur les pouvoirs que nous incarnons par rapport aux décideurs.</p><div class="form-grid"><div class="form-group"><label class="form-label">Genre</label><textarea class="form-textarea" data-field="fleur_genre" placeholder="Positionnement par rapport aux normes"></textarea></div><div class="form-group"><label class="form-label">Classe sociale</label><textarea class="form-textarea" data-field="fleur_classe" placeholder="Positionnement socio-économique"></textarea></div><div class="form-group"><label class="form-label">Origine / Ethnie</label><textarea class="form-textarea" data-field="fleur_origine" placeholder="Positionnement par rapport aux origines"></textarea></div><div class="form-group"><label class="form-label">Niveau d'études</label><textarea class="form-textarea" data-field="fleur_etudes" placeholder="Positionnement éducatif"></textarea></div></div><div class="form-group" style="margin-top:1rem"><label class="form-label">Réflexion globale</label><textarea class="form-textarea" data-field="fleur_reflexion" placeholder="Ce que révèle cette analyse sur votre position"></textarea></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-2')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-4')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-4" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 1 / VOIR / Outil 4</div><h2 class="section-title">🗺️ Cartographie des Acteurs <span class="phase-badge voir">VOIR</span></h2><p class="section-desc">Identifiez et cartographiez tous les acteurs : alliés, cibles, opposants.</p></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">➕</span><h3 class="card-title">Ajouter un acteur</h3></div></div><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">Nom <span class="req">*</span></label><input type="text" class="form-input" id="actor-name" placeholder="Nom ou organisation"></div><div class="form-group"><label class="form-label">Organisation</label><input type="text" class="form-input" id="actor-org" placeholder="Fonction, institution..."></div><div class="form-group"><label class="form-label">Position</label><select class="form-select" id="actor-pos"><option value="ally">🤝 Allié</option><option value="target">🎯 Cible</option><option value="opponent">⚔️ Opposant</option><option value="neutral">⚪ Neutre</option></select></div><div class="form-group"><label class="form-label">Pouvoir (1-5)</label><select class="form-select" id="actor-power"><option value="1">1 - Faible</option><option value="2">2</option><option value="3">3 - Moyen</option><option value="4">4</option><option value="5">5 - Très élevé</option></select></div></div><button class="btn btn-primary" onclick="addActor()" style="margin-top:1rem">➕ Ajouter</button></div></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">📋</span><h3 class="card-title">Liste (<span id="actor-count">0</span>)</h3></div></div><div class="card-content"><div class="actor-grid" id="actor-list"><p style="color:var(--text-muted);text-align:center;grid-column:1/-1">Aucun acteur ajouté.</p></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-3')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-5')">Phase JUGER →</button></div>
+            </section>
+            
+            <section id="outil-5" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 2 / JUGER / Outil 5</div><h2 class="section-title">💡 Théorie du Changement <span class="phase-badge juger">JUGER</span></h2><p class="section-desc">Définissez votre vision du changement souhaité et le chemin pour y parvenir.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">Vision long terme <span class="req">*</span></label><textarea class="form-textarea" data-field="toc_vision" placeholder="Le changement ultime souhaité"></textarea></div><div class="form-group"><label class="form-label">Résultats attendus</label><textarea class="form-textarea" data-field="toc_resultats" placeholder="Résultats concrets"></textarea></div><div class="form-group"><label class="form-label">Activités prévues</label><textarea class="form-textarea" data-field="toc_activites" placeholder="Activités à mener"></textarea></div><div class="form-group"><label class="form-label">Hypothèses</label><textarea class="form-textarea" data-field="toc_hypotheses" placeholder="Conditions à réunir"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-4')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-6')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-6" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 2 / JUGER / Outil 6</div><h2 class="section-title">📊 Analyse SWOT <span class="phase-badge juger">JUGER</span></h2><p class="section-desc">Analysez Forces, Faiblesses, Opportunités et Menaces.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid" style="grid-template-columns:repeat(2,1fr)"><div class="form-group"><label class="form-label" style="color:var(--agir)">💪 Forces</label><textarea class="form-textarea" data-field="swot_forces" placeholder="Vos atouts, compétences, ressources..."></textarea></div><div class="form-group"><label class="form-label" style="color:#ef4444">⚠️ Faiblesses</label><textarea class="form-textarea" data-field="swot_faiblesses" placeholder="Vos manques, limites..."></textarea></div><div class="form-group"><label class="form-label" style="color:var(--voir)">🌟 Opportunités</label><textarea class="form-textarea" data-field="swot_opportunites" placeholder="Contexte favorable, tendances..."></textarea></div><div class="form-group"><label class="form-label" style="color:var(--juger)">⛈️ Menaces</label><textarea class="form-textarea" data-field="swot_menaces" placeholder="Obstacles, opposants, risques..."></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-5')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-7')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-7" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 2 / JUGER / Outil 7</div><h2 class="section-title">🌍 Analyse PESTEL <span class="phase-badge juger">JUGER</span></h2><p class="section-desc">Analysez les facteurs macro-environnementaux.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid" style="grid-template-columns:repeat(2,1fr)"><div class="form-group"><label class="form-label">🏛️ Politique</label><textarea class="form-textarea" data-field="pestel_politique" placeholder="Contexte politique, gouvernement..."></textarea></div><div class="form-group"><label class="form-label">💰 Économique</label><textarea class="form-textarea" data-field="pestel_economique" placeholder="Conjoncture, financements..."></textarea></div><div class="form-group"><label class="form-label">👥 Social</label><textarea class="form-textarea" data-field="pestel_social" placeholder="Tendances sociales..."></textarea></div><div class="form-group"><label class="form-label">💻 Technologique</label><textarea class="form-textarea" data-field="pestel_techno" placeholder="Innovations, outils..."></textarea></div><div class="form-group"><label class="form-label">🌱 Environnemental</label><textarea class="form-textarea" data-field="pestel_environnement" placeholder="Enjeux écologiques..."></textarea></div><div class="form-group"><label class="form-label">⚖️ Légal</label><textarea class="form-textarea" data-field="pestel_legal" placeholder="Cadre juridique..."></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-6')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-8')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-8" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 2 / JUGER / Outil 8</div><h2 class="section-title">🌳 Arbre à Problème <span class="phase-badge juger">JUGER</span></h2><p class="section-desc">Analysez causes profondes et conséquences du problème.</p></div>
+                <div class="card"><div class="card-content"><div class="form-group"><label class="form-label" style="color:var(--juger);font-size:1rem">🎯 Problème central</label><textarea class="form-textarea" data-field="arbre_probleme" placeholder="Formulez clairement le problème"></textarea></div><div class="form-grid" style="margin-top:1rem"><div class="form-group"><label class="form-label">🌱 Causes (racines)</label><textarea class="form-textarea" data-field="arbre_causes" style="min-height:150px" placeholder="Causes profondes, une par ligne"></textarea></div><div class="form-group"><label class="form-label">🍃 Conséquences (branches)</label><textarea class="form-textarea" data-field="arbre_consequences" style="min-height:150px" placeholder="Conséquences, une par ligne"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-7')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-9')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-9" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 2 / JUGER / Outil 9</div><h2 class="section-title">❓ Les 5 Pourquoi <span class="phase-badge juger">JUGER</span></h2><p class="section-desc">Remontez aux causes racines en posant "Pourquoi ?" successivement.</p></div>
+                <div class="card"><div class="card-content"><div class="form-group"><label class="form-label">Problème initial</label><input type="text" class="form-input" data-field="pourquoi_probleme" placeholder="Le problème constaté"></div><div class="form-group" style="margin-top:1rem"><label class="form-label">1. Pourquoi ?</label><textarea class="form-textarea" data-field="pourquoi_1" placeholder="Pourquoi ce problème ?"></textarea></div><div class="form-group"><label class="form-label">2. Pourquoi ?</label><textarea class="form-textarea" data-field="pourquoi_2" placeholder="Pourquoi cette cause ?"></textarea></div><div class="form-group"><label class="form-label">3. Pourquoi ?</label><textarea class="form-textarea" data-field="pourquoi_3" placeholder="Continuez..."></textarea></div><div class="form-group"><label class="form-label">4. Pourquoi ?</label><textarea class="form-textarea" data-field="pourquoi_4" placeholder="Plus profond..."></textarea></div><div class="form-group"><label class="form-label">5. Pourquoi ? (Cause racine)</label><textarea class="form-textarea" data-field="pourquoi_5" placeholder="La cause racine"></textarea></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-8')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-10')">Phase AGIR →</button></div>
+            </section>
+            
+            <section id="outil-10" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 10</div><h2 class="section-title">⚔️ Avec, Sans, Contre <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Déterminez votre stratégie par rapport aux détenteurs du pouvoir.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label" style="color:var(--agir)">🤝 AVEC le pouvoir</label><textarea class="form-textarea" data-field="pouvoir_avec" placeholder="Collaboration, dialogue, négociation..."></textarea><span class="form-hint">Ex: rencontres officielles, consultations</span></div><div class="form-group"><label class="form-label" style="color:var(--juger)">🔄 SANS le pouvoir</label><textarea class="form-textarea" data-field="pouvoir_sans" placeholder="Actions autonomes, alternatives..."></textarea><span class="form-hint">Ex: créer des alternatives, auto-organisation</span></div><div class="form-group" style="grid-column:1/-1"><label class="form-label" style="color:#ef4444">✊ CONTRE le pouvoir</label><textarea class="form-textarea" data-field="pouvoir_contre" placeholder="Contestation, pression, mobilisation..."></textarea><span class="form-hint">Ex: manifestations, pétitions, désobéissance civile</span></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-9')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-11')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-11" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 11</div><h2 class="section-title">🎯 Objectifs SMART <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Définissez des objectifs Spécifiques, Mesurables, Atteignables, Réalistes, Temporels.</p></div>
+                <div class="card"><div class="card-content"><div class="form-group"><label class="form-label">🎯 Objectif principal</label><textarea class="form-textarea" data-field="smart_objectif" placeholder="Votre objectif de plaidoyer"></textarea></div><div class="form-grid" style="margin-top:1rem"><div class="form-group"><label class="form-label">S - Spécifique</label><textarea class="form-textarea" data-field="smart_s" placeholder="En quoi est-il précis ?"></textarea></div><div class="form-group"><label class="form-label">M - Mesurable</label><textarea class="form-textarea" data-field="smart_m" placeholder="Comment mesurer le succès ?"></textarea></div><div class="form-group"><label class="form-label">A - Atteignable</label><textarea class="form-textarea" data-field="smart_a" placeholder="Moyens disponibles ?"></textarea></div><div class="form-group"><label class="form-label">R - Réaliste</label><textarea class="form-textarea" data-field="smart_r" placeholder="Est-ce réaliste ?"></textarea></div><div class="form-group" style="grid-column:1/-1"><label class="form-label">T - Temporel</label><textarea class="form-textarea" data-field="smart_t" placeholder="Échéance et étapes"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-10')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-12')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-12" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 12</div><h2 class="section-title">🤝 Cibles et Alliances <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Identifiez vos cibles de plaidoyer et construisez vos alliances.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">🎯 Cible principale</label><textarea class="form-textarea" data-field="cible_principale" placeholder="Qui a le pouvoir de décision ?"></textarea></div><div class="form-group"><label class="form-label">🎯 Cibles secondaires</label><textarea class="form-textarea" data-field="cibles_secondaires" placeholder="Qui peut influencer ?"></textarea></div><div class="form-group"><label class="form-label">🤝 Alliés principaux</label><textarea class="form-textarea" data-field="allies_principaux" placeholder="Organisations, personnalités..."></textarea></div><div class="form-group"><label class="form-label">🔍 Alliés potentiels</label><textarea class="form-textarea" data-field="allies_potentiels" placeholder="À mobiliser"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-11')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-13')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-13" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 13</div><h2 class="section-title">💬 Construction Message <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Élaborez un message de plaidoyer percutant.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group" style="grid-column:1/-1"><label class="form-label">🎣 Accroche</label><textarea class="form-textarea" data-field="msg_accroche" placeholder="Phrase choc pour capter l'attention"></textarea></div><div class="form-group"><label class="form-label">❗ Le problème</label><textarea class="form-textarea" data-field="msg_probleme" placeholder="Exposez le problème"></textarea></div><div class="form-group"><label class="form-label">💡 Pourquoi c'est important</label><textarea class="form-textarea" data-field="msg_importance" placeholder="Données, témoignages..."></textarea></div><div class="form-group"><label class="form-label">🎯 Cible</label><input type="text" class="form-input" data-field="msg_cible" placeholder="M. le Ministre, Mme la Députée..."></div><div class="form-group"><label class="form-label">✅ Ce que nous demandons</label><textarea class="form-textarea" data-field="msg_action" placeholder="Demande précise"></textarea></div></div><button class="btn btn-primary" onclick="genMessage()" style="margin-top:1rem">✨ Générer le message</button><div id="msg-result" style="display:none;margin-top:1rem;padding:1rem;background:var(--bg-secondary);border-radius:var(--radius-sm);border:1px solid var(--accent)"><h4 style="color:var(--accent);margin-bottom:0.5rem">📝 Message généré</h4><pre id="msg-output" style="white-space:pre-wrap;color:var(--text-secondary);font-family:inherit"></pre><button class="btn btn-secondary" onclick="copyMsg()" style="margin-top:0.75rem">📋 Copier</button></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-12')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-14')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-14" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 14</div><h2 class="section-title">✅ Check-list Rencontre <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Préparez minutieusement vos rencontres de plaidoyer.</p></div>
+                <div class="card"><div class="card-content"><div class="checklist" id="checklist"><div class="check-item" onclick="toggleCheck(this,'c1')"><div class="check-box"></div><span class="check-text">Définir l'objectif de la rencontre</span></div><div class="check-item" onclick="toggleCheck(this,'c2')"><div class="check-box"></div><span class="check-text">Se renseigner sur l'interlocuteur</span></div><div class="check-item" onclick="toggleCheck(this,'c3')"><div class="check-box"></div><span class="check-text">Préparer arguments et données</span></div><div class="check-item" onclick="toggleCheck(this,'c4')"><div class="check-box"></div><span class="check-text">Anticiper les contre-arguments</span></div><div class="check-item" onclick="toggleCheck(this,'c5')"><div class="check-box"></div><span class="check-text">Désigner les rôles (porte-parole, notes...)</span></div><div class="check-item" onclick="toggleCheck(this,'c6')"><div class="check-box"></div><span class="check-text">Préparer documents à remettre</span></div><div class="check-item" onclick="toggleCheck(this,'c7')"><div class="check-box"></div><span class="check-text">Définir minimum acceptable / maximum espéré</span></div><div class="check-item" onclick="toggleCheck(this,'c8')"><div class="check-box"></div><span class="check-text">Prévoir les prochaines étapes</span></div></div><div class="form-group" style="margin-top:1.5rem"><label class="form-label">📝 Notes de préparation</label><textarea class="form-textarea" data-field="checklist_notes" style="min-height:120px" placeholder="Vos notes pour la rencontre..."></textarea></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-13')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('outil-15')">Suivant →</button></div>
+            </section>
+            
+            <section id="outil-15" class="section">
+                <div class="section-header"><div class="section-breadcrumb">Phase 3 / AGIR / Outil 15</div><h2 class="section-title">📈 Suivi et Évaluation <span class="phase-badge agir">AGIR</span></h2><p class="section-desc">Mettez en place un système de suivi et évaluez l'impact.</p></div>
+                <div class="card"><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">📊 Indicateurs</label><textarea class="form-textarea" data-field="suivi_indicateurs" placeholder="Comment mesurer le succès ?"></textarea></div><div class="form-group"><label class="form-label">📅 Jalons</label><textarea class="form-textarea" data-field="suivi_jalons" placeholder="Étapes clés"></textarea></div><div class="form-group"><label class="form-label">✅ Résultats obtenus</label><textarea class="form-textarea" data-field="suivi_resultats" placeholder="Vos avancées"></textarea></div><div class="form-group"><label class="form-label">📝 Leçons apprises</label><textarea class="form-textarea" data-field="suivi_lecons" placeholder="Apprentissages"></textarea></div><div class="form-group" style="grid-column:1/-1"><label class="form-label">🔄 Prochaines étapes</label><textarea class="form-textarea" data-field="suivi_prochaines" placeholder="Actions à venir"></textarea></div></div></div></div>
+                <div class="nav-actions"><button class="btn btn-secondary" onclick="navigateTo('outil-14')">← Précédent</button><button class="btn btn-primary" onclick="navigateTo('veille')">Veille Citoyenne →</button></div>
+            </section>
+            
+            <!-- VEILLE -->
+            <section id="veille" class="section">
+                <div class="section-header"><h2 class="section-title">📡 Veille Citoyenne <span class="nav-badge">NEW</span></h2><p class="section-desc">Collectez et organisez les informations pertinentes pour votre plaidoyer.</p></div>
+                <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr)"><div class="stat-card"><div class="stat-value" id="veille-total">0</div><div class="stat-label">Total</div></div><div class="stat-card"><div class="stat-value" id="veille-pol" style="color:var(--voir)">0</div><div class="stat-label">Politique</div></div><div class="stat-card"><div class="stat-value" id="veille-soc" style="color:var(--juger)">0</div><div class="stat-label">Social</div></div><div class="stat-card"><div class="stat-value" id="veille-env" style="color:var(--agir)">0</div><div class="stat-label">Environnement</div></div></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">➕</span><h3 class="card-title">Ajouter une veille</h3></div></div><div class="card-content"><div class="form-grid"><div class="form-group"><label class="form-label">Titre <span class="req">*</span></label><input type="text" class="form-input" id="veille-titre" placeholder="Titre de l'info"></div><div class="form-group"><label class="form-label">Catégorie</label><select class="form-select" id="veille-cat"><option value="politique">🏛️ Politique</option><option value="social">👥 Social</option><option value="environnement">🌱 Environnement</option><option value="economie">💰 Économie</option></select></div><div class="form-group"><label class="form-label">Source</label><input type="text" class="form-input" id="veille-source" placeholder="Le Monde, rapport..."></div><div class="form-group"><label class="form-label">Lien</label><input type="url" class="form-input" id="veille-lien" placeholder="https://..."></div></div><div class="form-group" style="margin-top:1rem"><label class="form-label">Notes</label><textarea class="form-textarea" id="veille-notes" placeholder="Points clés"></textarea></div><button class="btn btn-primary" onclick="addVeille()" style="margin-top:1rem">➕ Ajouter</button></div></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">📋</span><h3 class="card-title">Veilles collectées</h3></div></div><div class="card-content"><div id="veille-list"><p style="color:var(--text-muted);text-align:center">Aucune veille ajoutée.</p></div></div></div>
+            </section>
+            
+            <!-- JOURNAL -->
+            <section id="journal" class="section">
+                <div class="section-header"><h2 class="section-title">📔 Journal de Bord</h2><p class="section-desc">Documentez votre parcours, actions et apprentissages.</p></div>
+                <div class="card"><div class="card-content"><div class="form-group"><textarea class="form-textarea" id="journal-entry" placeholder="Actions, rencontres, réflexions du jour..." style="min-height:100px"></textarea></div><button class="btn btn-primary" onclick="addJournal()">➕ Ajouter</button></div></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">📅</span><h3 class="card-title">Historique</h3></div></div><div class="card-content"><div class="timeline" id="journal-list"><p style="color:var(--text-muted);text-align:center">Journal vide.</p></div></div></div>
+            </section>
+            
+            <!-- RESSOURCES -->
+            <section id="ressources" class="section">
+                <div class="section-header"><h2 class="section-title">📚 Ressources</h2><p class="section-desc">Documentation et liens utiles.</p></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">📖</span><h3 class="card-title">Guides et manuels</h3></div></div><div class="card-content"><ul style="color:var(--text-secondary);padding-left:1.5rem;line-height:2"><li>Le Petit Guide du Plaidoyer Citoyen — Justice et Paix (2020)</li><li>Manuel de plaidoyer de CARE International (2014)</li><li>La théorie du changement — ITECO (2016)</li></ul></div></div>
+                <div class="card"><div class="card-header"><div class="card-header-left"><span class="card-number">⌨️</span><h3 class="card-title">Raccourcis clavier</h3></div></div><div class="card-content"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem"><div><span class="kbd">Ctrl</span>+<span class="kbd">S</span> Sauvegarder</div><div><span class="kbd">Ctrl</span>+<span class="kbd">E</span> Exporter</div><div><span class="kbd">Ctrl</span>+<span class="kbd">I</span> Importer</div><div><span class="kbd">Esc</span> Fermer modal</div></div></div></div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- MODALS -->
+    <div class="modal-overlay" id="modal-export"><div class="modal"><div class="modal-header"><h3 class="modal-title">📤 Exporter</h3><button class="modal-close" onclick="closeModal('export')">✕</button></div><div class="modal-body"><p style="color:var(--text-secondary);margin-bottom:1.5rem">Choisissez le format d'export.</p><div class="export-grid"><div class="export-opt selected" onclick="selectExport('json')" data-fmt="json"><div class="export-icon">📦</div><div class="export-format">JSON</div><div class="export-desc">Complet, réimportable</div></div><div class="export-opt" onclick="selectExport('md')" data-fmt="md"><div class="export-icon">📝</div><div class="export-format">Markdown</div><div class="export-desc">Lisible, compatible</div></div><div class="export-opt" onclick="selectExport('html')" data-fmt="html"><div class="export-icon">🌐</div><div class="export-format">HTML</div><div class="export-desc">Page web</div></div><div class="export-opt" onclick="selectExport('pdf')" data-fmt="pdf"><div class="export-icon">📄</div><div class="export-format">PDF</div><div class="export-desc">Imprimer</div></div></div></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('export')">Annuler</button><button class="btn btn-primary" onclick="exportProject()">📤 Exporter</button></div></div></div>
+    <div class="modal-overlay" id="modal-import"><div class="modal"><div class="modal-header"><h3 class="modal-title">📥 Importer</h3><button class="modal-close" onclick="closeModal('import')">✕</button></div><div class="modal-body"><div class="drop-zone" id="drop-zone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('file-input').click()"><div class="drop-zone-icon">📁</div><div class="drop-zone-text">Glissez votre fichier ici</div><div class="drop-zone-hint">ou cliquez (JSON)</div></div><input type="file" id="file-input" accept=".json" style="display:none" onchange="handleFile(event)"></div></div></div>
+    <div class="toast-container" id="toast-container"></div>
+    
+    <script>
+    let data={meta:{name:'Mon Projet',created:new Date().toISOString(),updated:new Date().toISOString(),version:'3.0'},fields:{},actors:[],veille:[],journal:[],checks:{}};
+    let exportFmt='json';
+    
+    document.addEventListener('DOMContentLoaded',()=>{loadProject();initNav();initFields();updateProgress();});
+    
+    function initNav(){document.querySelectorAll('.nav-item').forEach(i=>i.addEventListener('click',()=>navigateTo(i.dataset.section)));}
+    function initFields(){document.querySelectorAll('[data-field]').forEach(f=>f.addEventListener('input',debounce(e=>{data.fields[e.target.dataset.field]=e.target.value;autoSave();updateProgress();},500)));document.getElementById('project-name').addEventListener('input',debounce(e=>{data.meta.name=e.target.value;autoSave();},500));}
+    
+    function navigateTo(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));const t=document.getElementById(id);if(t)t.classList.add('active');document.querySelectorAll('.nav-item').forEach(i=>{i.classList.remove('active');if(i.dataset.section===id)i.classList.add('active');});document.querySelector('.main').scrollTop=0;}
+    function toggleCard(c){c.classList.toggle('collapsed');}
+    
+    function addActor(){const n=document.getElementById('actor-name').value.trim();if(!n)return toast('Entrez un nom','warning');const a={id:Date.now(),name:n,org:document.getElementById('actor-org').value.trim(),pos:document.getElementById('actor-pos').value,power:+document.getElementById('actor-power').value};data.actors.push(a);renderActors();autoSave();updateProgress();document.getElementById('actor-name').value='';document.getElementById('actor-org').value='';toast('Acteur ajouté!');}
+    function renderActors(){const c=document.getElementById('actor-list'),cnt=document.getElementById('actor-count');if(!data.actors.length){c.innerHTML='<p style="color:var(--text-muted);text-align:center;grid-column:1/-1">Aucun acteur.</p>';cnt.textContent='0';return;}cnt.textContent=data.actors.length;c.innerHTML=data.actors.map(a=>`<div class="actor-card"><span class="actor-pos ${a.pos}">${posLabel(a.pos)}</span><div class="actor-name">${a.name}</div>${a.org?`<div class="actor-org">${a.org}</div>`:''}<div class="actor-power"><span>Pouvoir:</span><div class="power-dots">${[1,2,3,4,5].map(i=>`<div class="power-dot ${i<=a.power?'active':''}"></div>`).join('')}</div></div><button class="btn btn-ghost" style="position:absolute;bottom:0.5rem;right:0.5rem;padding:0.25rem" onclick="delActor(${a.id})">🗑️</button></div>`).join('');}
+    function posLabel(p){return{ally:'🤝 Allié',target:'🎯 Cible',opponent:'⚔️ Opposant',neutral:'⚪ Neutre'}[p]||p;}
+    function delActor(id){data.actors=data.actors.filter(a=>a.id!==id);renderActors();autoSave();updateProgress();toast('Supprimé');}
+    
+    function addVeille(){const t=document.getElementById('veille-titre').value.trim();if(!t)return toast('Entrez un titre','warning');const v={id:Date.now(),titre:t,cat:document.getElementById('veille-cat').value,source:document.getElementById('veille-source').value.trim(),lien:document.getElementById('veille-lien').value.trim(),notes:document.getElementById('veille-notes').value.trim(),date:new Date().toISOString()};data.veille.push(v);renderVeille();autoSave();updateProgress();document.getElementById('veille-titre').value='';document.getElementById('veille-source').value='';document.getElementById('veille-lien').value='';document.getElementById('veille-notes').value='';toast('Veille ajoutée!');}
+    function renderVeille(){document.getElementById('veille-total').textContent=data.veille.length;document.getElementById('veille-pol').textContent=data.veille.filter(v=>v.cat==='politique').length;document.getElementById('veille-soc').textContent=data.veille.filter(v=>v.cat==='social').length;document.getElementById('veille-env').textContent=data.veille.filter(v=>v.cat==='environnement').length;const c=document.getElementById('veille-list');if(!data.veille.length){c.innerHTML='<p style="color:var(--text-muted);text-align:center">Aucune veille.</p>';return;}c.innerHTML=data.veille.slice().reverse().map(v=>`<div class="veille-card"><div class="veille-cat ${v.cat}"></div><div class="veille-content"><div class="veille-title">${v.titre}</div><div class="veille-meta"><span>${catLabel(v.cat)}</span>${v.source?`<span>📰 ${v.source}</span>`:''}<span>📅 ${new Date(v.date).toLocaleDateString('fr-FR')}</span></div>${v.notes?`<p style="margin-top:0.5rem;color:var(--text-secondary);font-size:0.85rem">${v.notes}</p>`:''}</div><button class="btn btn-ghost" style="align-self:flex-start" onclick="delVeille(${v.id})">🗑️</button></div>`).join('');}
+    function catLabel(c){return{politique:'🏛️ Politique',social:'👥 Social',environnement:'🌱 Environnement',economie:'💰 Économie'}[c]||c;}
+    function delVeille(id){data.veille=data.veille.filter(v=>v.id!==id);renderVeille();autoSave();updateProgress();toast('Supprimé');}
+    
+    function addJournal(){const t=document.getElementById('journal-entry').value.trim();if(!t)return toast('Entrez du texte','warning');data.journal.push({id:Date.now(),text:t,date:new Date().toISOString()});renderJournal();autoSave();document.getElementById('journal-entry').value='';toast('Ajouté au journal!');}
+    function renderJournal(){const c=document.getElementById('journal-list');if(!data.journal.length){c.innerHTML='<p style="color:var(--text-muted);text-align:center">Journal vide.</p>';return;}c.innerHTML=data.journal.slice().reverse().map(e=>`<div class="timeline-item"><div class="timeline-date">${new Date(e.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</div><div class="timeline-content">${e.text}</div></div>`).join('');}
+    
+    function toggleCheck(el,k){el.classList.toggle('done');data.checks[k]=el.classList.contains('done');autoSave();}
+    
+    function calcProfile(){const q1=data.fields.profil_q1||'',q2=data.fields.profil_q2||'';const profiles={a:{n:'🗂️ Planificateur·trice',d:'Vous excellez dans l\'organisation et la planification.'},b:{n:'🗣️ Communicateur·trice',d:'Vous êtes à l\'aise pour mobiliser et communiquer.'},c:{n:'🔬 Chercheur·euse',d:'Vous aimez analyser et approfondir.'},d:{n:'🤝 Coordinateur·trice',d:'Vous savez fédérer et coordonner.'}};const p=profiles[q1||q2||'c'];document.getElementById('profile-type').textContent=p.n;document.getElementById('profile-desc').textContent=p.d;document.getElementById('profile-result').style.display='block';}
+    
+    function genMessage(){const f=data.fields;const m=`${f.msg_accroche||'[Accroche]'}\n\n${f.msg_probleme||'[Problème]'}\n\nPourquoi c'est important : ${f.msg_importance||'[Importance]'}\n\nNous demandons à ${f.msg_cible||'[Cible]'} de ${f.msg_action||'[Action]'}.`;document.getElementById('msg-output').textContent=m;document.getElementById('msg-result').style.display='block';}
+    function copyMsg(){navigator.clipboard.writeText(document.getElementById('msg-output').textContent).then(()=>toast('Copié!'));}
+    
+    function updateProgress(){const voirF=['domino_pourquoi','domino_valeurs','fleur_genre'],jugerF=['toc_vision','swot_forces','arbre_probleme','pourquoi_1'],agirF=['smart_objectif','cible_principale','msg_accroche'];const calc=fs=>Math.round(fs.filter(f=>data.fields[f]&&data.fields[f].trim()).length/fs.length*100);const vp=calc(voirF),jp=calc(jugerF),ap=calc(agirF),gp=Math.round((vp+jp+ap)/3);document.getElementById('global-pct').textContent=gp+'%';document.getElementById('global-fill').style.width=gp+'%';document.getElementById('voir-fill').style.width=vp+'%';document.getElementById('juger-fill').style.width=jp+'%';document.getElementById('agir-fill').style.width=ap+'%';document.getElementById('stat-pct').textContent=gp+'%';document.getElementById('stat-actors').textContent=data.actors.length;document.getElementById('stat-veille').textContent=data.veille.length;}
+    
+    function saveProject(){data.meta.updated=new Date().toISOString();localStorage.setItem('plaidoyer_v3',JSON.stringify(data));toast('Sauvegardé!');}
+    function autoSave(){data.meta.updated=new Date().toISOString();localStorage.setItem('plaidoyer_v3',JSON.stringify(data));}
+    function loadProject(){const s=localStorage.getItem('plaidoyer_v3');if(s){try{data=JSON.parse(s);document.getElementById('project-name').value=data.meta.name||'Mon Projet';Object.entries(data.fields||{}).forEach(([k,v])=>{const f=document.querySelector(`[data-field="${k}"]`);if(f)f.value=v;});renderActors();renderVeille();renderJournal();Object.entries(data.checks||{}).forEach(([k,c])=>{if(c){const items=document.querySelectorAll('.check-item');const i=parseInt(k.replace('c',''))-1;if(items[i])items[i].classList.add('done');}});}catch(e){console.error(e);}}}
+    
+    function selectExport(f){exportFmt=f;document.querySelectorAll('.export-opt').forEach(o=>o.classList.toggle('selected',o.dataset.fmt===f));}
+    function exportProject(){const fn=`plaidoyer_${data.meta.name.replace(/[^a-z0-9]/gi,'_')}_${new Date().toISOString().slice(0,10)}`;let content,type,ext;if(exportFmt==='json'){content=JSON.stringify(data,null,2);type='application/json';ext='json';}else if(exportFmt==='md'){content=`# ${data.meta.name}\n\n*Exporté le ${new Date().toLocaleDateString('fr-FR')}*\n\n`;Object.entries(data.fields).filter(([k,v])=>v&&v.trim()).forEach(([k,v])=>{content+=`## ${k.replace(/_/g,' ')}\n\n${v}\n\n`;});type='text/markdown';ext='md';}else if(exportFmt==='html'){content=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>${data.meta.name}</title><style>body{font-family:Georgia,serif;max-width:800px;margin:0 auto;padding:2rem;background:#f8f9fa;color:#1a1a2e}h1{color:#f97316}h2{color:#333;border-bottom:2px solid #f97316;padding-bottom:0.5rem;margin-top:2rem}.field{margin-bottom:1.5rem}</style></head><body><h1>${data.meta.name}</h1>`;Object.entries(data.fields).filter(([k,v])=>v&&v.trim()).forEach(([k,v])=>{content+=`<div class="field"><h2>${k.replace(/_/g,' ')}</h2><p>${v}</p></div>`;});content+='</body></html>';type='text/html';ext='html';}else{window.print();closeModal('export');return;}const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`${fn}.${ext}`;a.click();URL.revokeObjectURL(url);closeModal('export');toast(`Export ${ext.toUpperCase()} OK!`);}
+    
+    function handleDragOver(e){e.preventDefault();document.getElementById('drop-zone').classList.add('dragover');}
+    function handleDragLeave(e){document.getElementById('drop-zone').classList.remove('dragover');}
+    function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+    function handleFile(e){const f=e.target.files[0];if(f)processFile(f);}
+    function processFile(file){const r=new FileReader();r.onload=e=>{try{data=JSON.parse(e.target.result);localStorage.setItem('plaidoyer_v3',JSON.stringify(data));location.reload();}catch(err){toast('Erreur import','error');}};r.readAsText(file);}
+    
+    function openModal(t){document.getElementById(`modal-${t}`).classList.add('active');}
+    function closeModal(t){document.getElementById(`modal-${t}`).classList.remove('active');}
+    document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active');}));
+    
+    function toast(msg,type='success'){const c=document.getElementById('toast-container');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span>${type==='success'?'✅':type==='error'?'❌':'⚠️'}</span><span>${msg}</span>`;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';setTimeout(()=>t.remove(),300);},3000);}
+    function debounce(fn,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);};}
+    
+    document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey){if(e.key==='s'){e.preventDefault();saveProject();}else if(e.key==='e'){e.preventDefault();openModal('export');}else if(e.key==='i'){e.preventDefault();openModal('import');}}if(e.key==='Escape')document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));});
+    </script>
+</body>
+</html>

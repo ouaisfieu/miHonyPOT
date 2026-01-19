@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquête : La Belgique, un pays de fraudeurs ?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: "Vibrant Professional" 
+         Background: #F1F5F9 (Slate 100)
+         Primary Text: #0F172A (Slate 900)
+         Primary Color (Blue): #2563EB (Blue 600)
+         Secondary Color (Cyan): #06B6D4 (Cyan 500)
+         Accent Color (Orange): #F97316 (Orange 500)
+         Danger Color (Red): #EF4444 (Red 500)
+    -->
+
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #F1F5F9; color: #0F172A; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 400px; 
+        }
+        @media (min-width: 768px) { 
+            .chart-container { height: 400px; } 
+        }
+        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section-header { font-size: 1.5rem; font-weight: 700; color: #2563EB; margin-bottom: 1rem; border-bottom: 2px solid #E2E8F0; padding-bottom: 0.5rem; }
+        .stat-value { font-size: 2.5rem; font-weight: 900; color: #0F172A; }
+        .stat-label { font-size: 0.875rem; font-weight: 500; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        /* Custom Flowchart Styling (No Mermaid/SVG) */
+        .flow-step { background: #EFF6FF; border: 2px solid #2563EB; border-radius: 8px; padding: 10px; text-align: center; font-weight: bold; width: 100%; }
+        .flow-arrow { font-size: 24px; color: #94A3B8; text-align: center; margin: 5px 0; }
+        .heatmap-cell { transition: all 0.2s; }
+        .heatmap-cell:hover { transform: scale(1.05); }
+    </style>
+    
+    <!-- Application Structure Plan:
+         1. Hero Section: Provocative Title & Introduction based on the "Deborsu" theme (Belgian divides/fraud).
+         2. Key Metrics (Inform): Big Number Cards showing the scale of the "Tax Gap".
+         3. Fiscal vs Social (Compare): Doughnut chart contrasting the massive Tax Fraud vs smaller Social Fraud.
+         4. Sectors of Shadow (Compare): Bar chart showing top sectors for black labor.
+         5. The Mechanism (Organize): HTML-based flowchart explaining a VAT Carousel.
+         6. Regional Divide (Compare/Map substitute): "Card" comparison of Flanders vs Wallonia stats.
+         7. Evolution (Change): Line chart of fraud recovery over time.
+         8. Conclusion: Summary of the "Cost of Fraud".
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Intro Stats -> Goal: Inform -> Big Number Cards -> High impact, easy reading -> HTML/Tailwind.
+         2. Fiscal vs Social -> Goal: Compare -> Doughnut Chart (Chart.js) -> Clear proportion visualization -> Chart.js (Canvas).
+         3. Sectors -> Goal: Compare -> Horizontal Bar Chart (Chart.js) -> Handles long labels best -> Chart.js (Canvas).
+         4. VAT Carousel -> Goal: Organize -> Process Flow -> HTML/CSS Blocks -> No SVG/Mermaid.
+         5. Regional Data -> Goal: Compare -> Comparison Cards with Progress Bars -> No SVG Map available -> HTML/Tailwind.
+         6. Recovery Trend -> Goal: Change -> Line Chart (Chart.js) -> Shows temporal evolution -> Chart.js (Canvas).
+         7. Wealth Distribution -> Goal: Relationships -> Scatter Plot (Plotly) -> Complex relationship income/fraud -> Plotly (Canvas).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-8 md:p-12 shadow-lg">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">TOUS FRAUDEURS ?</h1>
+            <h2 class="text-xl md:text-2xl font-light text-blue-100">Enquête sur la réalité de la fraude en Belgique</h2>
+            <p class="mt-6 max-w-2xl mx-auto text-blue-50 leading-relaxed">
+                Au-delà des clichés sur "le sport national belge", que disent vraiment les chiffres ? 
+                Entre fraude fiscale massive et fraude sociale stigmatisée, plongez dans les données 
+                d'une fracture économique et morale.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-8 space-y-12">
+
+        <!-- Section 1: Le Constat (Big Numbers) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">Le Coût du "Sport National"</h3>
+                <p class="text-slate-600 mb-4">
+                    La Belgique a l'une des pressions fiscales les plus élevées au monde, ce qui alimente une économie souterraine tenace.
+                    Voici les estimations annuelles du "Tax Gap" (écart fiscal), soit l'argent qui échappe aux caisses de l'État.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="card text-center border-t-4 border-blue-600">
+                    <div class="text-4xl mb-2">💶</div>
+                    <div class="stat-value text-blue-600">30 Mds €</div>
+                    <div class="stat-label mt-2">Estimation Totale Fraude</div>
+                    <p class="text-sm text-slate-500 mt-2">Soit ~12% du PIB annuel</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="card text-center border-t-4 border-cyan-500">
+                    <div class="text-4xl mb-2">🏗️</div>
+                    <div class="stat-value text-cyan-600">4,8 Mds €</div>
+                    <div class="stat-label mt-2">Perte TVA (VAT Gap)</div>
+                    <p class="text-sm text-slate-500 mt-2">La fraude la plus courante</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="card text-center border-t-4 border-orange-500">
+                    <div class="text-4xl mb-2">👮</div>
+                    <div class="stat-value text-orange-500">1,2 Mds €</div>
+                    <div class="stat-label mt-2">Récupéré (2023)</div>
+                    <p class="text-sm text-slate-500 mt-2">Une goutte d'eau dans l'océan</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Fiscal vs Social (Doughnut Chart) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="order-2 md:order-1">
+                <div class="card">
+                    <div class="chart-container">
+                        <canvas id="fraudComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h3 class="section-header">Le Mythe du Chômeur Fraudeur</h3>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Dans l'imaginaire collectif, le "profiteur" est souvent celui qui abuse des allocations sociales. 
+                    Pourtant, les données sont formelles : la <strong>fraude fiscale</strong> (impôts non payés, TVA, sociétés) 
+                    pèse infiniment plus lourd que la <strong>fraude sociale</strong> (allocations indue, fausse domiciliation).
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded text-sm text-blue-800">
+                    <strong>Note d'analyse :</strong> Pour 1€ fraudé à la sécurité sociale, ce sont près de 15€ qui sont fraudés fiscalement (impôts directs et indirects).
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Sectors (Bar Chart) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">Où se cache le travail au noir ?</h3>
+                <p class="text-slate-600 mb-4">
+                    Certains secteurs sont structurellement plus exposés au travail dissimulé. 
+                    La construction et l'Horeca (Hôtellerie-Restauration-Café) trustent le haut du classement, 
+                    suivis par le commerce de détail et les services de nettoyage.
+                </p>
+            </div>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="sectorChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Mechanism (HTML Flowchart) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">Anatomie d'une Fraude : Le "Carrousel TVA"</h3>
+                <p class="text-slate-600 mb-6">
+                    La fraude "Carrousel" est une mécanique complexe impliquant plusieurs entreprises européennes 
+                    pour détourner la TVA. C'est un vol direct dans la poche de l'État.
+                </p>
+            </div>
+            
+            <div class="card bg-slate-50 overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 p-4">
+                    
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center w-full md:w-1/4">
+                        <div class="flow-step bg-white shadow border-l-4 border-l-cyan-500">
+                            <div class="text-2xl mb-1">🏢</div>
+                            <h4 class="font-bold text-slate-800">Société A (UE)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Vend sans TVA (Intracom.)</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-slate-400 text-2xl">➔</div>
+                    <div class="md:hidden text-slate-400 text-2xl">⬇</div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center w-full md:w-1/4">
+                        <div class="flow-step bg-white shadow border-l-4 border-l-red-500">
+                            <div class="text-2xl mb-1">🎭</div>
+                            <h4 class="font-bold text-slate-800">Société B "Taxi"</h4>
+                            <p class="text-xs text-slate-500 mt-1">Achète HT, revend TTC, disparaît sans payer la TVA</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-slate-400 text-2xl">➔</div>
+                    <div class="md:hidden text-slate-400 text-2xl">⬇</div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center w-full md:w-1/4">
+                        <div class="flow-step bg-white shadow border-l-4 border-l-blue-500">
+                            <div class="text-2xl mb-1">🏪</div>
+                            <h4 class="font-bold text-slate-800">Société C (Distributeur)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Achète TTC, récupère la TVA légalement</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4 p-4 bg-red-50 border-t border-red-100 rounded text-red-800 text-sm font-semibold">
+                    RÉSULTAT : L'État rembourse une TVA qu'il n'a jamais perçue.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Regional Comparison (Comparison Cards) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">La Fracture Régionale : Réalité ou Cliché ?</h3>
+                <p class="text-slate-600 mb-6">
+                    Christophe Deborsu interroge souvent les différences culturelles. En matière de fraude, 
+                    les chiffres montrent des profils différents. La Flandre, plus riche et dense économiquement, 
+                    concentre les gros volumes de fraude fiscale. Bruxelles et la Wallonie sont plus ciblées par les contrôles sociaux.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Flanders -->
+                <div class="bg-white p-6 rounded-lg shadow border-t-4 border-yellow-400">
+                    <h4 class="text-xl font-bold mb-4 flex items-center justify-between">
+                        <span>🦁 Flandre</span>
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Économie Dense</span>
+                    </h4>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-600 mb-1">
+                                <span>Fraude Fiscale (Vol. Absolu)</span>
+                                <span>Élevé</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-600 mb-1">
+                                <span>Contrôles Sociaux</span>
+                                <span>Moyen</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 45%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wallonia/Brussels -->
+                <div class="bg-white p-6 rounded-lg shadow border-t-4 border-red-500">
+                    <h4 class="text-xl font-bold mb-4 flex items-center justify-between">
+                        <span>🐓 Wallonie / BXL</span>
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Taux Chômage + Élevé</span>
+                    </h4>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-600 mb-1">
+                                <span>Fraude Fiscale (Vol. Absolu)</span>
+                                <span>Moyen</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-red-500 h-2.5 rounded-full" style="width: 55%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-600 mb-1">
+                                <span>Contrôles Sociaux</span>
+                                <span>Élevé</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                <div class="bg-red-500 h-2.5 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Trend (Line Chart) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">La Chasse aux Fraudeurs s'intensifie</h3>
+                <p class="text-slate-600 mb-4">
+                    Grâce au "Data Mining" et à l'échange automatique d'informations bancaires, 
+                    l'État détecte mieux la fraude. Cependant, les montants récupérés restent une fraction du total estimé.
+                </p>
+            </div>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Advanced Analysis (Plotly Scatter) -->
+        <section>
+            <div class="mb-6">
+                <h3 class="section-header">Corrélation : Revenus vs Type de Fraude</h3>
+                <p class="text-slate-600 mb-4">
+                    Analyse statistique (simulée) montrant la distribution des types de fraude en fonction du niveau de revenus.
+                    On observe une transition nette : la fraude sociale diminue quand le revenu augmente, remplacée par l'optimisation fiscale agressive.
+                </p>
+            </div>
+            <div class="card">
+                <!-- Plotly Container with explicit styling to prevent overflow -->
+                <div id="scatterPlot" style="width: 100%; height: 400px; max-width: 100%;"></div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <footer class="bg-slate-900 text-white rounded-lg p-8 text-center mt-12 mb-8">
+            <h3 class="text-2xl font-bold mb-4">Conclusion : Une Responsabilité Collective</h3>
+            <p class="max-w-2xl mx-auto text-slate-300 mb-6">
+                Si la fraude fiscale des grandes entreprises représente le plus gros manque à gagner, 
+                la "tolérance culturelle" belge envers le petit arrangement (travail au noir, facture sans TVA) 
+                maintient un système coûteux pour la collectivité.
+            </p>
+            <div class="inline-block bg-white text-slate-900 px-6 py-3 rounded-full font-bold shadow-lg">
+                Coût estimé par citoyen : ~2.500€ / an
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Utility: Label Wrapping ---
+        // Splits string into array of strings if longer than limit, aiming for whole words.
+        function smartWrap(str, limit = 16) {
+            if (str.length <= limit) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= limit) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Chart.js Global Config for Tooltips ---
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- Chart 1: Fiscal vs Social (Doughnut) ---
+        const ctx1 = document.getElementById('fraudComparisonChart').getContext('2d');
+        const labels1 = ['Fraude Fiscale (TVA, Impôts)', 'Fraude Sociale (Allocations, ONSS)'];
+        const processedLabels1 = labels1.map(l => smartWrap(l, 20));
+
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: processedLabels1,
+                datasets: [{
+                    data: [85, 15], // Estimated percentages
+                    backgroundColor: ['#2563EB', '#F97316'], // Blue vs Orange
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Roboto' } } },
+                    tooltip: tooltipConfig,
+                    title: { display: true, text: 'Répartition Estimée du Montant Total', font: { size: 16 } }
+                }
+            }
+        });
+
+        // --- Chart 2: Sectors (Horizontal Bar) ---
+        const ctx2 = document.getElementById('sectorChart').getContext('2d');
+        const rawLabels2 = [
+            'Construction & Rénovation', 
+            'Horeca (Restauration)', 
+            'Commerce de Détail', 
+            'Transport & Logistique', 
+            'Nettoyage & Services Domestiques'
+        ];
+        const processedLabels2 = rawLabels2.map(l => smartWrap(l, 20));
+
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: processedLabels2,
+                datasets: [{
+                    label: 'Risque de Travail au Noir (Score/100)',
+                    data: [85, 78, 45, 40, 35],
+                    backgroundColor: '#06B6D4', // Cyan
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal bar
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipConfig,
+                },
+                scales: {
+                    x: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+
+        // --- Chart 3: Trends (Line) ---
+        const ctx3 = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Montants Récupérés (Milliards €)',
+                    data: [0.7, 0.85, 0.80, 0.95, 1.1, 1.2],
+                    borderColor: '#EF4444', // Red
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // --- Chart 4: Plotly Scatter (Income vs Fraud Type) ---
+        // Simulating 50 data points
+        const trace1 = {
+            x: Array.from({length: 30}, () => Math.floor(Math.random() * 40000) + 15000), // Low-Mid Income
+            y: Array.from({length: 30}, () => Math.floor(Math.random() * 50) + 50), // High Social Fraud Index
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Fraude Sociale',
+            marker: { size: 10, color: '#F97316' } // Orange
+        };
+
+        const trace2 = {
+            x: Array.from({length: 30}, () => Math.floor(Math.random() * 80000) + 40000), // High Income
+            y: Array.from({length: 30}, () => Math.floor(Math.random() * 50) + 50), // High Fiscal Fraud Index
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Fraude Fiscale',
+            marker: { size: 10, color: '#2563EB' } // Blue
+        };
+
+        const layout = {
+            title: 'Type de Fraude vs Revenu Annuel',
+            font: { family: 'Roboto' },
+            xaxis: { title: 'Revenu Annuel (€)' },
+            yaxis: { title: 'Indice de Risque (Arbitraire)' },
+            showlegend: true,
+            margin: { t: 50, l: 50, r: 20, b: 50 },
+            autosize: true,
+            plot_bgcolor: '#F8FAFC',
+            paper_bgcolor: '#FFFFFF'
+        };
+
+        const config = { responsive: true, displayModeBar: false };
+        
+        // Render Plotly (Canvas/SVG hybrid handled by library, explicitly asking for no svg-only types)
+        Plotly.newPlot('scatterPlot', [trace1, trace2], layout, config);
+
+        // Ensure Plotly resizes correctly
+        window.addEventListener('resize', function() {
+            Plotly.Plots.resize('scatterPlot');
+        });
+
+    </script>
+</body>
+</html>

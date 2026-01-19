@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>miHonyPOT — Veille Citoyenne &amp; Intelligence Civile</title>
+    <link>https://ouaisfieu.github.io/miHonyPOT</link>
+    <description>Flux de veille citoyenne, documentation OSINT, et outils d'éducation permanente du projet miHonyPOT</description>
+    <language>fr-BE</language>
+    <lastBuildDate>Mon, 20 Jan 2025 12:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ouaisfieu.github.io/miHonyPOT/feed.xml" rel="self" type="application/rss+xml"/>
+    <generator>miHonyPOT RSS Generator</generator>
+    <copyright>CC BY-NC-SA 4.0 — Collectif Citoyen</copyright>
+    <webMaster>collectif@example.org</webMaster>
+    <category>Civic Tech</category>
+    <category>Veille Citoyenne</category>
+    <category>Éducation Permanente</category>
+    <image>
+      <url>https://ouaisfieu.github.io/miHonyPOT/img/logo.png</url>
+      <title>miHonyPOT</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT</link>
+    </image>
+    
+    <!-- Section Belgium -->
+    <item>
+      <title>🇧🇪 Belgium — Veille institutionnelle belge</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/belgium/</link>
+      <description>Documentation et veille sur les institutions belges, le parlement, et les processus démocratiques en Belgique.</description>
+      <pubDate>Mon, 20 Jan 2025 10:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/belgium/</guid>
+      <category>Belgique</category>
+      <category>Institutions</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section CCPLC -->
+    <item>
+      <title>🏛️ CCPLC — Collectif Citoyen Participation Libre &amp; Consciente</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/ccplc/</link>
+      <description>Documentation du Collectif Citoyen pour la Participation Libre et Consciente. Charte, méthodologies, et ressources.</description>
+      <pubDate>Sun, 19 Jan 2025 14:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/ccplc/</guid>
+      <category>Collectif</category>
+      <category>Participation citoyenne</category>
+      <dc:creator>CCPLC</dc:creator>
+    </item>
+    
+    <!-- Section e-bomba -->
+    <item>
+      <title>💣 e-BOMBA — Projet de guerre sémantique citoyenne</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/e-bomba/</link>
+      <description>Documentation du projet TSAR e-BOMBA : protocoles de contre-narratif et stratégies de domination cognitive éthique.</description>
+      <pubDate>Sat, 18 Jan 2025 09:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/e-bomba/</guid>
+      <category>Guerre cognitive</category>
+      <category>Contre-narratif</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section Fraude -->
+    <item>
+      <title>🔍 Fraude — Détection et documentation</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/fraude/</link>
+      <description>Méthodologies OSINT pour la détection de fraude, conflits d'intérêts, et documentation citoyenne.</description>
+      <pubDate>Fri, 17 Jan 2025 16:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/fraude/</guid>
+      <category>OSINT</category>
+      <category>Investigation</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section poli-kao -->
+    <item>
+      <title>🎭 Poli-Kao — Analyse politique et chaos</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/poli-kao/</link>
+      <description>Analyses politiques, cartographies du pouvoir, et documentation des dynamiques de chaos organisé.</description>
+      <pubDate>Thu, 16 Jan 2025 11:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/poli-kao/</guid>
+      <category>Politique</category>
+      <category>Analyse</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section Science -->
+    <item>
+      <title>🔬 Science — Connaissance et accès libre</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/science/</link>
+      <description>Ressources sur la science ouverte, l'accès libre au savoir, et la vulgarisation scientifique citoyenne.</description>
+      <pubDate>Wed, 15 Jan 2025 08:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/science/</guid>
+      <category>Science ouverte</category>
+      <category>Open Access</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section Topo -->
+    <item>
+      <title>🗺️ Topo — Cartographies et topologies</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/topo/</link>
+      <description>Cartographies du pouvoir, topologies des réseaux d'influence, et visualisations de données.</description>
+      <pubDate>Tue, 14 Jan 2025 15:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/topo/</guid>
+      <category>Cartographie</category>
+      <category>Data visualization</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section WOR -->
+    <item>
+      <title>⚔️ WOR — War On Reality</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/wor/</link>
+      <description>Documentation sur la guerre informationnelle, la désinformation, et les stratégies de résistance cognitive.</description>
+      <pubDate>Mon, 13 Jan 2025 10:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/wor/</guid>
+      <category>Désinformation</category>
+      <category>Guerre cognitive</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section PAC -->
+    <item>
+      <title>📋 PAC — Plan d'Action Citoyen</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/pac/</link>
+      <description>Plans d'action, roadmaps, et méthodologies pour l'engagement citoyen structuré.</description>
+      <pubDate>Sun, 12 Jan 2025 09:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/pac/</guid>
+      <category>Plan d'action</category>
+      <category>Méthodologie</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section Data -->
+    <item>
+      <title>📊 Data — Jeux de données ouverts</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/data/</link>
+      <description>Datasets en open data : CSV, JSON, et données structurées pour la veille citoyenne.</description>
+      <pubDate>Sat, 11 Jan 2025 14:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/data/</guid>
+      <category>Open Data</category>
+      <category>Datasets</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section App -->
+    <item>
+      <title>📱 App — Applications et outils</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/app/</link>
+      <description>Applications web, outils interactifs, et interfaces pour la participation citoyenne.</description>
+      <pubDate>Fri, 10 Jan 2025 11:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/app/</guid>
+      <category>Applications</category>
+      <category>Outils</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section Col -->
+    <item>
+      <title>🤝 Col — Collaborations</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/col/</link>
+      <description>Partenariats, collaborations inter-collectifs, et initiatives conjointes.</description>
+      <pubDate>Thu, 09 Jan 2025 16:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/col/</guid>
+      <category>Collaboration</category>
+      <category>Réseau</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+    
+    <!-- Section upYOUrs -->
+    <item>
+      <title>🎯 upYOUrs — Empowerment citoyen</title>
+      <link>https://ouaisfieu.github.io/miHonyPOT/upYOUrs/</link>
+      <description>Ressources d'empowerment, formation citoyenne, et outils d'autonomisation.</description>
+      <pubDate>Wed, 08 Jan 2025 08:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://ouaisfieu.github.io/miHonyPOT/upYOUrs/</guid>
+      <category>Empowerment</category>
+      <category>Formation</category>
+      <dc:creator>Collectif miHonyPOT</dc:creator>
+    </item>
+
+  </channel>
+</rss>

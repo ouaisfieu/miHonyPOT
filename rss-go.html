@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Générateur RSS pour GitHub Pages</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --green: #3fb950;
+            --orange: #d29922;
+            --red: #f85149;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 1.25rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+            color: var(--text);
+        }
+        
+        .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.6rem 0.875rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+        
+        .btn-primary {
+            background: var(--green);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background: #46c35f;
+        }
+        
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .output-area {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow: auto;
+        }
+        
+        pre {
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .tag-rss { background: rgba(255, 166, 0, 0.2); color: var(--orange); }
+        .tag-atom { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+        .tag-json { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        
+        .steps {
+            counter-reset: step;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--accent);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        
+        .step h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        code {
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.85em;
+        }
+        
+        .file-tree {
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        
+        .file-tree-item {
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .file-tree-item.folder { color: var(--accent); }
+        .file-tree-item.file { color: var(--text-muted); }
+        .file-tree-item.new { color: var(--green); }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        
+        .tab:hover {
+            color: var(--text);
+        }
+        
+        .tab.active {
+            color: var(--text);
+            border-bottom-color: var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+        
+        .alert-info {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            color: var(--accent);
+        }
+        
+        .alert-success {
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+            color: var(--green);
+        }
+        
+        .folder-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .folder-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        
+        .folder-chip:hover {
+            border-color: var(--accent);
+        }
+        
+        .folder-chip.selected {
+            background: rgba(88, 166, 255, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .folder-chip .remove {
+            margin-left: 0.25rem;
+            opacity: 0.5;
+        }
+        
+        .folder-chip .remove:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📡 Générateur RSS pour GitHub Pages</h1>
+        <p class="subtitle">Créez des flux RSS/Atom automatiques pour vos sites statiques</p>
+        
+        <div class="grid">
+            <!-- Configuration -->
+            <div class="card">
+                <div class="card-header">⚙️ Configuration du site</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>URL du repository GitHub</label>
+                        <input type="text" id="repo-url" placeholder="https://github.com/ouaisfieu/miHonyPOT" value="https://github.com/ouaisfieu/miHonyPOT">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>URL du site (GitHub Pages)</label>
+                        <input type="text" id="site-url" placeholder="https://ouaisfieu.github.io/miHonyPOT">
+                        <p class="hint">Généralement: https://[username].github.io/[repo]</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Titre du flux</label>
+                        <input type="text" id="feed-title" placeholder="miHonyPOT — Veille Citoyenne" value="miHonyPOT — Veille Citoyenne">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="feed-description" placeholder="Description du flux RSS...">Flux de veille citoyenne et documentation du projet miHonyPOT</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Langue</label>
+                        <select id="feed-lang">
+                            <option value="fr">Français (fr)</option>
+                            <option value="en">English (en)</option>
+                            <option value="nl">Nederlands (nl)</option>
+                            <option value="de">Deutsch (de)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Dossiers à inclure</label>
+                        <div class="folder-list" id="folders-list">
+                            <!-- Chips will be added here -->
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <input type="text" id="new-folder" placeholder="Nom du dossier..." style="flex: 1;">
+                            <button class="btn btn-secondary" onclick="addFolder()">+ Ajouter</button>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="generateAllFeeds()">🚀 Générer les flux</button>
+                        <button class="btn btn-secondary" onclick="scanRepo()">🔍 Scanner le repo</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="card">
+                <div class="card-header">📖 Guide d'installation</div>
+                <div class="card-body">
+                    <div class="steps">
+                        <div class="step">
+                            <h3>Générez vos flux</h3>
+                            <p>Configurez votre site et cliquez sur "Générer les flux" pour créer les fichiers RSS, Atom et JSON Feed.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h3>Téléchargez les fichiers</h3>
+                            <p>Téléchargez <code>feed.xml</code>, <code>atom.xml</code> et <code>feed.json</code> générés.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h3>Ajoutez au repository</h3>
+                            <p>Placez les fichiers à la racine de votre repo GitHub ou dans les sous-dossiers concernés.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h3>Automatisez (optionnel)</h3>
+                            <p>Utilisez GitHub Actions pour régénérer automatiquement les flux à chaque commit.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        💡 <strong>Astuce :</strong> Ajoutez <code>&lt;link rel="alternate" type="application/rss+xml" href="/feed.xml"&gt;</code> dans vos pages HTML pour la découverte automatique.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Output -->
+        <div class="card">
+            <div class="card-header">📄 Fichiers générés</div>
+            <div class="card-body">
+                <div class="tabs">
+                    <button class="tab active" data-tab="rss">
+                        <span class="tag tag-rss">RSS 2.0</span> feed.xml
+                    </button>
+                    <button class="tab" data-tab="atom">
+                        <span class="tag tag-atom">Atom</span> atom.xml
+                    </button>
+                    <button class="tab" data-tab="json">
+                        <span class="tag tag-json">JSON</span> feed.json
+                    </button>
+                    <button class="tab" data-tab="action">
+                        <span class="tag tag-json">YAML</span> GitHub Action
+                    </button>
+                    <button class="tab" data-tab="jekyll">
+                        <span class="tag tag-rss">Jekyll</span> _config.yml
+                    </button>
+                </div>
+                
+                <div class="tab-content active" id="tab-rss">
+                    <div class="output-area">
+                        <pre id="output-rss">Cliquez sur "Générer les flux" pour créer le fichier RSS...</pre>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="copyOutput('rss')">📋 Copier</button>
+                        <button class="btn btn-primary" onclick="downloadOutput('rss', 'feed.xml', 'application/rss+xml')">⬇️ Télécharger feed.xml</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-atom">
+                    <div class="output-area">
+                        <pre id="output-atom">Cliquez sur "Générer les flux" pour créer le fichier Atom...</pre>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="copyOutput('atom')">📋 Copier</button>
+                        <button class="btn btn-primary" onclick="downloadOutput('atom', 'atom.xml', 'application/atom+xml')">⬇️ Télécharger atom.xml</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-json">
+                    <div class="output-area">
+                        <pre id="output-json">Cliquez sur "Générer les flux" pour créer le fichier JSON Feed...</pre>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="copyOutput('json')">📋 Copier</button>
+                        <button class="btn btn-primary" onclick="downloadOutput('json', 'feed.json', 'application/json')">⬇️ Télécharger feed.json</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-action">
+                    <div class="output-area">
+                        <pre id="output-action">Cliquez sur "Générer les flux" pour créer le workflow GitHub Actions...</pre>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="copyOutput('action')">📋 Copier</button>
+                        <button class="btn btn-primary" onclick="downloadOutput('action', 'generate-feeds.yml', 'text/yaml')">⬇️ Télécharger generate-feeds.yml</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-jekyll">
+                    <div class="output-area">
+                        <pre id="output-jekyll">Cliquez sur "Générer les flux" pour créer la config Jekyll...</pre>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="copyOutput('jekyll')">📋 Copier</button>
+                        <button class="btn btn-primary" onclick="downloadOutput('jekyll', '_config.yml', 'text/yaml')">⬇️ Télécharger _config.yml</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Multi-feed per folder -->
+        <div class="card" style="margin-top: 1.5rem;">
+            <div class="card-header">📂 Flux par sous-dossier</div>
+            <div class="card-body">
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Générez un flux RSS distinct pour chaque section de votre site.</p>
+                
+                <div id="folder-feeds-output">
+                    <div class="alert alert-info">
+                        Ajoutez des dossiers ci-dessus puis cliquez sur "Générer les flux" pour créer des flux individuels.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State
+        let folders = ['belgium', 'ccplc', 'e-bomba', 'fraude', 'poli-kao', 'science', 'topo', 'wor'];
+        let generatedFeeds = {};
+        
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFolders();
+            initTabs();
+            autoDetectSiteUrl();
+        });
+        
+        function autoDetectSiteUrl() {
+            const repoUrl = document.getElementById('repo-url').value;
+            const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+            if (match) {
+                const [_, user, repo] = match;
+                document.getElementById('site-url').value = `https://${user}.github.io/${repo}`;
+            }
+        }
+        
+        document.getElementById('repo-url').addEventListener('change', autoDetectSiteUrl);
+        
+        // Tabs
+        function initTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+        
+        // Folders
+        function renderFolders() {
+            const container = document.getElementById('folders-list');
+            container.innerHTML = folders.map(f => `
+                <div class="folder-chip selected" onclick="toggleFolder('${f}')">
+                    📁 ${f}
+                    <span class="remove" onclick="event.stopPropagation(); removeFolder('${f}')">✕</span>
+                </div>
+            `).join('');
+        }
+        
+        function addFolder() {
+            const input = document.getElementById('new-folder');
+            const name = input.value.trim();
+            if (name && !folders.includes(name)) {
+                folders.push(name);
+                renderFolders();
+                input.value = '';
+            }
+        }
+        
+        function removeFolder(name) {
+            folders = folders.filter(f => f !== name);
+            renderFolders();
+        }
+        
+        function toggleFolder(name) {
+            const chip = event.target.closest('.folder-chip');
+            chip.classList.toggle('selected');
+        }
+        
+        // Scan repository
+        async function scanRepo() {
+            const repoUrl = document.getElementById('repo-url').value;
+            const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+            
+            if (!match) {
+                alert('URL de repository invalide');
+                return;
+            }
+            
+            const [_, user, repo] = match;
+            
+            try {
+                const response = await fetch(`https://api.github.com/repos/${user}/${repo}/contents`);
+                const contents = await response.json();
+                
+                const detectedFolders = contents
+                    .filter(item => item.type === 'dir')
+                    .filter(item => !item.name.startsWith('.') && !item.name.startsWith('_'))
+                    .map(item => item.name);
+                
+                folders = [...new Set([...folders, ...detectedFolders])];
+                renderFolders();
+                
+                alert(`✅ ${detectedFolders.length} dossiers détectés : ${detectedFolders.join(', ')}`);
+            } catch (error) {
+                alert('Erreur lors du scan. Vérifiez l\'URL du repository.');
+                console.error(error);
+            }
+        }
+        
+        // Generate feeds
+        function generateAllFeeds() {
+            const siteUrl = document.getElementById('site-url').value.replace(/\/$/, '');
+            const title = document.getElementById('feed-title').value;
+            const description = document.getElementById('feed-description').value;
+            const lang = document.getElementById('feed-lang').value;
+            const now = new Date().toISOString();
+            
+            const selectedFolders = [...document.querySelectorAll('.folder-chip.selected')]
+                .map(chip => chip.textContent.replace('📁 ', '').replace('✕', '').trim());
+            
+            // Generate main RSS 2.0
+            const rss = generateRSS({
+                siteUrl, title, description, lang, now, folders: selectedFolders
+            });
+            document.getElementById('output-rss').textContent = rss;
+            generatedFeeds.rss = rss;
+            
+            // Generate Atom
+            const atom = generateAtom({
+                siteUrl, title, description, lang, now, folders: selectedFolders
+            });
+            document.getElementById('output-atom').textContent = atom;
+            generatedFeeds.atom = atom;
+            
+            // Generate JSON Feed
+            const json = generateJSONFeed({
+                siteUrl, title, description, lang, now, folders: selectedFolders
+            });
+            document.getElementById('output-json').textContent = JSON.stringify(json, null, 2);
+            generatedFeeds.json = JSON.stringify(json, null, 2);
+            
+            // Generate GitHub Action
+            const action = generateGitHubAction({ siteUrl, title, folders: selectedFolders });
+            document.getElementById('output-action').textContent = action;
+            generatedFeeds.action = action;
+            
+            // Generate Jekyll config
+            const jekyll = generateJekyllConfig({ title, description, siteUrl });
+            document.getElementById('output-jekyll').textContent = jekyll;
+            generatedFeeds.jekyll = jekyll;
+            
+            // Generate per-folder feeds
+            generateFolderFeeds(siteUrl, selectedFolders, now, lang);
+        }
+        
+        function generateRSS({ siteUrl, title, description, lang, now, folders }) {
+            const items = folders.map((folder, i) => `
+    <item>
+      <title>${folder}</title>
+      <link>${siteUrl}/${folder}/</link>
+      <description>Section ${folder} du projet</description>
+      <pubDate>${new Date(Date.now() - i * 86400000).toUTCString()}</pubDate>
+      <guid isPermaLink="true">${siteUrl}/${folder}/</guid>
+      <category>${folder}</category>
+    </item>`).join('\n');
+            
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>${escapeXml(title)}</title>
+    <link>${siteUrl}</link>
+    <description>${escapeXml(description)}</description>
+    <language>${lang}</language>
+    <lastBuildDate>${new Date(now).toUTCString()}</lastBuildDate>
+    <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml"/>
+    <generator>GitHub Pages RSS Generator</generator>
+${items}
+  </channel>
+</rss>`;
+        }
+        
+        function generateAtom({ siteUrl, title, description, lang, now, folders }) {
+            const entries = folders.map((folder, i) => `
+  <entry>
+    <title>${escapeXml(folder)}</title>
+    <link href="${siteUrl}/${folder}/" rel="alternate"/>
+    <id>${siteUrl}/${folder}/</id>
+    <updated>${new Date(Date.now() - i * 86400000).toISOString()}</updated>
+    <summary>${escapeXml(`Section ${folder} du projet`)}</summary>
+    <category term="${folder}"/>
+  </entry>`).join('\n');
+            
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="${lang}">
+  <title>${escapeXml(title)}</title>
+  <subtitle>${escapeXml(description)}</subtitle>
+  <link href="${siteUrl}/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="${siteUrl}" rel="alternate" type="text/html"/>
+  <id>${siteUrl}/</id>
+  <updated>${now}</updated>
+  <generator uri="https://github.com">GitHub Pages RSS Generator</generator>
+${entries}
+</feed>`;
+        }
+        
+        function generateJSONFeed({ siteUrl, title, description, lang, now, folders }) {
+            return {
+                version: "https://jsonfeed.org/version/1.1",
+                title: title,
+                home_page_url: siteUrl,
+                feed_url: `${siteUrl}/feed.json`,
+                description: description,
+                language: lang,
+                items: folders.map((folder, i) => ({
+                    id: `${siteUrl}/${folder}/`,
+                    url: `${siteUrl}/${folder}/`,
+                    title: folder,
+                    content_text: `Section ${folder} du projet`,
+                    date_published: new Date(Date.now() - i * 86400000).toISOString(),
+                    tags: [folder]
+                }))
+            };
+        }
+        
+        function generateGitHubAction({ siteUrl, title, folders }) {
+            return `# .github/workflows/generate-feeds.yml
+# Régénère automatiquement les flux RSS à chaque push
+
+name: Generate RSS Feeds
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    # Tous les jours à minuit
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-feeds:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Generate RSS feeds
+        run: |
+          cat > generate-feeds.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          const SITE_URL = '${siteUrl}';
+          const TITLE = '${title}';
+          const FOLDERS = ${JSON.stringify(folders)};
+          
+          // Scan for HTML/MD files
+          function scanFolder(dir) {
+            const items = [];
+            try {
+              const files = fs.readdirSync(dir, { withFileTypes: true });
+              for (const file of files) {
+                if (file.isFile() && /\\.(html|md)$/i.test(file.name)) {
+                  const filePath = path.join(dir, file.name);
+                  const stats = fs.statSync(filePath);
+                  const content = fs.readFileSync(filePath, 'utf-8');
+                  const titleMatch = content.match(/<title>([^<]+)<\\/title>/i) 
+                                 || content.match(/^#\\s+(.+)$/m);
+                  items.push({
+                    title: titleMatch ? titleMatch[1] : file.name,
+                    link: SITE_URL + '/' + dir + '/' + file.name.replace(/\\.md$/, '.html'),
+                    date: stats.mtime.toISOString(),
+                    folder: dir
+                  });
+                }
+              }
+            } catch (e) {}
+            return items;
+          }
+          
+          // Collect all items
+          let allItems = [];
+          for (const folder of FOLDERS) {
+            allItems = allItems.concat(scanFolder(folder));
+          }
+          allItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          // Generate RSS
+          const rssItems = allItems.slice(0, 50).map(item => \`
+    <item>
+      <title>\${item.title}</title>
+      <link>\${item.link}</link>
+      <pubDate>\${new Date(item.date).toUTCString()}</pubDate>
+      <guid>\${item.link}</guid>
+      <category>\${item.folder}</category>
+    </item>\`).join('');
+          
+          const rss = \`<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>\${TITLE}</title>
+    <link>\${SITE_URL}</link>
+    <lastBuildDate>\${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="\${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
+\${rssItems}
+  </channel>
+</rss>\`;
+          
+          fs.writeFileSync('feed.xml', rss);
+          console.log('Generated feed.xml with', allItems.length, 'items');
+          EOF
+          
+          node generate-feeds.js
+      
+      - name: Commit feeds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed.xml atom.xml feed.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "🔄 Update RSS feeds [skip ci]"
+          git push
+`;
+        }
+        
+        function generateJekyllConfig({ title, description, siteUrl }) {
+            return `# _config.yml
+# Configuration Jekyll pour GitHub Pages avec génération RSS automatique
+
+title: "${title}"
+description: "${description}"
+url: "${siteUrl}"
+baseurl: ""
+
+# Thème (optionnel)
+# theme: minima
+
+# Plugins pour RSS
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Configuration du flux RSS
+feed:
+  path: feed.xml
+  posts_limit: 50
+  excerpt_only: false
+  
+# Collections pour organiser le contenu
+collections:
+  veille:
+    output: true
+    permalink: /veille/:name/
+  dossiers:
+    output: true
+    permalink: /dossiers/:name/
+
+# Defaults pour les métadonnées
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Collectif"
+  - scope:
+      path: ""
+      type: "veille"
+    values:
+      layout: "veille"
+
+# Exclure des fichiers
+exclude:
+  - README.md
+  - LICENSE
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Markdown
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+`;
+        }
+        
+        function generateFolderFeeds(siteUrl, folders, now, lang) {
+            const container = document.getElementById('folder-feeds-output');
+            
+            if (folders.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">Sélectionnez des dossiers pour générer des flux individuels.</div>';
+                return;
+            }
+            
+            const folderCards = folders.map(folder => {
+                const feedUrl = `${siteUrl}/${folder}/feed.xml`;
+                const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${folder} — Flux RSS</title>
+    <link>${siteUrl}/${folder}/</link>
+    <description>Flux RSS de la section ${folder}</description>
+    <language>${lang}</language>
+    <lastBuildDate>${new Date(now).toUTCString()}</lastBuildDate>
+    <atom:link href="${feedUrl}" rel="self" type="application/rss+xml"/>
+    <!-- Les items seront générés dynamiquement -->
+  </channel>
+</rss>`;
+                
+                return `
+                    <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; margin-bottom: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>📁 ${folder}/feed.xml</strong>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadFolderFeed('${folder}', \`${rss.replace(/`/g, '\\`')}\`)">⬇️ Télécharger</button>
+                        </div>
+                        <code style="font-size: 0.75rem; color: var(--text-muted);">${feedUrl}</code>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = `
+                <div class="alert alert-success" style="margin-bottom: 1rem;">
+                    ✅ ${folders.length} flux individuels prêts à télécharger
+                </div>
+                ${folderCards}
+                <button class="btn btn-primary" onclick="downloadAllFolderFeeds()">📦 Télécharger tous les flux (.zip)</button>
+            `;
+        }
+        
+        function downloadFolderFeed(folder, content) {
+            downloadFile(content, `${folder}-feed.xml`, 'application/rss+xml');
+        }
+        
+        function downloadAllFolderFeeds() {
+            alert('Pour télécharger tous les flux en ZIP, utilisez le GitHub Action qui les génère automatiquement.');
+        }
+        
+        // Utils
+        function escapeXml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+        
+        function copyOutput(type) {
+            const content = generatedFeeds[type];
+            if (content) {
+                navigator.clipboard.writeText(content);
+                alert('✅ Copié dans le presse-papiers !');
+            }
+        }
+        
+        function downloadOutput(type, filename, mime) {
+            const content = generatedFeeds[type];
+            if (content) {
+                downloadFile(content, filename, mime);
+            }
+        }
+        
+        function downloadFile(content, filename, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

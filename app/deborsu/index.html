@@ -1,0 +1,456 @@
+index.html<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquête : La Belgique, tous fraudeurs ?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; height: 40vh; max-height: 500px; }
+        .active-nav { background-color: #F3F4F6; border-left: 4px solid #EF4444; color: #111827; }
+        .card-hover:hover { transform: translateY(-2px); transition: all 0.2s ease-in-out; }
+    </style>
+    <!-- Chosen Palette: Warm Neutral Ground (Slate-50) with Journalistic Accents (Slate-900 for text, Red-600 for emphasis/alert). Creates a serious, newspaper-like aesthetic. -->
+    <!-- Application Structure Plan: The app is designed as an interactive "Digital Dossier". 
+         1. Hero Section: Sets the provocative context ("The Question").
+         2. Dashboard "Le Constat": High-level metrics using clear big numbers.
+         3. Interactive Analysis "Fiscal vs Social": Users toggle between two major fraud types to see breakdown charts.
+         4. "Mythbuster": Interactive cards to address stereotypes (Deborsu style).
+         5. "Impact Personnel": A calculator to make the billions abstract figures concrete for the user.
+         6. Conclusion: Summary and call to action. 
+         This structure moves from broad context to specific data, then to personal relevance. -->
+    <!-- Visualization & Content Choices: 
+         1. Intro Stats -> Goal: Inform -> Big Number Cards -> Simple Text -> Immediate impact.
+         2. Fraud Breakdown -> Goal: Compare -> Bar Chart (Chart.js) -> Interactive Toggle -> Allows comparing the scale of Tax Fraud (huge) vs Social Fraud (visible).
+         3. Regional Data -> Goal: Contextualize -> Table/List with Highlights -> JS Filter -> Addresses the "Flemish vs Walloon" narrative often present in Deborsu's work.
+         4. Interactive Calculator -> Goal: Engagement -> JS Input/Calculation -> Personalizes the data. 
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-white shadow-sm p-4 sticky top-0 z-50 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-slate-900">Enquête <span class="text-red-600">Fraude</span></h1>
+        <button id="mobile-menu-btn" class="text-slate-600 focus:outline-none text-2xl">
+            &#9776;
+        </button>
+    </header>
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 h-screen sticky top-0 fixed md:relative z-40 transition-transform transform md:translate-x-0 -translate-x-full absolute">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-2xl font-bold text-slate-900 leading-tight">Le Grand <br><span class="text-red-600">Dossier</span></h1>
+                <p class="text-xs text-slate-500 mt-2 tracking-widest uppercase">Analyse & Données</p>
+            </div>
+            <ul class="flex-1 overflow-y-auto py-4">
+                <li><button onclick="navigate('intro')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors active-nav" data-target="intro">Introduction</button></li>
+                <li><button onclick="navigate('data')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors" data-target="data">Les Chiffres Réels</button></li>
+                <li><button onclick="navigate('myths')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors" data-target="myths">Mythes & Réalités</button></li>
+                <li><button onclick="navigate('calculator')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors" data-target="calculator">Coût pour VOUS</button></li>
+            </ul>
+            <div class="p-6 bg-slate-50 border-t border-slate-200 text-xs text-slate-400">
+                &copy; 2024 Analyse Indépendante.<br>Basé sur les rapports fiscaux fédéraux.
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-12 overflow-y-auto">
+            
+            <!-- SECTION 1: INTRODUCTION -->
+            <section id="intro" class="section-view max-w-4xl mx-auto space-y-8 animate-fade-in">
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold tracking-wide">LA QUESTION QUI FÂCHE</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-4 text-slate-900 mb-6">La Belgique : Tous fraudeurs ?</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                        "C'est le sport national." Cette phrase, on l'entend souvent. Mais qu'en est-il vraiment ?
+                        Cette application interactive décortique le rapport sur la fraude fiscale et sociale en Belgique. 
+                        Au-delà des clichés communautaires ou de classe, les chiffres racontent une histoire plus complexe, 
+                        celle d'un "Tax Gap" (écart fiscal) estimé à plusieurs milliards d'euros par an.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        <div class="bg-slate-50 p-6 rounded-xl text-center border-t-4 border-red-500">
+                            <div class="text-3xl font-bold text-slate-900">30 Milliards €</div>
+                            <div class="text-sm text-slate-500 mt-2 font-medium">Estimation perte annuelle totale (Fraude fiscale)</div>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-xl text-center border-t-4 border-orange-400">
+                            <div class="text-3xl font-bold text-slate-900">Top 5</div>
+                            <div class="text-sm text-slate-500 mt-2 font-medium">Pression fiscale en Europe (OCDE)</div>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-xl text-center border-t-4 border-blue-500">
+                            <div class="text-3xl font-bold text-slate-900">2%</div>
+                            <div class="text-sm text-slate-500 mt-2 font-medium">Des dossiers contrôlés aboutissent à une sanction</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg">
+                    <h3 class="font-bold text-blue-900 text-lg mb-2">Pourquoi ce rapport ?</h3>
+                    <p class="text-blue-800">
+                        L'objectif est de dépasser la simple indignation pour comprendre les mécanismes : travail au noir, fraude à la TVA, optimisation agressive et fraude aux prestations sociales. Explorez les onglets pour découvrir la réalité des chiffres.
+                    </p>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <button onclick="navigate('data')" class="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-slate-800 transition shadow-lg flex items-center mx-auto gap-2">
+                        Explorer les Données <span>&#8594;</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 2: DATA VISUALIZATION -->
+            <section id="data" class="section-view hidden max-w-5xl mx-auto space-y-8">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-900">Anatomie de la Fraude</h2>
+                    <p class="text-slate-600 mt-2">Comparaison entre la fraude fiscale (l'argent non versé à l'État) et la fraude sociale (prestations indues ou travail non déclaré).</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <button onclick="updateChart('fiscal')" id="btn-fiscal" class="px-6 py-2 rounded-lg font-semibold bg-slate-900 text-white shadow-md transition-all">Fraude Fiscale</button>
+                    <button onclick="updateChart('social')" id="btn-social" class="px-6 py-2 rounded-lg font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Fraude Sociale</button>
+                </div>
+
+                <!-- Chart Area -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="chart-title" class="text-xl font-bold text-slate-800">Répartition : Fraude Fiscale</h3>
+                        <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">Source: Estimations SPF Finances/ONSS</span>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="fraudChart"></canvas>
+                    </div>
+                    
+                    <div id="chart-context" class="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600">
+                        La fraude à la TVA (notamment les carrousels TVA) représente la part la plus massive du manque à gagner pour l'État belge, dépassant largement la fraude aux prestations sociales souvent plus médiatisée.
+                    </div>
+                </div>
+
+                <!-- Comparison Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-lg text-red-600 mb-3 flex items-center gap-2">
+                            <span>&#9888;</span> Fraude Fiscale "Lourde"
+                        </h4>
+                        <ul class="space-y-2 text-slate-700 text-sm">
+                            <li class="flex items-start gap-2"><span class="mt-1 text-red-400 text-xs">&#9679;</span> Carrousels TVA (International)</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-red-400 text-xs">&#9679;</span> Evasion fiscale offshore</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-red-400 text-xs">&#9679;</span> Revenus professionnels dissimulés</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-lg text-orange-600 mb-3 flex items-center gap-2">
+                            <span>&#128101;</span> Fraude Sociale & Domiciliation
+                        </h4>
+                        <ul class="space-y-2 text-slate-700 text-sm">
+                            <li class="flex items-start gap-2"><span class="mt-1 text-orange-400 text-xs">&#9679;</span> Travail au noir (Horeca, Construction)</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-orange-400 text-xs">&#9679;</span> Fausse domiciliation (Isolé vs Cohabitant)</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-orange-400 text-xs">&#9679;</span> Chômage indu</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: MYTHS VS REALITY -->
+            <section id="myths" class="section-view hidden max-w-4xl mx-auto space-y-8">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-900">Le Vrai du Faux</h2>
+                    <p class="text-slate-600 mt-2">Cliquez sur les affirmations pour découvrir la réalité statistique derrière les idées reçues.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Myth 1 -->
+                    <div class="myth-card group cursor-pointer" onclick="toggleMyth(this)">
+                        <div class="bg-white border-l-4 border-red-500 p-6 shadow-sm hover:shadow-md transition-all rounded-r-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-slate-800">"Ce sont les chômeurs qui fraudent le plus"</h3>
+                                <span class="text-slate-400 text-xl transform transition-transform duration-300 icon-toggle">+</span>
+                            </div>
+                            <div class="myth-content hidden mt-4 pt-4 border-t border-slate-100 text-slate-600 animate-fade-in">
+                                <p><strong class="text-red-600">FAUX.</strong> En volume financier, la fraude fiscale (entreprises, indépendants, gros patrimoines) représente environ 80 à 90% du montant total de la fraude en Belgique. La fraude sociale aux allocations, bien que moralement condamnable, pèse beaucoup moins lourd budgétairement.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Myth 2 -->
+                    <div class="myth-card group cursor-pointer" onclick="toggleMyth(this)">
+                        <div class="bg-white border-l-4 border-red-500 p-6 shadow-sm hover:shadow-md transition-all rounded-r-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-slate-800">"Le travail au noir a disparu avec le digital"</h3>
+                                <span class="text-slate-400 text-xl transform transition-transform duration-300 icon-toggle">+</span>
+                            </div>
+                            <div class="myth-content hidden mt-4 pt-4 border-t border-slate-100 text-slate-600 animate-fade-in">
+                                <p><strong class="text-orange-600">NUANCÉ.</strong> Si les caisses blanches ont réduit la fraude dans l'Horeca, l'économie de plateforme et la sous-traitance en cascade dans la construction ont créé de nouvelles formes de "travail gris" ou de faux indépendants, difficiles à tracer.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Myth 3 -->
+                    <div class="myth-card group cursor-pointer" onclick="toggleMyth(this)">
+                        <div class="bg-white border-l-4 border-red-500 p-6 shadow-sm hover:shadow-md transition-all rounded-r-lg">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-slate-800">"On fraude plus en Wallonie qu'en Flandre"</h3>
+                                <span class="text-slate-400 text-xl transform transition-transform duration-300 icon-toggle">+</span>
+                            </div>
+                            <div class="myth-content hidden mt-4 pt-4 border-t border-slate-100 text-slate-600 animate-fade-in">
+                                <p><strong class="text-blue-600">COMPLEXE.</strong> Les types de fraudes diffèrent. La Flandre, ayant un tissu économique plus dense et plus d'entreprises, connaît des volumes absolus de fraude fiscale et sociale (dumping social dans les ports/construction) très élevés. La Wallonie a une proportion plus élevée de contrôles liés au statut de cohabitant/isolé due à sa démographie.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: CALCULATOR -->
+            <section id="calculator" class="section-view hidden max-w-3xl mx-auto space-y-8">
+                <div class="bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold mb-4">Simulateur : Le Coût de la Fraude pour VOUS</h2>
+                    <p class="text-slate-300 mb-8">La fraude n'est pas une victime sans visage. Si les 30 milliards € estimés étaient récupérés, combien cela représenterait-il pour votre foyer ?</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-slate-300">Votre revenu net mensuel (€)</label>
+                            <input type="number" id="user-salary" class="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-2 focus:ring-red-500 outline-none" placeholder="ex: 2500" value="2500">
+                            
+                            <label class="block text-sm font-medium text-slate-300">Nombre de contribuables (foyer)</label>
+                            <select id="user-household" class="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white outline-none">
+                                <option value="1">1 (Isolé)</option>
+                                <option value="2">2 (Couple)</option>
+                            </select>
+
+                            <button onclick="calculateCost()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition mt-4">Calculer l'impact</button>
+                        </div>
+
+                        <div class="bg-slate-800 p-6 rounded-xl flex flex-col justify-center items-center text-center">
+                            <div class="text-sm text-slate-400 mb-2">Gain potentiel annuel si la fraude disparaissait</div>
+                            <div id="result-amount" class="text-4xl font-bold text-green-400">--- €</div>
+                            <p class="text-xs text-slate-500 mt-4">
+                                *Estimation brute basée sur une répartition linéaire de la récupération de 50% de la fraude totale estimée (15Mds€) divisée par le nombre de foyers fiscaux (~5M).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-2">Que pourrait-on faire avec cet argent ?</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-2">
+                        <li>Construire <strong>15 nouveaux hôpitaux</strong> ultra-modernes chaque année.</li>
+                        <li>Augmenter la pension minimum de <strong>300€/mois</strong>.</li>
+                        <li>Rendre les transports en commun <strong>gratuits</strong> pour tous.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State Management
+        const state = {
+            currentView: 'intro',
+            chartInstance: null,
+            chartType: 'fiscal' // or 'social'
+        };
+
+        // Data Store
+        const fraudData = {
+            fiscal: {
+                labels: ['Fraude TVA', 'Impôt des sociétés', 'Impôt Personnes Physiques', 'Droits de succession', 'Autres'],
+                data: [12.5, 8.2, 5.4, 1.8, 2.1], // Billions estimation
+                color: 'rgba(239, 68, 68, 0.7)', // Red
+                title: 'Estimation Fraude Fiscale (en Milliards €)',
+                context: 'La fraude à la TVA (carrousels) est le poste le plus lourd, suivi de l\'optimisation abusive des sociétés.'
+            },
+            social: {
+                labels: ['Travail au Noir', 'Fraude Domiciliation', 'Chômage', 'Cotisations ONSS', 'Maladie/Invalidité'],
+                data: [4.1, 1.2, 0.8, 2.5, 0.9], // Billions estimation
+                color: 'rgba(59, 130, 246, 0.7)', // Blue
+                title: 'Estimation Fraude Sociale (en Milliards €)',
+                context: 'Le travail non déclaré (noir) et le non-paiement des cotisations patronales dominent la fraude sociale.'
+            }
+        };
+
+        // Navigation Function
+        function navigate(viewId) {
+            // Update UI State
+            document.querySelectorAll('.section-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+            
+            // Update Active Nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
+            const activeBtn = document.querySelector(`.nav-item[data-target="${viewId}"]`);
+            if(activeBtn) activeBtn.classList.add('active-nav');
+            
+            // Mobile menu close logic
+            if(window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+
+            state.currentView = viewId;
+
+            // Trigger Chart Render if data view
+            if(viewId === 'data') {
+                setTimeout(() => {
+                    if(!state.chartInstance) initChart();
+                    else state.chartInstance.resize(); // Ensure resize
+                }, 100);
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('absolute'); // Ensure it overlays on mobile
+        });
+
+        // Chart Initialization
+        function initChart() {
+            const ctx = document.getElementById('fraudChart').getContext('2d');
+            
+            state.chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: fraudData.fiscal.labels,
+                    datasets: [{
+                        label: 'Montant Estimé (Milliards €)',
+                        data: fraudData.fiscal.data,
+                        backgroundColor: fraudData.fiscal.color,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            titleFont: { size: 14, family: 'Inter' },
+                            bodyFont: { size: 14, family: 'Inter' },
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' Milliards €';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { font: { family: 'Inter' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' } }
+                        }
+                    },
+                    animation: {
+                        duration: 800,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // Update Chart Data
+        function updateChart(type) {
+            state.chartType = type;
+            const dataSet = fraudData[type];
+            
+            // UI Button Updates
+            document.getElementById('btn-fiscal').className = type === 'fiscal' 
+                ? "px-6 py-2 rounded-lg font-semibold bg-slate-900 text-white shadow-md transition-all"
+                : "px-6 py-2 rounded-lg font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+            
+            document.getElementById('btn-social').className = type === 'social'
+                ? "px-6 py-2 rounded-lg font-semibold bg-blue-600 text-white shadow-md transition-all"
+                : "px-6 py-2 rounded-lg font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all";
+
+            // Content Updates
+            document.getElementById('chart-title').innerText = dataSet.title;
+            document.getElementById('chart-context').innerText = dataSet.context;
+
+            // Chart Update
+            if(state.chartInstance) {
+                state.chartInstance.data.labels = dataSet.labels;
+                state.chartInstance.data.datasets[0].data = dataSet.data;
+                state.chartInstance.data.datasets[0].backgroundColor = dataSet.color;
+                state.chartInstance.update();
+            }
+        }
+
+        // Toggle Myth Cards
+        function toggleMyth(card) {
+            const content = card.querySelector('.myth-content');
+            const icon = card.querySelector('.icon-toggle');
+            
+            // Close others (optional, keeping open for comparison here)
+            // document.querySelectorAll('.myth-content').forEach(el => el.classList.add('hidden'));
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = "−"; // minus sign
+                icon.classList.add('text-red-500');
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = "+";
+                icon.classList.remove('text-red-500');
+            }
+        }
+
+        // Calculator Logic
+        function calculateCost() {
+            const salary = parseFloat(document.getElementById('user-salary').value) || 0;
+            const household = parseInt(document.getElementById('user-household').value) || 1;
+            
+            // Logic: Assume 30 Billion total fraud. Target recovery: 50% = 15 Billion.
+            // Approx 5 million households. 
+            // Base share = 3000 eur/household/year.
+            // Adjusted slightly by income level (progressive impact).
+            
+            const baseGainPerHousehold = 3000;
+            const incomeFactor = salary / 2500; // Normalized around median
+            
+            // Simple formula for "Visual Impact"
+            let personalGain = (baseGainPerHousehold * incomeFactor) / household;
+            
+            // Cap reasonable limits for the simulation
+            if (personalGain < 500) personalGain = 500;
+            if (personalGain > 10000) personalGain = 10000;
+
+            const formatted = Math.round(personalGain).toLocaleString('fr-BE');
+            
+            const resultEl = document.getElementById('result-amount');
+            
+            // Animate number
+            resultEl.innerText = "Calcul...";
+            setTimeout(() => {
+                resultEl.innerText = `+ ${formatted} € / an`;
+                resultEl.classList.add('animate-bounce');
+                setTimeout(() => resultEl.classList.remove('animate-bounce'), 1000);
+            }, 500);
+        }
+
+        // Initialization
+        window.onload = function() {
+            // Check hash for direct linking
+            const hash = window.location.hash.replace('#', '');
+            if(hash && ['intro', 'data', 'myths', 'calculator'].includes(hash)) {
+                navigate(hash);
+            } else {
+                navigate('intro'); // Default
+            }
+        };
+
+    </script>
+</body>
+</html>

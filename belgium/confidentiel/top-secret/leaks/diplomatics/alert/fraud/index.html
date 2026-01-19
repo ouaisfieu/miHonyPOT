@@ -1,0 +1,2274 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/uJNaeY6g7wYeQrWakF3kIghz3wvHUpytKLh48NRhM8lFRyrKp8TfXwpdUmurW1am8l542g22ZZck5cLuhlp944jGJNIstyVqtFwjA8XUQbPpNBOHJDsBnJR-KBcgpOBf4D7D6l5-Er74aM2EpB8giu2RPqkXaEALx8qqF0xu47pV2xxm2tjLEHwh22BYpuSp6G-dzLmrK3g8r-QZ_NGDR9rhauZ8WvRu8QisnIshaLGEzhFR_2GWTg0RM68Eomn1UwX_ha8LAdqs4SxONVqJn94AqvFHfetXuhovA3mVJXj9ot7yIxt91ZRAv4S1rRt1j_S-ZFiEr_nSSseuvYUmtFAXznTAKAM_47CD_2_5eUyJJQAu5udqDmS7VMqWzEraLQfuv3ngRJUqYsY-KIPhje-zoHonWehrz8S5q99ZK-bgjjNX7Oh03tY_4FlqCo7H2Jr1Dgtk7LzJvVP27XVNjcc4mtl9usO3ZvQIj-Hl6FsU3A'></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Plaidoyer Citoyen 3.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ============================================
+   PLAIDOYER CITOYEN 3.0 — UX MOBILE-FIRST
+   Design System Complet
+   ============================================ */
+
+:root {
+  /* Colors - Dark Mode */
+  --bg-0: #050507;
+  --bg-1: #0a0a0f;
+  --bg-2: #111118;
+  --bg-3: #1a1a24;
+  --bg-4: #252532;
+  
+  --text-1: #ffffff;
+  --text-2: #a0a0b0;
+  --text-3: #606070;
+  
+  --mint: #34d399;
+  --mint-dim: #059669;
+  --lilac: #a78bfa;
+  --lilac-dim: #7c3aed;
+  --coral: #f87171;
+  --amber: #fbbf24;
+  --cyan: #22d3ee;
+  
+  --voir: #f97316;
+  --juger: #3b82f6;
+  --agir: #10b981;
+  
+  /* Spacing - 4px base */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  
+  /* Typography */
+  --f: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --t-xs: 11px;
+  --t-sm: 13px;
+  --t-base: 15px;
+  --t-lg: 17px;
+  --t-xl: 20px;
+  --t-2xl: 24px;
+  --t-3xl: 30px;
+  
+  /* Radius */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.3);
+  
+  /* Layout */
+  --header-h: 56px;
+  --nav-h: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { 
+  font-size: 16px; 
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-family: var(--f);
+  font-size: var(--t-base);
+  line-height: 1.5;
+  color: var(--text-1);
+  background: var(--bg-0);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   APP SHELL
+   ============================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  padding-top: var(--safe-top);
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--bg-3);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--s-4);
+  gap: var(--s-3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  text-decoration: none;
+  color: var(--text-1);
+  font-weight: 600;
+  font-size: var(--t-lg);
+}
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--mint), var(--lilac));
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+
+.header-spacer { flex: 1; }
+
+/* Progress Ring */
+.progress-ring {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.progress-ring svg {
+  transform: rotate(-90deg);
+}
+.progress-ring-bg {
+  fill: none;
+  stroke: var(--bg-3);
+  stroke-width: 4;
+}
+.progress-ring-fill {
+  fill: none;
+  stroke: url(#progress-gradient);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.5s var(--ease);
+}
+.progress-ring-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--mint);
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  gap: var(--s-1);
+}
+.header-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  transition: all 0.2s var(--ease);
+}
+.header-btn:hover { background: var(--bg-3); color: var(--text-1); }
+.header-btn:active { transform: scale(0.95); }
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding-top: calc(var(--header-h) + var(--safe-top));
+  padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + var(--s-4));
+  padding-inline: var(--s-4);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Bottom Navigation */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--bg-1);
+  border-top: 1px solid var(--bg-3);
+  display: flex;
+  z-index: 100;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-1);
+  text-decoration: none;
+  color: var(--text-3);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  padding: var(--s-2);
+  transition: all 0.2s var(--ease);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 32px;
+  height: 3px;
+  background: var(--mint);
+  border-radius: 0 0 var(--r-full) var(--r-full);
+  transition: transform 0.2s var(--ease);
+}
+.nav-item.active { color: var(--mint); }
+.nav-item.active::before { transform: translateX(-50%) scaleX(1); }
+.nav-item:active { transform: scale(0.95); }
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.nav-label { letter-spacing: 0.02em; }
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+
+.section {
+  display: none;
+  padding-block: var(--s-6);
+  animation: fadeIn 0.3s var(--ease);
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  margin-bottom: var(--s-6);
+}
+.section-title {
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  margin-bottom: var(--s-2);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.section-title-icon {
+  font-size: var(--t-2xl);
+}
+.section-desc {
+  color: var(--text-2);
+  font-size: var(--t-sm);
+}
+
+/* ============================================
+   COMPONENTS — CARDS
+   ============================================ */
+
+.card {
+  background: var(--bg-2);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--bg-3);
+  overflow: hidden;
+  margin-bottom: var(--s-4);
+  transition: all 0.2s var(--ease);
+}
+.card:active { transform: scale(0.99); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.card-icon.voir { background: rgba(249, 115, 22, 0.15); color: var(--voir); }
+.card-icon.juger { background: rgba(59, 130, 246, 0.15); color: var(--juger); }
+.card-icon.agir { background: rgba(16, 185, 129, 0.15); color: var(--agir); }
+.card-icon.neutral { background: var(--bg-3); color: var(--text-2); }
+
+.card-info { flex: 1; min-width: 0; }
+.card-title {
+  font-size: var(--t-base);
+  font-weight: 600;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.card-number {
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  font-weight: 500;
+}
+.card-subtitle {
+  font-size: var(--t-sm);
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-chevron {
+  color: var(--text-3);
+  transition: transform 0.2s var(--ease);
+  font-size: 18px;
+}
+.card.open .card-chevron { transform: rotate(180deg); }
+
+.card-content {
+  display: none;
+  padding: 0 var(--s-4) var(--s-4);
+}
+.card.open .card-content { display: block; }
+
+/* ============================================
+   COMPONENTS — FORMS
+   ============================================ */
+
+.form-group { margin-bottom: var(--s-4); }
+
+.form-label {
+  display: block;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: var(--s-2);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-base);
+  font-family: inherit;
+  color: var(--text-1);
+  background: var(--bg-1);
+  border: 1px solid var(--bg-4);
+  border-radius: var(--r-md);
+  outline: none;
+  transition: all 0.2s var(--ease);
+  min-height: 48px;
+}
+.form-input:focus {
+  border-color: var(--mint);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+}
+.form-input::placeholder { color: var(--text-3); }
+
+textarea.form-input {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-hint {
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  margin-top: var(--s-1);
+}
+
+/* ============================================
+   COMPONENTS — BUTTONS
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-5);
+  font-size: var(--t-base);
+  font-weight: 500;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--mint), var(--mint-dim));
+  color: var(--bg-0);
+}
+.btn-primary:hover { box-shadow: var(--shadow-glow); }
+
+.btn-secondary {
+  background: var(--bg-3);
+  color: var(--text-1);
+}
+.btn-secondary:hover { background: var(--bg-4); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+}
+.btn-ghost:hover { background: var(--bg-3); color: var(--text-1); }
+
+.btn-block { width: 100%; }
+.btn-sm { 
+  min-height: 40px; 
+  padding: var(--s-2) var(--s-4);
+  font-size: var(--t-sm);
+}
+
+/* ============================================
+   COMPONENTS — STATS
+   ============================================ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-3);
+  margin-bottom: var(--s-6);
+}
+
+.stat-card {
+  background: var(--bg-2);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  text-align: center;
+  border: 1px solid var(--bg-3);
+}
+.stat-icon { font-size: 24px; margin-bottom: var(--s-2); }
+.stat-value {
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  color: var(--mint);
+  line-height: 1;
+  margin-bottom: var(--s-1);
+}
+.stat-label {
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   COMPONENTS — PHASE BUTTONS
+   ============================================ */
+
+.phase-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.phase-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4);
+  background: var(--bg-2);
+  border: 1px solid var(--bg-3);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.phase-btn:active { transform: scale(0.98); }
+.phase-btn:hover { border-color: var(--bg-4); }
+
+.phase-btn-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.phase-btn-icon.voir { background: linear-gradient(135deg, var(--voir), #ea580c); color: white; }
+.phase-btn-icon.juger { background: linear-gradient(135deg, var(--juger), #2563eb); color: white; }
+.phase-btn-icon.agir { background: linear-gradient(135deg, var(--agir), #059669); color: white; }
+
+.phase-btn-content { flex: 1; }
+.phase-btn-title {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: var(--s-1);
+}
+.phase-btn-desc {
+  font-size: var(--t-sm);
+  color: var(--text-3);
+}
+
+.phase-btn-arrow {
+  color: var(--text-3);
+  font-size: 20px;
+}
+
+/* ============================================
+   COMPONENTS — DROPZONE
+   ============================================ */
+
+.dropzone {
+  border: 2px dashed var(--bg-4);
+  border-radius: var(--r-lg);
+  padding: var(--s-8);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--mint);
+  background: rgba(52, 211, 153, 0.05);
+}
+.dropzone-icon {
+  font-size: 40px;
+  margin-bottom: var(--s-3);
+  opacity: 0.5;
+}
+.dropzone-text {
+  font-size: var(--t-base);
+  color: var(--text-2);
+  margin-bottom: var(--s-1);
+}
+.dropzone-hint {
+  font-size: var(--t-sm);
+  color: var(--text-3);
+}
+
+/* ============================================
+   COMPONENTS — SWOT GRID
+   ============================================ */
+
+.swot-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-3);
+}
+
+.swot-cell {
+  background: var(--bg-1);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  border-left: 3px solid;
+}
+.swot-cell.forces { border-color: var(--mint); }
+.swot-cell.faiblesses { border-color: var(--coral); }
+.swot-cell.opportunites { border-color: var(--juger); }
+.swot-cell.menaces { border-color: var(--amber); }
+
+.swot-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+.swot-icon { font-size: 18px; }
+.swot-title { font-weight: 600; font-size: var(--t-sm); }
+.swot-tag {
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  margin-left: auto;
+}
+
+/* ============================================
+   COMPONENTS — PESTEL
+   ============================================ */
+
+.pestel-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.pestel-item {
+  background: var(--bg-1);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+}
+.pestel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-3);
+}
+.pestel-letter {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--t-sm);
+  flex-shrink: 0;
+}
+.pestel-letter.p { background: #dc2626; color: white; }
+.pestel-letter.e { background: #16a34a; color: white; }
+.pestel-letter.s { background: #2563eb; color: white; }
+.pestel-letter.t { background: #9333ea; color: white; }
+.pestel-letter.env { background: #0d9488; color: white; }
+.pestel-letter.l { background: #ca8a04; color: white; }
+
+.pestel-title { font-weight: 600; font-size: var(--t-sm); }
+.pestel-subtitle { font-size: var(--t-xs); color: var(--text-3); }
+
+/* ============================================
+   COMPONENTS — SMART
+   ============================================ */
+
+.smart-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.smart-item {
+  display: flex;
+  gap: var(--s-3);
+}
+.smart-letter {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--lilac), var(--lilac-dim));
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.smart-content { flex: 1; }
+.smart-label { font-weight: 600; font-size: var(--t-sm); margin-bottom: var(--s-1); }
+.smart-hint { font-size: var(--t-xs); color: var(--text-3); margin-bottom: var(--s-2); }
+
+/* ============================================
+   COMPONENTS — ACTORS / POWER MAP
+   ============================================ */
+
+.powermap {
+  background: var(--bg-1);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  margin-bottom: var(--s-4);
+  position: relative;
+  aspect-ratio: 1;
+  max-height: 350px;
+}
+
+.powermap-grid {
+  position: absolute;
+  inset: var(--s-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  background: var(--bg-4);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.powermap-quadrant {
+  background: var(--bg-2);
+  padding: var(--s-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  text-align: center;
+}
+.powermap-quadrant strong {
+  display: block;
+  color: var(--text-2);
+  margin-bottom: var(--s-1);
+}
+
+.actor-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.actor-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--bg-1);
+  border-radius: var(--r-md);
+}
+.actor-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-full);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.actor-avatar.ally { background: rgba(52, 211, 153, 0.15); }
+.actor-avatar.target { background: rgba(167, 139, 250, 0.15); }
+.actor-avatar.neutral { background: var(--bg-3); }
+.actor-avatar.opponent { background: rgba(248, 113, 113, 0.15); }
+
+.actor-info { flex: 1; min-width: 0; }
+.actor-name { font-weight: 500; font-size: var(--t-sm); }
+.actor-type { font-size: var(--t-xs); color: var(--text-3); }
+
+/* ============================================
+   COMPONENTS — CHECKLIST
+   ============================================ */
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--bg-1);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.checklist-item:active { background: var(--bg-3); }
+.checklist-item.done { opacity: 0.6; }
+.checklist-item.done .checklist-text { text-decoration: line-through; }
+
+.checklist-check {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--bg-4);
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  color: transparent;
+  flex-shrink: 0;
+  transition: all 0.2s var(--ease);
+}
+.checklist-item.done .checklist-check {
+  background: var(--mint);
+  border-color: var(--mint);
+  color: var(--bg-0);
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  padding-top: 2px;
+}
+
+/* ============================================
+   COMPONENTS — MODAL
+   ============================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s var(--ease);
+}
+.modal-backdrop.open { opacity: 1; visibility: visible; }
+
+.modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-1);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  max-height: 90vh;
+  z-index: 201;
+  transform: translateY(100%);
+  transition: transform 0.3s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.modal.open { transform: translateY(0); }
+
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--bg-4);
+  border-radius: var(--r-full);
+  margin: var(--s-3) auto var(--s-2);
+}
+
+.modal-header {
+  padding: var(--s-2) var(--s-4) var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.modal-title {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  flex: 1;
+}
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-3);
+  color: var(--text-2);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.modal-body {
+  flex: 1;
+  padding: 0 var(--s-4) var(--s-4);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: var(--s-4);
+  padding-bottom: calc(var(--s-4) + var(--safe-bottom));
+  border-top: 1px solid var(--bg-3);
+  display: flex;
+  gap: var(--s-3);
+}
+.modal-footer .btn { flex: 1; }
+
+/* ============================================
+   COMPONENTS — TOAST
+   ============================================ */
+
+.toast-container {
+  position: fixed;
+  top: calc(var(--header-h) + var(--safe-top) + var(--s-4));
+  left: var(--s-4);
+  right: var(--s-4);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--bg-2);
+  border: 1px solid var(--bg-4);
+  border-radius: var(--r-md);
+  padding: var(--s-3) var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.3s var(--bounce);
+  pointer-events: auto;
+}
+.toast.out { animation: toastOut 0.3s var(--ease) forwards; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(-10px) scale(0.95); }
+}
+
+.toast-icon { font-size: 18px; }
+.toast-icon.success { color: var(--mint); }
+.toast-icon.error { color: var(--coral); }
+.toast-icon.warning { color: var(--amber); }
+.toast-icon.info { color: var(--cyan); }
+
+.toast-msg { flex: 1; font-size: var(--t-sm); }
+
+/* ============================================
+   COMPONENTS — EMPTY STATE
+   ============================================ */
+
+.empty-state {
+  text-align: center;
+  padding: var(--s-8);
+}
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--s-4);
+  opacity: 0.5;
+}
+.empty-title {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  margin-bottom: var(--s-2);
+}
+.empty-desc {
+  font-size: var(--t-sm);
+  color: var(--text-3);
+  margin-bottom: var(--s-4);
+}
+
+/* ============================================
+   VEILLE
+   ============================================ */
+
+.veille-item {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  background: var(--bg-2);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-3);
+  border: 1px solid var(--bg-3);
+}
+.veille-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-3);
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.veille-content { flex: 1; min-width: 0; }
+.veille-title {
+  font-weight: 500;
+  margin-bottom: var(--s-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.veille-url {
+  font-size: var(--t-xs);
+  color: var(--mint);
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--s-2);
+}
+.veille-meta {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.veille-tag {
+  font-size: var(--t-xs);
+  padding: var(--s-1) var(--s-2);
+  background: var(--bg-3);
+  border-radius: var(--r-sm);
+  color: var(--text-3);
+}
+
+/* ============================================
+   DESKTOP ENHANCEMENTS (768px+)
+   ============================================ */
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 64px;
+    --nav-h: 0px;
+  }
+  
+  .main {
+    max-width: 800px;
+    padding-inline: var(--s-8);
+    padding-bottom: var(--s-8);
+  }
+  
+  .nav { display: none; }
+  
+  /* Desktop nav in header */
+  .desktop-nav {
+    display: flex;
+    gap: var(--s-1);
+    margin-left: var(--s-6);
+  }
+  .desktop-nav-item {
+    padding: var(--s-2) var(--s-4);
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: var(--t-sm);
+    font-weight: 500;
+    border-radius: var(--r-sm);
+    transition: all 0.2s var(--ease);
+  }
+  .desktop-nav-item:hover { background: var(--bg-3); color: var(--text-1); }
+  .desktop-nav-item.active { color: var(--mint); }
+  
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  
+  .swot-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .pestel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .modal {
+    bottom: auto;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0;
+    max-width: 500px;
+    width: calc(100% - var(--s-8));
+    border-radius: var(--r-xl);
+    max-height: 80vh;
+  }
+  .modal.open { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  .modal-handle { display: none; }
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.text-mint { color: var(--mint); }
+.text-lilac { color: var(--lilac); }
+.text-muted { color: var(--text-3); }
+
+.mt-4 { margin-top: var(--s-4); }
+.mb-4 { margin-bottom: var(--s-4); }
+.mb-6 { margin-bottom: var(--s-6); }
+
+.divider {
+  height: 1px;
+  background: var(--bg-3);
+  margin: var(--s-4) 0;
+}
+
+/* Hidden by default on mobile */
+.desktop-only { display: none; }
+@media (min-width: 768px) {
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+}
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    
+    <!-- SVG Defs -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--mint)"/>
+          <stop offset="100%" stop-color="var(--lilac)"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    
+    <!-- Header -->
+    <header class="header">
+      <a href="#" class="logo" onclick="App.nav('dashboard'); return false;">
+        <div class="logo-icon">📢</div>
+        <span class="desktop-only">Plaidoyer Citoyen</span>
+      </a>
+      
+      <nav class="desktop-nav desktop-only">
+        <a href="#" class="desktop-nav-item active" data-section="dashboard">Accueil</a>
+        <a href="#" class="desktop-nav-item" data-section="voir">Voir</a>
+        <a href="#" class="desktop-nav-item" data-section="juger">Juger</a>
+        <a href="#" class="desktop-nav-item" data-section="agir">Agir</a>
+        <a href="#" class="desktop-nav-item" data-section="veille">Veille</a>
+      </nav>
+      
+      <div class="header-spacer"></div>
+      
+      <div class="progress-ring" id="progress-ring">
+        <svg width="40" height="40" viewBox="0 0 40 40">
+          <circle class="progress-ring-bg" cx="20" cy="20" r="16"/>
+          <circle class="progress-ring-fill" cx="20" cy="20" r="16" id="progress-circle"/>
+        </svg>
+        <span class="progress-ring-text" id="progress-text">0%</span>
+      </div>
+      
+      <div class="header-actions">
+        <button class="header-btn" onclick="App.save()" title="Sauvegarder">💾</button>
+        <button class="header-btn" onclick="App.showExport()" title="Exporter">📤</button>
+        <button class="header-btn" onclick="App.showSettings()" title="Paramètres">⚙️</button>
+      </div>
+    </header>
+    
+    <!-- Main -->
+    <main class="main">
+      
+      <!-- Dashboard -->
+      <section class="section active" id="section-dashboard">
+        <div class="section-header">
+          <h1 class="section-title">
+            <span class="section-title-icon">📊</span>
+            Tableau de bord
+          </h1>
+          <p class="section-desc">Votre projet de plaidoyer citoyen</p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value" id="stat-progress">0%</div>
+            <div class="stat-label">Progression</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value" id="stat-actors">0</div>
+            <div class="stat-label">Acteurs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📡</div>
+            <div class="stat-value" id="stat-veille">0</div>
+            <div class="stat-label">Veille</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="stat-checklist">0/12</div>
+            <div class="stat-label">Checklist</div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon neutral">⚡</div>
+            <div class="card-info">
+              <div class="card-title">Démarrage rapide</div>
+              <div class="card-subtitle">Méthodologie Voir-Juger-Agir</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <p class="text-muted mb-4">Suivez la méthodologie de Joseph Cardijn pour structurer votre plaidoyer.</p>
+            <div class="phase-grid">
+              <button class="phase-btn" onclick="App.nav('voir')">
+                <div class="phase-btn-icon voir">👁️</div>
+                <div class="phase-btn-content">
+                  <div class="phase-btn-title">1. Voir</div>
+                  <div class="phase-btn-desc">Observer et constater les réalités</div>
+                </div>
+                <span class="phase-btn-arrow">→</span>
+              </button>
+              <button class="phase-btn" onclick="App.nav('juger')">
+                <div class="phase-btn-icon juger">⚖️</div>
+                <div class="phase-btn-content">
+                  <div class="phase-btn-title">2. Juger</div>
+                  <div class="phase-btn-desc">Analyser et évaluer le contexte</div>
+                </div>
+                <span class="phase-btn-arrow">→</span>
+              </button>
+              <button class="phase-btn" onclick="App.nav('agir')">
+                <div class="phase-btn-icon agir">🎯</div>
+                <div class="phase-btn-content">
+                  <div class="phase-btn-title">3. Agir</div>
+                  <div class="phase-btn-desc">Planifier et mettre en œuvre</div>
+                </div>
+                <span class="phase-btn-arrow">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card open">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon neutral">📥</div>
+            <div class="card-info">
+              <div class="card-title">Importer un projet</div>
+              <div class="card-subtitle">Fichier JSON</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="dropzone" id="dropzone">
+              <div class="dropzone-icon">📁</div>
+              <div class="dropzone-text">Glissez un fichier JSON ici</div>
+              <div class="dropzone-hint">ou touchez pour sélectionner</div>
+            </div>
+            <input type="file" id="file-input" accept=".json" hidden>
+          </div>
+        </div>
+      </section>
+      
+      <!-- VOIR -->
+      <section class="section" id="section-voir">
+        <div class="section-header">
+          <h1 class="section-title">
+            <span class="section-title-icon">👁️</span>
+            Phase Voir
+          </h1>
+          <p class="section-desc">Observer et constater les réalités</p>
+        </div>
+        
+        <div class="card open" id="card-domino">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon voir">🎲</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">01</span> Domino du Changement</div>
+              <div class="card-subtitle">Motivations et valeurs</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label class="form-label">Pourquoi je m'engage ?</label>
+              <textarea class="form-input" data-field="domino_pourquoi" placeholder="Qu'est-ce qui vous pousse à agir ?"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mes valeurs</label>
+              <textarea class="form-input" data-field="domino_valeurs" placeholder="Justice, égalité, solidarité..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Changements souhaités</label>
+              <textarea class="form-input" data-field="domino_changements" placeholder="Quels changements concrets ?"></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" id="card-cartographie">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon voir">🗺️</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">04</span> Cartographie des Acteurs</div>
+              <div class="card-subtitle" id="actors-count">0 acteur identifié</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="powermap">
+              <div class="powermap-grid">
+                <div class="powermap-quadrant"><strong>Alliés influents</strong>Mobiliser</div>
+                <div class="powermap-quadrant"><strong>Opposants influents</strong>Neutraliser</div>
+                <div class="powermap-quadrant"><strong>Alliés potentiels</strong>Convaincre</div>
+                <div class="powermap-quadrant"><strong>Opposants faibles</strong>Surveiller</div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block mb-4" onclick="App.addActor()">+ Ajouter un acteur</button>
+            <div class="actor-list" id="actor-list"></div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- JUGER -->
+      <section class="section" id="section-juger">
+        <div class="section-header">
+          <h1 class="section-title">
+            <span class="section-title-icon">⚖️</span>
+            Phase Juger
+          </h1>
+          <p class="section-desc">Analyser et évaluer le contexte</p>
+        </div>
+        
+        <div class="card open" id="card-swot">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon juger">📊</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">06</span> Analyse SWOT</div>
+              <div class="card-subtitle">Forces, Faiblesses, Opportunités, Menaces</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="swot-grid">
+              <div class="swot-cell forces">
+                <div class="swot-header">
+                  <span class="swot-icon">💪</span>
+                  <span class="swot-title">Forces</span>
+                  <span class="swot-tag">Interne +</span>
+                </div>
+                <textarea class="form-input" data-field="swot_forces" placeholder="Vos atouts, ressources, compétences..."></textarea>
+              </div>
+              <div class="swot-cell faiblesses">
+                <div class="swot-header">
+                  <span class="swot-icon">⚠️</span>
+                  <span class="swot-title">Faiblesses</span>
+                  <span class="swot-tag">Interne -</span>
+                </div>
+                <textarea class="form-input" data-field="swot_faiblesses" placeholder="Vos limites, manques, contraintes..."></textarea>
+              </div>
+              <div class="swot-cell opportunites">
+                <div class="swot-header">
+                  <span class="swot-icon">🚀</span>
+                  <span class="swot-title">Opportunités</span>
+                  <span class="swot-tag">Externe +</span>
+                </div>
+                <textarea class="form-input" data-field="swot_opportunites" placeholder="Éléments favorables du contexte..."></textarea>
+              </div>
+              <div class="swot-cell menaces">
+                <div class="swot-header">
+                  <span class="swot-icon">🔥</span>
+                  <span class="swot-title">Menaces</span>
+                  <span class="swot-tag">Externe -</span>
+                </div>
+                <textarea class="form-input" data-field="swot_menaces" placeholder="Obstacles et risques externes..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" id="card-pestel">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon juger">🔬</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">07</span> Analyse PESTEL</div>
+              <div class="card-subtitle">Contexte macro-environnemental</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="pestel-grid">
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter p">P</div>
+                  <div><div class="pestel-title">Politique</div><div class="pestel-subtitle">Gouvernement, politiques</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_politique" placeholder="Stabilité, réformes..."></textarea>
+              </div>
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter e">E</div>
+                  <div><div class="pestel-title">Économique</div><div class="pestel-subtitle">Conjoncture, finances</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_economique" placeholder="Budgets, financements..."></textarea>
+              </div>
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter s">S</div>
+                  <div><div class="pestel-title">Social</div><div class="pestel-subtitle">Société, opinions</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_social" placeholder="Opinion publique, tendances..."></textarea>
+              </div>
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter t">T</div>
+                  <div><div class="pestel-title">Technologique</div><div class="pestel-subtitle">Innovation, outils</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_technologique" placeholder="Nouvelles technologies..."></textarea>
+              </div>
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter env">E</div>
+                  <div><div class="pestel-title">Environnemental</div><div class="pestel-subtitle">Écologie, climat</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_environnemental" placeholder="Enjeux climatiques..."></textarea>
+              </div>
+              <div class="pestel-item">
+                <div class="pestel-header">
+                  <div class="pestel-letter l">L</div>
+                  <div><div class="pestel-title">Légal</div><div class="pestel-subtitle">Lois, réglementation</div></div>
+                </div>
+                <textarea class="form-input" data-field="pestel_legal" placeholder="Cadre juridique..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" id="card-5pourquoi">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon juger">❓</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">09</span> Les 5 Pourquoi</div>
+              <div class="card-subtitle">Remonter aux causes profondes</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label class="form-label">🎯 Problème de départ</label>
+              <input class="form-input" data-field="pourquoi_probleme" placeholder="Quel problème analysez-vous ?">
+            </div>
+            <div class="form-group">
+              <label class="form-label">1. Pourquoi ?</label>
+              <input class="form-input" data-field="pourquoi_1" placeholder="Première réponse...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">2. Pourquoi ?</label>
+              <input class="form-input" data-field="pourquoi_2" placeholder="Deuxième réponse...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">3. Pourquoi ?</label>
+              <input class="form-input" data-field="pourquoi_3" placeholder="Troisième réponse...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">4. Pourquoi ?</label>
+              <input class="form-input" data-field="pourquoi_4" placeholder="Quatrième réponse...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">5. Pourquoi ? (Cause racine)</label>
+              <input class="form-input" data-field="pourquoi_5" placeholder="Cause profonde identifiée">
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- AGIR -->
+      <section class="section" id="section-agir">
+        <div class="section-header">
+          <h1 class="section-title">
+            <span class="section-title-icon">🎯</span>
+            Phase Agir
+          </h1>
+          <p class="section-desc">Planifier et mettre en œuvre l'action</p>
+        </div>
+        
+        <div class="card open" id="card-smart">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon agir">🎯</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">11</span> Objectifs SMART</div>
+              <div class="card-subtitle">Spécifique, Mesurable, Atteignable...</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="smart-grid">
+              <div class="smart-item">
+                <div class="smart-letter">S</div>
+                <div class="smart-content">
+                  <div class="smart-label">Spécifique</div>
+                  <div class="smart-hint">Objectif clair et précis</div>
+                  <textarea class="form-input" data-field="smart_specifique" placeholder="Que voulez-vous accomplir ?"></textarea>
+                </div>
+              </div>
+              <div class="smart-item">
+                <div class="smart-letter">M</div>
+                <div class="smart-content">
+                  <div class="smart-label">Mesurable</div>
+                  <div class="smart-hint">Indicateurs de succès</div>
+                  <textarea class="form-input" data-field="smart_mesurable" placeholder="Comment mesurer le succès ?"></textarea>
+                </div>
+              </div>
+              <div class="smart-item">
+                <div class="smart-letter">A</div>
+                <div class="smart-content">
+                  <div class="smart-label">Atteignable</div>
+                  <div class="smart-hint">Moyens disponibles</div>
+                  <textarea class="form-input" data-field="smart_atteignable" placeholder="Quelles ressources ?"></textarea>
+                </div>
+              </div>
+              <div class="smart-item">
+                <div class="smart-letter">R</div>
+                <div class="smart-content">
+                  <div class="smart-label">Réaliste</div>
+                  <div class="smart-hint">Pertinence contextuelle</div>
+                  <textarea class="form-input" data-field="smart_realiste" placeholder="Pourquoi maintenant ?"></textarea>
+                </div>
+              </div>
+              <div class="smart-item">
+                <div class="smart-letter">T</div>
+                <div class="smart-content">
+                  <div class="smart-label">Temporel</div>
+                  <div class="smart-hint">Échéance définie</div>
+                  <textarea class="form-input" data-field="smart_temporel" placeholder="Quelle date limite ?"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" id="card-message">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon agir">💬</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">13</span> Message de Plaidoyer</div>
+              <div class="card-subtitle">Construire un message percutant</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label class="form-label">1. Accroche</label>
+              <textarea class="form-input" data-field="msg_accroche" placeholder="Phrase choc pour capter l'attention..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">2. Problème</label>
+              <textarea class="form-input" data-field="msg_probleme" placeholder="Exposez le problème clairement..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">3. Solution</label>
+              <textarea class="form-input" data-field="msg_solution" placeholder="Votre proposition..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">4. Appel à l'action</label>
+              <textarea class="form-input" data-field="msg_appel" placeholder="Que demandez-vous concrètement ?"></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" id="card-checklist">
+          <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="card-icon agir">✅</div>
+            <div class="card-info">
+              <div class="card-title"><span class="card-number">14</span> Checklist Rencontre</div>
+              <div class="card-subtitle" id="checklist-status">0/12 complété</div>
+            </div>
+            <span class="card-chevron">▼</span>
+          </div>
+          <div class="card-content">
+            <div class="checklist" id="checklist"></div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- VEILLE -->
+      <section class="section" id="section-veille">
+        <div class="section-header">
+          <h1 class="section-title">
+            <span class="section-title-icon">📡</span>
+            Veille Citoyenne
+          </h1>
+          <p class="section-desc">Suivez l'actualité de votre thématique</p>
+        </div>
+        
+        <button class="btn btn-primary btn-block mb-6" onclick="App.addVeille()">+ Ajouter une source</button>
+        
+        <div id="veille-list"></div>
+      </section>
+      
+    </main>
+    
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="nav mobile-only">
+      <a href="#" class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Accueil</span>
+      </a>
+      <a href="#" class="nav-item" data-section="voir">
+        <span class="nav-icon">👁️</span>
+        <span class="nav-label">Voir</span>
+      </a>
+      <a href="#" class="nav-item" data-section="juger">
+        <span class="nav-icon">⚖️</span>
+        <span class="nav-label">Juger</span>
+      </a>
+      <a href="#" class="nav-item" data-section="agir">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">Agir</span>
+      </a>
+      <a href="#" class="nav-item" data-section="veille">
+        <span class="nav-icon">📡</span>
+        <span class="nav-label">Veille</span>
+      </a>
+    </nav>
+    
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal" id="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Modal</h3>
+        <button class="modal-close" onclick="App.closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+    
+  </div>
+
+<script>
+/* ============================================
+   PLAIDOYER CITOYEN 3.0 — APP
+   ============================================ */
+
+const App = (function() {
+  'use strict';
+  
+  // === CONFIG ===
+  const STORAGE_KEY = 'plaidoyer-citoyen-3';
+  const AUTOSAVE_DELAY = 2000;
+  
+  const DEFAULT_CHECKLIST = [
+    { id: '1', text: 'Définir l\'objectif de la rencontre', done: false },
+    { id: '2', text: 'Identifier les décideurs et leur pouvoir', done: false },
+    { id: '3', text: 'Préparer les arguments clés', done: false },
+    { id: '4', text: 'Anticiper les objections', done: false },
+    { id: '5', text: 'Rassembler les preuves et données', done: false },
+    { id: '6', text: 'Préparer les supports visuels', done: false },
+    { id: '7', text: 'Définir les rôles de l\'équipe', done: false },
+    { id: '8', text: 'Planifier le suivi post-rencontre', done: false },
+    { id: '9', text: 'Prévoir un plan B', done: false },
+    { id: '10', text: 'Confirmer la logistique', done: false },
+    { id: '11', text: 'Répéter la présentation', done: false },
+    { id: '12', text: 'Préparer les questions à poser', done: false }
+  ];
+  
+  // === STATE ===
+  let state = {
+    fields: {},
+    actors: [],
+    veille: [],
+    checklist: [...DEFAULT_CHECKLIST]
+  };
+  
+  let autosaveTimer = null;
+  
+  // === INIT ===
+  function init() {
+    load();
+    bindEvents();
+    bindForms();
+    renderAll();
+    updateProgress();
+    console.log('✅ Plaidoyer Citoyen 3.0 initialized');
+  }
+  
+  // === NAVIGATION ===
+  function nav(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    
+    // Show target
+    const target = document.getElementById('section-' + sectionId);
+    if (target) target.classList.add('active');
+    
+    // Update nav
+    document.querySelectorAll('[data-section]').forEach(item => {
+      item.classList.toggle('active', item.dataset.section === sectionId);
+    });
+    
+    // Scroll top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  // === EVENTS ===
+  function bindEvents() {
+    // Navigation
+    document.querySelectorAll('[data-section]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        nav(item.dataset.section);
+      });
+    });
+    
+    // Dropzone
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    
+    ['dragover', 'dragenter'].forEach(e => {
+      dropzone.addEventListener(e, (ev) => {
+        ev.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(e => {
+      dropzone.addEventListener(e, () => dropzone.classList.remove('dragover'));
+    });
+    
+    dropzone.addEventListener('drop', handleDrop);
+    dropzone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelect);
+    
+    // Modal backdrop
+    document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+  }
+  
+  function bindForms() {
+    document.querySelectorAll('[data-field]').forEach(input => {
+      const field = input.dataset.field;
+      
+      // Set initial value
+      if (state.fields[field]) {
+        input.value = state.fields[field];
+      }
+      
+      // Listen for changes
+      input.addEventListener('input', () => {
+        state.fields[field] = input.value;
+        scheduleAutosave();
+        updateProgress();
+      });
+    });
+  }
+  
+  // === RENDERING ===
+  function renderAll() {
+    renderChecklist();
+    renderActors();
+    renderVeille();
+  }
+  
+  function renderChecklist() {
+    const container = document.getElementById('checklist');
+    if (!container) return;
+    
+    container.innerHTML = state.checklist.map(item => `
+      <div class="checklist-item ${item.done ? 'done' : ''}" data-id="${item.id}">
+        <div class="checklist-check">${item.done ? '✓' : ''}</div>
+        <div class="checklist-text">${item.text}</div>
+      </div>
+    `).join('');
+    
+    // Bind clicks
+    container.querySelectorAll('.checklist-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.id;
+        const item = state.checklist.find(c => c.id === id);
+        if (item) {
+          item.done = !item.done;
+          scheduleAutosave();
+          renderChecklist();
+          updateProgress();
+        }
+      });
+    });
+    
+    // Update status
+    const done = state.checklist.filter(c => c.done).length;
+    const status = document.getElementById('checklist-status');
+    if (status) status.textContent = `${done}/${state.checklist.length} complété`;
+  }
+  
+  function renderActors() {
+    const container = document.getElementById('actor-list');
+    const count = document.getElementById('actors-count');
+    if (!container) return;
+    
+    if (state.actors.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">Aucun acteur</div><div class="empty-desc">Ajoutez les parties prenantes de votre plaidoyer</div></div>';
+    } else {
+      container.innerHTML = state.actors.map(actor => `
+        <div class="actor-item" data-id="${actor.id}">
+          <div class="actor-avatar ${actor.type}">${getActorIcon(actor.type)}</div>
+          <div class="actor-info">
+            <div class="actor-name">${actor.name}</div>
+            <div class="actor-type">${getActorTypeName(actor.type)}</div>
+          </div>
+        </div>
+      `).join('');
+      
+      container.querySelectorAll('.actor-item').forEach(el => {
+        el.addEventListener('click', () => editActor(el.dataset.id));
+      });
+    }
+    
+    if (count) {
+      count.textContent = state.actors.length + ' acteur' + (state.actors.length > 1 ? 's' : '') + ' identifié' + (state.actors.length > 1 ? 's' : '');
+    }
+  }
+  
+  function renderVeille() {
+    const container = document.getElementById('veille-list');
+    if (!container) return;
+    
+    if (state.veille.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-title">Aucune source</div><div class="empty-desc">Ajoutez des articles et sources d\'information</div></div>';
+    } else {
+      container.innerHTML = state.veille.map(item => `
+        <div class="veille-item" data-id="${item.id}">
+          <div class="veille-icon">${getVeilleIcon(item.type)}</div>
+          <div class="veille-content">
+            <div class="veille-title">${item.title}</div>
+            ${item.url ? `<a href="${item.url}" target="_blank" class="veille-url">${shortenUrl(item.url)}</a>` : ''}
+            <div class="veille-meta">
+              <span class="veille-tag">${item.category || 'Autre'}</span>
+              <span class="veille-tag">${formatDate(item.date)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      container.querySelectorAll('.veille-item').forEach(el => {
+        el.addEventListener('click', () => editVeille(el.dataset.id));
+      });
+    }
+  }
+  
+  // === PROGRESS ===
+  function updateProgress() {
+    const fields = Object.values(state.fields).filter(v => v && v.trim()).length;
+    const total = document.querySelectorAll('[data-field]').length || 20;
+    const percent = Math.min(100, Math.round((fields / total) * 100));
+    
+    // Ring
+    const circle = document.getElementById('progress-circle');
+    const text = document.getElementById('progress-text');
+    if (circle) {
+      const circumference = 2 * Math.PI * 16;
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+    }
+    if (text) text.textContent = percent + '%';
+    
+    // Stats
+    const statProgress = document.getElementById('stat-progress');
+    const statActors = document.getElementById('stat-actors');
+    const statVeille = document.getElementById('stat-veille');
+    const statChecklist = document.getElementById('stat-checklist');
+    
+    if (statProgress) statProgress.textContent = percent + '%';
+    if (statActors) statActors.textContent = state.actors.length;
+    if (statVeille) statVeille.textContent = state.veille.length;
+    if (statChecklist) {
+      const done = state.checklist.filter(c => c.done).length;
+      statChecklist.textContent = done + '/' + state.checklist.length;
+    }
+  }
+  
+  // === STORAGE ===
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      toast('Sauvegardé', 'success');
+    } catch (e) {
+      toast('Erreur de sauvegarde', 'error');
+    }
+  }
+  
+  function load() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        state = { ...state, ...parsed };
+        if (!state.checklist || state.checklist.length === 0) {
+          state.checklist = [...DEFAULT_CHECKLIST];
+        }
+      }
+    } catch (e) {
+      console.error('Load error:', e);
+    }
+  }
+  
+  function scheduleAutosave() {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+      catch (e) { /* silent */ }
+    }, AUTOSAVE_DELAY);
+  }
+  
+  // === EXPORT/IMPORT ===
+  function showExport() {
+    modal('Exporter le projet', `
+      <div class="phase-grid">
+        <button class="phase-btn" onclick="App.exportJSON()">
+          <div class="phase-btn-icon neutral">📄</div>
+          <div class="phase-btn-content">
+            <div class="phase-btn-title">JSON</div>
+            <div class="phase-btn-desc">Sauvegarde complète</div>
+          </div>
+        </button>
+        <button class="phase-btn" onclick="App.exportMarkdown()">
+          <div class="phase-btn-icon neutral">📝</div>
+          <div class="phase-btn-content">
+            <div class="phase-btn-title">Markdown</div>
+            <div class="phase-btn-desc">Document lisible</div>
+          </div>
+        </button>
+        <button class="phase-btn" onclick="App.exportHTML()">
+          <div class="phase-btn-icon neutral">🌐</div>
+          <div class="phase-btn-content">
+            <div class="phase-btn-title">HTML</div>
+            <div class="phase-btn-desc">Page web</div>
+          </div>
+        </button>
+      </div>
+    `);
+  }
+  
+  function exportJSON() {
+    download(JSON.stringify(state, null, 2), 'plaidoyer.json', 'application/json');
+    closeModal();
+    toast('Export JSON réussi', 'success');
+  }
+  
+  function exportMarkdown() {
+    let md = `# Projet de Plaidoyer\n\n`;
+    md += `## Phase VOIR\n\n`;
+    md += `### Pourquoi je m'engage\n${state.fields.domino_pourquoi || '-'}\n\n`;
+    md += `### Mes valeurs\n${state.fields.domino_valeurs || '-'}\n\n`;
+    md += `## Phase JUGER\n\n`;
+    md += `### SWOT\n- **Forces**: ${state.fields.swot_forces || '-'}\n- **Faiblesses**: ${state.fields.swot_faiblesses || '-'}\n- **Opportunités**: ${state.fields.swot_opportunites || '-'}\n- **Menaces**: ${state.fields.swot_menaces || '-'}\n\n`;
+    md += `## Phase AGIR\n\n`;
+    md += `### Objectifs SMART\n- **S**: ${state.fields.smart_specifique || '-'}\n- **M**: ${state.fields.smart_mesurable || '-'}\n- **A**: ${state.fields.smart_atteignable || '-'}\n- **R**: ${state.fields.smart_realiste || '-'}\n- **T**: ${state.fields.smart_temporel || '-'}\n\n`;
+    
+    download(md, 'plaidoyer.md', 'text/markdown');
+    closeModal();
+    toast('Export Markdown réussi', 'success');
+  }
+  
+  function exportHTML() {
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Plaidoyer</title><style>body{font-family:system-ui;max-width:800px;margin:0 auto;padding:2rem;line-height:1.6}h1{color:#059669}h2{color:#7c3aed;border-bottom:2px solid #e5e5ea;padding-bottom:.5rem}.card{background:#f5f5f7;padding:1rem;border-radius:8px;margin:1rem 0}</style></head><body><h1>📢 Projet de Plaidoyer</h1><h2>👁️ Phase VOIR</h2><div class="card"><strong>Pourquoi je m'engage:</strong><p>${state.fields.domino_pourquoi || '-'}</p></div><h2>⚖️ Phase JUGER</h2><div class="card"><strong>SWOT:</strong><ul><li>Forces: ${state.fields.swot_forces || '-'}</li><li>Faiblesses: ${state.fields.swot_faiblesses || '-'}</li></ul></div><h2>🎯 Phase AGIR</h2><div class="card"><strong>Objectif SMART:</strong><p>${state.fields.smart_specifique || '-'}</p></div></body></html>`;
+    
+    download(html, 'plaidoyer.html', 'text/html');
+    closeModal();
+    toast('Export HTML réussi', 'success');
+  }
+  
+  function handleDrop(e) {
+    e.preventDefault();
+    const file = e.dataTransfer?.files[0];
+    if (file) importFile(file);
+  }
+  
+  function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (file) importFile(file);
+  }
+  
+  function importFile(file) {
+    if (!file.name.endsWith('.json')) {
+      toast('Format non supporté', 'error');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        state = { ...state, ...data };
+        bindForms();
+        renderAll();
+        updateProgress();
+        toast('Import réussi', 'success');
+      } catch (err) {
+        toast('Fichier invalide', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+  
+  // === ACTORS ===
+  function addActor() {
+    modal('Ajouter un acteur', `
+      <div class="form-group">
+        <label class="form-label">Nom</label>
+        <input class="form-input" id="actor-name" placeholder="Nom de l'acteur">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-input" id="actor-type">
+          <option value="neutral">⚖️ Neutre</option>
+          <option value="ally">🤝 Allié</option>
+          <option value="target">🎯 Cible</option>
+          <option value="opponent">🚫 Opposant</option>
+        </select>
+      </div>
+    `, `
+      <button class="btn btn-secondary" onclick="App.closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="App.saveActor()">Ajouter</button>
+    `);
+    
+    setTimeout(() => document.getElementById('actor-name')?.focus(), 100);
+  }
+  
+  function saveActor(id = null) {
+    const name = document.getElementById('actor-name')?.value?.trim();
+    const type = document.getElementById('actor-type')?.value;
+    
+    if (!name) {
+      toast('Entrez un nom', 'warning');
+      return;
+    }
+    
+    if (id) {
+      const actor = state.actors.find(a => a.id === id);
+      if (actor) {
+        actor.name = name;
+        actor.type = type;
+      }
+    } else {
+      state.actors.push({ id: Date.now().toString(), name, type });
+    }
+    
+    scheduleAutosave();
+    renderActors();
+    updateProgress();
+    closeModal();
+    toast(id ? 'Acteur modifié' : 'Acteur ajouté', 'success');
+  }
+  
+  function editActor(id) {
+    const actor = state.actors.find(a => a.id === id);
+    if (!actor) return;
+    
+    modal('Modifier l\'acteur', `
+      <div class="form-group">
+        <label class="form-label">Nom</label>
+        <input class="form-input" id="actor-name" value="${actor.name}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-input" id="actor-type">
+          <option value="neutral" ${actor.type === 'neutral' ? 'selected' : ''}>⚖️ Neutre</option>
+          <option value="ally" ${actor.type === 'ally' ? 'selected' : ''}>🤝 Allié</option>
+          <option value="target" ${actor.type === 'target' ? 'selected' : ''}>🎯 Cible</option>
+          <option value="opponent" ${actor.type === 'opponent' ? 'selected' : ''}>🚫 Opposant</option>
+        </select>
+      </div>
+    `, `
+      <button class="btn btn-secondary" style="color:var(--coral)" onclick="App.deleteActor('${id}')">Supprimer</button>
+      <button class="btn btn-primary" onclick="App.saveActor('${id}')">Enregistrer</button>
+    `);
+  }
+  
+  function deleteActor(id) {
+    state.actors = state.actors.filter(a => a.id !== id);
+    scheduleAutosave();
+    renderActors();
+    updateProgress();
+    closeModal();
+    toast('Acteur supprimé', 'success');
+  }
+  
+  // === VEILLE ===
+  function addVeille() {
+    modal('Ajouter une source', `
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <input class="form-input" id="veille-title" placeholder="Titre de la source">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL (optionnel)</label>
+        <input class="form-input" id="veille-url" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Catégorie</label>
+        <select class="form-input" id="veille-category">
+          <option value="Politique">🏛️ Politique</option>
+          <option value="Économique">💰 Économique</option>
+          <option value="Social">👥 Social</option>
+          <option value="Technologique">💻 Technologique</option>
+          <option value="Environnemental">🌍 Environnemental</option>
+          <option value="Légal">⚖️ Légal</option>
+          <option value="Autre">📌 Autre</option>
+        </select>
+      </div>
+    `, `
+      <button class="btn btn-secondary" onclick="App.closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="App.saveVeille()">Ajouter</button>
+    `);
+    
+    setTimeout(() => document.getElementById('veille-title')?.focus(), 100);
+  }
+  
+  function saveVeille() {
+    const title = document.getElementById('veille-title')?.value?.trim();
+    const url = document.getElementById('veille-url')?.value?.trim();
+    const category = document.getElementById('veille-category')?.value;
+    
+    if (!title) {
+      toast('Entrez un titre', 'warning');
+      return;
+    }
+    
+    state.veille.push({
+      id: Date.now().toString(),
+      title,
+      url,
+      category,
+      type: 'article',
+      date: new Date().toISOString()
+    });
+    
+    scheduleAutosave();
+    renderVeille();
+    updateProgress();
+    closeModal();
+    toast('Source ajoutée', 'success');
+  }
+  
+  function editVeille(id) {
+    const item = state.veille.find(v => v.id === id);
+    if (!item) return;
+    
+    modal('Modifier la source', `
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <input class="form-input" id="veille-title" value="${item.title}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL</label>
+        <input class="form-input" id="veille-url" value="${item.url || ''}">
+      </div>
+    `, `
+      <button class="btn btn-secondary" style="color:var(--coral)" onclick="App.deleteVeille('${id}')">Supprimer</button>
+      <button class="btn btn-primary" onclick="App.closeModal()">Fermer</button>
+    `);
+  }
+  
+  function deleteVeille(id) {
+    state.veille = state.veille.filter(v => v.id !== id);
+    scheduleAutosave();
+    renderVeille();
+    updateProgress();
+    closeModal();
+    toast('Source supprimée', 'success');
+  }
+  
+  // === SETTINGS ===
+  function showSettings() {
+    modal('Paramètres', `
+      <div class="phase-grid">
+        <button class="phase-btn" onclick="App.resetProject()">
+          <div class="phase-btn-icon" style="background:var(--coral)">🗑️</div>
+          <div class="phase-btn-content">
+            <div class="phase-btn-title">Réinitialiser</div>
+            <div class="phase-btn-desc">Effacer toutes les données</div>
+          </div>
+        </button>
+      </div>
+    `);
+  }
+  
+  function resetProject() {
+    if (confirm('Effacer toutes les données ?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  }
+  
+  // === MODAL ===
+  function modal(title, body, footer = '') {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = body;
+    document.getElementById('modal-footer').innerHTML = footer;
+    document.getElementById('modal-backdrop').classList.add('open');
+    document.getElementById('modal').classList.add('open');
+  }
+  
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    document.getElementById('modal').classList.remove('open');
+  }
+  
+  // === TOAST ===
+  function toast(msg, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+    
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `<span class="toast-icon ${type}">${icons[type]}</span><span class="toast-msg">${msg}</span>`;
+    
+    container.appendChild(el);
+    
+    setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 300);
+    }, 3000);
+  }
+  
+  // === HELPERS ===
+  function download(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  
+  function getActorIcon(type) {
+    return { ally: '🤝', target: '🎯', neutral: '⚖️', opponent: '🚫' }[type] || '👤';
+  }
+  
+  function getActorTypeName(type) {
+    return { ally: 'Allié', target: 'Cible', neutral: 'Neutre', opponent: 'Opposant' }[type] || 'Inconnu';
+  }
+  
+  function getVeilleIcon(type) {
+    return { article: '📰', rapport: '📊', video: '🎬', podcast: '🎙️', site: '🌐' }[type] || '📌';
+  }
+  
+  function shortenUrl(url) {
+    try { return new URL(url).hostname.replace('www.', ''); }
+    catch { return url.slice(0, 30); }
+  }
+  
+  function formatDate(d) {
+    if (!d) return '';
+    return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  }
+  
+  // === PUBLIC API ===
+  return {
+    init, nav, save, showExport, showSettings, closeModal,
+    exportJSON, exportMarkdown, exportHTML,
+    addActor, saveActor, editActor, deleteActor,
+    addVeille, saveVeille, editVeille, deleteVeille,
+    resetProject
+  };
+})();
+
+// Start
+document.addEventListener('DOMContentLoaded', App.init);
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Stop Déforestation - Huile de Palme",
+    "description": "Campagne de plaidoyer pour interdire l'importation d'huile de palme issue de la déforestation",
+    "created": "2025-03-10T08:00:00.000Z",
+    "updated": "2026-01-18T16:45:00.000Z",
+    "author": "Coalition Forêts Vivantes",
+    "theme": "environnement"
+  },
+  "fields": {
+    "project_name": "Stop Déforestation : Interdire l'huile de palme non durable",
+    "project_description": "Campagne de plaidoyer d'opposition visant à obtenir l'interdiction de l'importation dans l'UE d'huile de palme issue de la déforestation, en ciblant les grandes entreprises agroalimentaires et les décideurs européens.",
+    
+    "domino_pourquoi": "Chaque minute, l'équivalent de 40 terrains de football de forêt tropicale disparaît, principalement pour la culture de l'huile de palme. Cette déforestation massive détruit l'habitat des orangs-outans, accélère le changement climatique et viole les droits des peuples autochtones. Les consommateurs européens sont complices malgré eux.",
+    "domino_valeurs": "Protection de la biodiversité, droits des peuples autochtones, responsabilité des entreprises, transparence des chaînes d'approvisionnement, justice climatique, consommation responsable.",
+    "domino_changements": "1. Interdiction de l'importation d'huile de palme liée à la déforestation\n2. Traçabilité obligatoire de 100% des chaînes d'approvisionnement\n3. Engagement des grandes marques (Nestlé, Unilever, etc.)\n4. Certification RSPO renforcée et obligatoire\n5. Reconnaissance des droits fonciers des communautés locales",
+    "domino_actions": "- Actions de désobéissance civile non-violente\n- Campagnes virales sur les réseaux sociaux\n- Enquêtes terrain et rapports d'investigation\n- Interpellation des assemblées générales d'actionnaires\n- Plaidoyer au Parlement européen",
+    
+    "profil_q1": "agir",
+    "profil_q2": "leader",
+    "profil_competences": "Expertise en mobilisation citoyenne, réseau international d'activistes, capacité d'investigation terrain, maîtrise des campagnes médiatiques virales, expérience en actions directes non-violentes.",
+    
+    "fleur_genre": "Les femmes des communautés autochtones sont particulièrement affectées car elles dépendent traditionnellement des ressources forestières. Le travail dans les plantations expose les femmes à des conditions précaires.",
+    "fleur_classe": "Les populations locales les plus pauvres sont expropriées de leurs terres. Les bénéfices de l'industrie de l'huile de palme profitent aux multinationales, pas aux communautés.",
+    "fleur_origine": "Conflit Nord-Sud : les forêts du Sud sont détruites pour satisfaire la consommation du Nord. Les peuples autochtones (Dayak, Penan) perdent leurs terres ancestrales.",
+    "fleur_autres": "Les enfants sont parfois employés dans les plantations. Les travailleurs migrants sont exploités. Les défenseurs de l'environnement locaux sont criminalisés.",
+    
+    "toc_vision": "Un monde où les forêts tropicales sont préservées, où la biodiversité est protégée, où les communautés locales vivent dignement, et où les entreprises ne profitent plus de la destruction de l'environnement.",
+    "toc_hypotheses": "Si nous parvenons à créer une pression médiatique et réputationnelle suffisante sur les grandes marques, elles changeront leurs pratiques d'approvisionnement. Si l'UE adopte une réglementation contraignante, les importateurs devront se conformer.",
+    "toc_missions": "1. Exposer publiquement les liens entre grandes marques et déforestation\n2. Mobiliser l'opinion publique européenne\n3. Faire adopter une législation européenne contraignante\n4. Soutenir les communautés locales dans leurs luttes",
+    
+    "swot_forces": "- Réseau international et capacité de mobilisation rapide\n- Expertise en désobéissance civile et actions médiatiques\n- Crédibilité et notoriété de la marque Greenpeace\n- Capacité d'investigation terrain en zones difficiles\n- Base de donateurs engagés (3 millions en Europe)",
+    "swot_faiblesses": "- Réputation parfois perçue comme 'extrémiste'\n- Pas d'accès direct aux cercles de décision\n- Dépendance aux dons et vulnérabilité financière\n- Manque de propositions alternatives concrètes",
+    "swot_opportunites": "- Assemblée générale de Nestlé en avril (fenêtre d'action)\n- Viralité des réseaux sociaux (vidéos choc)\n- Espèce emblématique (orang-outan) à fort potentiel émotionnel\n- Green Deal européen et loi anti-déforestation en discussion",
+    "swot_menaces": "- Contre-attaque médiatique de Nestlé et du lobby agroalimentaire\n- Procès pour diffamation ou entrave à la liberté du commerce\n- Arrestations de militants et criminalisation\n- Lassitude du public face aux campagnes environnementales",
+    
+    "pestel_politique": "- Green Deal européen avec volet déforestation importée\n- Négociations UE-Mercosur (enjeux forêts Amazonie)\n- Politiques de certification volontaires (RSPO)\n- Pression diplomatique de l'Indonésie et Malaisie",
+    "pestel_economique": "- Huile de palme = huile végétale la moins chère\n- Lobby agroalimentaire très puissant\n- Dépendance économique des pays producteurs\n- Marché des certifications durables en croissance",
+    "pestel_social": "- Sensibilité croissante des consommateurs européens\n- Mouvement Fridays for Future\n- Documentaires Netflix sur la déforestation\n- Mobilisation des peuples autochtones",
+    "pestel_techno": "- Imagerie satellite pour monitoring déforestation\n- Blockchain pour traçabilité\n- Réseaux sociaux pour viralité\n- Deepfakes et désinformation",
+    "pestel_ecolo": "- 6ème extinction de masse en cours\n- Orangs-outans en danger critique\n- Émissions CO2 des tourbières drainées\n- Points de bascule climatique",
+    "pestel_legal": "- Règlement UE sur la déforestation importée (2023)\n- Devoir de vigilance des entreprises\n- Certification RSPO (volontaire)\n- Poursuites contre militants",
+    
+    "arbre_probleme": "La déforestation pour l'huile de palme détruit les écosystèmes et le climat",
+    
+    "pourquoi_1": "Parce que la demande mondiale en huile de palme augmente de 5% par an",
+    "pourquoi_2": "Parce que l'huile de palme est l'huile végétale la plus productive et la moins chère",
+    "pourquoi_3": "Parce que les grandes marques privilégient les coûts bas sur la durabilité",
+    "pourquoi_4": "Parce que les certifications existantes (RSPO) sont insuffisantes et non contraignantes",
+    "pourquoi_5": "Parce que le marché ne prend pas en compte les externalités environnementales et sociales",
+    
+    "smart_s": "Obtenir l'engagement public de Nestlé à éliminer 100% de l'huile de palme liée à la déforestation de sa chaîne d'approvisionnement",
+    "smart_m": "Déclaration officielle du CEO de Nestlé avec plan d'action chiffré et calendrier vérifiable",
+    "smart_a": "Équipe de campagne de 15 personnes, budget de 500.000€, réseau de 50.000 activistes mobilisables",
+    "smart_r": "Nestlé est sensible à son image de marque et a déjà fait des concessions par le passé (Kit Kat 2010)",
+    "smart_t": "Avant l'assemblée générale de Nestlé en avril 2026, avec annonce publique lors de l'AG",
+    
+    "cible_principale": "Mark Schneider, CEO de Nestlé - Pouvoir de décision sur les politiques d'approvisionnement et l'image de marque du groupe",
+    "cible_secondaires": "- Conseil d'administration de Nestlé\n- Directeur Sustainability de Nestlé\n- Actionnaires institutionnels (BlackRock, Vanguard)\n- Commissaire européen à l'Environnement",
+    "allies": "- Rainforest Action Network\n- WWF (sur la certification RSPO)\n- SumOfUs (pétitions en ligne)\n- Les Amis de la Terre\n- Communautés Dayak et Penan\n- Journalistes d'investigation",
+    
+    "msg_accroche": "Chaque barre de Kit Kat contient un petit morceau de forêt tropicale. Et peut-être les derniers jours d'un orang-outan.",
+    "msg_probleme": "Nestlé utilise de l'huile de palme provenant de fournisseurs qui détruisent les forêts de Bornéo. Nos enquêtes ont tracé l'huile de palme des plantations illégales jusqu'aux usines Nestlé.",
+    "msg_solution": "Nestlé peut tracer 100% de son huile de palme et exclure les fournisseurs liés à la déforestation. D'autres grandes marques l'ont fait. C'est une question de volonté, pas de capacité.",
+    "msg_action": "Nous demandons à Nestlé de publier la liste complète de ses fournisseurs d'huile de palme et de s'engager à zéro déforestation d'ici 2025.",
+    
+    "suivi_indicateurs": "- Couverture médiatique (nombre d'articles, audience)\n- Viralité des contenus (vues, partages)\n- Réactions officielles de Nestlé\n- Évolution du cours de bourse\n- Signatures de la pétition",
+    "suivi_resultats": "- Vidéo virale : 15 millions de vues\n- 500.000 signatures en 3 semaines\n- Couverture dans NYT, Guardian, Le Monde\n- Chute de 3% du cours Nestlé\n- Demande de dialogue de Nestlé",
+    "suivi_lecons": "- Le storytelling émotionnel (orang-outan) est très efficace\n- Les actions à l'AG touchent directement les décideurs\n- La coordination internationale amplifie l'impact\n- Nestlé contre-attaque par le greenwashing",
+    "suivi_ajustements": "- Préparer un rapport de vérification des engagements de Nestlé\n- Maintenir la pression post-AG\n- Étendre la campagne à Unilever et Mars\n- Soutenir la proposition de loi européenne"
+  },
+  "actors": [
+    {
+      "id": "actor_001",
+      "name": "Nestlé (CEO Mark Schneider)",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible principale. N°1 mondial de l'agroalimentaire. Historique de réaction aux campagnes (Kit Kat 2010)."
+    },
+    {
+      "id": "actor_002",
+      "name": "Rainforest Action Network",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "ONG américaine spécialisée. Expertise en traçabilité et enquêtes fournisseurs."
+    },
+    {
+      "id": "actor_003",
+      "name": "RSPO (Table ronde huile de palme durable)",
+      "type": "neutral",
+      "influence": "moyen",
+      "notes": "Organisme de certification. Critiqué pour sa faiblesse mais reste un levier."
+    },
+    {
+      "id": "actor_004",
+      "name": "Wilmar International",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Plus grand trader d'huile de palme. Fournisseur de Nestlé. Accusé de déforestation."
+    },
+    {
+      "id": "actor_005",
+      "name": "Gouvernement indonésien",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Défend son industrie palmier à huile. Pression diplomatique sur l'UE."
+    },
+    {
+      "id": "actor_006",
+      "name": "Communautés Dayak",
+      "type": "ally",
+      "influence": "faible",
+      "notes": "Peuples autochtones de Bornéo. Victimes directes, témoignages puissants."
+    },
+    {
+      "id": "actor_007",
+      "name": "BlackRock (actionnaire Nestlé)",
+      "type": "neutral",
+      "influence": "fort",
+      "notes": "Sensible aux risques ESG. Cible secondaire lors des AG."
+    },
+    {
+      "id": "actor_008",
+      "name": "Commission européenne - DG ENV",
+      "type": "target",
+      "influence": "fort",
+      "notes": "En charge du règlement déforestation importée. Réceptive aux arguments."
+    },
+    {
+      "id": "actor_009",
+      "name": "WWF",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Travaille sur la certification. Approche plus collaborative, complémentaire."
+    },
+    {
+      "id": "actor_010",
+      "name": "FoodDrinkEurope (lobby agroalimentaire)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Lobby européen de l'industrie. Contre toute réglementation contraignante."
+    }
+  ],
+  "veille": [
+    {
+      "id": "veille_001",
+      "title": "Rapport Global Forest Watch - Déforestation 2025",
+      "url": "https://www.globalforestwatch.org/report-2025",
+      "category": "environnement",
+      "notes": "4,1 millions d'hectares de forêt primaire perdus en 2024. Indonésie et Brésil en tête.",
+      "date": "2025-04-15T00:00:00.000Z"
+    },
+    {
+      "id": "veille_002",
+      "title": "Enquête Chain Reaction Research sur Wilmar",
+      "url": "https://chainreactionresearch.com/wilmar-2025",
+      "category": "economique",
+      "notes": "Liens documentés entre Wilmar et plantations illégales. Risque financier pour investisseurs.",
+      "date": "2025-09-20T00:00:00.000Z"
+    },
+    {
+      "id": "veille_003",
+      "title": "Règlement UE déforestation : analyse d'impact",
+      "url": "https://eur-lex.europa.eu/deforestation-regulation",
+      "category": "juridique",
+      "notes": "Entrée en vigueur progressive. Sanctions jusqu'à 4% du CA européen.",
+      "date": "2025-12-01T00:00:00.000Z"
+    },
+    {
+      "id": "veille_004",
+      "title": "Orangs-outans : population en chute de 80%",
+      "url": "https://www.iucn.org/orangutan-status-2025",
+      "category": "environnement",
+      "notes": "Moins de 100.000 individus. Espèce en danger critique d'extinction.",
+      "date": "2025-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "veille_005",
+      "title": "Réponse de Nestlé à Greenpeace",
+      "url": "https://www.nestle.com/sustainability/palm-oil-response",
+      "category": "politique",
+      "notes": "Communiqué défensif. Engagement vague sur 'déforestation nette zéro' d'ici 2030.",
+      "date": "2026-01-05T00:00:00.000Z"
+    }
+  ],
+  "checklist": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": true,
+    "c6": true,
+    "c7": false
+  },
+  "tree": {
+    "causes": [
+      { "id": "cause_001", "text": "Demande mondiale croissante en huile de palme (+5%/an)" },
+      { "id": "cause_002", "text": "Huile de palme = huile végétale la plus productive et la moins chère" },
+      { "id": "cause_003", "text": "Faiblesse des réglementations dans les pays producteurs" },
+      { "id": "cause_004", "text": "Certifications volontaires insuffisantes (RSPO)" },
+      { "id": "cause_005", "text": "Corruption et accaparement des terres" },
+      { "id": "cause_006", "text": "Externalités non intégrées dans le prix" },
+      { "id": "cause_007", "text": "Opacité des chaînes d'approvisionnement" }
+    ],
+    "effects": [
+      { "id": "effect_001", "text": "Destruction de 10 millions d'hectares de forêt tropicale" },
+      { "id": "effect_002", "text": "Extinction des orangs-outans en cours" },
+      { "id": "effect_003", "text": "Émissions massives de CO2 (tourbières drainées)" },
+      { "id": "effect_004", "text": "Expulsion des communautés autochtones" },
+      { "id": "effect_005", "text": "Pollution des cours d'eau par pesticides" },
+      { "id": "effect_006", "text": "Conflits fonciers et violence" }
+    ]
+  },
+  "graph": {
+    "nodes": [
+      { "id": "concept_001", "label": "Déforestation zéro", "type": "concept" },
+      { "id": "concept_002", "label": "Traçabilité totale", "type": "concept" },
+      { "id": "concept_003", "label": "Droits des peuples autochtones", "type": "value" },
+      { "id": "concept_004", "label": "Responsabilité des entreprises", "type": "value" },
+      { "id": "concept_005", "label": "RSPO+", "type": "concept" },
+      { "id": "action_001", "label": "Campagne Kit Kat Killer", "type": "action" },
+      { "id": "action_002", "label": "Action AG Nestlé", "type": "action" },
+      { "id": "action_003", "label": "Rapport d'enquête terrain", "type": "action" }
+    ],
+    "links": [
+      { "source": "concept_001", "target": "concept_002", "type": "related" },
+      { "source": "concept_003", "target": "cause_005", "type": "opposes" },
+      { "source": "action_001", "target": "actor_001", "type": "influences" },
+      { "source": "action_003", "target": "action_001", "type": "supports" },
+      { "source": "concept_004", "target": "concept_002", "type": "causes" },
+      { "source": "actor_002", "target": "action_003", "type": "supports" },
+      { "source": "cause_002", "target": "cause_001", "type": "causes" }
+    ]
+  }
+}

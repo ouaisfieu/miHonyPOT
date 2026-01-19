@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Nouveau Projet",
+    "description": "",
+    "created": "2026-01-19T12:00:00.000Z",
+    "updated": "2026-01-19T12:00:00.000Z",
+    "author": "",
+    "theme": ""
+  },
+  "fields": {},
+  "actors": [],
+  "veille": [],
+  "checklist": {},
+  "tree": {
+    "causes": [],
+    "effects": []
+  },
+  "graph": {
+    "nodes": [],
+    "links": []
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Accueil Digne des Personnes Migrantes",
+    "description": "Plaidoyer pour un accueil humain et digne des personnes migrantes en Belgique",
+    "created": "2025-01-15T11:00:00.000Z",
+    "updated": "2026-01-17T09:15:00.000Z",
+    "author": "Plateforme Citoyenne de Soutien aux Réfugiés",
+    "theme": "social"
+  },
+  "fields": {
+    "project_name": "Pour un Accueil Digne : Stop aux violations des droits fondamentaux",
+    "project_description": "Campagne de plaidoyer visant à garantir un accueil humain et conforme au droit international pour toutes les personnes migrantes en Belgique, en ciblant les politiques de Fedasil et du Secrétariat d'État à l'Asile.",
+    
+    "domino_pourquoi": "Des centaines de personnes dorment chaque nuit dans les rues de Bruxelles, privées du droit à l'accueil prévu par la loi. Des familles avec enfants, des mineurs non accompagnés, des personnes vulnérables sont abandonnées par l'État belge. La Belgique est condamnée régulièrement par les tribunaux pour non-respect du droit à l'accueil, mais continue de violer ses obligations.",
+    "domino_valeurs": "Dignité humaine, solidarité, respect du droit international, hospitalité, non-discrimination, protection des vulnérables, égalité de traitement.",
+    "domino_changements": "1. Fin de la saturation du réseau d'accueil Fedasil\n2. Accueil inconditionnel de tous les demandeurs d'asile\n3. Alternatives à la détention pour les familles avec enfants\n4. Régularisation des sans-papiers intégrés\n5. Respect des décisions de justice condamnant l'État",
+    "domino_actions": "- Hébergement citoyen en urgence\n- Permanences juridiques pour les personnes sans accueil\n- Plaidoyer parlementaire et européen\n- Mobilisations et manifestations\n- Communication médiatique sur la crise",
+    
+    "profil_q1": "organiser",
+    "profil_q2": "mediateur",
+    "profil_competences": "Coordination de réseaux d'hébergement citoyen, expertise juridique en droit des étrangers, mobilisation citoyenne, relations avec les médias, dialogue avec les institutions.",
+    
+    "fleur_genre": "Les femmes migrantes sont particulièrement vulnérables (violences de genre sur le parcours, traite). Les mères isolées avec enfants sont en grande détresse dans la rue.",
+    "fleur_classe": "Les personnes migrantes sont souvent issues de milieux défavorisés. Le coût des procédures et l'impossibilité de travailler les maintiennent dans la précarité.",
+    "fleur_origine": "Discrimination dans l'accès à l'hébergement citoyen selon le pays d'origine (Ukrainiens vs Afghans). Racisme systémique dans les centres d'accueil.",
+    "fleur_autres": "Mineurs non accompagnés en danger. Personnes LGBTQ+ fuyant des persécutions. Personnes handicapées sans accès adapté. Traumatismes psychologiques non pris en charge.",
+    
+    "toc_vision": "Une Belgique où chaque personne cherchant protection est accueillie dignement, où le droit d'asile est respecté, où la solidarité citoyenne est soutenue par l'État, et où les politiques migratoires sont basées sur les droits humains plutôt que sur la dissuasion.",
+    "toc_hypotheses": "Si nous maintenons la pression médiatique et juridique, le gouvernement sera contraint d'augmenter les capacités d'accueil. Si nous documentons les violations, nous renforçons les recours devant les tribunaux. Si nous mobilisons les citoyens, nous créons une contre-majorité politique.",
+    "toc_missions": "1. Garantir un accueil d'urgence via le réseau citoyen\n2. Défendre juridiquement les droits des personnes sans accueil\n3. Faire pression sur le gouvernement pour qu'il respecte la loi\n4. Changer le récit public sur les migrations",
+    
+    "swot_forces": "- Réseau de 5.000 hébergeurs citoyens actifs\n- Légitimité morale et soutien de l'opinion publique\n- Expertise juridique reconnue\n- Capacité de mobilisation rapide\n- Partenariats avec syndicats et Églises",
+    "swot_faiblesses": "- Dépendance au bénévolat (épuisement)\n- Ressources financières limitées\n- Pas d'accès direct aux décideurs politiques\n- Difficulté à maintenir l'attention médiatique",
+    "swot_opportunites": "- Condamnations multiples de l'État par les tribunaux\n- Élections communales et régionales en 2024\n- Solidarité post-Ukraine créant un précédent\n- Engagement de la société civile",
+    "swot_menaces": "- Discours politique de fermeté et de dissuasion\n- Montée de l'extrême-droite (Vlaams Belang, PTB)\n- Lassitude de l'opinion publique\n- Criminalisation de la solidarité",
+    
+    "pestel_politique": "- Gouvernement De Croo avec N-VA hostile\n- Secrétaire d'État à l'Asile sous pression\n- Pacte européen sur l'asile et la migration\n- Élections fédérales en 2024",
+    "pestel_economique": "- Budget Fedasil insuffisant\n- Coût de l'hébergement citoyen non compensé\n- Impact économique positif des régularisations (études)\n- Pénuries de main d'œuvre dans certains secteurs",
+    "pestel_social": "- Solidarité citoyenne forte mais fragile\n- Polarisation du débat migratoire\n- Préjugés et stéréotypes\n- Intégration réussie de nombreux réfugiés",
+    "pestel_techno": "- Applications de mise en relation hébergeurs/hébergés\n- Outils de coordination du réseau citoyen\n- Désinformation sur les réseaux sociaux",
+    "pestel_ecolo": "- Migrations climatiques croissantes\n- Lien entre environnement et déplacements\n- Vulnérabilité des personnes migrantes au changement climatique",
+    "pestel_legal": "- Directive européenne Accueil\n- Convention de Genève sur les réfugiés\n- Condamnations multiples de la Belgique (Cour européenne, tribunaux nationaux)\n- Loi sur l'accueil de 2007",
+    
+    "arbre_probleme": "Des milliers de personnes migrantes sont privées de leur droit à l'accueil en Belgique",
+    
+    "pourquoi_1": "Parce que le réseau d'accueil Fedasil est saturé et ne crée pas assez de places",
+    "pourquoi_2": "Parce que le gouvernement a choisi une politique de dissuasion plutôt que d'accueil",
+    "pourquoi_3": "Parce que des partis politiques hostiles à l'immigration sont au gouvernement",
+    "pourquoi_4": "Parce que le récit dominant présente les migrants comme une menace et non comme des personnes en besoin de protection",
+    "pourquoi_5": "Parce que les intérêts électoraux à court terme priment sur le respect du droit international",
+    
+    "smart_s": "Obtenir l'ouverture de 3.000 places d'accueil supplémentaires dans le réseau Fedasil",
+    "smart_m": "Publication d'un arrêté royal créant 3.000 places et engagement budgétaire correspondant",
+    "smart_a": "Réseau de 50 organisations partenaires, 5.000 hébergeurs citoyens, budget campagne de 80.000€",
+    "smart_r": "Condamnations judiciaires répétées, pression européenne, soutien d'une partie de la majorité",
+    "smart_t": "Avant l'hiver 2025-2026, avec annonce gouvernementale en septembre 2025",
+    
+    "cible_principale": "Secrétaire d'État à l'Asile et à la Migration - Compétence directe sur Fedasil et les capacités d'accueil",
+    "cible_secondaires": "- Premier ministre (arbitrage budgétaire)\n- Ministre du Budget\n- Fedasil (administration)\n- Commission européenne (procédure d'infraction)",
+    "allies": "- CIRÉ (Coordination et initiatives pour réfugiés et étrangers)\n- Caritas\n- Médecins du Monde\n- Ligue des droits humains\n- Syndicats (FGTB, CSC)\n- Églises et communautés religieuses",
+    
+    "msg_accroche": "Cette nuit, des enfants dormiront dans la rue à Bruxelles. Pas parce qu'il n'y a pas de solution, mais parce que notre gouvernement a choisi de les abandonner.",
+    "msg_probleme": "La Belgique a été condamnée plus de 7.000 fois par les tribunaux pour non-respect du droit à l'accueil. Malgré ces condamnations, des familles entières restent sans abri, livrées au froid et à la violence de la rue.",
+    "msg_solution": "La loi prévoit que toute personne demandant l'asile a droit à un hébergement. Il suffit de la respecter. 3.000 places supplémentaires permettraient de mettre fin à la crise.",
+    "msg_action": "Nous demandons au gouvernement d'ouvrir immédiatement 3.000 places d'accueil et de mettre fin aux violations systématiques du droit.",
+    
+    "suivi_indicateurs": "- Nombre de personnes hébergées par le réseau citoyen\n- Nombre de condamnations de l'État\n- Couverture médiatique\n- Évolution des places Fedasil\n- Mobilisations citoyennes",
+    "suivi_resultats": "- 2.500 personnes hébergées par le réseau citoyen\n- 150 nouvelles condamnations de l'État\n- Manifestation de 15.000 personnes\n- 500 places supplémentaires annoncées (insuffisant)",
+    "suivi_lecons": "- Les témoignages individuels touchent plus que les chiffres\n- Les images d'enfants dans la rue sont puissantes\n- Le soutien des Églises élargit la coalition\n- La fatigue des hébergeurs citoyens est un risque",
+    "suivi_ajustements": "- Renforcer le soutien psychologique aux hébergeurs\n- Documenter les coûts de la non-politique (santé, social)\n- Cibler les élus locaux avant les communales\n- Préparer une action en justice européenne"
+  },
+  "actors": [
+    {
+      "id": "actor_001",
+      "name": "Secrétaire d'État à l'Asile",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible principale. Sous pression de la N-VA mais sensible à l'image internationale de la Belgique."
+    },
+    {
+      "id": "actor_002",
+      "name": "CIRÉ",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Coordination historique des associations. Expertise juridique et plaidoyer institutionnel."
+    },
+    {
+      "id": "actor_003",
+      "name": "Fedasil",
+      "type": "neutral",
+      "influence": "moyen",
+      "notes": "Agence d'accueil. Direction sous pression politique mais agents souvent solidaires."
+    },
+    {
+      "id": "actor_004",
+      "name": "Vlaams Belang",
+      "type": "opponent",
+      "influence": "moyen",
+      "notes": "Extrême-droite flamande. Discours anti-migrants, pression sur le gouvernement."
+    },
+    {
+      "id": "actor_005",
+      "name": "N-VA (au gouvernement)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Parti nationaliste flamand. Politique de dissuasion, frein à toute ouverture de places."
+    },
+    {
+      "id": "actor_006",
+      "name": "Médecins du Monde",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Expertise santé, présence terrain, crédibilité médicale."
+    },
+    {
+      "id": "actor_007",
+      "name": "Église catholique belge",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Soutien moral et matériel. Accès à des locaux pour l'hébergement d'urgence."
+    },
+    {
+      "id": "actor_008",
+      "name": "Commission européenne",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible secondaire. Peut lancer une procédure d'infraction contre la Belgique."
+    },
+    {
+      "id": "actor_009",
+      "name": "Collectifs de sans-papiers",
+      "type": "ally",
+      "influence": "faible",
+      "notes": "Voix des premiers concernés. Légitimité mais peu de pouvoir d'influence."
+    },
+    {
+      "id": "actor_010",
+      "name": "Médias mainstream",
+      "type": "neutral",
+      "influence": "fort",
+      "notes": "Couverture variable. Peuvent amplifier ou minimiser la crise selon l'agenda."
+    }
+  ],
+  "veille": [
+    {
+      "id": "veille_001",
+      "title": "Arrêt Cour européenne des droits de l'homme contre la Belgique",
+      "url": "https://hudoc.echr.coe.int/belgique-accueil-2025",
+      "category": "juridique",
+      "notes": "Condamnation pour traitement inhumain et dégradant. Obligation de mettre fin aux violations.",
+      "date": "2025-07-15T00:00:00.000Z"
+    },
+    {
+      "id": "veille_002",
+      "title": "Rapport Médecins du Monde : Impact sanitaire de la non-prise en charge",
+      "url": "https://medecinsdumonde.be/rapport-migrants-2025",
+      "category": "social",
+      "notes": "Pathologies aggravées, traumatismes non traités, grossesses à risque.",
+      "date": "2025-09-20T00:00:00.000Z"
+    },
+    {
+      "id": "veille_003",
+      "title": "Statistiques Fedasil : Taux d'occupation du réseau",
+      "url": "https://www.fedasil.be/statistiques-2025",
+      "category": "politique",
+      "notes": "Taux d'occupation à 105%. File d'attente de 3.500 personnes.",
+      "date": "2025-11-01T00:00:00.000Z"
+    },
+    {
+      "id": "veille_004",
+      "title": "Pacte européen sur l'asile et la migration adopté",
+      "url": "https://ec.europa.eu/migration-pact-2024",
+      "category": "juridique",
+      "notes": "Nouvelles obligations de solidarité. Mécanisme de relocalisation. Screening aux frontières.",
+      "date": "2025-04-10T00:00:00.000Z"
+    },
+    {
+      "id": "veille_005",
+      "title": "Sondage : 62% des Belges favorables à un meilleur accueil",
+      "url": "https://www.rtbf.be/sondage-accueil-migrants-2025",
+      "category": "social",
+      "notes": "Majorité silencieuse solidaire. Clivage régional Flandre/Wallonie-Bruxelles.",
+      "date": "2025-10-05T00:00:00.000Z"
+    }
+  ],
+  "checklist": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": true,
+    "c6": true,
+    "c7": true
+  },
+  "tree": {
+    "causes": [
+      { "id": "cause_001", "text": "Sous-financement chronique de Fedasil" },
+      { "id": "cause_002", "text": "Politique de dissuasion du gouvernement" },
+      { "id": "cause_003", "text": "Pression des partis anti-immigration au sein de la coalition" },
+      { "id": "cause_004", "text": "Récit médiatique négatif sur les migrations" },
+      { "id": "cause_005", "text": "Absence de volonté politique de créer des places" },
+      { "id": "cause_006", "text": "Externalisation des frontières européennes" }
+    ],
+    "effects": [
+      { "id": "effect_001", "text": "Milliers de personnes dormant dans la rue" },
+      { "id": "effect_002", "text": "Dégradation de la santé physique et mentale" },
+      { "id": "effect_003", "text": "Violation du droit international" },
+      { "id": "effect_004", "text": "Surcharge du réseau citoyen bénévole" },
+      { "id": "effect_005", "text": "Condamnations multiples de l'État" },
+      { "id": "effect_006", "text": "Exploitation et traite des personnes vulnérables" }
+    ]
+  },
+  "graph": {
+    "nodes": [
+      { "id": "concept_001", "label": "Droit à l'accueil", "type": "concept" },
+      { "id": "concept_002", "label": "Dignité humaine", "type": "value" },
+      { "id": "concept_003", "label": "Solidarité citoyenne", "type": "value" },
+      { "id": "concept_004", "label": "Hospitalité inconditionnelle", "type": "concept" },
+      { "id": "action_001", "label": "Hébergement citoyen", "type": "action" },
+      { "id": "action_002", "label": "Recours juridiques", "type": "action" },
+      { "id": "action_003", "label": "Manifestation nationale", "type": "action" }
+    ],
+    "links": [
+      { "source": "concept_001", "target": "concept_002", "type": "related" },
+      { "source": "concept_003", "target": "action_001", "type": "supports" },
+      { "source": "action_002", "target": "actor_001", "type": "influences" },
+      { "source": "cause_002", "target": "effect_001", "type": "causes" },
+      { "source": "actor_002", "target": "action_002", "type": "supports" },
+      { "source": "concept_004", "target": "concept_003", "type": "related" }
+    ]
+  }
+}

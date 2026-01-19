@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Plaidoyer Numérique Durable",
+    "description": "Campagne pour un numérique plus responsable et respectueux de l'environnement",
+    "created": "2025-09-15T10:00:00.000Z",
+    "updated": "2026-01-19T14:30:00.000Z",
+    "author": "Justice et Paix Belgique",
+    "theme": "environnement"
+  },
+  "fields": {
+    "project_name": "Plaidoyer pour un Numérique Durable",
+    "project_description": "Campagne de plaidoyer visant à promouvoir un numérique plus responsable, sobre et respectueux de l'environnement auprès des décideurs politiques belges et européens.",
+    
+    "domino_pourquoi": "Le secteur numérique représente 4% des émissions mondiales de gaz à effet de serre, un chiffre en croissance de 9% par an. L'obsolescence programmée des appareils, l'extraction de terres rares dans des conditions inhumaines, et la consommation énergétique des data centers sont des enjeux majeurs que les politiques publiques ignorent largement.",
+    "domino_valeurs": "Justice environnementale, sobriété numérique, solidarité internationale (conditions d'extraction), transparence des entreprises tech, droit à la réparation, éducation critique aux médias numériques.",
+    "domino_changements": "1. Adoption d'un indice de réparabilité obligatoire pour tous les appareils électroniques\n2. Interdiction de l'obsolescence programmée logicielle\n3. Taxation de l'empreinte carbone des data centers\n4. Inclusion de la sobriété numérique dans les programmes scolaires\n5. Création d'un label européen 'Numérique Responsable'",
+    "domino_actions": "- Rédaction d'une proposition de loi citoyenne\n- Organisation de rencontres avec les parlementaires\n- Campagne de sensibilisation grand public\n- Partenariat avec les associations de consommateurs\n- Mobilisation des jeunes via les réseaux sociaux",
+    
+    "profil_q1": "analyser",
+    "profil_q2": "expert",
+    "profil_competences": "Expertise environnementale, capacité de vulgarisation scientifique, réseau dans le monde associatif, expérience en éducation populaire, compétences en communication digitale.",
+    
+    "fleur_genre": "Le secteur tech reste majoritairement masculin, ce qui peut influencer les priorités de développement. Les femmes sont sous-représentées dans les espaces de décision sur le numérique.",
+    "fleur_classe": "L'accès au numérique durable (appareils reconditionnés, réparation) reste plus cher et moins accessible pour les classes populaires. La fracture numérique renforce les inégalités sociales.",
+    "fleur_origine": "L'extraction des terres rares se fait principalement en Afrique et en Asie, dans des conditions souvent désastreuses. Le colonialisme technologique perpétue des rapports de domination Nord-Sud.",
+    "fleur_autres": "Les personnes âgées et les personnes en situation de handicap sont particulièrement impactées par l'obsolescence rapide des interfaces. L'accessibilité numérique doit être intégrée.",
+    
+    "toc_vision": "Un monde où le numérique est au service du bien commun et de la transition écologique, où les appareils sont conçus pour durer et être réparés, où l'empreinte environnementale du secteur est drastiquement réduite.",
+    "toc_hypotheses": "Si nous parvenons à sensibiliser les décideurs et l'opinion publique aux impacts environnementaux du numérique, alors une régulation ambitieuse pourra être adoptée. Si les citoyens changent leurs comportements de consommation, alors les entreprises devront s'adapter.",
+    "toc_missions": "1. Informer et éduquer sur l'impact environnemental du numérique\n2. Porter des propositions législatives concrètes\n3. Construire une coalition d'acteurs pour amplifier notre voix\n4. Accompagner les citoyens vers des pratiques numériques plus sobres",
+    
+    "swot_forces": "- Expertise reconnue de Justice et Paix sur les questions de justice globale\n- Réseau solide d'associations partenaires\n- Crédibilité auprès des décideurs politiques\n- Capacité de mobilisation citoyenne\n- Expérience en plaidoyer parlementaire",
+    "swot_faiblesses": "- Ressources humaines limitées\n- Manque d'expertise technique pointue sur le numérique\n- Faible présence sur les réseaux sociaux\n- Dépendance aux financements publics",
+    "swot_opportunites": "- Actualité du sujet (Green Deal européen, loi AGEC en France)\n- Intérêt croissant des médias pour l'écologie numérique\n- Existence de partenaires potentiels (The Shift Project, HOP)\n- Présidence belge du Conseil de l'UE en 2024",
+    "swot_menaces": "- Lobbying puissant des GAFAM\n- Complexité technique du sujet\n- Risque de greenwashing des entreprises\n- Priorité donnée à la 'compétitivité numérique' par les gouvernements",
+    
+    "pestel_politique": "- Green Deal européen avec volet numérique\n- Loi française AGEC sur l'économie circulaire\n- Plan de relance belge avec axe digitalisation\n- Débats parlementaires sur la 5G",
+    "pestel_economique": "- Marché du reconditionnement en croissance (+20%/an)\n- Coût croissant des matières premières\n- Investissements massifs dans les data centers\n- Modèle économique des GAFAM basé sur l'obsolescence",
+    "pestel_social": "- Prise de conscience écologique croissante (jeunesse)\n- Mouvement Right to Repair aux USA et en Europe\n- Critique grandissante de la surveillance numérique\n- Fracture numérique persistante",
+    "pestel_techno": "- Développement de l'IA énergivore\n- Solutions de green coding émergentes\n- Progrès dans le recyclage des métaux rares\n- Alternatives open source et low-tech",
+    "pestel_ecolo": "- Urgence climatique reconnue (GIEC)\n- Épuisement des ressources en terres rares\n- Pollution des sols et des eaux par l'électronique\n- Consommation d'eau des data centers",
+    "pestel_legal": "- Directive européenne sur l'écoconception\n- Indice de réparabilité français (2021)\n- Débat sur le Digital Services Act\n- Droit à la réparation en discussion",
+    
+    "arbre_probleme": "L'empreinte environnementale du numérique croît de façon insoutenable",
+    
+    "pourquoi_1": "Parce que les appareils électroniques ont une durée de vie de plus en plus courte",
+    "pourquoi_2": "Parce que les fabricants pratiquent l'obsolescence programmée (matérielle et logicielle)",
+    "pourquoi_3": "Parce que le modèle économique des entreprises tech repose sur le renouvellement fréquent",
+    "pourquoi_4": "Parce qu'il n'existe pas de régulation contraignante imposant la durabilité",
+    "pourquoi_5": "Parce que les lobbies industriels ont plus d'influence que la société civile auprès des décideurs",
+    
+    "smart_s": "Obtenir l'adoption d'un indice de réparabilité obligatoire pour tous les appareils électroniques vendus en Belgique",
+    "smart_m": "Vote d'une proposition de loi au Parlement fédéral avec au moins 80 voix favorables",
+    "smart_a": "Ressources disponibles : 2 chargés de plaidoyer, budget communication de 15.000€, réseau de 50 associations partenaires",
+    "smart_r": "Contexte favorable : précédent français, intérêt des consommateurs, élections en 2024",
+    "smart_t": "Avant la fin de la législature 2024, avec première lecture avant juin 2024",
+    
+    "cible_principale": "Ministre fédéral de l'Environnement et de l'Économie - Pouvoir de déposer un projet de loi et d'influencer la position belge au niveau européen",
+    "cible_secondaires": "- Commission Environnement de la Chambre\n- Députés des partis écologistes et socialistes\n- Secrétaire d'État à la Digitalisation\n- Représentation permanente belge auprès de l'UE",
+    "allies": "- Test-Achats (association de consommateurs)\n- Inter-Environnement Wallonie\n- Bond Beter Leefmilieu\n- The Shift Project (France)\n- HOP - Halte à l'Obsolescence Programmée\n- Repair Cafés Belgium",
+    
+    "msg_accroche": "Chaque année, 50 millions de tonnes de déchets électroniques sont produits dans le monde. Et si votre smartphone devenait un outil de la transition écologique plutôt qu'un problème ?",
+    "msg_probleme": "L'industrie numérique est responsable de 4% des émissions mondiales de CO2, plus que l'aviation civile. Les appareils sont conçus pour être remplacés, pas réparés. En Belgique, un smartphone est gardé en moyenne 23 mois avant d'être jeté.",
+    "msg_solution": "L'indice de réparabilité, déjà en place en France, permet aux consommateurs de choisir des produits durables et pousse les fabricants à concevoir différemment. La Belgique peut devenir pionnière en Europe.",
+    "msg_action": "Nous demandons au gouvernement de déposer un projet de loi rendant obligatoire l'affichage d'un indice de réparabilité sur tous les appareils électroniques vendus en Belgique d'ici 2025.",
+    
+    "suivi_indicateurs": "- Nombre de rencontres avec des parlementaires\n- Couverture médiatique (articles, interviews)\n- Signatures de la pétition citoyenne\n- Avancement du texte législatif\n- Engagement des associations partenaires",
+    "suivi_resultats": "- 12 rencontres avec des députés réalisées\n- 3 articles dans la presse nationale\n- 8.500 signatures collectées\n- Question parlementaire posée par 2 députés",
+    "suivi_lecons": "- L'argument économique (emplois dans la réparation) est plus efficace que l'argument environnemental seul\n- Les témoignages de citoyens touchent plus que les statistiques\n- La coordination avec les partenaires français est précieuse",
+    "suivi_ajustements": "- Renforcer le volet économique du message\n- Organiser une visite de Repair Café pour les députés\n- Solliciter un expert français pour témoigner en commission"
+  },
+  "actors": [
+    {
+      "id": "actor_001",
+      "name": "Ministre de l'Environnement",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible principale. Sensible aux enjeux écologiques, mais sous pression pour la compétitivité économique."
+    },
+    {
+      "id": "actor_002",
+      "name": "Test-Achats",
+      "type": "ally",
+      "influence": "fort",
+      "notes": "Association de consommateurs très influente. Partage nos objectifs sur le droit à la réparation."
+    },
+    {
+      "id": "actor_003",
+      "name": "Fédération du commerce électronique (BeCommerce)",
+      "type": "opponent",
+      "influence": "moyen",
+      "notes": "Défend les intérêts des vendeurs en ligne. Craint une complexification réglementaire."
+    },
+    {
+      "id": "actor_004",
+      "name": "Ecolo-Groen",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Parti au gouvernement. Députés déjà sensibilisés, peuvent porter une proposition de loi."
+    },
+    {
+      "id": "actor_005",
+      "name": "Apple Belgium",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Opposé historique au droit à la réparation. Lobbying actif au niveau européen."
+    },
+    {
+      "id": "actor_006",
+      "name": "Repair Cafés Belgium",
+      "type": "ally",
+      "influence": "faible",
+      "notes": "Réseau de bénévoles. Crédibilité terrain, témoignages concrets, mais peu d'accès aux décideurs."
+    },
+    {
+      "id": "actor_007",
+      "name": "Commission européenne - DG ENV",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible secondaire. Travaille sur la révision de la directive écoconception."
+    },
+    {
+      "id": "actor_008",
+      "name": "Agoria (fédération tech belge)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Représente les intérêts de l'industrie tech. Accès direct aux cabinets ministériels."
+    },
+    {
+      "id": "actor_009",
+      "name": "The Shift Project",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Think tank français reconnu. Expertise technique sur l'empreinte carbone du numérique."
+    },
+    {
+      "id": "actor_010",
+      "name": "Députés socialistes (PS-Vooruit)",
+      "type": "neutral",
+      "influence": "moyen",
+      "notes": "Sensibles aux arguments économiques (emplois réparation) mais prudents sur la régulation."
+    }
+  ],
+  "veille": [
+    {
+      "id": "veille_001",
+      "title": "Rapport ADEME sur l'empreinte numérique des Français",
+      "url": "https://www.ademe.fr/empreinte-numerique",
+      "category": "environnement",
+      "notes": "Données clés : 2% de l'empreinte carbone française. Fabrication = 80% de l'impact.",
+      "date": "2025-11-20T00:00:00.000Z"
+    },
+    {
+      "id": "veille_002",
+      "title": "Indice de réparabilité : premier bilan en France",
+      "url": "https://www.ecologie.gouv.fr/indice-reparabilite",
+      "category": "politique",
+      "notes": "Retour d'expérience positif. 78% des consommateurs déclarent regarder l'indice.",
+      "date": "2025-10-15T00:00:00.000Z"
+    },
+    {
+      "id": "veille_003",
+      "title": "Proposition de directive européenne sur le droit à la réparation",
+      "url": "https://ec.europa.eu/right-to-repair",
+      "category": "juridique",
+      "notes": "Texte ambitieux mais opposition forte des industriels. Vote prévu mi-2024.",
+      "date": "2025-12-01T00:00:00.000Z"
+    },
+    {
+      "id": "veille_004",
+      "title": "Apple condamné pour obsolescence programmée en France",
+      "url": "https://www.lemonde.fr/apple-condamnation",
+      "category": "juridique",
+      "notes": "Amende de 25 millions €. Crée un précédent juridique important.",
+      "date": "2025-09-28T00:00:00.000Z"
+    },
+    {
+      "id": "veille_005",
+      "title": "Rapport The Shift Project : Sobriété numérique",
+      "url": "https://theshiftproject.org/sobriete-numerique-2024",
+      "category": "environnement",
+      "notes": "Scénarios de réduction de l'empreinte. Recommandations politiques détaillées.",
+      "date": "2025-06-10T00:00:00.000Z"
+    }
+  ],
+  "checklist": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": false,
+    "c4": true,
+    "c5": true,
+    "c6": false,
+    "c7": false
+  },
+  "tree": {
+    "causes": [
+      { "id": "cause_001", "text": "Obsolescence programmée matérielle (batteries soudées, pièces non standard)" },
+      { "id": "cause_002", "text": "Obsolescence programmée logicielle (mises à jour qui ralentissent)" },
+      { "id": "cause_003", "text": "Modèle économique basé sur le renouvellement fréquent" },
+      { "id": "cause_004", "text": "Manque de formation des réparateurs indépendants" },
+      { "id": "cause_005", "text": "Coût de réparation supérieur au remplacement" },
+      { "id": "cause_006", "text": "Absence de régulation contraignante" },
+      { "id": "cause_007", "text": "Marketing agressif sur les nouvelles fonctionnalités" },
+      { "id": "cause_008", "text": "Extraction non régulée des terres rares" }
+    ],
+    "effects": [
+      { "id": "effect_001", "text": "50 millions de tonnes de déchets électroniques par an" },
+      { "id": "effect_002", "text": "4% des émissions mondiales de GES" },
+      { "id": "effect_003", "text": "Pollution des sols et nappes phréatiques" },
+      { "id": "effect_004", "text": "Exploitation de travailleurs dans les mines de cobalt" },
+      { "id": "effect_005", "text": "Perte de souveraineté technologique européenne" },
+      { "id": "effect_006", "text": "Précarité numérique pour les plus pauvres" }
+    ]
+  },
+  "graph": {
+    "nodes": [
+      { "id": "concept_001", "label": "Droit à la réparation", "type": "concept" },
+      { "id": "concept_002", "label": "Sobriété numérique", "type": "concept" },
+      { "id": "concept_003", "label": "Économie circulaire", "type": "concept" },
+      { "id": "concept_004", "label": "Justice environnementale", "type": "value" },
+      { "id": "concept_005", "label": "Souveraineté technologique", "type": "concept" },
+      { "id": "action_001", "label": "Proposition de loi", "type": "action" },
+      { "id": "action_002", "label": "Campagne médiatique", "type": "action" },
+      { "id": "action_003", "label": "Pétition citoyenne", "type": "action" }
+    ],
+    "links": [
+      { "source": "concept_001", "target": "concept_003", "type": "supports" },
+      { "source": "concept_002", "target": "concept_001", "type": "related" },
+      { "source": "concept_004", "target": "cause_008", "type": "opposes" },
+      { "source": "action_001", "target": "actor_001", "type": "influences" },
+      { "source": "actor_002", "target": "action_003", "type": "supports" },
+      { "source": "cause_003", "target": "effect_001", "type": "causes" },
+      { "source": "cause_006", "target": "cause_003", "type": "causes" }
+    ]
+  }
+}

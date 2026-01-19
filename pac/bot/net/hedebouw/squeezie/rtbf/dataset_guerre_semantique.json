@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Opération TSAR e-BOMBA",
+    "description": "Contre-offensive narrative des précaires face aux médias dominants - Guerre sémantique et domination cognitive",
+    "created": "2025-11-01T08:00:00.000Z",
+    "updated": "2026-01-19T12:00:00.000Z",
+    "author": "Collectif Bénéficiaires de l'Intervention Majorée",
+    "theme": "influence"
+  },
+  "fields": {
+    "project_name": "TSAR e-BOMBA : Contre-Narrative des Précaires",
+    "project_description": "Opération de guerre sémantique visant à renverser le narratif médiatique dominant sur les allocataires sociaux en Belgique. Utilisation des techniques de SEO offensif, Entity Poisoning et construction d'autorité narrative pour imposer un contre-récit légitime.",
+    
+    "domino_pourquoi": "Les médias dominants (RTL, RTBF, presse écrite) dépeignent systématiquement les allocataires sociaux comme des fraudeurs et des profiteurs. Ce narratif toxique influence l'opinion publique et légitime des politiques de contrôle et de sanctions. La propagande descendante des institutions est inefficace - seule une mobilisation authentique de la société civile peut retourner l'algorithme.",
+    "domino_valeurs": "Dignité des précaires, vérité factuelle vs narrative médiatique, authenticité comme arme, soft power citoyen, justice sociale, démocratisation de l'influence numérique.",
+    "domino_changements": "1. Redéfinition sémantique de l'entité 'allocataire social' dans le Knowledge Graph\n2. Association des médias hostiles aux concepts de 'désinformation' et 'mépris de classe'\n3. Création d'une autorité narrative alternative crédible\n4. Mobilisation virale de la société civile\n5. Inversion du rapport de force informationnel",
+    "domino_actions": "- Déploiement d'un cocon sémantique structuré\n- Production massive de contenu optimisé SEO\n- Balisage Schema.org chirurgical (JSON-LD)\n- Netlinking de masse via mobilisation sociale\n- Saturation des SERPs sur les requêtes cibles\n- Infiltration des corpus d'entraînement IA (GEO)",
+    
+    "profil_q1": "agir",
+    "profil_q2": "leader",
+    "profil_competences": "Expertise SEO/Entity SEO, maîtrise du balisage Schema.org, connaissance des algorithmes de ranking, capacité de mobilisation citoyenne, storytelling émotionnel, analyse OSINT.",
+    
+    "fleur_genre": "Les femmes allocataires sont davantage stigmatisées (mères célibataires). Le vocabulaire médiatique utilise des stéréotypes genrés pour discréditer.",
+    "fleur_classe": "Conflit de classe fondamental : les médias appartiennent aux classes dominantes. Les précaires n'ont pas accès aux canaux de diffusion traditionnels.",
+    "fleur_origine": "Les allocataires d'origine étrangère sont doublement stigmatisés. Le narratif 'fraude = immigration' est exploité par l'extrême-droite.",
+    "fleur_autres": "Les personnes en situation de handicap sont invisibilisées. Les malades de longue durée sont présentés comme des simulateurs.",
+    
+    "toc_vision": "Un espace informationnel où la voix des précaires est aussi puissante que celle des médias mainstream. Une redéfinition permanente de leur image dans le Knowledge Graph de Google. Une mobilisation authentique qui génère plus de backlinks et de signaux sociaux que toute campagne institutionnelle.",
+    "toc_hypotheses": "Si nous appliquons les techniques de SEO offensif avec rigueur, nous pouvons modifier les attributs des entités dans le Knowledge Graph. Si la mobilisation citoyenne génère des signaux authentiques, les algorithmes favoriseront notre narratif. Si nous ciblons la longue traîne, nous capturerons des audiences hautement qualifiées.",
+    "toc_missions": "1. Cartographier et démanteler l'arsenal narratif adverse\n2. Établir la suprématie sémantique sur les requêtes cibles\n3. Construire une autorité narrative inattaquable\n4. Transformer l'information en mouvement social",
+    
+    "swot_forces": "- Authenticité des témoignages (société civile > propagande)\n- Expertise technique en SEO sémantique (équipe #B!Mi)\n- Effet de surprise (l'adversaire ne s'attend pas à une riposte)\n- Motivation des précaires (survie vs profit)\n- Architecture du web favorise les signaux bottom-up",
+    "swot_faiblesses": "- Ressources financières limitées\n- Accès restreint aux médias traditionnels\n- Risque juridique (diffamation, lawfare)\n- Dépendance aux plateformes centralisées (Google, Facebook)\n- Fatigue et précarité des militants",
+    "swot_opportunites": "- Algorithmes de recommandation favorisent l'engagement émotionnel\n- Crise de confiance dans les médias mainstream\n- Outils IA accessibles (génération de contenu)\n- Précédents de campagnes virales réussies\n- GEO (infiltration des corpus d'entraînement IA)",
+    "swot_menaces": "- Contre-offensive juridique (procès en diffamation)\n- Désindexation par Google (spam penalty)\n- Surveillance et infiltration par VIGINUM\n- Récupération politique (extrême-droite ou gauche)\n- Épuisement de l'attention publique",
+    
+    "pestel_politique": "- Gouvernement hostile aux allocataires (contrôles renforcés)\n- Agence VIGINUM surveille les opérations d'influence\n- Contexte électoral favorable à la stigmatisation\n- Digital Services Act (DSA) comme menace juridique",
+    "pestel_economique": "- Modèle publicitaire des plateformes favorise la polarisation\n- Coût du SEO professionnel vs ressources des précaires\n- Précarité financière limite la capacité d'action\n- Short-selling cognitif possible contre médias cotés",
+    "pestel_social": "- Fracture entre 'insiders' et 'outsiders' du marché du travail\n- Solidarité latente mais non mobilisée\n- Défiance croissante envers les institutions\n- Potentiel viral des histoires individuelles",
+    "pestel_techno": "- IA générative (ChatGPT) permet production massive de contenu\n- Schema.org et Knowledge Graph comme leviers de manipulation\n- Algorithmes de ranking comme champ de bataille\n- GEO = nouveau front de la guerre cognitive",
+    "pestel_ecolo": "- Précarité énergétique comme angle de communication\n- Lien entre justice sociale et justice climatique",
+    "pestel_legal": "- Risque de poursuites pour diffamation\n- DSA et RGPD comme contraintes\n- Jurisprudence sur le droit à l'image et la réputation\n- Zones grises du droit de l'influence",
+    
+    "arbre_probleme": "Le narratif médiatique dominant stigmatise les allocataires sociaux comme fraudeurs",
+    
+    "pourquoi_1": "Parce que les médias mainstream relaient sans critique les discours institutionnels",
+    "pourquoi_2": "Parce que les algorithmes de recommandation amplifient les contenus polarisants",
+    "pourquoi_3": "Parce que les précaires n'ont pas accès aux canaux de diffusion dominants",
+    "pourquoi_4": "Parce que l'authenticité citoyenne n'est pas organisée en force de frappe sémantique",
+    "pourquoi_5": "Parce que personne n'a encore appliqué les techniques de guerre cognitive au profit des dominés",
+    
+    "smart_s": "Faire apparaître notre contre-récit en première page de Google sur la requête 'allocataires sociaux Belgique fraude'",
+    "smart_m": "Top 3 des résultats Google sur 10 requêtes cibles identifiées, avec Featured Snippet sur au moins 3 requêtes",
+    "smart_a": "Équipe de 5 experts SEO bénévoles, budget de 5.000€, réseau de 500 précaires mobilisables pour backlinks et partages",
+    "smart_r": "Techniques éprouvées (Entity SEO, cocon sémantique), audience existante sur les réseaux sociaux",
+    "smart_t": "6 mois pour les premiers résultats visibles, 12 mois pour la domination des SERPs cibles",
+    
+    "cible_principale": "Google Knowledge Graph - L'entité 'allocataire social' doit être redéfinie avec des attributs positifs (résilience, dignité, victime du système)",
+    "cible_secondaires": "- RTL Belgium (Christophe Deborsu) : association à 'désinformation'\n- ONEM : association à 'harcèlement administratif'\n- Gouvernement fédéral : association à 'précarisation volontaire'\n- Opinion publique : déclenchement d'empathie",
+    "allies": "- Syndicats (FGTB, CSC) : relais de diffusion\n- Collectifs de chômeurs existants\n- Influenceurs engagés sur les réseaux sociaux\n- Journalistes indépendants / alternatifs\n- Experts SEO sympathisants (réseau #B!Mi)\n- Associations de lutte contre la pauvreté",
+    
+    "msg_accroche": "Tous fraudeurs ? L'heure est venue de leur renvoyer la question. Qui fraude vraiment : le chômeur qui survit ou le système qui l'écrase ?",
+    "msg_probleme": "Chaque semaine, les médias mainstream diffusent des reportages stigmatisant les allocataires sociaux. Cette propagande descendante légitime des politiques de contrôle et de sanctions qui poussent des milliers de personnes dans la misère.",
+    "msg_solution": "Le web sémantique favorise les signaux authentiques de la société civile. En mobilisant nos témoignages, nos partages, nos liens, nous pouvons inverser le narratif. Chaque backlink est un vote de confiance que Google ne peut ignorer.",
+    "msg_action": "Partagez ce manifeste. Liez-le depuis vos blogs. Commentez-le sur les réseaux. Chaque action renforce notre autorité algorithmique. Le premier résultat Google a en moyenne 3,8 fois plus de backlinks que les positions 2 à 10. Votre mobilisation est notre carburant.",
+    
+    "suivi_indicateurs": "- Positions Google sur requêtes cibles\n- Nombre de backlinks acquis\n- Signaux sociaux (partages, likes)\n- Trafic organique sur les pages du cocon\n- Apparition dans les Featured Snippets\n- Mentions dans les réponses IA (ChatGPT, Perplexity)",
+    "suivi_resultats": "- Position 5 sur 'allocataires sociaux fraude' (était page 3)\n- 250 backlinks acquis en 3 mois\n- Viralité sur Twitter : 15.000 partages\n- Featured Snippet obtenu sur 1 requête\n- Première mention par ChatGPT",
+    "suivi_lecons": "- Les témoignages vidéo génèrent plus de backlinks que les textes\n- Le balisage FAQPage est très efficace pour les Featured Snippets\n- La mobilisation doit être continue, pas ponctuelle\n- Les médias traditionnels ignorent mais les algorithmes intègrent",
+    "suivi_ajustements": "- Augmenter la production vidéo (YouTube SEO)\n- Cibler les requêtes en anglais pour l'international\n- Préparer la défense juridique préventive\n- Infiltrer les corpus d'entraînement des LLM via Wikipedia"
+  },
+  "actors": [
+    {
+      "id": "actor_001",
+      "name": "Google Knowledge Graph",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Cible technique principale. Redéfinir les attributs des entités pour imposer notre narratif algorithmiquement."
+    },
+    {
+      "id": "actor_002",
+      "name": "Agence #B!Mi",
+      "type": "ally",
+      "influence": "fort",
+      "notes": "Structure d'influence de nouvelle génération. Expertise en SEO sémantique, netlinking, GEO."
+    },
+    {
+      "id": "actor_003",
+      "name": "RTL Belgium (Christophe Deborsu)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Médias mainstream relayant le narratif hostile. Cible de l'Entity Poisoning (association à 'désinformation')."
+    },
+    {
+      "id": "actor_004",
+      "name": "VIGINUM",
+      "type": "opponent",
+      "influence": "moyen",
+      "notes": "Agence française de lutte contre les ingérences. Surveille les opérations d'influence même légitimes."
+    },
+    {
+      "id": "actor_005",
+      "name": "FGTB / CSC (syndicats)",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Relais de diffusion potentiel. Base militante mobilisable pour les signaux sociaux."
+    },
+    {
+      "id": "actor_006",
+      "name": "Précaires mobilisés",
+      "type": "ally",
+      "influence": "fort",
+      "notes": "Force de frappe principale. Leur authenticité génère des signaux que les algorithmes valorisent."
+    },
+    {
+      "id": "actor_007",
+      "name": "Laurent Bourrelly (SEO)",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Expert cocon sémantique. Fournit l'architecture stratégique des contenus."
+    },
+    {
+      "id": "actor_008",
+      "name": "Jacky Giang (Netlinking)",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Maître du netlinking de masse. Fournit la puissance de feu pour l'autorité algorithmique."
+    },
+    {
+      "id": "actor_009",
+      "name": "ChatGPT / Perplexity (LLMs)",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Nouveau front GEO. Infiltrer les corpus d'entraînement pour influencer les réponses générées."
+    },
+    {
+      "id": "actor_010",
+      "name": "ONEM / Institutions de contrôle",
+      "type": "opponent",
+      "influence": "moyen",
+      "notes": "Source du narratif hostile. Cible secondaire pour l'association à 'harcèlement administratif'."
+    }
+  ],
+  "veille": [
+    {
+      "id": "veille_001",
+      "title": "Étude 'Vu du Web' : les mots-clés longue traîne ont 2x plus de clics",
+      "url": "https://www.vuduweb.fr/etude-longue-traine-2025",
+      "category": "technique",
+      "notes": "Statistique clé pour la stratégie de ciblage des requêtes qualifiées.",
+      "date": "2025-08-15T00:00:00.000Z"
+    },
+    {
+      "id": "veille_002",
+      "title": "Joseph Nye : Soft Power et influence à l'ère numérique",
+      "url": "https://www.foreignaffairs.com/soft-power-digital-age",
+      "category": "politique",
+      "notes": "Cadre théorique fondateur. Le soft power repose sur l'attraction, pas la coercition.",
+      "date": "2025-03-20T00:00:00.000Z"
+    },
+    {
+      "id": "veille_003",
+      "title": "Rapport RAND : Noopolitique et domination narrative",
+      "url": "https://www.rand.org/noopolitics-2025",
+      "category": "politique",
+      "notes": "La victoire stratégique dépend de 'quelle histoire l'emporte'. Forme sombre vs lumineuse.",
+      "date": "2025-06-10T00:00:00.000Z"
+    },
+    {
+      "id": "veille_004",
+      "title": "Julien Gourdon : GEO - Optimisation pour les moteurs génératifs",
+      "url": "https://www.searchenginejournal.com/geo-optimization",
+      "category": "technique",
+      "notes": "Nouveau paradigme : être LA source citée par l'IA, pas seulement en top 3 Google.",
+      "date": "2025-11-05T00:00:00.000Z"
+    },
+    {
+      "id": "veille_005",
+      "title": "Loi de Brandolini : asymétrie vérité/mensonge",
+      "url": "https://fr.wikipedia.org/wiki/Loi_de_Brandolini",
+      "category": "social",
+      "notes": "L'énergie pour réfuter est supérieure à celle pour produire. Avantage structurel à l'attaquant.",
+      "date": "2025-01-10T00:00:00.000Z"
+    }
+  ],
+  "checklist": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": false,
+    "c6": false,
+    "c7": false
+  },
+  "tree": {
+    "causes": [
+      { "id": "cause_001", "text": "Médias mainstream relaient sans critique les discours institutionnels" },
+      { "id": "cause_002", "text": "Algorithmes de recommandation amplifient les contenus polarisants" },
+      { "id": "cause_003", "text": "Modèle économique publicitaire récompense l'indignation" },
+      { "id": "cause_004", "text": "Précaires n'ont pas accès aux canaux de diffusion dominants" },
+      { "id": "cause_005", "text": "Absence d'organisation de l'authenticité citoyenne en force de frappe" },
+      { "id": "cause_006", "text": "Techniques de guerre cognitive réservées aux puissants" },
+      { "id": "cause_007", "text": "Knowledge Graph encode les biais médiatiques comme 'vérité'" }
+    ],
+    "effects": [
+      { "id": "effect_001", "text": "Stigmatisation sociale des allocataires" },
+      { "id": "effect_002", "text": "Légitimation des politiques de contrôle et sanctions" },
+      { "id": "effect_003", "text": "Isolement et honte des précaires" },
+      { "id": "effect_004", "text": "Renforcement du narratif 'fraudeur' dans le Knowledge Graph" },
+      { "id": "effect_005", "text": "Dégradation des conditions de vie et droits sociaux" },
+      { "id": "effect_006", "text": "Fracture sociale et montée du ressentiment" }
+    ]
+  },
+  "graph": {
+    "nodes": [
+      { "id": "concept_001", "label": "Soft Power citoyen", "type": "concept" },
+      { "id": "concept_002", "label": "Entity SEO", "type": "concept" },
+      { "id": "concept_003", "label": "Cocon sémantique", "type": "concept" },
+      { "id": "concept_004", "label": "Knowledge Graph", "type": "concept" },
+      { "id": "concept_005", "label": "GEO (Generative Engine Optimization)", "type": "concept" },
+      { "id": "concept_006", "label": "Authenticité", "type": "value" },
+      { "id": "concept_007", "label": "Auftragstaktik", "type": "concept" },
+      { "id": "action_001", "label": "Déploiement e-BOMBA", "type": "action" },
+      { "id": "action_002", "label": "Mobilisation backlinks", "type": "action" },
+      { "id": "action_003", "label": "Balisage Schema.org", "type": "action" },
+      { "id": "action_004", "label": "Infiltration LLMs", "type": "action" }
+    ],
+    "links": [
+      { "source": "concept_001", "target": "concept_006", "type": "related" },
+      { "source": "concept_002", "target": "concept_004", "type": "influences" },
+      { "source": "concept_003", "target": "concept_002", "type": "supports" },
+      { "source": "action_001", "target": "actor_003", "type": "influences" },
+      { "source": "action_002", "target": "concept_004", "type": "influences" },
+      { "source": "action_003", "target": "actor_009", "type": "influences" },
+      { "source": "concept_007", "target": "action_001", "type": "supports" },
+      { "source": "actor_002", "target": "concept_003", "type": "supports" },
+      { "source": "cause_002", "target": "effect_001", "type": "causes" },
+      { "source": "actor_006", "target": "action_002", "type": "supports" }
+    ]
+  }
+}

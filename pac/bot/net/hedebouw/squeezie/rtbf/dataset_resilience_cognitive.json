@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "version": "4.0",
+    "name": "Résilience Cognitive Citoyenne",
+    "description": "Plaidoyer pour la souveraineté numérique et la protection contre la manipulation de l'information",
+    "created": "2025-06-01T09:00:00.000Z",
+    "updated": "2026-01-19T10:20:00.000Z",
+    "author": "Observatoire de la Désinformation",
+    "theme": "democratie"
+  },
+  "fields": {
+    "project_name": "Résilience Cognitive : Défendre la démocratie à l'ère de la désinformation",
+    "project_description": "Campagne de plaidoyer visant à renforcer la résilience des citoyens face à la manipulation de l'information et à promouvoir une régulation européenne des plateformes numériques plus ambitieuse.",
+    
+    "domino_pourquoi": "La démocratie est menacée par une guerre cognitive permanente. Des acteurs étatiques et privés manipulent l'information pour fragmenter les sociétés, polariser le débat public et éroder la confiance dans les institutions. Les algorithmes amplifient la désinformation plus vite que la vérité ne peut la rattraper. Les citoyens sont devenus le champ de bataille d'une guerre invisible.",
+    "domino_valeurs": "Vérité, souveraineté citoyenne, esprit critique, transparence algorithmique, pluralisme de l'information, protection de l'espace public numérique, éducation aux médias.",
+    "domino_changements": "1. Transparence obligatoire des algorithmes de recommandation\n2. Création d'une agence européenne de lutte contre la désinformation\n3. Éducation aux médias obligatoire de la primaire au lycée\n4. Régulation des dark patterns et techniques de manipulation\n5. Soutien public au journalisme d'intérêt général",
+    "domino_actions": "- Production de rapports d'investigation sur les opérations d'influence\n- Développement d'outils de fact-checking collaboratifs\n- Formation des enseignants à l'éducation aux médias\n- Plaidoyer pour renforcer le Digital Services Act\n- Campagne de sensibilisation grand public",
+    
+    "profil_q1": "analyser",
+    "profil_q2": "expert",
+    "profil_competences": "Expertise en OSINT (renseignement en sources ouvertes), analyse des réseaux sociaux, fact-checking, connaissance du droit européen du numérique, pédagogie et vulgarisation.",
+    
+    "fleur_genre": "Les femmes sont davantage ciblées par le cyberharcèlement coordonné. Les campagnes de désinformation exploitent souvent des stéréotypes de genre pour manipuler.",
+    "fleur_classe": "L'accès à une information de qualité devient un marqueur social. Les classes populaires sont plus exposées aux contenus de faible qualité et aux arnaques en ligne.",
+    "fleur_origine": "Les communautés migrantes sont souvent ciblées par des campagnes de haine. Les diasporas reçoivent de la désinformation depuis leur pays d'origine.",
+    "fleur_autres": "Les personnes âgées sont plus vulnérables aux techniques de manipulation. Les jeunes sont exposés à des contenus extrémistes via les algorithmes de recommandation.",
+    
+    "toc_vision": "Un espace public numérique sain où les citoyens disposent des outils pour distinguer le vrai du faux, où les plateformes sont responsables des contenus qu'elles amplifient, et où la démocratie est protégée contre les ingérences informationnelles.",
+    "toc_hypotheses": "Si les citoyens développent un esprit critique face à l'information, ils seront moins vulnérables à la manipulation. Si les plateformes sont régulées, elles réduiront l'amplification de la désinformation. Si le journalisme de qualité est soutenu, il pourra contrer les narratifs manipulés.",
+    "toc_missions": "1. Exposer les mécanismes de la guerre cognitive\n2. Outiller les citoyens pour résister à la manipulation\n3. Influencer la régulation européenne du numérique\n4. Soutenir l'écosystème de l'information de qualité",
+    
+    "swot_forces": "- Expertise reconnue en analyse de la désinformation\n- Réseau européen de fact-checkers partenaires\n- Crédibilité auprès des institutions européennes\n- Outils techniques d'analyse innovants\n- Équipe pluridisciplinaire (journalistes, data scientists, juristes)",
+    "swot_faiblesses": "- Sujet complexe, difficile à vulgariser\n- Risque d'être perçu comme partisan\n- Ressources limitées face à l'ampleur du phénomène\n- Difficulté à mesurer l'impact de nos actions",
+    "swot_opportunites": "- Prise de conscience post-Covid et post-Ukraine\n- Révision du Digital Services Act en 2025\n- Intérêt des médias pour le sujet\n- Financement européen disponible (Horizon Europe)",
+    "swot_menaces": "- Accusations de censure par les mouvements complotistes\n- Lobbying des GAFAM contre la régulation\n- Course technologique (IA générative, deepfakes)\n- Polarisation politique sur le sujet",
+    
+    "pestel_politique": "- Digital Services Act (DSA) en application\n- Création de VIGINUM en France\n- Ingérences russes documentées en Europe\n- Débat sur la régulation de l'IA (AI Act)",
+    "pestel_economique": "- Modèle économique des plateformes basé sur l'engagement\n- Crise du journalisme traditionnel\n- Marché de la désinformation (fermes à trolls)\n- Coût économique des fake news estimé à 78 Md€/an",
+    "pestel_social": "- Défiance croissante envers les médias traditionnels\n- Bulles de filtre et chambres d'écho\n- Polarisation politique accélérée\n- Mouvements anti-establishment (Gilets jaunes, anti-vax)",
+    "pestel_techno": "- IA générative (ChatGPT, Midjourney) et deepfakes\n- Algorithmes de recommandation opaques\n- Bots et astroturfing sophistiqués\n- Messageries chiffrées (difficulté de monitoring)",
+    "pestel_ecolo": "- Désinformation climatosceptique massive\n- Greenwashing et manipulation corporate\n- Liens entre écologie et théories du complot",
+    "pestel_legal": "- Digital Services Act (DSA)\n- AI Act en négociation\n- Code de bonnes pratiques UE contre la désinformation\n- Jurisprudence sur la responsabilité des plateformes",
+    
+    "arbre_probleme": "La désinformation massive érode la confiance démocratique et fragmente les sociétés",
+    
+    "pourquoi_1": "Parce que les algorithmes amplifient les contenus émotionnels et polarisants",
+    "pourquoi_2": "Parce que le modèle économique des plateformes repose sur l'engagement maximal",
+    "pourquoi_3": "Parce que les annonceurs paient au clic sans se soucier de la qualité du contenu",
+    "pourquoi_4": "Parce qu'il n'existe pas de régulation contraignante des algorithmes de recommandation",
+    "pourquoi_5": "Parce que les États et les lobbies tech s'opposent à toute transparence algorithmique",
+    
+    "smart_s": "Obtenir l'inclusion d'un article sur la transparence algorithmique obligatoire dans la révision du Digital Services Act",
+    "smart_m": "Adoption par le Parlement européen d'un amendement imposant l'auditabilité des algorithmes de recommandation",
+    "smart_a": "Coalition de 15 ONG, 50 chercheurs signataires, budget de 200.000€, accès à 5 eurodéputés clés",
+    "smart_r": "Contexte favorable : scandales Cambridge Analytica/Twitter Files, prise de conscience post-Covid",
+    "smart_t": "Avant le vote en commission IMCO en octobre 2025, avec amendement déposé en septembre",
+    
+    "cible_principale": "Commission IMCO du Parlement européen - Compétente sur le Digital Services Act, réceptive aux arguments de protection des consommateurs",
+    "cible_secondaires": "- Commissaire européen au Marché intérieur\n- Présidence du Conseil de l'UE\n- Autorités nationales de régulation (ARCOM, BNetzA)\n- Ombudsman européen",
+    "allies": "- European Digital Rights (EDRi)\n- AlgorithmWatch\n- Mozilla Foundation\n- Reporters sans frontières\n- Université d'Oxford - Internet Institute\n- Fact-checkers européens (EFCSN)",
+    
+    "msg_accroche": "L'algorithme qui vous montre cette vidéo ne veut pas vous informer. Il veut vous garder accro. Et des puissances hostiles l'ont compris.",
+    "msg_probleme": "Les algorithmes de TikTok, Facebook et YouTube amplifient la désinformation 6 fois plus vite que les informations vérifiées. Des opérations d'influence étrangères ont touché 80% des élections européennes depuis 2016.",
+    "msg_solution": "La transparence algorithmique permettrait aux chercheurs et régulateurs de comprendre et corriger ces biais. L'UE peut imposer cette transparence sans compromettre le secret commercial.",
+    "msg_action": "Nous demandons au Parlement européen d'adopter un amendement imposant l'auditabilité des algorithmes de recommandation par des chercheurs indépendants.",
+    
+    "suivi_indicateurs": "- Nombre de co-signataires de l'appel\n- Rencontres avec eurodéputés\n- Couverture médiatique européenne\n- Position des groupes politiques\n- Avancement de l'amendement",
+    "suivi_resultats": "- 75 organisations signataires\n- 12 rencontres avec eurodéputés\n- Tribune publiée dans 5 grands journaux européens\n- Soutien des groupes Verts, S&D et Renew",
+    "suivi_lecons": "- L'angle 'souveraineté européenne face aux GAFAM' est plus efficace que l'angle libertés\n- Les cas concrets (élections) parlent plus que les statistiques\n- La coalition large (ONG + chercheurs + journalistes) renforce la crédibilité",
+    "suivi_ajustements": "- Cibler aussi le groupe PPE via l'angle économique\n- Préparer des réponses aux arguments des lobbies tech\n- Organiser une audition d'experts au Parlement"
+  },
+  "actors": [
+    {
+      "id": "actor_001",
+      "name": "Commission IMCO (Parlement européen)",
+      "type": "target",
+      "influence": "fort",
+      "notes": "Commission compétente sur le DSA. Présidente réceptive aux arguments de protection des consommateurs."
+    },
+    {
+      "id": "actor_002",
+      "name": "European Digital Rights (EDRi)",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Coalition d'ONG numériques. Expertise juridique, accès aux institutions européennes."
+    },
+    {
+      "id": "actor_003",
+      "name": "DigitalEurope (lobby tech)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Représente les GAFAM en Europe. Oppose toute régulation contraignante des algorithmes."
+    },
+    {
+      "id": "actor_004",
+      "name": "Meta (Facebook)",
+      "type": "opponent",
+      "influence": "fort",
+      "notes": "Opposé à la transparence algorithmique. Arguments : secret commercial, vie privée."
+    },
+    {
+      "id": "actor_005",
+      "name": "AlgorithmWatch",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "ONG allemande spécialisée. Expertise technique sur l'auditabilité des algorithmes."
+    },
+    {
+      "id": "actor_006",
+      "name": "Commissaire au Marché intérieur",
+      "type": "target",
+      "influence": "fort",
+      "notes": "En charge du DSA. Position intermédiaire, sensible aux arguments de compétitivité."
+    },
+    {
+      "id": "actor_007",
+      "name": "VIGINUM (France)",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Agence française anti-ingérence. Peut témoigner de la réalité des menaces."
+    },
+    {
+      "id": "actor_008",
+      "name": "Groupe PPE (conservateurs)",
+      "type": "neutral",
+      "influence": "fort",
+      "notes": "Premier groupe au PE. Sensible aux arguments économiques et sécuritaires."
+    },
+    {
+      "id": "actor_009",
+      "name": "Oxford Internet Institute",
+      "type": "ally",
+      "influence": "moyen",
+      "notes": "Centre de recherche de référence. Peut fournir des études d'impact crédibles."
+    },
+    {
+      "id": "actor_010",
+      "name": "Gouvernement russe (via médias RT/Sputnik)",
+      "type": "opponent",
+      "influence": "moyen",
+      "notes": "Principal acteur d'ingérence documenté. Oppose toute régulation qui limiterait sa capacité de manipulation."
+    }
+  ],
+  "veille": [
+    {
+      "id": "veille_001",
+      "title": "Rapport VIGINUM sur les ingérences lors des élections européennes 2024",
+      "url": "https://www.sgdsn.gouv.fr/viginum-rapport-2024",
+      "category": "politique",
+      "notes": "36 opérations d'influence étrangère détectées. Russie et Chine principales sources.",
+      "date": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "id": "veille_002",
+      "title": "Étude MIT : La désinformation se propage 6x plus vite que la vérité",
+      "url": "https://science.sciencemag.org/content/359/6380/1146",
+      "category": "social",
+      "notes": "Étude sur 126.000 histoires virales. Les fausses nouvelles touchent plus de personnes.",
+      "date": "2025-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "veille_003",
+      "title": "Position de Meta sur la transparence algorithmique",
+      "url": "https://about.fb.com/algorithmic-transparency-position",
+      "category": "economique",
+      "notes": "Arguments : secret commercial, vie privée des utilisateurs, sécurité contre le gaming.",
+      "date": "2025-06-20T00:00:00.000Z"
+    },
+    {
+      "id": "veille_004",
+      "title": "Rapport AlgorithmWatch sur l'auditabilité des recommandations",
+      "url": "https://algorithmwatch.org/audit-recommendation-systems-2025",
+      "category": "juridique",
+      "notes": "Proposition technique de cadre d'audit préservant le secret commercial.",
+      "date": "2025-09-05T00:00:00.000Z"
+    },
+    {
+      "id": "veille_005",
+      "title": "Deepfakes : premiers cas d'utilisation électorale en Europe",
+      "url": "https://www.lemonde.fr/deepfake-elections-europe",
+      "category": "politique",
+      "notes": "Faux discours de candidats générés par IA. Détection en 24h mais viralité massive.",
+      "date": "2025-11-28T00:00:00.000Z"
+    }
+  ],
+  "checklist": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": false,
+    "c5": true,
+    "c6": false,
+    "c7": false
+  },
+  "tree": {
+    "causes": [
+      { "id": "cause_001", "text": "Modèle économique des plateformes basé sur l'engagement maximal" },
+      { "id": "cause_002", "text": "Algorithmes de recommandation amplifiant le contenu émotionnel" },
+      { "id": "cause_003", "text": "Opacité des systèmes algorithmiques (boîte noire)" },
+      { "id": "cause_004", "text": "Stratégies délibérées d'acteurs étatiques hostiles" },
+      { "id": "cause_005", "text": "Faiblesse de l'éducation aux médias dans les systèmes scolaires" },
+      { "id": "cause_006", "text": "Crise économique du journalisme de qualité" },
+      { "id": "cause_007", "text": "Biais cognitifs humains exploités (biais de confirmation, etc.)" }
+    ],
+    "effects": [
+      { "id": "effect_001", "text": "Polarisation politique croissante des sociétés" },
+      { "id": "effect_002", "text": "Défiance envers les institutions et les médias" },
+      { "id": "effect_003", "text": "Manipulation des processus électoraux" },
+      { "id": "effect_004", "text": "Radicalisation de certains groupes" },
+      { "id": "effect_005", "text": "Paralysie du débat public sur les enjeux complexes" },
+      { "id": "effect_006", "text": "Atteinte à la santé mentale (anxiété, doomscrolling)" }
+    ]
+  },
+  "graph": {
+    "nodes": [
+      { "id": "concept_001", "label": "Transparence algorithmique", "type": "concept" },
+      { "id": "concept_002", "label": "Résilience cognitive", "type": "concept" },
+      { "id": "concept_003", "label": "Souveraineté numérique", "type": "concept" },
+      { "id": "concept_004", "label": "Esprit critique", "type": "value" },
+      { "id": "concept_005", "label": "Pre-bunking", "type": "concept" },
+      { "id": "concept_006", "label": "Fact-checking", "type": "action" },
+      { "id": "action_001", "label": "Amendement DSA", "type": "action" },
+      { "id": "action_002", "label": "Formation enseignants EMI", "type": "action" },
+      { "id": "action_003", "label": "Rapport d'investigation", "type": "action" }
+    ],
+    "links": [
+      { "source": "concept_001", "target": "concept_003", "type": "supports" },
+      { "source": "concept_002", "target": "concept_004", "type": "related" },
+      { "source": "concept_005", "target": "concept_002", "type": "supports" },
+      { "source": "action_001", "target": "actor_001", "type": "influences" },
+      { "source": "concept_006", "target": "effect_001", "type": "opposes" },
+      { "source": "cause_002", "target": "effect_001", "type": "causes" },
+      { "source": "actor_002", "target": "action_001", "type": "supports" }
+    ]
+  }
+}

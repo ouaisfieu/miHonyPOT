@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Datasets de Test — Plaidoyer Citoyen</title>
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --green-soft: #7fefaf;
+            --lilac-soft: #c9b8ff;
+            --rose: #fb7185;
+            --cyan: #67e8f9;
+            --orange: #fbbf24;
+            --text: #e4e4e7;
+            --text-dim: #71717a;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--green-soft), var(--lilac-soft));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 1rem 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid rgba(127, 239, 175, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--green-soft);
+        }
+        
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        
+        .datasets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .dataset-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .dataset-card:hover {
+            border-color: var(--green-soft);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(127, 239, 175, 0.15);
+        }
+        
+        .dataset-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .dataset-icon {
+            font-size: 2rem;
+        }
+        
+        .dataset-title {
+            font-size: 1.2rem;
+            color: var(--lilac-soft);
+        }
+        
+        .dataset-theme {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(127, 239, 175, 0.2);
+            color: var(--green-soft);
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+        
+        .dataset-desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .dataset-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mini-stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .mini-stat-value {
+            font-weight: bold;
+            color: var(--cyan);
+        }
+        
+        .mini-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+        
+        .dataset-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--green-soft);
+            color: var(--bg-dark);
+        }
+        
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--lilac-soft);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--cyan);
+        }
+        
+        .download-all {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .download-all .btn {
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        th {
+            color: var(--lilac-soft);
+            font-weight: 600;
+        }
+        
+        .check { color: var(--green-soft); }
+        .cross { color: var(--rose); }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-dim);
+        }
+        
+        @media (max-width: 600px) {
+            .datasets-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-bar {
+                gap: 1rem;
+            }
+            .stat {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Datasets de Test</h1>
+            <p class="subtitle">Plaidoyer Citoyen v3 / v4 — Données de test basées sur le projet</p>
+        </header>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Datasets</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">50</div>
+                <div class="stat-label">Acteurs</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Veilles</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">40+</div>
+                <div class="stat-label">Causes/Effets</div>
+            </div>
+        </div>
+        
+        <div class="datasets-grid">
+            <!-- Dataset 1: Numérique Durable -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">🌿</span>
+                    <span class="dataset-title">Numérique Durable</span>
+                </div>
+                <span class="dataset-theme">Environnement</span>
+                <p class="dataset-desc">Campagne Justice et Paix pour un numérique responsable. Indice de réparabilité, obsolescence programmée.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">10</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">5</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">8</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">85%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_numerique_durable.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('numerique')">📋 Copier</button>
+                </div>
+            </div>
+            
+            <!-- Dataset 2: Déforestation -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">🌳</span>
+                    <span class="dataset-title">Stop Déforestation</span>
+                </div>
+                <span class="dataset-theme">Environnement</span>
+                <p class="dataset-desc">Cas Greenpeace vs Nestlé. Plaidoyer d'opposition, huile de palme, campagne virale.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">10</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">5</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">7</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">90%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_deforestation.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('deforestation')">📋 Copier</button>
+                </div>
+            </div>
+            
+            <!-- Dataset 3: Résilience Cognitive -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">🧠</span>
+                    <span class="dataset-title">Résilience Cognitive</span>
+                </div>
+                <span class="dataset-theme">Démocratie</span>
+                <p class="dataset-desc">Plaidoyer européen contre la désinformation. Transparence algorithmique, DSA, VIGINUM.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">10</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">5</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">7</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">75%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_resilience_cognitive.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('resilience')">📋 Copier</button>
+                </div>
+            </div>
+            
+            <!-- Dataset 4: Accueil Migrants -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">🤝</span>
+                    <span class="dataset-title">Accueil des Migrants</span>
+                </div>
+                <span class="dataset-theme">Social</span>
+                <p class="dataset-desc">Plateforme Citoyenne Belgique. Droits fondamentaux, Fedasil, hébergement citoyen.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">10</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">5</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">6</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">95%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_accueil_migrants.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('migrants')">📋 Copier</button>
+                </div>
+            </div>
+            
+            <!-- Dataset 5: Guerre Sémantique -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">⚔️</span>
+                    <span class="dataset-title">TSAR e-BOMBA</span>
+                </div>
+                <span class="dataset-theme">Influence</span>
+                <p class="dataset-desc">Guerre sémantique des précaires. SEO offensif, Entity Poisoning, cocon sémantique, GEO.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">10</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">5</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">7</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">80%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_guerre_semantique.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('guerre')">📋 Copier</button>
+                </div>
+            </div>
+            
+            <!-- Dataset 6: Vide -->
+            <div class="dataset-card">
+                <div class="dataset-header">
+                    <span class="dataset-icon">⬜</span>
+                    <span class="dataset-title">Projet Vide</span>
+                </div>
+                <span class="dataset-theme">Test</span>
+                <p class="dataset-desc">Structure minimale pour tester l'initialisation et la création de nouveaux projets.</p>
+                <div class="dataset-stats">
+                    <div class="mini-stat"><div class="mini-stat-value">0</div><div class="mini-stat-label">Acteurs</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">0</div><div class="mini-stat-label">Veilles</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">0</div><div class="mini-stat-label">Causes</div></div>
+                    <div class="mini-stat"><div class="mini-stat-value">0%</div><div class="mini-stat-label">Complet</div></div>
+                </div>
+                <div class="dataset-actions">
+                    <a href="dataset_vide.json" download class="btn btn-primary">📥 Télécharger</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('vide')">📋 Copier</button>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">📋 Matrice de couverture des tests</h2>
+        <table>
+            <tr>
+                <th>Fonctionnalité</th>
+                <th>🌿 Numérique</th>
+                <th>🌳 Déforest.</th>
+                <th>🧠 Résilience</th>
+                <th>🤝 Migrants</th>
+                <th>⚔️ Guerre</th>
+                <th>⬜ Vide</th>
+            </tr>
+            <tr>
+                <td>Champs VOIR</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Champs JUGER</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Champs AGIR</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>SWOT complet</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>PESTEL complet</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Acteurs (10)</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Arbre problème</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Veille (5)</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Graph nodes</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+            <tr>
+                <td>Graph links</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="cross">✗</td>
+            </tr>
+        </table>
+        
+        <h2 class="section-title">🔧 Import rapide (console)</h2>
+        <div class="code-block">
+            <pre>// Charger un dataset dans localStorage
+const response = await fetch('dataset_numerique_durable.json');
+const data = await response.json();
+localStorage.setItem('plaidoyer_v4', JSON.stringify(data));
+location.reload();</pre>
+        </div>
+        
+        <h2 class="section-title">📁 Structure des données</h2>
+        <div class="code-block">
+            <pre>{
+  "meta": { "version", "name", "description", "theme", ... },
+  "fields": { /* Tous les champs texte du formulaire */ },
+  "actors": [ { "id", "name", "type", "influence", "notes" } ],
+  "veille": [ { "id", "title", "url", "category", "notes", "date" } ],
+  "checklist": { "c0": true, "c1": false, ... },
+  "tree": { "causes": [], "effects": [] },
+  "graph": { "nodes": [], "links": [] }
+}</pre>
+        </div>
+        
+        <footer>
+            <p>Générés le 19 janvier 2026 — Projet Plaidoyer Citoyen</p>
+            <p style="margin-top: 0.5rem;">Compatible v3.0 et v4.0</p>
+        </footer>
+    </div>
+    
+    <script>
+        function copyToClipboard(type) {
+            const files = {
+                'numerique': 'dataset_numerique_durable.json',
+                'deforestation': 'dataset_deforestation.json',
+                'resilience': 'dataset_resilience_cognitive.json',
+                'migrants': 'dataset_accueil_migrants.json',
+                'guerre': 'dataset_guerre_semantique.json',
+                'vide': 'dataset_vide.json'
+            };
+            
+            fetch(files[type])
+                .then(r => r.text())
+                .then(text => {
+                    navigator.clipboard.writeText(text);
+                    alert('✅ Dataset copié dans le presse-papier !');
+                })
+                .catch(() => {
+                    alert('❌ Erreur: utilisez le téléchargement direct');
+                });
+        }
+    </script>
+</body>
+</html>

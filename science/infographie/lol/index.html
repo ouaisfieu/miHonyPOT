@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Défense Cognitive | Analyse Stratégique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
+            color: #1e293b; /* Slate 800 */
+        }
+
+        h1, h2, h3, .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Ensures it fits in grid columns */
+            height: 300px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .nav-active {
+            border-bottom: 2px solid #2563eb; /* Blue 600 */
+            color: #2563eb;
+        }
+
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Custom Scrollbar for inner content */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+    <!-- Chosen Palette: Slate (Neutrals) + Royal Blue (Trust/Data) + Alert Red (Threats) -->
+    <!-- Application Structure Plan: 
+         1. Header: Mission Briefing (Context setting).
+         2. Dashboard Layout:
+            - Section A: Threat Analysis (Visualizing the shift from Kinetic to Cognitive).
+            - Section B: The Stack Architecture (Interactive exploration of Bratton's model).
+            - Section C: Tactical Lexicon (Interactive Glossary/Cards for key terms).
+            - Section D: Simulation (The Aptitude Test from the 'Survival Manual').
+         3. Why this structure? The source material is dense and theoretical. Breaking it into a 'Dashboard' allows the user to parse the 'Stack' visually, compare 'Biopolitics vs Psychopolitics' via charts, and actively test their knowledge, transforming passive reading into active 'intelligence analysis'.
+    -->
+    <!-- Visualization & Content Choices:
+         - Radar Chart: Compares Biopolitics vs Psychopolitics. Goal: Compare complex theoretical frameworks clearly.
+         - Line Chart: Visualizes the rise of 'Grey Zone' conflicts over time. Goal: Show trends.
+         - Interactive Stack Layering: HTML/JS clickable list updating a display pane. Goal: Explain the 6 layers of The Stack without static diagrams.
+         - Quiz Logic: Gamified aptitude test. Goal: Engage user and reinforce key terminology (Lead-dexing, Noopolitique).
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🛡️</span>
+                    <span class="font-bold text-xl tracking-tight text-slate-900 mono-font">NOOSPHERE_MONITOR_V1</span>
+                </div>
+                <div class="hidden sm:flex space-x-8 items-center">
+                    <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-active px-3 py-2 text-sm font-medium hover:text-blue-600 transition-colors">Situation</button>
+                    <button onclick="navigate('stack')" id="nav-stack" class="px-3 py-2 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">The Stack</button>
+                    <button onclick="navigate('lexicon')" id="nav-lexicon" class="px-3 py-2 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">Arsenal Sémantique</button>
+                    <button onclick="navigate('training')" id="nav-training" class="px-3 py-2 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">Test d'Aptitude</button>
+                </div>
+                <!-- Mobile menu button simplified -->
+                <div class="flex items-center sm:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-slate-500 hover:text-slate-900 focus:outline-none">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden sm:hidden bg-white border-t border-slate-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="navigate('dashboard')" class="block w-full text-left px-3 py-2 text-base font-medium hover:bg-slate-50">Situation</button>
+                <button onclick="navigate('stack')" class="block w-full text-left px-3 py-2 text-base font-medium hover:bg-slate-50">The Stack</button>
+                <button onclick="navigate('lexicon')" class="block w-full text-left px-3 py-2 text-base font-medium hover:bg-slate-50">Arsenal</button>
+                <button onclick="navigate('training')" class="block w-full text-left px-3 py-2 text-base font-medium hover:bg-slate-50">Test</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- VIEW: DASHBOARD (SITUATION) -->
+        <div id="view-dashboard" class="space-y-8 animate-fade-in">
+            <!-- Intro Section -->
+            <div class="bg-white rounded-lg shadow-sm border-l-4 border-blue-600 p-6">
+                <h2 class="text-2xl font-bold mb-2">Introduction : La Guerre Cognitive</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Nous assistons à une mutation tectonique de la conflictualité. La distinction traditionnelle entre paix et guerre est obsolète, remplacée par une <strong>« Zone Grise »</strong> permanente. Le territoire à conquérir n'est plus géographique, mais cognitif : la <strong>Noosphère</strong>. L'objectif est la paralysie des processus décisionnels adverses et la redéfinition de la réalité perçue. Ce tableau de bord synthétise les données du <em>Livre Blanc Stratégique</em> et du <em>Manuel de Survie Cognitive</em> pour vous préparer à cette nouvelle ère de "Manipulation Mutuelle Assurée".
+                </p>
+            </div>
+
+            <!-- Top Stats/Metrics Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Paradigme Actuel</div>
+                    <div class="text-2xl font-bold text-slate-800">Psychopolitique</div>
+                    <div class="text-sm text-green-600 mt-2">↑ vs Biopolitique</div>
+                    <p class="text-xs text-slate-400 mt-2">Contrôle via l'auto-exposition volontaire (Big Data).</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Unité Tactique</div>
+                    <div class="text-2xl font-bold text-slate-800">Triplet Sémantique</div>
+                    <div class="text-sm text-blue-600 mt-2">Sujet - Verbe - Objet</div>
+                    <p class="text-xs text-slate-400 mt-2">Structure fondamentale du Knowledge Graph.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Niveau d'Alerte</div>
+                    <div class="text-2xl font-bold text-red-600">ZONE GRISE</div>
+                    <div class="text-sm text-red-500 mt-2">Conflit Permanent</div>
+                    <p class="text-xs text-slate-400 mt-2">Brouillard de guerre et attribution impossible.</p>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Chart 1: Evolution of Conflict -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-4 border-b pb-2">Évolution de la Conflictualité</h3>
+                    <p class="text-sm text-slate-500 mb-4">Transition historique de la puissance cinétique (destruction physique) vers la puissance cognitive (manipulation de la perception).</p>
+                    <div class="chart-container">
+                        <canvas id="conflictEvolutionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Bio vs Psycho Politics -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-4 border-b pb-2">Biopolitique vs Psychopolitique</h3>
+                    <p class="text-sm text-slate-500 mb-4">Analyse comparative des modèles de contrôle des populations selon Byung-Chul Han.</p>
+                    <div class="chart-container">
+                        <canvas id="paradigmRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: THE STACK -->
+        <div id="view-stack" class="hidden space-y-8 animate-fade-in">
+            <div class="bg-white rounded-lg shadow-sm border-l-4 border-indigo-600 p-6">
+                <h2 class="text-2xl font-bold mb-2">Modèle Stratégique : The Stack</h2>
+                <p class="text-slate-600">
+                    Selon Benjamin Bratton, la géopolitique numérique est un empilement vertical de 6 couches. La maîtrise de ces couches définit la souveraineté moderne. Cliquez sur chaque couche pour analyser ses enjeux stratégiques.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+                <!-- Interactive Stack Controller -->
+                <div class="lg:col-span-1 space-y-2">
+                    <!-- Generated via JS for cleaner HTML -->
+                    <div id="stack-buttons-container" class="flex flex-col space-y-2">
+                        <!-- Buttons injected here -->
+                    </div>
+                </div>
+
+                <!-- Detail View -->
+                <div class="lg:col-span-2 bg-slate-900 text-white rounded-xl p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl font-bold select-none" id="stack-bg-number">6</div>
+                    <div class="relative z-10">
+                        <div class="text-indigo-400 font-mono text-sm mb-2 tracking-widest uppercase" id="stack-layer-subtitle">Couche Supérieure</div>
+                        <h3 class="text-4xl font-bold mb-6 text-white" id="stack-layer-title">Utilisateur (User)</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-lg font-semibold text-indigo-200 mb-2">Définition</h4>
+                                <p class="text-slate-300 leading-relaxed" id="stack-layer-desc">
+                                    L'agent (humain ou machine) qui interagit avec la pile. C'est ici que se joue la "guerre cognitive" ultime : le piratage des esprits.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-slate-800 bg-opacity-50 p-4 rounded border border-slate-700">
+                                <h4 class="text-sm font-bold text-red-400 uppercase mb-2">⚠️ Enjeux Critiques</h4>
+                                <p class="text-sm text-slate-300" id="stack-layer-threat">
+                                    Quantification du Soi, Profilage psychométrique, Bulles de filtres.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: LEXICON (ARSENAL) -->
+        <div id="view-lexicon" class="hidden space-y-8 animate-fade-in">
+            <div class="bg-white rounded-lg shadow-sm border-l-4 border-emerald-600 p-6">
+                <h2 class="text-2xl font-bold mb-2">Arsenal Sémantique & Tactique</h2>
+                <p class="text-slate-600">
+                    Dans la guerre cognitive, les mots sont des armes. Comprendre le vocabulaire est la première ligne de défense. Explorez les concepts clés extraits des rapports classifiés. Utilisez la barre de recherche pour filtrer.
+                </p>
+            </div>
+
+            <!-- Search -->
+            <div class="relative max-w-lg mx-auto mb-8">
+                <input type="text" id="lexicon-search" placeholder="Rechercher un concept (ex: Soft Power, Ruling...)" 
+                       class="w-full pl-10 pr-4 py-3 rounded-full border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-shadow">
+                <span class="absolute left-3 top-3.5 text-slate-400">🔍</span>
+            </div>
+
+            <!-- Grid of Cards -->
+            <div id="lexicon-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+
+        <!-- VIEW: TRAINING (TEST) -->
+        <div id="view-training" class="hidden space-y-8 animate-fade-in">
+             <div class="bg-white rounded-lg shadow-sm border-l-4 border-amber-500 p-6">
+                <h2 class="text-2xl font-bold mb-2">Zone de Quarantaine : Test d'Aptitude</h2>
+                <p class="text-slate-600">
+                    Ce module simule le protocole de test du "Manuel de Survie Cognitive". L'échec n'est pas une option. Prouvez que vous n'êtes pas un simple "User" dans leur "Stack".
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <div id="quiz-container" class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 h-2">
+                        <div id="quiz-progress" class="bg-amber-500 h-2 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+
+                    <div class="p-8">
+                        <!-- Question State -->
+                        <div id="quiz-question-view">
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-sm font-bold text-amber-600 tracking-wider">ÉPREUVE <span id="q-number">01</span>/05</span>
+                                <span class="text-sm text-slate-400">Difficulté: Classifiée</span>
+                            </div>
+                            
+                            <h3 id="q-text" class="text-xl font-bold text-slate-800 mb-8 leading-relaxed">
+                                <!-- Question text injected -->
+                            </h3>
+
+                            <div id="q-options" class="space-y-3">
+                                <!-- Options injected -->
+                            </div>
+                        </div>
+
+                        <!-- Result State -->
+                        <div id="quiz-result-view" class="hidden text-center py-8">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <h3 class="text-3xl font-bold text-slate-800 mb-2">Analyse Terminée</h3>
+                            <p class="text-slate-600 mb-6">Votre score de compatibilité cognitive : <span id="final-score" class="font-bold text-amber-600">0/5</span></p>
+                            <div id="result-message" class="bg-slate-50 p-4 rounded text-sm text-slate-700 mb-6"></div>
+                            <button onclick="resetQuiz()" class="bg-slate-800 text-white px-6 py-3 rounded-lg hover:bg-slate-900 transition-colors font-medium">Relancer le Protocole</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+            <p>Généré par Canvas Create Webapp | Basé sur les documents : "Z.O.N.E. DE Q.U.A.R.A.N.T.A.I.N.E." et "Livre Blanc Stratégique"</p>
+            <p class="mt-2 text-xs opacity-50">CONFIDENTIEL // ACCÈS RESTREINT</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- DATA STORE ---
+
+        // The Stack (Benjamin Bratton) Data
+        const stackData = [
+            {
+                id: 6,
+                title: "Utilisateur (User)",
+                subtitle: "L'Agent Cognitif",
+                desc: "Nous, les humains (et bots), qui agissons sur les autres couches. C'est la cible ultime de la guerre cognitive. La gestion des esprits remplace la gestion des corps.",
+                threat: "Bulles de filtres, Addiction, Manipulation émotionnelle."
+            },
+            {
+                id: 5,
+                title: "Interface",
+                subtitle: "Le Point de Contact",
+                desc: "La couche qui connecte l'utilisateur aux machines (écrans, voix, AR/VR). C'est là que le design persuade et oriente les choix.",
+                threat: "Dark patterns, Réalité diminuée, Surcharge cognitive."
+            },
+            {
+                id: 4,
+                title: "Adresse (Address)",
+                subtitle: "L'Identification",
+                desc: "Le système qui permet d'identifier et de localiser tout objet ou personne connectée (IP, URI, ID Social). C'est la base du ciblage.",
+                threat: "Anonymisation impossible, Tracking universel."
+            },
+            {
+                id: 3,
+                title: "Ville (City)",
+                subtitle: "L'Environnement Physique",
+                desc: "L'espace urbain où les réseaux se matérialisent (Smart Cities, caméras, capteurs). La ville devient une interface habitable.",
+                threat: "Surveillance de masse, Contrôle des mouvements."
+            },
+            {
+                id: 2,
+                title: "Cloud",
+                subtitle: "La Plateforme Globale",
+                desc: "Les serveurs et bases de données qui stockent la mémoire mondiale. C'est là que résident les GAFAM et les souverainetés numériques.",
+                threat: "Souveraineté des données, Juridiction extraterritoriale."
+            },
+            {
+                id: 1,
+                title: "Terre (Earth)",
+                subtitle: "La Couche Géologique",
+                desc: "La base matérielle : minéraux pour les puces, énergie pour les serveurs, câbles sous-marins. Sans elle, pas de numérique.",
+                threat: "Pénurie de terres rares, Coût énergétique, Géopolitique des câbles."
+            }
+        ];
+
+        // Lexicon Data
+        const lexiconData = [
+            { term: "Zone Grise", def: "Espace de conflictualité permanent où la distinction entre paix et guerre est floue. Les affrontements y sont constants, indirects et multiformes.", type: "Stratégie" },
+            { term: "Soft Power", def: "Concept de Joseph S. Nye. Capacité d'influencer par l'attraction (culture, valeurs) plutôt que la coercition. L'authenticité est sa monnaie.", type: "Influence" },
+            { term: "Triplet Sémantique", def: "Unité fondamentale du web sémantique (Sujet-Verbe-Objet). Fait structuré compréhensible par les machines pour le Knowledge Graph.", type: "Technique" },
+            { term: "Psychopolitique", def: "Paradigme de pouvoir (Byung-Chul Han) qui ne contraint pas le corps mais gère l'esprit via l'auto-exposition volontaire (Big Data).", type: "Philosophie" },
+            { term: "Lead-dexing", def: "Méthode de détection mesurable par une cible précise (Concept fictif du test). Souvent associé au 'Trigger Marketing'.", type: "Tactique" },
+            { term: "Auftragstaktik", def: "Doctrine de commandement par mission (armée prussienne). Encourage l'initiative et la décentralisation, vitale pour la vitesse du cyberespace.", type: "Militaire" },
+            { term: "Ruling Fiscal", def: "Accord juridique anticipé validant un montage financier, liant l'État pour une durée déterminée (ex: 5 ans en Belgique).", type: "Économie" },
+            { term: "Noopolitique", def: "Politique de la connaissance et de l'esprit (Noosphère). Stratégie visant à dominer la sphère des idées et des perceptions.", type: "Stratégie" },
+            { term: "Faux Drapeau", def: "Opération 'False Flag'. Acte commis avec l'intention d'être attribué à un autre, rendant l'attribution des cyberattaques incertaine.", type: "Tactique" },
+            { term: "Statut BIM", def: "Bénéficiaire de l'Intervention Majorée (Belgique). Statut social pour remboursements de soins élevés, conditionné aux revenus.", type: "Société" }
+        ];
+
+        // Quiz Data
+        const quizData = [
+            {
+                q: "Quel concept décrit une méthode de détection mesurable par une cible précise (nom de code) ?",
+                options: ["Mention Monitoring", "Ego Baiting", "Lead-dexing", "Trigger Marketing"],
+                correct: 2 // Index 0-based
+            },
+            {
+                q: "Quelle philosophie de commandement est prônée pour opérer à la vélocité du cyberespace ?",
+                options: ["Befehlstaktik", "Auftragstaktik", "Blitzkrieg", "Noopolitique"],
+                correct: 1
+            },
+            {
+                q: "Selon Byung-Chul Han, quel paradigme succède à la Biopolitique ?",
+                options: ["La Noopolitique", "La Psychopolitique", "La Souveraineté Numérique", "Le Soft Power"],
+                correct: 1
+            },
+            {
+                q: "Quelle est l'unité fondamentale du web sémantique ?",
+                options: ["Le Pixel", "Le Cookie", "Le Triplet Sémantique", "L'Algorithme"],
+                correct: 2
+            },
+            {
+                q: "Dans la 'Zone Grise', quelle distinction devient floue ?",
+                options: ["Entre Civil et Militaire", "Entre Paix et Guerre", "Entre Public et Privé", "Toutes les réponses"],
+                correct: 1 // Focusing on the main definition provided in snippet
+            }
+        ];
+
+        // --- NAVIGATION LOGIC ---
+        function navigate(viewId) {
+            // Hide all views
+            ['dashboard', 'stack', 'lexicon', 'training'].forEach(id => {
+                document.getElementById(`view-${id}`).classList.add('hidden');
+                document.getElementById(`nav-${id}`).classList.remove('nav-active', 'text-blue-600');
+                document.getElementById(`nav-${id}`).classList.add('text-slate-500');
+            });
+
+            // Show selected view
+            const selectedView = document.getElementById(`view-${viewId}`);
+            selectedView.classList.remove('hidden');
+            
+            // Highlight nav
+            const selectedNav = document.getElementById(`nav-${viewId}`);
+            selectedNav.classList.add('nav-active', 'text-blue-600');
+            selectedNav.classList.remove('text-slate-500');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- STACK VISUALIZATION LOGIC ---
+        function initStack() {
+            const container = document.getElementById('stack-buttons-container');
+            container.innerHTML = ''; // Clear
+
+            stackData.forEach((layer, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded transition-all duration-200 border-l-4 ${index === 0 ? 'bg-slate-800 text-white border-indigo-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`;
+                btn.innerHTML = `<span class="font-mono font-bold mr-2 text-xs opacity-50">0${layer.id}</span> <span class="font-bold">${layer.title}</span>`;
+                btn.onclick = () => updateStackView(layer.id, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function updateStackView(layerId, clickedBtn) {
+            const layer = stackData.find(d => d.id === layerId);
+            if (!layer) return;
+
+            // Update Text
+            document.getElementById('stack-bg-number').innerText = layer.id;
+            document.getElementById('stack-layer-subtitle').innerText = layer.subtitle;
+            document.getElementById('stack-layer-title').innerText = layer.title;
+            document.getElementById('stack-layer-desc').innerText = layer.desc;
+            document.getElementById('stack-layer-threat').innerText = layer.threat;
+
+            // Update Buttons Styling
+            const buttons = document.getElementById('stack-buttons-container').children;
+            Array.from(buttons).forEach(btn => {
+                btn.className = 'w-full text-left p-4 rounded transition-all duration-200 border-l-4 bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
+            });
+            clickedBtn.className = 'w-full text-left p-4 rounded transition-all duration-200 border-l-4 bg-slate-800 text-white border-indigo-500 shadow-lg';
+        }
+
+        // --- LEXICON LOGIC ---
+        function initLexicon() {
+            const grid = document.getElementById('lexicon-grid');
+            const searchInput = document.getElementById('lexicon-search');
+
+            function render(filter = "") {
+                grid.innerHTML = "";
+                const filtered = lexiconData.filter(item => 
+                    item.term.toLowerCase().includes(filter.toLowerCase()) || 
+                    item.def.toLowerCase().includes(filter.toLowerCase())
+                );
+
+                if(filtered.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-10 text-slate-400">Aucun résultat trouvé dans la base de données.</div>`;
+                    return;
+                }
+
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-lg shadow-sm border border-slate-200 interactive-card flex flex-col";
+                    
+                    let typeColor = "text-slate-400";
+                    if(item.type === "Tactique") typeColor = "text-red-500";
+                    if(item.type === "Technique") typeColor = "text-blue-500";
+                    if(item.type === "Philosophie") typeColor = "text-purple-500";
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-bold text-lg text-slate-800">${item.term}</h3>
+                            <span class="text-xs font-mono uppercase border px-2 py-0.5 rounded ${typeColor} border-slate-100">${item.type}</span>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed flex-grow">${item.def}</p>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            searchInput.addEventListener('input', (e) => render(e.target.value));
+            render(); // Initial render
+        }
+
+        // --- QUIZ LOGIC ---
+        let currentQuestionIdx = 0;
+        let score = 0;
+
+        function initQuiz() {
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const qData = quizData[currentQuestionIdx];
+            document.getElementById('q-number').innerText = `0${currentQuestionIdx + 1}`;
+            document.getElementById('q-text').innerText = qData.q;
+            
+            const optionsContainer = document.getElementById('q-options');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded border border-slate-200 hover:bg-amber-50 hover:border-amber-300 transition-colors text-slate-700 font-medium";
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Update Progress
+            const pct = ((currentQuestionIdx) / quizData.length) * 100;
+            document.getElementById('quiz-progress').style.width = `${pct}%`;
+        }
+
+        function handleAnswer(selectedIdx) {
+            const qData = quizData[currentQuestionIdx];
+            if(selectedIdx === qData.correct) {
+                score++;
+            }
+
+            currentQuestionIdx++;
+            if(currentQuestionIdx < quizData.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-question-view').classList.add('hidden');
+            document.getElementById('quiz-result-view').classList.remove('hidden');
+            document.getElementById('quiz-progress').style.width = `100%`;
+
+            const scoreEl = document.getElementById('final-score');
+            scoreEl.innerText = `${score}/${quizData.length}`;
+            
+            const msgEl = document.getElementById('result-message');
+            if(score === 5) {
+                msgEl.innerText = "ACCÈS AUTORISÉ. Agent de Niveau 1 confirmé. Excellente compréhension des enjeux cognitifs.";
+                msgEl.className = "bg-green-100 text-green-800 p-4 rounded text-sm font-bold";
+            } else if (score >= 3) {
+                msgEl.innerText = "ACCÈS CONDITIONNEL. Connaissances opérationnelles, mais révision du manuel recommandée.";
+                msgEl.className = "bg-amber-100 text-amber-800 p-4 rounded text-sm font-bold";
+            } else {
+                msgEl.innerText = "ACCÈS REFUSÉ. Risque de contamination cognitive élevé. Relisez le protocole de quarantaine.";
+                msgEl.className = "bg-red-100 text-red-800 p-4 rounded text-sm font-bold";
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestionIdx = 0;
+            score = 0;
+            document.getElementById('quiz-question-view').classList.remove('hidden');
+            document.getElementById('quiz-result-view').classList.add('hidden');
+            renderQuestion();
+        }
+
+        // --- CHARTS INITIALIZATION ---
+        function initCharts() {
+            // Chart 1: Evolution Line Chart
+            const ctx1 = document.getElementById('conflictEvolutionChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['1945', '1980', '2000', '2010', '2025'],
+                    datasets: [
+                        {
+                            label: 'Conflit Cinétique (Physique)',
+                            data: [90, 70, 50, 40, 30],
+                            borderColor: '#94a3b8', // Slate 400
+                            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Guerre Cognitive (Information)',
+                            data: [10, 20, 50, 75, 95],
+                            borderColor: '#dc2626', // Red 600
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            title: { display: true, text: 'Intensité / Impact (%)' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Radar Chart (Comparison)
+            const ctx2 = document.getElementById('paradigmRadarChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['Contrainte Physique', 'Big Data', 'Liberté Apparente', 'Ciblage du Corps', 'Ciblage de l\'Esprit'],
+                    datasets: [
+                        {
+                            label: 'Biopolitique (Ancien)',
+                            data: [90, 20, 10, 100, 30],
+                            borderColor: '#64748b', // Slate 500
+                            backgroundColor: 'rgba(100, 116, 139, 0.2)',
+                            pointBackgroundColor: '#64748b',
+                        },
+                        {
+                            label: 'Psychopolitique (Nouveau)',
+                            data: [20, 100, 95, 10, 100],
+                            borderColor: '#2563eb', // Blue 600
+                            backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                            pointBackgroundColor: '#2563eb',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- MASTER INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initStack();
+            initLexicon();
+            initQuiz();
+            initCharts();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,1 +1,718 @@
-tete-de-cul
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatoire de la Domination Cognitive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Clinical Strategy (Slate/Zinc background, Indigo primary, Red alert accents) - Designed for clarity and high-contrast readability in a light environment. -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        indigo: {
+                            600: '#4f46e5',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 500px;
+        }
+
+        .chart-container-small {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #4f46e5;
+        }
+
+        .stack-layer {
+            transition: all 0.2s ease;
+        }
+        .stack-layer.active {
+            background-color: #4f46e5;
+            color: white;
+            border-left-width: 4px;
+            border-left-color: #312e81;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Application Structure Plan: 
+         1. Header: Establish the "Situation Room" atmosphere.
+         2. Strategic Briefing (Hero): Contextualize the shift from physical to cognitive warfare (Source: Livre Blanc).
+         3. The Architecture (The Stack): Interactive exploration of Bratton's model, essential for understanding the "terrain" (Source: Livre Blanc).
+         4. Tactical Analysis (Charts): Visualizing "Soft Power" vs "Hard Power" and the "Gray Zone" (Source: Livre Blanc & Manuel).
+         5. Intelligence Database (Glossary): A filterable grid of specific terms like "Lead-dexing" and "BIM" (Source: Manuel).
+         6. Agent Assessment (Quiz): Interactive test to engage the user and test knowledge retention (Source: Manuel).
+         This structure moves from Theory -> Structure -> Analysis -> Definition -> Application. 
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation / Header -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <span class="text-2xl text-indigo-900 font-bold tracking-tight">NOOSPHÈRE<span class="text-indigo-600">.OPS</span></span>
+                        <span class="px-2 py-1 rounded text-xs font-mono bg-slate-100 text-slate-500 border border-slate-200">V.2026.1</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex space-x-8">
+                        <button onclick="scrollToSection('architecture')" class="text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Le Stack</button>
+                        <button onclick="scrollToSection('tactics')" class="text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Tactiques</button>
+                        <button onclick="scrollToSection('database')" class="text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Lexique</button>
+                        <button onclick="scrollToSection('assessment')" class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">Test Agent</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section: Context -->
+    <div class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+                    <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                        <span class="block">La Guerre Cognitive &</span>
+                        <span class="block text-indigo-600">Domination Sémantique</span>
+                    </h1>
+                    <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 font-light">
+                        Le champ de bataille a changé. La distinction entre paix et guerre est obsolète. Bienvenue dans la <strong class="text-indigo-900 font-semibold">Zone Grise</strong>, où l'esprit humain est le territoire ultime à conquérir.
+                    </p>
+                    <div class="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
+                        <p class="text-sm font-mono text-slate-400 mb-4 border-l-2 border-indigo-200 pl-3">
+                            // SOURCE: LIVRE BLANC STRATÉGIQUE + MANUEL DE SURVIE
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <span class="block text-2xl font-bold text-indigo-600" id="stat-psych">Psychopolitique</span>
+                                <span class="text-xs text-slate-500 uppercase tracking-wide">Nouveau Paradigme</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <span class="block text-2xl font-bold text-slate-700">Noopolitique</span>
+                                <span class="text-xs text-slate-500 uppercase tracking-wide">Stratégie du Savoir</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+                    <div class="bg-slate-50 rounded-xl shadow-xl border border-slate-200 p-6 w-full">
+                        <h3 class="text-lg font-medium text-slate-900 mb-4">Analyse Comparative de la Puissance</h3>
+                        <p class="text-sm text-slate-500 mb-4">Transition du "Hard Power" traditionnel vers le "Soft/Smart Power" cognitif.</p>
+                        <div class="chart-container-small">
+                            <canvas id="powerRadarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: The Stack (Architecture) -->
+    <!-- Visualization & Content Choices: Used a vertical interactive list to represent Benjamin Bratton's 'Stack' model. 
+         This allows the user to click through layers (Earth to User) and understand the vertical geopolitics described in the report. 
+         Interaction is key here to break down a complex theoretical model into digestible parts. -->
+    <section id="architecture" class="bg-slate-50 py-16 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-slate-900">Architecture Géopolitique : Le "Stack"</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-500">
+                    Selon le modèle de Benjamin Bratton, la souveraineté ne se mesure plus par des frontières horizontales sur une carte, mais par la maîtrise verticale de six couches technologiques.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Interactive List -->
+                <div class="lg:col-span-1 space-y-2" id="stack-list">
+                    <!-- JS generates items here -->
+                </div>
+
+                <!-- Detail View -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-8 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="text-9xl font-bold text-slate-300" id="stack-bg-number">06</span>
+                    </div>
+                    <div id="stack-content">
+                        <span class="text-indigo-600 font-mono text-sm tracking-wider uppercase mb-2 block">Couche Supérieure</span>
+                        <h3 class="text-3xl font-bold text-slate-900 mb-4">L'Utilisateur (User)</h3>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                            L'agent individuel, ou la machine, qui possède une identité numérique et interagit avec l'interface. C'est la cible ultime de la guerre cognitive. La gestion des esprits (Psychopolitique) opère ici, exploitant l'auto-exposition volontaire.
+                        </p>
+                        <div class="bg-slate-50 border-l-4 border-indigo-500 p-4">
+                            <p class="text-sm text-slate-700 italic">"Prouvez que vous n'êtes pas qu'un simple 'User' dans leur 'Stack'."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Tactics (Gray Zone Analysis) -->
+    <!-- Visualization & Content Choices: A Plotly Scatter plot is used to visualize the 'Gray Zone'. 
+         It maps specific attack vectors (Fake News, DDoS, Lawfare) on two axes: Difficulty of Attribution vs. Psychological Impact.
+         This transforms abstract threats into a concrete risk matrix. -->
+    <section id="tactics" class="bg-white py-16 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <div class="lg:col-span-4">
+                    <h2 class="text-3xl font-extrabold text-slate-900">La Zone Grise & Tactiques</h2>
+                    <p class="mt-4 text-slate-500 mb-6">
+                        L'espace de conflictualité permanent où la distinction entre paix et guerre est floue. Les affrontements y sont constants, indirects et multiformes.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-bold text-slate-900 mb-2">Manipulation Mutuelle Assurée</h4>
+                            <p class="text-sm text-slate-600">
+                                Nous sommes passés de la destruction mutuelle (nucléaire) à la manipulation mutuelle. L'information est une munition.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-bold text-slate-900 mb-2">Auftragstaktik</h4>
+                            <p class="text-sm text-slate-600">
+                                Philosophie de commandement (mission command) prônée pour opérer à la vélocité du cyberespace. Décentralisation de l'exécution, centralisation de l'intention.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-8 mt-8 lg:mt-0">
+                    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-4">
+                        <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
+                            <h3 class="text-lg font-semibold text-slate-800">Matrice de Menace Cognitive</h3>
+                            <span class="text-xs font-mono text-slate-400">AXE Y: IMPACT | AXE X: OPACITÉ</span>
+                        </div>
+                        <div class="chart-container" id="plotly-container">
+                            <!-- Plotly Chart loads here -->
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2 text-center italic">Données simulées basées sur l'analyse théorique du Livre Blanc.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Intelligence Database (Glossary) -->
+    <!-- Visualization & Content Choices: A grid of cards with Javascript-based filtering. 
+         This handles the "Lexico-Anarchie" mentioned in the report. Users can search for terms like "Ruling Fiscal" or "Trigger Marketing".
+         This organizes the definitions into a usable knowledge base. -->
+    <section id="database" class="bg-slate-100 py-16 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-900">Base de Données Sémantique</h2>
+                <p class="mt-2 text-slate-500">Décodage des terminologies clés extraites des fichiers récupérés.</p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="max-w-xl mx-auto mb-10">
+                <div class="relative rounded-md shadow-sm">
+                    <input type="text" id="search-input" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 pr-12 py-3 sm:text-sm border-slate-300 rounded-md" placeholder="Rechercher un terme (ex: Soft Power)...">
+                    <div class="absolute inset-y-0 right-0 flex items-center">
+                        <select id="category-filter" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-slate-500 sm:text-sm rounded-md">
+                            <option value="all">Tout</option>
+                            <option value="juridique">Juridique/Social</option>
+                            <option value="marketing">Marketing/Influence</option>
+                            <option value="theory">Théorie/Concept</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid of Definitions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="glossary-grid">
+                <!-- Cards injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Assessment (Quiz) -->
+    <!-- Visualization & Content Choices: An interactive quiz directly implementing the "ÉPREUVE 01" from the "Manuel de Survie".
+         This engages the user actively ("Gamification") rather than just presenting text. It reinforces the "Training" aspect of the source material. -->
+    <section id="assessment" class="bg-indigo-900 py-16 border-t border-indigo-800 text-white relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-indigo-500 blur-3xl"></div>
+             <div class="absolute top-1/2 right-0 w-64 h-64 rounded-full bg-purple-500 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <span class="inline-block py-1 px-3 rounded bg-indigo-800 border border-indigo-700 text-indigo-300 text-xs font-mono mb-4">PROTOCOLE D'ACTIVATION</span>
+                <h2 class="text-3xl font-extrabold">Test d'Aptitude : Zone Grise</h2>
+                <p class="mt-4 text-indigo-200">
+                    "L'échec n'est pas une option. C'est une condition." Prouvez votre capacité à décoder la matrice.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-2xl overflow-hidden text-slate-900">
+                <div class="p-8">
+                    <div id="quiz-container">
+                        <!-- Question Progress -->
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-sm font-bold text-indigo-600" id="question-tracker">Question 1/3</span>
+                            <div class="w-32 h-2 bg-slate-100 rounded-full">
+                                <div class="h-full bg-indigo-600 rounded-full transition-all duration-300" id="progress-bar" style="width: 33%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question -->
+                        <h3 class="text-xl font-bold mb-6" id="quiz-question">Chargement...</h3>
+
+                        <!-- Options -->
+                        <div class="space-y-3" id="quiz-options">
+                            <!-- Buttons injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Result View (Hidden initially) -->
+                    <div id="quiz-result" class="hidden text-center py-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                            <span class="text-2xl font-bold" id="score-display">0</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2" id="result-title">Analyse Terminée</h3>
+                        <p class="text-slate-600 mb-6" id="result-message">...</p>
+                        <button onclick="resetQuiz()" class="text-indigo-600 font-semibold hover:text-indigo-800">Recommencer le protocole</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-xl text-slate-100 font-bold tracking-tight">NOOSPHÈRE<span class="text-indigo-500">.OPS</span></span>
+                <p class="text-slate-500 text-sm mt-1">Manuel de Survie Cognitive & Livre Blanc Stratégique</p>
+            </div>
+            <div class="text-slate-500 text-sm text-center md:text-right">
+                <p>Données extraites de serveurs décommissionnés.</p>
+                <p>Accès autorisé. Niveau de sécurité: Public.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- DATA STORE ---
+
+        // Glossary Data extracted from "Manuel de Survie" and "Livre Blanc"
+        const glossaryData = [
+            {
+                term: "Soft Power",
+                cat: "theory",
+                def: "Concept de Joseph S. Nye. Capacité d'influencer par l'attraction (culture, valeurs) plutôt que par la coercition (hard power). L'authenticité est sa monnaie."
+            },
+            {
+                term: "Ruling Fiscal",
+                cat: "juridique",
+                def: "Décision anticipée. Accord juridique obtenu auprès de l'administration fiscale (SDA en Belgique) qui valide un montage financier et lie l'État pour une durée déterminée (5 ans)."
+            },
+            {
+                term: "Statut BIM",
+                cat: "juridique",
+                def: "Bénéficiaire de l'Intervention Majorée. Statut social ouvrant droit à des remboursements de soins de santé plus élevés. Conditionné à un plafond de revenus."
+            },
+            {
+                term: "The Stack",
+                cat: "theory",
+                def: "Modèle de Benjamin Bratton décrivant la géopolitique numérique comme un empilement vertical de 6 couches (Terre, Cloud, Ville, Adresse, Interface, Utilisateur)."
+            },
+            {
+                term: "Triplet Sémantique",
+                cat: "marketing",
+                def: "Unité fondamentale du web sémantique (Sujet-Verbe-Objet). C'est un fait structuré que les machines peuvent comprendre et intégrer dans leur Knowledge Graph."
+            },
+            {
+                term: "Trigger Marketing",
+                cat: "marketing",
+                def: "Stratégie consistant à déclencher une action marketing personnalisée en réaction à un événement détectable (changement de poste, levée de fonds)."
+            },
+            {
+                term: "Zone Grise",
+                cat: "theory",
+                def: "Espace de conflictualité permanent où la distinction entre paix et guerre est floue. Les affrontements y sont constants, indirects et multiformes."
+            },
+            {
+                term: "Lead-dexing",
+                cat: "marketing",
+                def: "Méthode de détection mesurable par une cible précise (Concept fictif utilisé dans le manuel pour illustrer le jargon marketing/surveillance)."
+            },
+            {
+                term: "Noopolitique",
+                cat: "theory",
+                def: "La politique de l'esprit (Noosphère). Paradigme qui succède à la biopolitique, gérant les esprits via l'auto-exposition volontaire."
+            }
+        ];
+
+        // The Stack Data
+        const stackData = [
+            { id: "user", label: "Utilisateur", desc: "L'agent individuel. La cible ultime. La gestion des esprits (Psychopolitique) opère ici.", num: "06" },
+            { id: "interface", label: "Interface", desc: "Le point de contact visuel et tactile. Là où la réalité est médiée et présentée à l'utilisateur.", num: "05" },
+            { id: "address", label: "Adresse", desc: "L'identification et la localisation. Sans adresse (IP, Crypto, ID), on n'existe pas dans le système.", num: "04" },
+            { id: "city", label: "Ville", desc: "L'environnement physique saturé de capteurs et de réseaux. La ville intelligente comme grille de contrôle.", num: "03" },
+            { id: "cloud", label: "Cloud", desc: "Les serveurs, les données, la mémoire décentralisée. La souveraineté des plateformes transnationales.", num: "02" },
+            { id: "earth", label: "Terre", desc: "La couche physique. Minéraux, câbles sous-marins, énergie. La base matérielle du virtuel.", num: "01" }
+        ];
+
+        // Quiz Data extracted from "ÉPREUVE 01"
+        const quizData = [
+            {
+                q: "1. Ce concept a été forgé pour décrire une méthode de détection mesurable par une cible précise. Quel est son nom de code ?",
+                options: ["Mention Monitoring", "Ego Baiting", "Lead-dexing", "Trigger Marketing"],
+                correct: 2 // Lead-dexing
+            },
+            {
+                q: "2. Dans la doctrine de domination cognitive, quelle philosophie de commandement est prônée pour opérer à la vélocité du cyberespace ?",
+                options: ["Befehlstaktik", "Auftragstaktik", "Blitzkrieg", "Noopolitique"],
+                correct: 1 // Auftragstaktik
+            },
+            {
+                q: "3. Le philosophe Byung-Chul Han décrit une transition du pouvoir de la 'Biopolitique' vers quel nouveau paradigme ?",
+                options: ["La Noopolitique", "La Psychopolitique", "La Souveraineté Numérique", "Le Soft Power"],
+                correct: 1 // La Psychopolitique
+            }
+        ];
+
+        // --- INITIALIZATION ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStack();
+            initGlossary();
+            initQuiz();
+            initCharts();
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- MODULE: THE STACK ---
+        function initStack() {
+            const listEl = document.getElementById('stack-list');
+            const contentEl = document.getElementById('stack-content');
+            const bgNum = document.getElementById('stack-bg-number');
+
+            stackData.forEach((layer, index) => {
+                const btn = document.createElement('div');
+                btn.className = `p-4 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 stack-layer ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-700">${layer.label}</span>
+                        <span class="text-xs font-mono text-slate-400">LAYER ${layer.num}</span>
+                    </div>
+                `;
+                btn.onclick = () => {
+                    // Update UI
+                    document.querySelectorAll('.stack-layer').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update Content
+                    bgNum.textContent = layer.num;
+                    contentEl.innerHTML = `
+                        <span class="text-indigo-600 font-mono text-sm tracking-wider uppercase mb-2 block">Couche ${layer.num}</span>
+                        <h3 class="text-3xl font-bold text-slate-900 mb-4">${layer.label}</h3>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">${layer.desc}</p>
+                    `;
+                    
+                    // Add subtle animation
+                    contentEl.animate([
+                        { opacity: 0, transform: 'translateY(10px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ], { duration: 300 });
+                };
+                listEl.appendChild(btn);
+            });
+        }
+
+        // --- MODULE: GLOSSARY ---
+        function initGlossary() {
+            const grid = document.getElementById('glossary-grid');
+            const searchInput = document.getElementById('search-input');
+            const filterSelect = document.getElementById('category-filter');
+
+            function render(filterTerm = '', category = 'all') {
+                grid.innerHTML = '';
+                const filtered = glossaryData.filter(item => {
+                    const matchesTerm = item.term.toLowerCase().includes(filterTerm.toLowerCase()) || item.def.toLowerCase().includes(filterTerm.toLowerCase());
+                    const matchesCat = category === 'all' || item.cat === category;
+                    return matchesTerm && matchesCat;
+                });
+
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg p-6 shadow-sm border border-slate-200 interactive-card flex flex-col';
+                    
+                    let tagColor = 'bg-slate-100 text-slate-600';
+                    if(item.cat === 'juridique') tagColor = 'bg-red-50 text-red-600';
+                    if(item.cat === 'marketing') tagColor = 'bg-green-50 text-green-600';
+                    if(item.cat === 'theory') tagColor = 'bg-indigo-50 text-indigo-600';
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-800">${item.term}</h3>
+                            <span class="px-2 py-1 rounded text-xs font-medium uppercase ${tagColor}">${item.cat}</span>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed flex-grow">${item.def}</p>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            // Listeners
+            searchInput.addEventListener('input', (e) => render(e.target.value, filterSelect.value));
+            filterSelect.addEventListener('change', (e) => render(searchInput.value, e.target.value));
+
+            // Initial render
+            render();
+        }
+
+        // --- MODULE: QUIZ ---
+        let currentQuestion = 0;
+        let score = 0;
+
+        function initQuiz() {
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('question-tracker').textContent = `Question ${currentQuestion + 1}/${quizData.length}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
+            document.getElementById('quiz-question').textContent = q.q;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-lg bg-slate-50 border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 transition-colors font-medium text-slate-700';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(idx);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selectedIndex) {
+            if(selectedIndex === quizData[currentQuestion].correct) {
+                score++;
+            }
+
+            if(currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            
+            document.getElementById('score-display').textContent = `${score}/${quizData.length}`;
+            
+            const msg = document.getElementById('result-message');
+            const title = document.getElementById('result-title');
+            
+            if(score === quizData.length) {
+                title.textContent = "Compatible Zone Grise";
+                title.classList.add("text-indigo-600");
+                msg.textContent = "Excellent. Vous avez assimilé la doctrine. Vous n'êtes plus un simple 'User'.";
+            } else if (score > 0) {
+                title.textContent = "Potentiel Détecté";
+                title.classList.add("text-yellow-600");
+                msg.textContent = "Vous avez des bases, mais la matrice vous influence encore. Relisez le manuel.";
+            } else {
+                title.textContent = "Échec Critique";
+                title.classList.add("text-red-600");
+                msg.textContent = "Vous êtes totalement sous influence. Protocole de quarantaine recommandé.";
+            }
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // --- MODULE: CHARTS ---
+        function initCharts() {
+            // 1. Chart.js Radar Chart (Power Analysis)
+            const ctxRadar = document.getElementById('powerRadarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Coercition', 'Attraction', 'Invisibilité', 'Faible Coût', 'Vitesse', 'Portée'],
+                    datasets: [{
+                        label: 'Hard Power (Ancien)',
+                        data: [90, 20, 10, 10, 40, 60],
+                        fill: true,
+                        backgroundColor: 'rgba(148, 163, 184, 0.2)',
+                        borderColor: 'rgb(148, 163, 184)',
+                        pointBackgroundColor: 'rgb(148, 163, 184)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(148, 163, 184)'
+                    }, {
+                        label: 'Smart/Soft Power (Cognitif)',
+                        data: [30, 95, 85, 90, 95, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderColor: 'rgb(79, 70, 229)',
+                        pointBackgroundColor: 'rgb(79, 70, 229)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(79, 70, 229)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 2 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            pointLabels: {
+                                font: { size: 10, family: 'Inter' }
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+
+            // 2. Plotly Scatter Plot (Gray Zone Matrix)
+            const trace1 = {
+                x: [8, 9, 3, 5, 7], // Attribution Difficulty
+                y: [8, 7, 4, 6, 9], // Psychological Impact
+                mode: 'markers+text',
+                type: 'scatter',
+                text: ['False Flags', 'Deepfakes', 'DDoS', 'Troll Farms', 'Opérations Psy'],
+                textposition: 'top center',
+                textfont: {
+                    family: 'Inter',
+                    size: 11
+                },
+                marker: { 
+                    size: [20, 18, 12, 15, 22],
+                    color: ['#ef4444', '#f97316', '#94a3b8', '#64748b', '#4f46e5'], // Red, Orange, Gray, Gray, Indigo
+                    opacity: 0.8
+                },
+                hoverinfo: 'text+x+y',
+                hovertemplate: '<b>%{text}</b><br>Difficulté Attr.: %{x}/10<br>Impact Psycho: %{y}/10<extra></extra>'
+            };
+
+            const layout = {
+                margin: { t: 20, r: 20, b: 40, l: 40 },
+                xaxis: {
+                    title: 'Difficulté d\'Attribution (Opacité)',
+                    range: [0, 11],
+                    gridcolor: '#f1f5f9',
+                    zeroline: false
+                },
+                yaxis: {
+                    title: 'Impact Psychologique',
+                    range: [0, 11],
+                    gridcolor: '#f1f5f9',
+                    zeroline: false
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                showlegend: false,
+                font: {
+                    family: 'Inter',
+                    color: '#64748b'
+                }
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            Plotly.newPlot('plotly-container', [trace1], layout, config);
+        }
+
+    </script>
+</body>
+</html>

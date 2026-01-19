@@ -1,0 +1,2905 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CITOYENLAB — Poste de Travail Citoyen 3.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0c0c0e;
+            --bg-elevated: #141418;
+            --bg-card: #1a1a20;
+            --bg-card-hover: #222228;
+            --bg-input: #101014;
+            
+            --accent-gold: #d4a853;
+            --accent-gold-dim: rgba(212, 168, 83, 0.15);
+            --accent-gold-glow: rgba(212, 168, 83, 0.4);
+            --accent-emerald: #34d399;
+            --accent-emerald-dim: rgba(52, 211, 153, 0.12);
+            --accent-coral: #f87171;
+            --accent-coral-dim: rgba(248, 113, 113, 0.12);
+            --accent-sky: #38bdf8;
+            --accent-sky-dim: rgba(56, 189, 248, 0.12);
+            --accent-violet: #a78bfa;
+            --accent-violet-dim: rgba(167, 139, 250, 0.12);
+            
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-active: rgba(212, 168, 83, 0.3);
+            
+            --radius-xs: 4px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 40px rgba(212, 168, 83, 0.15);
+            
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.15s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-gold-dim) transparent;
+        }
+        
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-gold-dim); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
+
+        /* ═══════════════════════════════════════════════════════════
+           BACKGROUND ATMOSPHERE
+        ═══════════════════════════════════════════════════════════ */
+        .atmosphere {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .atmo-gradient {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.08;
+        }
+        
+        .atmo-1 { width: 800px; height: 800px; background: var(--accent-gold); top: -400px; left: -200px; }
+        .atmo-2 { width: 600px; height: 600px; background: var(--accent-emerald); bottom: -200px; right: -200px; }
+        .atmo-3 { width: 400px; height: 400px; background: var(--accent-violet); top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; }
+        
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--border-subtle) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.3;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           LAYOUT STRUCTURE
+        ═══════════════════════════════════════════════════════════ */
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           HEADER
+        ═══════════════════════════════════════════════════════════ */
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(12, 12, 14, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-emerald));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-glow);
+            animation: brand-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes brand-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 83, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(52, 211, 153, 0.3); }
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: 'Fraunces', serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent-gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-active);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #c9943d);
+            border: none;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-danger {
+            border-color: var(--accent-coral-dim);
+            color: var(--accent-coral);
+        }
+
+        .btn-danger:hover {
+            background: var(--accent-coral-dim);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           SIDEBAR NAVIGATION
+        ═══════════════════════════════════════════════════════════ */
+        .sidebar {
+            background: var(--bg-elevated);
+            border-right: 1px solid var(--border-subtle);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+            height: calc(100vh - 60px);
+            position: sticky;
+            top: 60px;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 0.9rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-gold-dim);
+            color: var(--accent-gold);
+            border-color: var(--border-active);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-icon { background: var(--accent-gold-dim); }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--bg-input);
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--text-muted);
+        }
+
+        .progress-mini {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .progress-mini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-mini-title {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-mini-value {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .progress-mini-bar {
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-mini-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-emerald));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           MAIN CONTENT AREA
+        ═══════════════════════════════════════════════════════════ */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CARDS & PANELS
+        ═══════════════════════════════════════════════════════════ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--border-active);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .card-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        @media (max-width: 1200px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FORM ELEMENTS
+        ═══════════════════════════════════════════════════════════ */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px var(--accent-gold-dim);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        .form-help {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           DASHBOARD STATS
+        ═══════════════════════════════════════════════════════════ */
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--stat-color, var(--accent-gold));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--stat-bg, var(--accent-gold-dim));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           METHODOLOGY PHASES
+        ═══════════════════════════════════════════════════════════ */
+        .phase-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .phase-tab {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phase-tab:hover {
+            border-color: var(--border-active);
+        }
+
+        .phase-tab.active {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+        }
+
+        .phase-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .tool-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(4px);
+        }
+
+        .tool-card.expanded {
+            background: var(--bg-card);
+            border-color: var(--accent-gold);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tool-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-gold-dim);
+            color: var(--accent-gold);
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .tool-info {
+            flex: 1;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .tool-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .tool-content {
+            display: none;
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .tool-card.expanded .tool-content {
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ACTORS / POWER MAPPING
+        ═══════════════════════════════════════════════════════════ */
+        .actor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .actor-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            position: relative;
+        }
+
+        .actor-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+            background: var(--actor-color, var(--accent-gold));
+        }
+
+        .actor-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .actor-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .actor-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-xs);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+        }
+
+        .actor-power {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .power-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--bg-input);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .power-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           VEILLE CITOYENNE
+        ═══════════════════════════════════════════════════════════ */
+        .veille-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all var(--transition);
+        }
+
+        .veille-item:hover {
+            border-color: var(--border-active);
+        }
+
+        .veille-cat {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .veille-cat.politique { background: var(--accent-coral-dim); }
+        .veille-cat.environnement { background: var(--accent-emerald-dim); }
+        .veille-cat.social { background: var(--accent-sky-dim); }
+        .veille-cat.economie { background: var(--accent-gold-dim); }
+        .veille-cat.culture { background: var(--accent-violet-dim); }
+
+        .veille-content { flex: 1; }
+
+        .veille-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .veille-source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .veille-date {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TIMELINE / JOURNAL
+        ═══════════════════════════════════════════════════════════ */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-subtle);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            border: 3px solid var(--bg-base);
+        }
+
+        .timeline-date {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CHECKLIST
+        ═══════════════════════════════════════════════════════════ */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .checklist-item:hover {
+            background: var(--bg-card);
+        }
+
+        .checklist-item.completed {
+            opacity: 0.6;
+        }
+
+        .checklist-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-subtle);
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition);
+        }
+
+        .checklist-item.completed .checklist-box {
+            background: var(--accent-emerald);
+            border-color: var(--accent-emerald);
+        }
+
+        .checklist-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .checklist-item.completed .checklist-text {
+            text-decoration: line-through;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           EXPORT PANEL
+        ═══════════════════════════════════════════════════════════ */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .export-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .export-btn:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .export-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .export-icon.json { background: var(--accent-gold-dim); }
+        .export-icon.md { background: var(--accent-emerald-dim); }
+        .export-icon.html { background: var(--accent-coral-dim); }
+        .export-icon.csv { background: var(--accent-sky-dim); }
+        .export-icon.pdf { background: var(--accent-violet-dim); }
+
+        .export-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .export-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           IMPORT ZONE
+        ═══════════════════════════════════════════════════════════ */
+        .dropzone {
+            border: 2px dashed var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+
+        .dropzone:hover, .dropzone.dragover {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        .dropzone-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .dropzone-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .dropzone-formats {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TOAST NOTIFICATIONS
+        ═══════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-soft);
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+        }
+
+        .toast.success { border-color: var(--accent-emerald); }
+        .toast.error { border-color: var(--accent-coral); }
+        .toast.info { border-color: var(--accent-sky); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           MODAL
+        ═══════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--accent-coral-dim);
+            color: var(--accent-coral);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESPONSIVE MOBILE MENU
+        ═══════════════════════════════════════════════════════════ */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-subtle);
+            padding: 0.5rem;
+            z-index: 100;
+        }
+
+        .mobile-nav-items {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .mobile-nav-item.active {
+            color: var(--accent-gold);
+        }
+
+        .mobile-nav-item span {
+            font-size: 0.65rem;
+        }
+
+        @media (max-width: 900px) {
+            .mobile-nav { display: block; }
+            .main-content { padding-bottom: 5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ATMOSPHERE -->
+    <div class="atmosphere">
+        <div class="atmo-gradient atmo-1"></div>
+        <div class="atmo-gradient atmo-2"></div>
+        <div class="atmo-gradient atmo-3"></div>
+        <div class="grid-pattern"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon">🏛️</div>
+                <div class="brand-text">
+                    <span class="brand-name">CITOYENLAB</span>
+                    <span class="brand-subtitle">Poste de Travail Citoyen 3.0</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn" onclick="document.getElementById('import-input').click()">
+                    📥 Importer
+                </button>
+                <input type="file" id="import-input" accept=".json,.csv,.md" style="display:none" onchange="handleImport(event)">
+                <button class="btn btn-primary" onclick="saveProject()">💾 Sauvegarder</button>
+                <button class="btn btn-danger" onclick="confirmReset()">🗑️ Reset</button>
+            </div>
+        </header>
+
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-section-title">Vue d'ensemble</div>
+                <div class="nav-item active" data-section="dashboard">
+                    <div class="nav-icon">📊</div>
+                    <span>Tableau de bord</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Méthodologie V-J-A</div>
+                <div class="nav-item" data-section="voir">
+                    <div class="nav-icon">👁️</div>
+                    <span>1. Voir</span>
+                    <span class="nav-badge" id="nav-voir-count">0/4</span>
+                </div>
+                <div class="nav-item" data-section="juger">
+                    <div class="nav-icon">⚖️</div>
+                    <span>2. Juger</span>
+                    <span class="nav-badge" id="nav-juger-count">0/5</span>
+                </div>
+                <div class="nav-item" data-section="agir">
+                    <div class="nav-icon">🚀</div>
+                    <span>3. Agir</span>
+                    <span class="nav-badge" id="nav-agir-count">0/6</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Intelligence Civile</div>
+                <div class="nav-item" data-section="veille">
+                    <div class="nav-icon">🔍</div>
+                    <span>Veille Citoyenne</span>
+                    <span class="nav-badge" id="nav-veille-count">0</span>
+                </div>
+                <div class="nav-item" data-section="acteurs">
+                    <div class="nav-icon">🎯</div>
+                    <span>Cartographie Acteurs</span>
+                    <span class="nav-badge" id="nav-acteurs-count">0</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Gestion</div>
+                <div class="nav-item" data-section="journal">
+                    <div class="nav-icon">📅</div>
+                    <span>Journal de Bord</span>
+                </div>
+                <div class="nav-item" data-section="checklist">
+                    <div class="nav-icon">✅</div>
+                    <span>Check-list</span>
+                </div>
+                <div class="nav-item" data-section="export">
+                    <div class="nav-icon">📤</div>
+                    <span>Import / Export</span>
+                </div>
+            </div>
+
+            <div class="progress-mini">
+                <div class="progress-mini-header">
+                    <span class="progress-mini-title">Progression globale</span>
+                    <span class="progress-mini-value" id="global-progress">0%</span>
+                </div>
+                <div class="progress-mini-bar">
+                    <div class="progress-mini-fill" id="global-progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: DASHBOARD
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h1 class="section-title">📊 Tableau de Bord</h1>
+                    <p class="section-subtitle">Vue d'ensemble de votre projet de plaidoyer citoyen</p>
+                </div>
+
+                <div class="grid-4">
+                    <div class="stat-card" style="--stat-color: var(--accent-gold); --stat-bg: var(--accent-gold-dim)">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value" id="stat-fields">0</div>
+                        <div class="stat-label">Champs remplis</div>
+                    </div>
+                    <div class="stat-card" style="--stat-color: var(--accent-emerald); --stat-bg: var(--accent-emerald-dim)">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="stat-actors">0</div>
+                        <div class="stat-label">Acteurs identifiés</div>
+                    </div>
+                    <div class="stat-card" style="--stat-color: var(--accent-sky); --stat-bg: var(--accent-sky-dim)">
+                        <div class="stat-icon">🔍</div>
+                        <div class="stat-value" id="stat-veille">0</div>
+                        <div class="stat-label">Éléments de veille</div>
+                    </div>
+                    <div class="stat-card" style="--stat-color: var(--accent-violet); --stat-bg: var(--accent-violet-dim)">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="stat-checks">0</div>
+                        <div class="stat-label">Tâches complétées</div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">⚡ Progression par Phase</h3>
+                        </div>
+                        <div id="phase-progress-container">
+                            <!-- Généré dynamiquement -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🎯 Projet Actuel</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom du projet</label>
+                            <input type="text" class="form-input" data-field="project_name" placeholder="Ex: Transition écologique locale">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Objectif principal</label>
+                            <textarea class="form-textarea" data-field="project_objective" placeholder="Décrivez en quelques lignes le changement que vous souhaitez obtenir..." rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📅 Activité Récente</h3>
+                    </div>
+                    <div class="timeline" id="recent-activity">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Aujourd'hui</div>
+                            <div class="timeline-content">Projet initialisé. Commencez par la phase "Voir" pour analyser votre contexte.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: VOIR
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="voir" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">👁️ Phase 1 : VOIR</h1>
+                    <p class="section-subtitle">Poser des constats sur la société et identifier les enjeux</p>
+                </div>
+
+                <div class="tool-card" data-tool="domino">
+                    <div class="tool-header">
+                        <div class="tool-number">1</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🎲 Domino du Changement</div>
+                            <div class="tool-desc">Identifier vos motivations et valeurs profondes</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Pourquoi s'engager ?</label>
+                                <textarea class="form-textarea" data-field="domino_pourquoi" placeholder="Qu'est-ce qui vous pousse à agir ? Quelle indignation ou quel espoir ?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Valeurs fondamentales</label>
+                                <textarea class="form-textarea" data-field="domino_valeurs" placeholder="Quelles valeurs défendez-vous ? Justice, égalité, solidarité..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Changements souhaités</label>
+                            <textarea class="form-textarea" data-field="domino_changements" placeholder="Décrivez précisément les changements que vous voulez voir dans la société..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="profil">
+                    <div class="tool-header">
+                        <div class="tool-number">2</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🧭 Quel est mon profil ?</div>
+                            <div class="tool-desc">Identifier votre style d'engagement citoyen</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Face à une injustice, je préfère...</label>
+                            <select class="form-select" data-field="profil_q1">
+                                <option value="">Sélectionnez une réponse</option>
+                                <option value="a">Planifier une stratégie méthodique</option>
+                                <option value="b">Mobiliser et communiquer largement</option>
+                                <option value="c">Documenter et analyser en profondeur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mon point fort dans un groupe est...</label>
+                            <select class="form-select" data-field="profil_q2">
+                                <option value="">Sélectionnez une réponse</option>
+                                <option value="a">L'organisation et la coordination</option>
+                                <option value="b">L'art oratoire et la persuasion</option>
+                                <option value="c">L'expertise et la recherche d'information</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="calculateProfile()">🔮 Découvrir mon profil</button>
+                        <div id="profile-result" style="margin-top: 1rem; display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="fleur">
+                    <div class="tool-header">
+                        <div class="tool-number">3</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🌸 Fleur de Pouvoir</div>
+                            <div class="tool-desc">Analyser les dynamiques de pouvoir qui vous affectent</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Pouvoirs visibles (formels)</label>
+                                <textarea class="form-textarea" data-field="fleur_visible" placeholder="Lois, institutions, règlements, autorités officielles..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Pouvoirs cachés (informels)</label>
+                                <textarea class="form-textarea" data-field="fleur_cache" placeholder="Lobbys, réseaux d'influence, médias, intérêts économiques..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pouvoirs intériorisés</label>
+                            <textarea class="form-textarea" data-field="fleur_interiorise" placeholder="Normes sociales, croyances limitantes, autocensure..."></textarea>
+                            <div class="form-help">Les pouvoirs que nous avons intériorisés et qui limitent notre action sans que nous en soyons conscients</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="carto">
+                    <div class="tool-header">
+                        <div class="tool-number">4</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🗺️ Cartographie des Acteurs</div>
+                            <div class="tool-desc">Identifier et positionner les parties prenantes</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                            → Rendez-vous dans la section <strong>"Cartographie Acteurs"</strong> pour gérer vos acteurs avec le power mapping complet.
+                        </p>
+                        <button class="btn" onclick="navigateTo('acteurs')">🎯 Accéder à la cartographie</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: JUGER
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="juger" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">⚖️ Phase 2 : JUGER</h1>
+                    <p class="section-subtitle">Analyser en profondeur et développer une réflexion critique</p>
+                </div>
+
+                <div class="tool-card" data-tool="toc">
+                    <div class="tool-header">
+                        <div class="tool-number">5</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🎯 Théorie du Changement (ToC)</div>
+                            <div class="tool-desc">Construire votre chaîne causale vers le changement</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Vision à long terme</label>
+                            <textarea class="form-textarea" data-field="toc_vision" placeholder="À quoi ressemble le monde que vous voulez construire ? Décrivez votre idéal..."></textarea>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Résultats intermédiaires</label>
+                                <textarea class="form-textarea" data-field="toc_resultats" placeholder="Quels changements à moyen terme sont nécessaires ?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Activités prévues</label>
+                                <textarea class="form-textarea" data-field="toc_activites" placeholder="Quelles actions concrètes allez-vous mener ?"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hypothèses et conditions</label>
+                            <textarea class="form-textarea" data-field="toc_hypotheses" placeholder="Quelles conditions doivent être réunies ? Quels sont les risques ?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="swot">
+                    <div class="tool-header">
+                        <div class="tool-number">6</div>
+                        <div class="tool-info">
+                            <div class="tool-name">📊 Analyse SWOT</div>
+                            <div class="tool-desc">Forces, Faiblesses, Opportunités, Menaces</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">💪 Forces (internes +)</label>
+                                <textarea class="form-textarea" data-field="swot_forces" placeholder="Vos atouts, compétences, ressources, légitimité..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">⚠️ Faiblesses (internes -)</label>
+                                <textarea class="form-textarea" data-field="swot_faiblesses" placeholder="Vos manques, limites, points de vulnérabilité..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">🌟 Opportunités (externes +)</label>
+                                <textarea class="form-textarea" data-field="swot_opportunites" placeholder="Contexte favorable, alliés potentiels, fenêtres politiques..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">⛈️ Menaces (externes -)</label>
+                                <textarea class="form-textarea" data-field="swot_menaces" placeholder="Opposition, contexte défavorable, risques..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="pestel">
+                    <div class="tool-header">
+                        <div class="tool-number">7</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🌍 Analyse PESTEL</div>
+                            <div class="tool-desc">Analyser le macro-environnement</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label">🏛️ Politique</label>
+                                <textarea class="form-textarea" data-field="pestel_politique" placeholder="Contexte politique, élections, majorités..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">💰 Économique</label>
+                                <textarea class="form-textarea" data-field="pestel_economique" placeholder="Conjoncture, budgets, financement..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">👥 Sociologique</label>
+                                <textarea class="form-textarea" data-field="pestel_sociologique" placeholder="Opinion publique, tendances sociales..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">💻 Technologique</label>
+                                <textarea class="form-textarea" data-field="pestel_technologique" placeholder="Outils, plateformes, innovations..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">🌿 Environnemental</label>
+                                <textarea class="form-textarea" data-field="pestel_environnemental" placeholder="Enjeux écologiques, climat..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">⚖️ Légal</label>
+                                <textarea class="form-textarea" data-field="pestel_legal" placeholder="Cadre juridique, règlements..." rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="arbre">
+                    <div class="tool-header">
+                        <div class="tool-number">8</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🌳 Arbre à Problème / Objectif</div>
+                            <div class="tool-desc">Identifier causes et conséquences</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">🔴 Problème central</label>
+                            <input type="text" class="form-input" data-field="arbre_probleme" placeholder="Formulez le problème principal en une phrase">
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">🌱 Causes (racines)</label>
+                                <textarea class="form-textarea" data-field="arbre_causes" placeholder="Quelles sont les causes profondes du problème ?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">🍂 Conséquences (branches)</label>
+                                <textarea class="form-textarea" data-field="arbre_consequences" placeholder="Quels sont les effets visibles du problème ?"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🎯 Objectif (reformulation positive)</label>
+                            <textarea class="form-textarea" data-field="arbre_objectif" placeholder="Transformez le problème en objectif positif à atteindre"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="pourquoi">
+                    <div class="tool-header">
+                        <div class="tool-number">9</div>
+                        <div class="tool-info">
+                            <div class="tool-name">❓ Les 5 Pourquoi</div>
+                            <div class="tool-desc">Remonter aux causes racines</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Constat de départ</label>
+                            <input type="text" class="form-input" data-field="pourquoi_constat" placeholder="Décrivez la situation problématique">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">1. Pourquoi ?</label>
+                            <input type="text" class="form-input" data-field="pourquoi_1" placeholder="Première réponse...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">2. Pourquoi ?</label>
+                            <input type="text" class="form-input" data-field="pourquoi_2" placeholder="Deuxième réponse...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">3. Pourquoi ?</label>
+                            <input type="text" class="form-input" data-field="pourquoi_3" placeholder="Troisième réponse...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">4. Pourquoi ?</label>
+                            <input type="text" class="form-input" data-field="pourquoi_4" placeholder="Quatrième réponse...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">5. Pourquoi ? (cause racine)</label>
+                            <input type="text" class="form-input" data-field="pourquoi_5" placeholder="Cause fondamentale identifiée...">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: AGIR
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="agir" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">🚀 Phase 3 : AGIR</h1>
+                    <p class="section-subtitle">Mettre en place des actions concrètes pour réaliser le changement</p>
+                </div>
+
+                <div class="tool-card" data-tool="pouvoir">
+                    <div class="tool-header">
+                        <div class="tool-number">10</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🤝 Avec, Sans, Contre le Pouvoir</div>
+                            <div class="tool-desc">Définir votre stratégie de relation au pouvoir</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label">✅ AVEC le pouvoir</label>
+                                <textarea class="form-textarea" data-field="pouvoir_avec" placeholder="Dialogue, négociation, partenariat institutionnel..." rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">🔄 SANS le pouvoir</label>
+                                <textarea class="form-textarea" data-field="pouvoir_sans" placeholder="Alternatives concrètes, expérimentation, préfiguration..." rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">⚔️ CONTRE le pouvoir</label>
+                                <textarea class="form-textarea" data-field="pouvoir_contre" placeholder="Mobilisation, contestation, rapport de force..." rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="smart">
+                    <div class="tool-header">
+                        <div class="tool-number">11</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🎯 Objectifs SMART</div>
+                            <div class="tool-desc">Formuler des objectifs mesurables et réalisables</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Objectif principal</label>
+                            <input type="text" class="form-input" data-field="smart_objectif" placeholder="Formulez votre objectif en une phrase">
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">S - Spécifique</label>
+                                <textarea class="form-textarea" data-field="smart_s" placeholder="L'objectif est-il précis et clair ?" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">M - Mesurable</label>
+                                <textarea class="form-textarea" data-field="smart_m" placeholder="Comment saurez-vous si c'est atteint ?" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">A - Atteignable</label>
+                                <textarea class="form-textarea" data-field="smart_a" placeholder="Avez-vous les ressources nécessaires ?" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">R - Réaliste</label>
+                                <textarea class="form-textarea" data-field="smart_r" placeholder="Est-ce pertinent par rapport au contexte ?" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">T - Temporellement défini</label>
+                            <input type="text" class="form-input" data-field="smart_t" placeholder="Quelle est l'échéance ? Date limite ?">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="cibles">
+                    <div class="tool-header">
+                        <div class="tool-number">12</div>
+                        <div class="tool-info">
+                            <div class="tool-name">🎯 Cibles et Alliances</div>
+                            <div class="tool-desc">Identifier qui peut agir et qui peut vous soutenir</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Cible principale (décideur)</label>
+                            <input type="text" class="form-input" data-field="cible_principale" placeholder="Qui a le pouvoir de décision final ?">
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Cibles secondaires</label>
+                                <textarea class="form-textarea" data-field="cibles_secondaires" placeholder="Qui peut influencer la cible principale ?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Alliés potentiels</label>
+                                <textarea class="form-textarea" data-field="allies" placeholder="Organisations, personnalités, collectifs..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="message">
+                    <div class="tool-header">
+                        <div class="tool-number">13</div>
+                        <div class="tool-info">
+                            <div class="tool-name">💬 Construire un Message</div>
+                            <div class="tool-desc">Formuler un message clair et percutant</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Accroche (hook)</label>
+                            <input type="text" class="form-input" data-field="msg_accroche" placeholder="Une phrase choc qui capte l'attention">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Problème</label>
+                            <textarea class="form-textarea" data-field="msg_probleme" placeholder="Exposez le problème de manière concrète et émotionnelle" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Importance</label>
+                            <textarea class="form-textarea" data-field="msg_importance" placeholder="Pourquoi c'est important ? Quelles sont les conséquences ?" rows="2"></textarea>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Cible du message</label>
+                                <input type="text" class="form-input" data-field="msg_cible" placeholder="À qui s'adresse ce message ?">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Action demandée</label>
+                                <input type="text" class="form-input" data-field="msg_action" placeholder="Que voulez-vous qu'il/elle fasse ?">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateMessage()">📝 Générer le message</button>
+                        <div id="generated-message" style="margin-top: 1rem; display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="checklist">
+                    <div class="tool-header">
+                        <div class="tool-number">14</div>
+                        <div class="tool-info">
+                            <div class="tool-name">✅ Check-list de Préparation</div>
+                            <div class="tool-desc">Préparer une rencontre de plaidoyer</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                            → Rendez-vous dans la section <strong>"Check-list"</strong> pour gérer vos tâches de préparation.
+                        </p>
+                        <button class="btn" onclick="navigateTo('checklist')">✅ Accéder à la check-list</button>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool="suivi">
+                    <div class="tool-header">
+                        <div class="tool-number">15</div>
+                        <div class="tool-info">
+                            <div class="tool-name">📈 Suivi et Évaluation</div>
+                            <div class="tool-desc">Mesurer l'impact et ajuster la stratégie</div>
+                        </div>
+                    </div>
+                    <div class="tool-content">
+                        <div class="form-group">
+                            <label class="form-label">Indicateurs de succès</label>
+                            <textarea class="form-textarea" data-field="suivi_indicateurs" placeholder="Comment mesurerez-vous le succès de votre plaidoyer ?"></textarea>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Résultats obtenus</label>
+                                <textarea class="form-textarea" data-field="suivi_resultats" placeholder="Qu'avez-vous accompli jusqu'à présent ?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Leçons apprises</label>
+                                <textarea class="form-textarea" data-field="suivi_lecons" placeholder="Que feriez-vous différemment ?"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: VEILLE CITOYENNE
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="veille" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">🔍 Veille Citoyenne</h1>
+                    <p class="section-subtitle">Collecte et analyse d'informations stratégiques pour votre plaidoyer</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">➕ Ajouter un élément de veille</h3>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Titre / Sujet</label>
+                            <input type="text" class="form-input" id="veille-title" placeholder="Ex: Décision du conseil communal sur...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Catégorie</label>
+                            <select class="form-select" id="veille-category">
+                                <option value="politique">🏛️ Politique</option>
+                                <option value="environnement">🌿 Environnement</option>
+                                <option value="social">👥 Social</option>
+                                <option value="economie">💰 Économie</option>
+                                <option value="culture">🎭 Culture</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Source</label>
+                            <input type="text" class="form-input" id="veille-source" placeholder="Ex: Le Soir, RTBF, Moniteur belge...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL (optionnel)</label>
+                            <input type="url" class="form-input" id="veille-url" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes / Analyse</label>
+                        <textarea class="form-textarea" id="veille-notes" placeholder="Votre analyse : pourquoi c'est important pour votre plaidoyer ?"></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addVeilleItem()">➕ Ajouter</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📋 Éléments collectés</h3>
+                        <div class="form-group" style="margin: 0; width: 200px;">
+                            <select class="form-select" id="veille-filter" onchange="filterVeille()">
+                                <option value="">Tous</option>
+                                <option value="politique">Politique</option>
+                                <option value="environnement">Environnement</option>
+                                <option value="social">Social</option>
+                                <option value="economie">Économie</option>
+                                <option value="culture">Culture</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="veille-list">
+                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                            Aucun élément de veille enregistré. Commencez à collecter des informations !
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: ACTEURS
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="acteurs" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">🎯 Cartographie des Acteurs</h1>
+                    <p class="section-subtitle">Power Mapping : identifier et positionner les parties prenantes</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">➕ Ajouter un acteur</h3>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Nom / Organisation</label>
+                            <input type="text" class="form-input" id="actor-name" placeholder="Ex: Échevin de l'urbanisme">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" id="actor-type">
+                                <option value="decision">🏛️ Décideur</option>
+                                <option value="influence">🎭 Influenceur</option>
+                                <option value="ally">🤝 Allié</option>
+                                <option value="opponent">⚔️ Opposant</option>
+                                <option value="neutral">⚪ Neutre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Niveau de pouvoir (1-10)</label>
+                            <input type="range" min="1" max="10" value="5" id="actor-power" style="width: 100%">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted);">
+                                <span>Faible</span><span>Fort</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Position actuelle</label>
+                            <select class="form-select" id="actor-position">
+                                <option value="favorable">😊 Favorable</option>
+                                <option value="neutre">😐 Neutre</option>
+                                <option value="oppose">😠 Opposé</option>
+                                <option value="inconnu">❓ Inconnu</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes stratégiques</label>
+                        <textarea class="form-textarea" id="actor-notes" placeholder="Intérêts, motivations, points d'entrée, historique relationnel..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addActor()">➕ Ajouter</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🗺️ Power Map</h3>
+                    </div>
+                    <div class="actor-grid" id="actors-list">
+                        <p style="color: var(--text-muted); text-align: center; padding: 2rem; grid-column: 1/-1;">
+                            Aucun acteur enregistré. Commencez par identifier les parties prenantes de votre plaidoyer.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: JOURNAL
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="journal" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">📅 Journal de Bord</h1>
+                    <p class="section-subtitle">Documentez vos actions, rencontres et réflexions</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">✏️ Nouvelle entrée</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type d'entrée</label>
+                        <select class="form-select" id="journal-type">
+                            <option value="action">🎯 Action réalisée</option>
+                            <option value="rencontre">🤝 Rencontre</option>
+                            <option value="reflexion">💭 Réflexion</option>
+                            <option value="victoire">🎉 Victoire</option>
+                            <option value="obstacle">⚠️ Obstacle</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="journal-content" placeholder="Décrivez l'événement, vos observations, les personnes rencontrées..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addJournalEntry()">➕ Ajouter</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📜 Historique</h3>
+                    </div>
+                    <div class="timeline" id="journal-timeline">
+                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                            Aucune entrée dans le journal. Commencez à documenter votre parcours !
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: CHECKLIST
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="checklist" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">✅ Check-list de Préparation</h1>
+                    <p class="section-subtitle">15 points clés pour préparer une action de plaidoyer</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📋 Avant la rencontre</h3>
+                        </div>
+                        <div id="checklist-avant"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🎯 Pendant et après</h3>
+                        </div>
+                        <div id="checklist-pendant"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SECTION: EXPORT
+            ═══════════════════════════════════════════════════════════ -->
+            <section id="export" class="section">
+                <div class="section-header">
+                    <h1 class="section-title">📤 Import / Export</h1>
+                    <p class="section-subtitle">Gérer vos fichiers et sauvegardes</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📥 Importer un projet</h3>
+                    </div>
+                    <div class="dropzone" id="dropzone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('import-input-main').click()">
+                        <div class="dropzone-icon">📁</div>
+                        <div class="dropzone-title">Glissez-déposez un fichier ici</div>
+                        <div class="dropzone-formats">Formats acceptés : JSON, CSV, Markdown</div>
+                    </div>
+                    <input type="file" id="import-input-main" accept=".json,.csv,.md" style="display:none" onchange="handleImport(event)">
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📤 Exporter le projet</h3>
+                    </div>
+                    <div class="export-grid">
+                        <div class="export-btn" onclick="exportProject('json')">
+                            <div class="export-icon json">📄</div>
+                            <div class="export-label">JSON</div>
+                            <div class="export-desc">Sauvegarde complète</div>
+                        </div>
+                        <div class="export-btn" onclick="exportProject('md')">
+                            <div class="export-icon md">📝</div>
+                            <div class="export-label">Markdown</div>
+                            <div class="export-desc">Document lisible</div>
+                        </div>
+                        <div class="export-btn" onclick="exportProject('html')">
+                            <div class="export-icon html">🌐</div>
+                            <div class="export-label">HTML</div>
+                            <div class="export-desc">Page web autonome</div>
+                        </div>
+                        <div class="export-btn" onclick="exportProject('csv')">
+                            <div class="export-icon csv">📊</div>
+                            <div class="export-label">CSV</div>
+                            <div class="export-desc">Tableur (acteurs)</div>
+                        </div>
+                        <div class="export-btn" onclick="exportProject('pdf')">
+                            <div class="export-icon pdf">📕</div>
+                            <div class="export-label">PDF</div>
+                            <div class="export-desc">Rapport imprimable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📚 Ressources</h3>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+                        <p>• <strong>Justice et Paix</strong> — Le petit guide du plaidoyer citoyen (2020)</p>
+                        <p>• <strong>ULB-Coopération</strong> — Manuel Plaidoyer v4 (2022)</p>
+                        <p>• <strong>Intelligence Civile</strong> — Guide pour l'éducation permanente (FWB)</p>
+                        <p>• <strong>Veille Citoyenne</strong> — Enjeux et pratiques pour la démocratie</p>
+                        <p>• <strong>Décret EP 2003</strong> — Cadre légal de l'éducation permanente en FWB</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <div class="mobile-nav-item active" data-section="dashboard">📊<span>Bord</span></div>
+            <div class="mobile-nav-item" data-section="voir">👁️<span>Voir</span></div>
+            <div class="mobile-nav-item" data-section="juger">⚖️<span>Juger</span></div>
+            <div class="mobile-nav-item" data-section="agir">🚀<span>Agir</span></div>
+            <div class="mobile-nav-item" data-section="veille">🔍<span>Veille</span></div>
+        </div>
+    </nav>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Confirmation</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════
+        // DATA STRUCTURE
+        // ═══════════════════════════════════════════════════════════
+        let projectData = {
+            meta: {
+                version: '3.0',
+                created: new Date().toISOString(),
+                updated: new Date().toISOString(),
+                name: 'Nouveau projet de plaidoyer'
+            },
+            fields: {},
+            actors: [],
+            veille: [],
+            journal: [],
+            checklist: {}
+        };
+
+        // Check-list items
+        const checklistItems = {
+            avant: [
+                "Définir l'objectif précis de la rencontre",
+                "Rechercher des informations sur l'interlocuteur",
+                "Préparer les arguments clés (max 3)",
+                "Anticiper les objections et préparer des réponses",
+                "Rassembler les documents de support",
+                "Préparer un pitch de 2 minutes",
+                "Vérifier la logistique (lieu, heure, matériel)",
+                "Briefer l'équipe de plaidoyer"
+            ],
+            pendant: [
+                "Commencer par l'écoute active",
+                "Présenter les faits avant les opinions",
+                "Utiliser des exemples concrets et locaux",
+                "Proposer des solutions, pas juste des problèmes",
+                "Prendre des notes pendant l'échange",
+                "Définir des prochaines étapes claires",
+                "Rédiger un compte-rendu dans les 24h"
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProject();
+            initNavigation();
+            initToolCards();
+            initFormFields();
+            initChecklist();
+            updateAllStats();
+        });
+
+        function initNavigation() {
+            const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const section = item.dataset.section;
+                    navigateTo(section);
+                });
+            });
+        }
+
+        function navigateTo(sectionId) {
+            // Update nav
+            document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === sectionId);
+            });
+            
+            // Update sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.toggle('active', section.id === sectionId);
+            });
+
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        function initToolCards() {
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.querySelector('.tool-header').addEventListener('click', () => {
+                    card.classList.toggle('expanded');
+                });
+            });
+        }
+
+        function initFormFields() {
+            document.querySelectorAll('[data-field]').forEach(field => {
+                // Load saved value
+                if (projectData.fields[field.dataset.field]) {
+                    field.value = projectData.fields[field.dataset.field];
+                }
+                
+                // Save on change
+                field.addEventListener('input', debounce(() => {
+                    projectData.fields[field.dataset.field] = field.value;
+                    saveProject(false);
+                    updateAllStats();
+                }, 500));
+            });
+        }
+
+        function initChecklist() {
+            const avantContainer = document.getElementById('checklist-avant');
+            const pendantContainer = document.getElementById('checklist-pendant');
+
+            checklistItems.avant.forEach((item, i) => {
+                avantContainer.appendChild(createChecklistItem(item, `avant_${i}`));
+            });
+
+            checklistItems.pendant.forEach((item, i) => {
+                pendantContainer.appendChild(createChecklistItem(item, `pendant_${i}`));
+            });
+        }
+
+        function createChecklistItem(text, id) {
+            const div = document.createElement('div');
+            div.className = 'checklist-item' + (projectData.checklist[id] ? ' completed' : '');
+            div.innerHTML = `
+                <div class="checklist-box">${projectData.checklist[id] ? '✓' : ''}</div>
+                <div class="checklist-text">${text}</div>
+            `;
+            div.addEventListener('click', () => {
+                projectData.checklist[id] = !projectData.checklist[id];
+                div.classList.toggle('completed');
+                div.querySelector('.checklist-box').textContent = projectData.checklist[id] ? '✓' : '';
+                saveProject(false);
+                updateAllStats();
+            });
+            return div;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // PROFILE CALCULATOR
+        // ═══════════════════════════════════════════════════════════
+        function calculateProfile() {
+            const q1 = projectData.fields.profil_q1 || '';
+            const q2 = projectData.fields.profil_q2 || '';
+            
+            let profile = { name: '🔬 Chercheur·euse', desc: 'Vous excellez dans l\'analyse et la documentation.' };
+            
+            if (q1 === 'a' || q2 === 'a') {
+                profile = { name: '🗂️ Planificateur·trice', desc: 'Vous êtes doué·e pour organiser et coordonner les actions.' };
+            } else if (q1 === 'b' || q2 === 'b') {
+                profile = { name: '🗣️ Communicateur·trice', desc: 'Vous savez mobiliser et convaincre les gens.' };
+            }
+
+            const resultDiv = document.getElementById('profile-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="padding: 1rem; background: var(--accent-gold-dim); border-radius: var(--radius-md); border: 1px solid var(--border-active);">
+                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 0.5rem;">${profile.name}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">${profile.desc}</div>
+                </div>
+            `;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // MESSAGE GENERATOR
+        // ═══════════════════════════════════════════════════════════
+        function generateMessage() {
+            const f = projectData.fields;
+            const message = `${f.msg_accroche || '[Accroche à définir]'}
+
+${f.msg_probleme || '[Problème à exposer]'}
+
+Pourquoi c'est important : ${f.msg_importance || '[Importance à expliquer]'}
+
+Nous demandons à ${f.msg_cible || '[Cible]'} de ${f.msg_action || '[Action demandée]'}.`;
+
+            const div = document.getElementById('generated-message');
+            div.style.display = 'block';
+            div.innerHTML = `
+                <div style="padding: 1rem; background: var(--bg-input); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                    <pre style="white-space: pre-wrap; font-family: inherit; color: var(--text-primary); font-size: 0.9rem; line-height: 1.7;">${message}</pre>
+                    <button class="btn" style="margin-top: 1rem;" onclick="copyToClipboard(\`${message.replace(/`/g, '\\`')}\`)">📋 Copier</button>
+                </div>
+            `;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // VEILLE MANAGEMENT
+        // ═══════════════════════════════════════════════════════════
+        function addVeilleItem() {
+            const title = document.getElementById('veille-title').value.trim();
+            const category = document.getElementById('veille-category').value;
+            const source = document.getElementById('veille-source').value.trim();
+            const url = document.getElementById('veille-url').value.trim();
+            const notes = document.getElementById('veille-notes').value.trim();
+
+            if (!title) {
+                showToast('Veuillez entrer un titre', 'error');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                title,
+                category,
+                source,
+                url,
+                notes,
+                date: new Date().toISOString()
+            };
+
+            projectData.veille.unshift(item);
+            renderVeilleList();
+            saveProject();
+            updateAllStats();
+
+            // Clear form
+            document.getElementById('veille-title').value = '';
+            document.getElementById('veille-source').value = '';
+            document.getElementById('veille-url').value = '';
+            document.getElementById('veille-notes').value = '';
+
+            showToast('Élément de veille ajouté !');
+        }
+
+        function renderVeilleList() {
+            const container = document.getElementById('veille-list');
+            const filter = document.getElementById('veille-filter').value;
+            const filtered = filter ? projectData.veille.filter(v => v.category === filter) : projectData.veille;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                    ${filter ? 'Aucun élément dans cette catégorie.' : 'Aucun élément de veille enregistré.'}
+                </p>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const icons = { politique: '🏛️', environnement: '🌿', social: '👥', economie: '💰', culture: '🎭' };
+                const date = new Date(item.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                
+                return `
+                    <div class="veille-item">
+                        <div class="veille-cat ${item.category}">${icons[item.category] || '📄'}</div>
+                        <div class="veille-content">
+                            <div class="veille-title">${item.title}</div>
+                            <div class="veille-source">
+                                ${item.source ? `<span>📰 ${item.source}</span>` : ''}
+                                ${item.url ? `<a href="${item.url}" target="_blank" style="color: var(--accent-gold);">🔗 Lien</a>` : ''}
+                            </div>
+                            ${item.notes ? `<div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">${item.notes}</div>` : ''}
+                        </div>
+                        <div class="veille-date">${date}</div>
+                        <button class="btn btn-danger" style="padding: 0.4rem 0.6rem; font-size: 0.7rem;" onclick="deleteVeille(${item.id})">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterVeille() {
+            renderVeilleList();
+        }
+
+        function deleteVeille(id) {
+            projectData.veille = projectData.veille.filter(v => v.id !== id);
+            renderVeilleList();
+            saveProject();
+            updateAllStats();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ACTORS MANAGEMENT
+        // ═══════════════════════════════════════════════════════════
+        function addActor() {
+            const name = document.getElementById('actor-name').value.trim();
+            const type = document.getElementById('actor-type').value;
+            const power = document.getElementById('actor-power').value;
+            const position = document.getElementById('actor-position').value;
+            const notes = document.getElementById('actor-notes').value.trim();
+
+            if (!name) {
+                showToast('Veuillez entrer un nom', 'error');
+                return;
+            }
+
+            const actor = {
+                id: Date.now(),
+                name,
+                type,
+                power: parseInt(power),
+                position,
+                notes
+            };
+
+            projectData.actors.push(actor);
+            renderActorsList();
+            saveProject();
+            updateAllStats();
+
+            // Clear form
+            document.getElementById('actor-name').value = '';
+            document.getElementById('actor-power').value = 5;
+            document.getElementById('actor-notes').value = '';
+
+            showToast('Acteur ajouté !');
+        }
+
+        function renderActorsList() {
+            const container = document.getElementById('actors-list');
+
+            if (projectData.actors.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem; grid-column: 1/-1;">
+                    Aucun acteur enregistré.
+                </p>`;
+                return;
+            }
+
+            const typeColors = {
+                decision: 'var(--accent-gold)',
+                influence: 'var(--accent-violet)',
+                ally: 'var(--accent-emerald)',
+                opponent: 'var(--accent-coral)',
+                neutral: 'var(--text-muted)'
+            };
+
+            const typeLabels = {
+                decision: '🏛️ Décideur',
+                influence: '🎭 Influenceur',
+                ally: '🤝 Allié',
+                opponent: '⚔️ Opposant',
+                neutral: '⚪ Neutre'
+            };
+
+            const positionLabels = {
+                favorable: '😊 Favorable',
+                neutre: '😐 Neutre',
+                oppose: '😠 Opposé',
+                inconnu: '❓ Inconnu'
+            };
+
+            container.innerHTML = projectData.actors.map(actor => `
+                <div class="actor-card" style="--actor-color: ${typeColors[actor.type]}">
+                    <div class="actor-name">${actor.name}</div>
+                    <div class="actor-meta">
+                        <span class="actor-badge">${typeLabels[actor.type]}</span>
+                        <span class="actor-badge">${positionLabels[actor.position]}</span>
+                    </div>
+                    <div class="actor-power">
+                        <span>Pouvoir:</span>
+                        <div class="power-bar">
+                            <div class="power-fill" style="width: ${actor.power * 10}%"></div>
+                        </div>
+                        <span>${actor.power}/10</span>
+                    </div>
+                    ${actor.notes ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">${actor.notes}</div>` : ''}
+                    <button class="btn btn-danger" style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.3rem 0.5rem; font-size: 0.65rem;" onclick="deleteActor(${actor.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteActor(id) {
+            projectData.actors = projectData.actors.filter(a => a.id !== id);
+            renderActorsList();
+            saveProject();
+            updateAllStats();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // JOURNAL MANAGEMENT
+        // ═══════════════════════════════════════════════════════════
+        function addJournalEntry() {
+            const type = document.getElementById('journal-type').value;
+            const content = document.getElementById('journal-content').value.trim();
+
+            if (!content) {
+                showToast('Veuillez entrer une description', 'error');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                type,
+                content,
+                date: new Date().toISOString()
+            };
+
+            projectData.journal.unshift(entry);
+            renderJournalTimeline();
+            saveProject();
+
+            document.getElementById('journal-content').value = '';
+            showToast('Entrée ajoutée au journal !');
+        }
+
+        function renderJournalTimeline() {
+            const container = document.getElementById('journal-timeline');
+
+            if (projectData.journal.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                    Aucune entrée dans le journal.
+                </p>`;
+                return;
+            }
+
+            const typeIcons = {
+                action: '🎯',
+                rencontre: '🤝',
+                reflexion: '💭',
+                victoire: '🎉',
+                obstacle: '⚠️'
+            };
+
+            container.innerHTML = projectData.journal.map(entry => {
+                const date = new Date(entry.date).toLocaleDateString('fr-FR', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-date">${typeIcons[entry.type]} ${date}</div>
+                        <div class="timeline-content">${entry.content}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // STATISTICS
+        // ═══════════════════════════════════════════════════════════
+        function updateAllStats() {
+            // Count filled fields
+            const filledFields = Object.values(projectData.fields).filter(v => v && v.trim()).length;
+            document.getElementById('stat-fields').textContent = filledFields;
+
+            // Count actors
+            document.getElementById('stat-actors').textContent = projectData.actors.length;
+            document.getElementById('nav-acteurs-count').textContent = projectData.actors.length;
+
+            // Count veille
+            document.getElementById('stat-veille').textContent = projectData.veille.length;
+            document.getElementById('nav-veille-count').textContent = projectData.veille.length;
+
+            // Count completed checklist
+            const completedChecks = Object.values(projectData.checklist).filter(v => v).length;
+            document.getElementById('stat-checks').textContent = completedChecks;
+
+            // Calculate phase progress
+            const voirFields = ['domino_pourquoi', 'domino_valeurs', 'domino_changements', 'fleur_visible', 'fleur_cache', 'fleur_interiorise'];
+            const jugerFields = ['toc_vision', 'toc_resultats', 'swot_forces', 'swot_faiblesses', 'arbre_probleme', 'pourquoi_1'];
+            const agirFields = ['smart_objectif', 'smart_s', 'cible_principale', 'msg_accroche', 'msg_probleme', 'suivi_indicateurs'];
+
+            const calcProgress = (fields) => {
+                const filled = fields.filter(f => projectData.fields[f] && projectData.fields[f].trim()).length;
+                return Math.round((filled / fields.length) * 100);
+            };
+
+            const voirProgress = calcProgress(voirFields);
+            const jugerProgress = calcProgress(jugerFields);
+            const agirProgress = calcProgress(agirFields);
+            const globalProgress = Math.round((voirProgress + jugerProgress + agirProgress) / 3);
+
+            // Update nav badges
+            document.getElementById('nav-voir-count').textContent = `${Math.round(voirProgress/25)}/4`;
+            document.getElementById('nav-juger-count').textContent = `${Math.round(jugerProgress/20)}/5`;
+            document.getElementById('nav-agir-count').textContent = `${Math.round(agirProgress/17)}/6`;
+
+            // Update global progress
+            document.getElementById('global-progress').textContent = globalProgress + '%';
+            document.getElementById('global-progress-fill').style.width = globalProgress + '%';
+
+            // Render phase progress bars
+            const progressContainer = document.getElementById('phase-progress-container');
+            progressContainer.innerHTML = [
+                { name: '👁️ VOIR', value: voirProgress, color: 'var(--accent-gold)' },
+                { name: '⚖️ JUGER', value: jugerProgress, color: 'var(--accent-emerald)' },
+                { name: '🚀 AGIR', value: agirProgress, color: 'var(--accent-sky)' }
+            ].map(phase => `
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.85rem; font-weight: 600;">${phase.name}</span>
+                        <span style="font-family: 'Fraunces', serif; font-weight: 700; color: ${phase.color};">${phase.value}%</span>
+                    </div>
+                    <div class="progress-mini-bar">
+                        <div class="progress-mini-fill" style="width: ${phase.value}%; background: ${phase.color};"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // SAVE / LOAD
+        // ═══════════════════════════════════════════════════════════
+        function saveProject(notify = true) {
+            projectData.meta.updated = new Date().toISOString();
+            localStorage.setItem('citoyenlab_v3', JSON.stringify(projectData));
+            if (notify) showToast('Projet sauvegardé !', 'success');
+        }
+
+        function loadProject() {
+            const saved = localStorage.getItem('citoyenlab_v3');
+            if (saved) {
+                try {
+                    projectData = JSON.parse(saved);
+                    
+                    // Restore fields
+                    Object.entries(projectData.fields).forEach(([key, value]) => {
+                        const field = document.querySelector(`[data-field="${key}"]`);
+                        if (field) field.value = value;
+                    });
+
+                    // Render lists
+                    renderVeilleList();
+                    renderActorsList();
+                    renderJournalTimeline();
+                    
+                } catch (e) {
+                    console.error('Erreur chargement projet:', e);
+                }
+            }
+        }
+
+        function confirmReset() {
+            showModal(
+                '⚠️ Réinitialiser le projet ?',
+                '<p style="color: var(--text-secondary);">Cette action supprimera toutes les données du projet actuel. Cette action est irréversible.</p>',
+                [
+                    { text: 'Annuler', class: 'btn', action: closeModal },
+                    { text: '🗑️ Réinitialiser', class: 'btn btn-danger', action: resetProject }
+                ]
+            );
+        }
+
+        function resetProject() {
+            localStorage.removeItem('citoyenlab_v3');
+            location.reload();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // IMPORT / EXPORT
+        // ═══════════════════════════════════════════════════════════
+        function handleImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    if (file.name.endsWith('.json')) {
+                        projectData = JSON.parse(e.target.result);
+                        localStorage.setItem('citoyenlab_v3', JSON.stringify(projectData));
+                        location.reload();
+                    } else if (file.name.endsWith('.csv')) {
+                        importCSV(e.target.result);
+                    } else {
+                        showToast('Format non supporté', 'error');
+                    }
+                } catch (err) {
+                    showToast('Erreur lors de l\'import', 'error');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function importCSV(content) {
+            const lines = content.split('\n').filter(l => l.trim());
+            if (lines.length < 2) return;
+
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            
+            lines.slice(1).forEach(line => {
+                const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                const obj = {};
+                headers.forEach((h, i) => obj[h] = values[i]);
+
+                if (obj.name || obj.nom) {
+                    projectData.actors.push({
+                        id: Date.now() + Math.random(),
+                        name: obj.name || obj.nom,
+                        type: obj.type || 'neutral',
+                        power: parseInt(obj.power || obj.pouvoir) || 5,
+                        position: obj.position || 'inconnu',
+                        notes: obj.notes || ''
+                    });
+                }
+            });
+
+            renderActorsList();
+            saveProject();
+            showToast('Acteurs importés depuis CSV');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.remove('dragover');
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const input = document.getElementById('import-input-main');
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+                handleImport({ target: input });
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('dropzone').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            document.getElementById('dropzone').classList.remove('dragover');
+        }
+
+        function exportProject(format) {
+            const timestamp = new Date().toISOString().slice(0, 10);
+            const projectName = (projectData.fields.project_name || 'plaidoyer').replace(/\s+/g, '_');
+            let content, type, filename;
+
+            switch (format) {
+                case 'json':
+                    content = JSON.stringify(projectData, null, 2);
+                    type = 'application/json';
+                    filename = `${projectName}_${timestamp}.json`;
+                    break;
+
+                case 'md':
+                    content = generateMarkdown();
+                    type = 'text/markdown';
+                    filename = `${projectName}_${timestamp}.md`;
+                    break;
+
+                case 'html':
+                    content = generateHTML();
+                    type = 'text/html';
+                    filename = `${projectName}_${timestamp}.html`;
+                    break;
+
+                case 'csv':
+                    content = generateCSV();
+                    type = 'text/csv';
+                    filename = `${projectName}_acteurs_${timestamp}.csv`;
+                    break;
+
+                case 'pdf':
+                    generatePDF();
+                    return;
+            }
+
+            downloadFile(content, filename, type);
+            showToast(`Export ${format.toUpperCase()} réussi !`);
+        }
+
+        function generateMarkdown() {
+            const f = projectData.fields;
+            let md = `# Projet de Plaidoyer Citoyen
+
+**Projet:** ${f.project_name || 'Non défini'}
+**Date d'export:** ${new Date().toLocaleDateString('fr-FR')}
+
+---
+
+## 📋 Objectif Principal
+
+${f.project_objective || 'À définir'}
+
+---
+
+## 👁️ Phase 1 : VOIR
+
+### Domino du Changement
+- **Pourquoi s'engager:** ${f.domino_pourquoi || 'N/A'}
+- **Valeurs:** ${f.domino_valeurs || 'N/A'}
+- **Changements souhaités:** ${f.domino_changements || 'N/A'}
+
+### Fleur de Pouvoir
+- **Pouvoirs visibles:** ${f.fleur_visible || 'N/A'}
+- **Pouvoirs cachés:** ${f.fleur_cache || 'N/A'}
+- **Pouvoirs intériorisés:** ${f.fleur_interiorise || 'N/A'}
+
+---
+
+## ⚖️ Phase 2 : JUGER
+
+### Théorie du Changement
+- **Vision:** ${f.toc_vision || 'N/A'}
+- **Résultats intermédiaires:** ${f.toc_resultats || 'N/A'}
+- **Activités:** ${f.toc_activites || 'N/A'}
+
+### Analyse SWOT
+| Forces | Faiblesses |
+|--------|------------|
+| ${f.swot_forces || 'N/A'} | ${f.swot_faiblesses || 'N/A'} |
+
+| Opportunités | Menaces |
+|--------------|---------|
+| ${f.swot_opportunites || 'N/A'} | ${f.swot_menaces || 'N/A'} |
+
+### Arbre à Problème
+- **Problème central:** ${f.arbre_probleme || 'N/A'}
+- **Causes:** ${f.arbre_causes || 'N/A'}
+- **Conséquences:** ${f.arbre_consequences || 'N/A'}
+- **Objectif:** ${f.arbre_objectif || 'N/A'}
+
+---
+
+## 🚀 Phase 3 : AGIR
+
+### Objectif SMART
+${f.smart_objectif || 'N/A'}
+
+### Message de Plaidoyer
+> ${f.msg_accroche || '[Accroche]'}
+>
+> ${f.msg_probleme || '[Problème]'}
+>
+> Nous demandons à ${f.msg_cible || '[Cible]'} de ${f.msg_action || '[Action]'}.
+
+---
+
+## 🎯 Cartographie des Acteurs
+
+${projectData.actors.length > 0 ? projectData.actors.map(a => `- **${a.name}** (${a.type}) - Pouvoir: ${a.power}/10 - Position: ${a.position}`).join('\n') : 'Aucun acteur enregistré'}
+
+---
+
+## 🔍 Veille Citoyenne
+
+${projectData.veille.length > 0 ? projectData.veille.map(v => `- [${v.category}] **${v.title}** - ${v.source || 'Source N/A'}`).join('\n') : 'Aucun élément de veille'}
+
+---
+
+*Exporté depuis CITOYENLAB — Poste de Travail Citoyen 3.0*
+`;
+            return md;
+        }
+
+        function generateHTML() {
+            const md = generateMarkdown();
+            return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport de Plaidoyer - ${projectData.fields.project_name || 'Projet'}</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; background: #0c0c0e; color: #f5f5f7; line-height: 1.7; }
+        h1 { color: #d4a853; border-bottom: 2px solid #d4a853; padding-bottom: 0.5rem; }
+        h2 { color: #34d399; margin-top: 2rem; }
+        h3 { color: #38bdf8; }
+        blockquote { border-left: 4px solid #d4a853; padding-left: 1rem; margin: 1rem 0; background: rgba(212,168,83,0.1); padding: 1rem; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { border: 1px solid #333; padding: 0.75rem; text-align: left; }
+        th { background: #1a1a20; }
+        code { background: #1a1a20; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        hr { border: none; border-top: 1px solid #333; margin: 2rem 0; }
+        .meta { font-size: 0.85rem; color: #a1a1aa; }
+    </style>
+</head>
+<body>
+    ${md.replace(/^# (.*$)/gm, '<h1>$1</h1>')
+        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+        .replace(/^\*\*(.*?):\*\*/gm, '<strong>$1:</strong>')
+        .replace(/^- (.*$)/gm, '<li>$1</li>')
+        .replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>')
+        .replace(/---/g, '<hr>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^\|.*\|$/gm, (match) => {
+            const cells = match.split('|').filter(c => c.trim());
+            return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+        })}
+</body>
+</html>`;
+        }
+
+        function generateCSV() {
+            let csv = 'Nom,Type,Pouvoir,Position,Notes\n';
+            projectData.actors.forEach(a => {
+                csv += `"${a.name}","${a.type}",${a.power},"${a.position}","${(a.notes || '').replace(/"/g, '""')}"\n`;
+            });
+            return csv;
+        }
+
+        function generatePDF() {
+            // Create print-friendly version
+            const content = generateHTML();
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.onload = () => {
+                printWindow.print();
+            };
+            showToast('Utilisez "Imprimer vers PDF" dans le dialogue');
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // UI UTILITIES
+        // ═══════════════════════════════════════════════════════════
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showModal(title, body, buttons) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = body;
+            document.getElementById('modal-footer').innerHTML = buttons.map(btn => 
+                `<button class="${btn.class}" onclick="(${btn.action})()">${btn.text}</button>`
+            ).join('');
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copié dans le presse-papiers !');
+            });
+        }
+
+        function debounce(fn, ms) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), ms);
+            };
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveProject();
+            }
+        });
+    </script>
+</body>
+</html>

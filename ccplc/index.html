@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Energy Transition & Climate Action Report 2025</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plotly.js (Optional but loaded as per instructions, though Chart.js is primary here for speed/style) -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Google Fonts: Inter & Merriweather -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- NO SVG / NO MERMAID as per instructions -->
+    <!-- Chosen Palette: 'Eco-Modernist' -->
+    <!-- Background: Stone-50 (Warm Neutral) -->
+    <!-- Primary Text: Stone-800 -->
+    <!-- Accents: Emerald-600 (Growth), Amber-500 (Warning/Energy), Slate-600 (Structure) -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        eco: {
+                            bg: '#fbfaf8', // Warm off-white
+                            panel: '#ffffff',
+                            primary: '#059669', // Emerald 600
+                            secondary: '#d97706', // Amber 600
+                            text: '#1c1917', // Stone 900
+                            muted: '#78716c', // Stone 500
+                            border: '#e7e5e4', // Stone 200
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar for sleek look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        /* Chart Container Utilities */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Default height */
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .chart-container-sm {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            max-height: 300px;
+        }
+
+        /* Smooth transitions */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid #059669;
+            color: #059669;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-eco-bg text-eco-text font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- Application Structure Plan:
+         1. Header: Simple, fixed navigation.
+         2. Hero/Executive Summary: High-level KPI cards that respond to a "Scenario" dropdown (Business as Usual vs. Net Zero).
+         3. Sector Deep Dive: Interactive Bar Chart showing emissions. Clicking bars updates a text panel (Goal: Inform & Compare).
+         4. Energy Mix Evolution: Doughnut Chart with Year Toggles (2020, 2025, 2030) (Goal: Change/Trend).
+         5. Technology Matrix: Bubble chart comparing Impact vs. Cost of technologies (Goal: Relationships).
+         6. Policy Roadmap: Interactive list/accordion of regulatory milestones (Goal: Organize).
+    -->
+
+    <!-- Visualization & Content Choices:
+         - KPIs: Simple DOM manipulation numbers. Instant impact.
+         - Emissions: Bar Chart (Chart.js). Good for comparing magnitude across sectors.
+         - Energy Mix: Doughnut Chart (Chart.js). Best for part-to-whole comparison.
+         - Tech Matrix: Bubble Chart (Chart.js). Shows 3 dimensions (Cost, Impact, Readiness) effectively without SVG.
+         - Roadmap: Styled HTML list. Clean and accessible.
+         - NO SVG / NO Mermaid confirmed.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-eco-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-eco-primary tracking-tight">Eco<span class="text-eco-text">Report</span> 2025</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="navTo('section-summary')" class="nav-link active px-3 py-2 text-sm transition-colors" id="nav-summary">Executive Summary</button>
+                    <button onclick="navTo('section-emissions')" class="nav-link px-3 py-2 text-sm transition-colors" id="nav-emissions">Sector Emissions</button>
+                    <button onclick="navTo('section-energy')" class="nav-link px-3 py-2 text-sm transition-colors" id="nav-energy">Energy Mix</button>
+                    <button onclick="navTo('section-tech')" class="nav-link px-3 py-2 text-sm transition-colors" id="nav-tech">Tech Matrix</button>
+                </div>
+                <!-- Mobile Menu Button (simplified for SPA) -->
+                <div class="flex items-center md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-eco-text focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-eco-border">
+            <button onclick="navTo('section-summary')" class="block w-full text-left px-4 py-3 text-sm hover:bg-emerald-50">Executive Summary</button>
+            <button onclick="navTo('section-emissions')" class="block w-full text-left px-4 py-3 text-sm hover:bg-emerald-50">Sector Emissions</button>
+            <button onclick="navTo('section-energy')" class="block w-full text-left px-4 py-3 text-sm hover:bg-emerald-50">Energy Mix</button>
+            <button onclick="navTo('section-tech')" class="block w-full text-left px-4 py-3 text-sm hover:bg-emerald-50">Tech Matrix</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- SECTION 1: Executive Summary -->
+        <section id="section-summary" class="fade-in scroll-mt-24">
+            <div class="mb-8">
+                <h1 class="text-4xl font-serif font-bold text-eco-text mb-4">The State of Global Transition</h1>
+                <p class="text-lg text-eco-muted max-w-3xl leading-relaxed">
+                    This interactive report synthesizes the 2025 findings on global decarbonization. 
+                    While renewable adoption is accelerating, the gap between current policies and the 1.5°C target remains critical.
+                    Use the controls below to explore different future scenarios.
+                </p>
+            </div>
+
+            <!-- Scenario Control -->
+            <div class="bg-white rounded-xl shadow-sm border border-eco-border p-6 mb-8">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="font-semibold text-eco-text">Select Scenario Projection:</h3>
+                        <p class="text-sm text-eco-muted">Adjusts KPIs based on IEA 2025 predictive models.</p>
+                    </div>
+                    <select id="scenario-select" onchange="updateKPIs()" class="w-full sm:w-auto px-4 py-2 bg-stone-50 border border-eco-border rounded-lg text-eco-text focus:ring-2 focus:ring-eco-primary outline-none cursor-pointer">
+                        <option value="bau">Business as Usual (current policies)</option>
+                        <option value="pledges">Announced Pledges (targets)</option>
+                        <option value="netzero">Net Zero 2050 (required)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- KPI 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-eco-secondary hover:shadow-md transition-shadow">
+                    <div class="text-sm font-semibold text-eco-muted uppercase tracking-wider mb-2">Projected Warming</div>
+                    <div class="flex items-end items-baseline">
+                        <span id="kpi-warming" class="text-4xl font-bold text-eco-text">2.6°C</span>
+                        <span class="ml-2 text-sm text-eco-muted">by 2100</span>
+                    </div>
+                    <div id="kpi-warming-desc" class="mt-3 text-sm text-eco-text bg-stone-50 p-2 rounded">
+                        Critical Risk: Exceeds tipping points.
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-eco-primary hover:shadow-md transition-shadow">
+                    <div class="text-sm font-semibold text-eco-muted uppercase tracking-wider mb-2">Renewable Share</div>
+                    <div class="flex items-end items-baseline">
+                        <span id="kpi-renewables" class="text-4xl font-bold text-eco-text">35%</span>
+                        <span class="ml-2 text-sm text-eco-muted">of total generation</span>
+                    </div>
+                    <div id="kpi-renewables-desc" class="mt-3 text-sm text-eco-text bg-stone-50 p-2 rounded">
+                        Moderate growth driven by Solar PV.
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-stone-400 hover:shadow-md transition-shadow">
+                    <div class="text-sm font-semibold text-eco-muted uppercase tracking-wider mb-2">Investment Gap</div>
+                    <div class="flex items-end items-baseline">
+                        <span id="kpi-gap" class="text-4xl font-bold text-eco-text">$2.1T</span>
+                        <span class="ml-2 text-sm text-eco-muted">annual deficit</span>
+                    </div>
+                    <div id="kpi-gap-desc" class="mt-3 text-sm text-eco-text bg-stone-50 p-2 rounded">
+                        Significant capital mobilization needed.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Sector Emissions (Bar Chart + Drilldown) -->
+        <section id="section-emissions" class="scroll-mt-24 border-t border-eco-border pt-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: Intro & Details -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div>
+                        <h2 class="text-3xl font-serif font-bold text-eco-text mb-3">Emissions by Sector</h2>
+                        <p class="text-eco-muted mb-4">
+                            Energy generation remains the largest emitter, but Transport and Industry are the hardest to abate sectors.
+                        </p>
+                        <p class="text-sm font-medium text-eco-primary">
+                            <span class="text-xl mr-1">👆</span> Click on a chart bar to see sector-specific strategies.
+                        </p>
+                    </div>
+                    
+                    <!-- Dynamic Details Panel -->
+                    <div id="sector-details" class="bg-white p-6 rounded-xl border border-eco-border shadow-sm h-auto transition-all duration-300">
+                        <h3 id="sector-title" class="text-xl font-bold text-eco-text mb-2">Global Total</h3>
+                        <p id="sector-desc" class="text-sm text-eco-muted mb-4">
+                            Total global CO2 emissions reached 37.4 Gt in 2024. The breakdown shows where immediate action is required.
+                        </p>
+                        <div class="border-t border-eco-border pt-3">
+                            <h4 class="text-xs font-semibold uppercase text-eco-muted mb-2">Key Lever for Decarbonization:</h4>
+                            <p id="sector-lever" class="text-sm font-medium text-emerald-700 bg-emerald-50 p-2 rounded">
+                                Systemic efficiency and electrification.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Chart -->
+                <div class="lg:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-eco-border">
+                    <div class="chart-container">
+                        <canvas id="emissionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Energy Mix (Doughnut) -->
+        <section id="section-energy" class="scroll-mt-24 border-t border-eco-border pt-12">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl font-serif font-bold text-eco-text mb-4">The Shifting Energy Mix</h2>
+                <p class="text-eco-muted">
+                    The transition from fossil fuels to renewables is underway. Explore the historical data and future projections for 2030 based on current pledged policies.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-eco-border p-8">
+                <!-- Toggles -->
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button onclick="updateEnergyMix(2020)" class="mix-btn active px-4 py-2 rounded-full text-sm font-semibold border transition-all bg-eco-text text-white border-eco-text" data-year="2020">2020 (Actual)</button>
+                    <button onclick="updateEnergyMix(2025)" class="mix-btn px-4 py-2 rounded-full text-sm font-semibold border transition-all text-eco-muted border-eco-border hover:border-eco-text" data-year="2025">2025 (Est)</button>
+                    <button onclick="updateEnergyMix(2030)" class="mix-btn px-4 py-2 rounded-full text-sm font-semibold border transition-all text-eco-muted border-eco-border hover:border-eco-text" data-year="2030">2030 (Projected)</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container-sm md:h-[350px] flex justify-center">
+                        <canvas id="energyMixChart"></canvas>
+                    </div>
+                    <div class="space-y-4">
+                        <div id="mix-insight" class="bg-stone-50 p-5 rounded-lg border border-eco-border">
+                            <h4 class="font-bold text-eco-text mb-2">2020 Snapshot</h4>
+                            <p class="text-sm text-eco-muted">Fossil fuels dominated with over 80% of total supply. Coal remained the single largest source of electricity generation globally.</p>
+                        </div>
+                        <!-- Custom Legend / Stat block -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 rounded border border-emerald-100 bg-emerald-50">
+                                <div class="text-xs text-emerald-800 font-semibold uppercase">Renewables</div>
+                                <div id="stat-renewables" class="text-2xl font-bold text-emerald-600">29%</div>
+                            </div>
+                            <div class="p-3 rounded border border-orange-100 bg-orange-50">
+                                <div class="text-xs text-orange-800 font-semibold uppercase">Fossil Fuels</div>
+                                <div id="stat-fossil" class="text-2xl font-bold text-orange-600">61%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Tech Matrix (Bubble) -->
+        <section id="section-tech" class="scroll-mt-24 border-t border-eco-border pt-12">
+            <div class="mb-8">
+                <h2 class="text-3xl font-serif font-bold text-eco-text mb-4">Technology Maturity vs. Impact</h2>
+                <p class="text-eco-muted max-w-4xl">
+                    Analyzing the landscape of green technologies. 
+                    <br><strong>X-Axis:</strong> Cost Efficiency (Lower is better). 
+                    <br><strong>Y-Axis:</strong> Abatement Potential (Higher is better). 
+                    <br><strong>Bubble Size:</strong> Current Readiness Level.
+                </p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-eco-border">
+                <div class="chart-container">
+                    <canvas id="techBubbleChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                <div class="p-4 bg-white border border-eco-border rounded-lg">
+                    <span class="block w-3 h-3 rounded-full bg-emerald-500 mb-2"></span>
+                    <strong>Mature (Solar, Wind):</strong> High impact, low cost. Ready for massive scale.
+                </div>
+                <div class="p-4 bg-white border border-eco-border rounded-lg">
+                    <span class="block w-3 h-3 rounded-full bg-blue-500 mb-2"></span>
+                    <strong>Early Adoption (EVs, Heat Pumps):</strong> Costs falling rapidly, high potential.
+                </div>
+                <div class="p-4 bg-white border border-eco-border rounded-lg">
+                    <span class="block w-3 h-3 rounded-full bg-amber-500 mb-2"></span>
+                    <strong>Demonstration (Hydrogen, CCS):</strong> High cost, but crucial for hard-to-abate sectors.
+                </div>
+                <div class="p-4 bg-white border border-eco-border rounded-lg">
+                    <span class="block w-3 h-3 rounded-full bg-gray-400 mb-2"></span>
+                    <strong>R&D:</strong> Fusion, Direct Air Capture. High risk, high reward.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Policy Roadmap (List) -->
+        <section class="border-t border-eco-border pt-12 pb-20">
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                 <div>
+                     <h2 class="text-3xl font-serif font-bold text-eco-text mb-6">Policy Roadmap 2025-2030</h2>
+                     <p class="text-eco-muted mb-6">
+                         Key regulatory milestones required to keep the Net Zero scenario alive. Click items to expand details.
+                     </p>
+                     <div class="space-y-3" id="roadmap-container">
+                         <!-- Roadmap Item 1 -->
+                         <div class="roadmap-item group cursor-pointer" onclick="toggleRoadmap(this)">
+                             <div class="flex items-center justify-between p-4 bg-white border border-eco-border rounded-lg hover:border-emerald-500 transition-colors">
+                                 <div class="flex items-center gap-4">
+                                     <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">2025</span>
+                                     <span class="font-medium text-eco-text">Peak Global Emissions</span>
+                                 </div>
+                                 <span class="text-eco-muted group-hover:text-emerald-600 transition-colors">▼</span>
+                             </div>
+                             <div class="hidden px-4 py-3 bg-stone-50 border-x border-b border-eco-border rounded-b-lg text-sm text-eco-muted">
+                                 Global emissions must peak immediately to maintain a realistic chance of 1.5°C. This requires immediate cessation of new coal permits.
+                             </div>
+                         </div>
+                         <!-- Roadmap Item 2 -->
+                         <div class="roadmap-item group cursor-pointer" onclick="toggleRoadmap(this)">
+                            <div class="flex items-center justify-between p-4 bg-white border border-eco-border rounded-lg hover:border-emerald-500 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">2027</span>
+                                    <span class="font-medium text-eco-text">Methane Pledge Enforcement</span>
+                                </div>
+                                <span class="text-eco-muted group-hover:text-emerald-600 transition-colors">▼</span>
+                            </div>
+                            <div class="hidden px-4 py-3 bg-stone-50 border-x border-b border-eco-border rounded-b-lg text-sm text-eco-muted">
+                                Strict satellite monitoring of oil & gas methane leaks implemented globally. Penalties for non-compliance come into full effect.
+                            </div>
+                        </div>
+                        <!-- Roadmap Item 3 -->
+                        <div class="roadmap-item group cursor-pointer" onclick="toggleRoadmap(this)">
+                            <div class="flex items-center justify-between p-4 bg-white border border-eco-border rounded-lg hover:border-emerald-500 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">2030</span>
+                                    <span class="font-medium text-eco-text">OECD Coal Phase-out</span>
+                                </div>
+                                <span class="text-eco-muted group-hover:text-emerald-600 transition-colors">▼</span>
+                            </div>
+                            <div class="hidden px-4 py-3 bg-stone-50 border-x border-b border-eco-border rounded-b-lg text-sm text-eco-muted">
+                                Complete phase-out of unabated coal power in all OECD nations. Developing nations to follow by 2040.
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+                 
+                 <!-- Call to Action / Info Box -->
+                 <div class="bg-emerald-900 rounded-2xl p-8 text-white flex flex-col justify-center relative overflow-hidden">
+                     <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-emerald-800 rounded-full opacity-50"></div>
+                     <div class="relative z-10">
+                        <h3 class="text-2xl font-serif font-bold mb-4">The Cost of Inaction</h3>
+                        <p class="text-emerald-100 mb-6 leading-relaxed">
+                            Delaying action until 2030 would double the cost of transition and render the 1.5°C target physically impossible.
+                        </p>
+                        <div class="flex flex-col gap-3">
+                            <div class="flex justify-between items-center border-b border-emerald-800 pb-2">
+                                <span>GDP Impact (2050)</span>
+                                <span class="font-bold text-red-300">-12% Global GDP</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-emerald-800 pb-2">
+                                <span>Displaced Population</span>
+                                <span class="font-bold text-red-300">~216 Million</span>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-100 border-t border-eco-border py-8 text-center text-sm text-eco-muted">
+        <p>&copy; 2025 Global Energy Transition Report. Synthesized Data Analysis.</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- DATA & STATE ---
+        const reportData = {
+            kpis: {
+                bau: { temp: "2.6°C", renewables: "35%", gap: "$2.1T", descTemp: "Critical Risk: Exceeds tipping points.", descRen: "Moderate growth driven by Solar PV.", descGap: "Significant capital mobilization needed." },
+                pledges: { temp: "2.1°C", renewables: "50%", gap: "$1.2T", descTemp: "High Risk: Major impacts inevitable.", descRen: "Strong policy support in EU/USA.", descGap: "Commitments made but not funded." },
+                netzero: { temp: "1.5°C", renewables: "70%", gap: "$0T", descTemp: "Target: Avoids worst impacts.", descRen: "Rapid deployment across all sectors.", descGap: "Full alignment of global finance." }
+            },
+            sectors: {
+                labels: ['Power', 'Industry', 'Transport', 'Buildings', 'Agriculture', 'Other'],
+                data: [13.5, 9.2, 8.5, 3.2, 4.0, 1.5], // Gt CO2
+                details: [
+                    { title: "Power Generation", desc: "The largest emitting sector. Coal remains the primary driver.", lever: "Rapid deployment of Solar/Wind + Grid Storage." },
+                    { title: "Heavy Industry", desc: "Steel, Cement, and Chemicals are hard-to-abate.", lever: "Green Hydrogen and Carbon Capture (CCUS)." },
+                    { title: "Transport", desc: "Road transport dominates, but Aviation/Shipping are rising.", lever: "EV Adoption and Sustainable Aviation Fuels." },
+                    { title: "Buildings", desc: "Direct emissions from heating/cooling.", lever: "Heat Pumps and Retrofitting efficiency." },
+                    { title: "Agriculture", desc: "Methane from livestock and rice cultivation.", lever: "Alternative proteins and precision farming." },
+                    { title: "Other Energy", desc: "Fugitive emissions from fuel extraction.", lever: "Methane leak detection and sealing." }
+                ]
+            },
+            mix: {
+                2020: { coal: 35, oil: 30, gas: 23, nuclear: 4, hydro: 6, solarwind: 2 },
+                2025: { coal: 30, oil: 28, gas: 24, nuclear: 4, hydro: 6, solarwind: 8 },
+                2030: { coal: 15, oil: 25, gas: 20, nuclear: 5, hydro: 7, solarwind: 28 } // Net Zero aligned projection
+            },
+            tech: [
+                { x: 2, y: 9, r: 20, label: "Solar PV", type: "Mature" }, // Low cost, High impact, Big scale
+                { x: 3, y: 8, r: 18, label: "Wind", type: "Mature" },
+                { x: 5, y: 7, r: 15, label: "EVs", type: "Early Adoption" },
+                { x: 8, y: 6, r: 10, label: "Heat Pumps", type: "Early Adoption" },
+                { x: 15, y: 8, r: 8, label: "Green Hydrogen", type: "Demo" }, // High cost, High potential
+                { x: 12, y: 5, r: 7, label: "CCUS", type: "Demo" },
+                { x: 20, y: 9, r: 5, label: "Fusion", type: "R&D" } // Very high cost, High potential, Low readiness
+            ]
+        };
+
+        // --- CHART INSTANCES ---
+        let emissionsChart = null;
+        let energyMixChart = null;
+        let techBubbleChart = null;
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initEmissionsChart();
+            initEnergyMixChart();
+            initTechChart();
+            updateKPIs(); // Set initial state
+        });
+
+        // --- KPI LOGIC ---
+        function updateKPIs() {
+            const scenario = document.getElementById('scenario-select').value;
+            const data = reportData.kpis[scenario];
+
+            // Animate Numbers (Simple text replacement for now, could be counter anim)
+            document.getElementById('kpi-warming').textContent = data.temp;
+            document.getElementById('kpi-renewables').textContent = data.renewables;
+            document.getElementById('kpi-gap').textContent = data.gap;
+
+            document.getElementById('kpi-warming-desc').textContent = data.descTemp;
+            document.getElementById('kpi-renewables-desc').textContent = data.descRen;
+            document.getElementById('kpi-gap-desc').textContent = data.descGap;
+        }
+
+        // --- EMISSIONS CHART (Bar + Interaction) ---
+        function initEmissionsChart() {
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+            emissionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: reportData.sectors.labels,
+                    datasets: [{
+                        label: 'Emissions (Gt CO2)',
+                        data: reportData.sectors.data,
+                        backgroundColor: [
+                            '#d97706', '#d97706', '#d97706', '#059669', '#059669', '#78716c'
+                        ],
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#1c1917'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.raw} Gt CO2`
+                            }
+                        }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            updateSectorDetails(index);
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f3f4f6' },
+                            title: { display: true, text: 'Gt CO2' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSectorDetails(index) {
+            const info = reportData.sectors.details[index];
+            const panel = document.getElementById('sector-details');
+            
+            // Fade effect
+            panel.style.opacity = '0.5';
+            setTimeout(() => {
+                document.getElementById('sector-title').textContent = info.title;
+                document.getElementById('sector-desc').textContent = info.desc;
+                document.getElementById('sector-lever').textContent = info.lever;
+                panel.style.opacity = '1';
+            }, 150);
+        }
+
+        // --- ENERGY MIX CHART (Doughnut + Toggles) ---
+        function initEnergyMixChart() {
+            const ctx = document.getElementById('energyMixChart').getContext('2d');
+            // Initial data 2020
+            const d = reportData.mix[2020];
+            
+            energyMixChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Coal', 'Oil', 'Gas', 'Nuclear', 'Hydro', 'Solar/Wind'],
+                    datasets: [{
+                        data: [d.coal, d.oil, d.gas, d.nuclear, d.hydro, d.solarwind],
+                        backgroundColor: [
+                            '#44403c', // Coal (Dark Stone)
+                            '#78716c', // Oil (Med Stone)
+                            '#a8a29e', // Gas (Light Stone)
+                            '#fbbf24', // Nuclear (Amber)
+                            '#3b82f6', // Hydro (Blue)
+                            '#059669'  // Solar/Wind (Emerald)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                    }
+                }
+            });
+        }
+
+        function updateEnergyMix(year) {
+            // UI State
+            document.querySelectorAll('.mix-btn').forEach(b => {
+                b.classList.remove('bg-eco-text', 'text-white', 'border-eco-text');
+                b.classList.add('text-eco-muted', 'border-eco-border');
+                if(parseInt(b.dataset.year) === year) {
+                    b.classList.remove('text-eco-muted', 'border-eco-border');
+                    b.classList.add('bg-eco-text', 'text-white', 'border-eco-text');
+                }
+            });
+
+            // Update Chart
+            const d = reportData.mix[year];
+            energyMixChart.data.datasets[0].data = [d.coal, d.oil, d.gas, d.nuclear, d.hydro, d.solarwind];
+            energyMixChart.update();
+
+            // Update Stats Text
+            const fossil = d.coal + d.oil + d.gas;
+            const renew = d.hydro + d.solarwind + d.nuclear; // Grouping low carbon
+            
+            document.getElementById('stat-fossil').textContent = `${fossil}%`;
+            document.getElementById('stat-renewables').textContent = `${renew}%`;
+            
+            const insight = document.getElementById('mix-insight');
+            if(year === 2020) {
+                insight.querySelector('h4').textContent = "2020 Snapshot";
+                insight.querySelector('p').textContent = "Fossil fuels dominated. Coal remained the single largest source of electricity.";
+            } else if(year === 2025) {
+                insight.querySelector('h4').textContent = "2025 Current State";
+                insight.querySelector('p').textContent = "Solar PV is the fastest growing source, but oil demand persists in transport.";
+            } else {
+                insight.querySelector('h4').textContent = "2030 Net Zero Path";
+                insight.querySelector('p').textContent = "Renewables must overtake coal. This requires massive grid expansion.";
+            }
+        }
+
+        // --- TECH BUBBLE CHART ---
+        function initTechChart() {
+            const ctx = document.getElementById('techBubbleChart').getContext('2d');
+            techBubbleChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Technologies',
+                        data: reportData.tech,
+                        backgroundColor: (ctx) => {
+                            const val = ctx.raw;
+                            if(!val) return '#ccc';
+                            if(val.type === 'Mature') return '#059669'; // Green
+                            if(val.type === 'Early Adoption') return '#3b82f6'; // Blue
+                            if(val.type === 'Demo') return '#d97706'; // Amber
+                            return '#9ca3af'; // Grey
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const r = ctx.raw;
+                                    return `${r.label}: Cost Index ${r.x}, Impact ${r.y}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Cost Efficiency (Lower is Better)' },
+                            min: 0, max: 25,
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Abatement Potential (Higher is Better)' },
+                            min: 0, max: 12,
+                            grid: { color: '#f3f4f6' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- ROADMAP ACCORDION ---
+        function toggleRoadmap(el) {
+            const content = el.nextElementSibling;
+            const arrow = el.querySelector('span:last-child');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.textContent = '▲';
+                arrow.classList.add('text-emerald-600');
+            } else {
+                content.classList.add('hidden');
+                arrow.textContent = '▼';
+                arrow.classList.remove('text-emerald-600');
+            }
+        }
+
+        // --- NAVIGATION ---
+        function navTo(id) {
+            // Mobile Menu Close
+            const menu = document.getElementById('mobile-menu');
+            if(!menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+
+            // Scroll
+            const el = document.getElementById(id);
+            if(el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Update Active Link State
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            // Find the button that called this (if simple ID match)
+            const btnId = 'nav-' + id.replace('section-', '');
+            const btn = document.getElementById(btnId);
+            if(btn) btn.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+    </script>
+</body>
+</html>

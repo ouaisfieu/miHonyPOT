@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ouaisfi·eu Directory — Cartographie complète</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Georgia&display=swap');
+        
+        :root {
+            --bg-cream: #f5f0e6;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-gray: #555;
+            --link-blue: #0000cc;
+            --link-hover: #6600cc;
+            --link-visited: #660099;
+            --border-gray: #c0c0c0;
+            --accent-purple: #6633cc;
+            --accent-orange: #ff6600;
+            --accent-green: #006600;
+            --accent-red: #cc0000;
+            --shadow: rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(180deg, #4a0080 0%, #220044 100%);
+            padding: 15px 20px;
+            border-bottom: 3px solid var(--accent-orange);
+        }
+        
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .logo {
+            font-family: 'Courier Prime', monospace;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        
+        .logo span {
+            color: var(--accent-orange);
+        }
+        
+        .tagline {
+            color: #ccbbff;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .search-bar input {
+            padding: 8px 12px;
+            border: 2px solid #666;
+            font-size: 1rem;
+            width: 250px;
+            font-family: Georgia, serif;
+        }
+        
+        .search-bar button {
+            padding: 8px 20px;
+            background: var(--accent-orange);
+            border: 2px solid #cc5500;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .search-bar button:hover {
+            background: #ff8833;
+        }
+        
+        /* Navigation */
+        nav {
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--border-gray);
+            padding: 8px 20px;
+        }
+        
+        nav ul {
+            max-width: 1000px;
+            margin: 0 auto;
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        nav a {
+            color: var(--link-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+        
+        nav a:hover {
+            background: #eee;
+            text-decoration: underline;
+        }
+        
+        nav a.active {
+            background: var(--accent-purple);
+            color: white;
+        }
+        
+        /* Main Container */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Featured Box */
+        .featured {
+            background: linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%);
+            border: 2px solid #d4aa00;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 0 var(--shadow);
+        }
+        
+        .featured h2 {
+            color: var(--accent-orange);
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .featured h2::before {
+            content: "★";
+            color: #ffcc00;
+        }
+        
+        .featured-link {
+            font-size: 1.4rem;
+            color: var(--link-blue);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .featured-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+        
+        .featured-desc {
+            margin-top: 10px;
+            color: var(--text-gray);
+        }
+        
+        .featured-meta {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .featured-meta span {
+            background: #fff;
+            padding: 2px 8px;
+            border: 1px solid #ccc;
+        }
+        
+        /* Categories Grid */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .category {
+            background: var(--bg-white);
+            border: 1px solid var(--border-gray);
+            padding: 15px;
+            box-shadow: 2px 2px 0 var(--shadow);
+        }
+        
+        .category h3 {
+            font-family: 'Courier Prime', monospace;
+            color: var(--accent-purple);
+            font-size: 1.1rem;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .category h3 .icon {
+            font-size: 1.2rem;
+        }
+        
+        .category ul {
+            list-style: none;
+        }
+        
+        .category li {
+            padding: 4px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        .category li:last-child {
+            border-bottom: none;
+        }
+        
+        .category a {
+            color: var(--link-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        
+        .category a:visited {
+            color: var(--link-visited);
+        }
+        
+        .category a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+        
+        .category .new {
+            background: var(--accent-red);
+            color: white;
+            font-size: 0.7rem;
+            padding: 1px 4px;
+            margin-left: 5px;
+            font-family: 'Courier Prime', monospace;
+            text-transform: uppercase;
+        }
+        
+        .category .sub {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-left: 15px;
+            display: block;
+            padding: 2px 0;
+        }
+        
+        /* Sections */
+        .section {
+            background: var(--bg-white);
+            border: 1px solid var(--border-gray);
+            margin-bottom: 20px;
+            box-shadow: 2px 2px 0 var(--shadow);
+        }
+        
+        .section-header {
+            background: linear-gradient(180deg, #eee 0%, #ddd 100%);
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h3 {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+        
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+        
+        .section-content {
+            padding: 15px;
+        }
+        
+        .section-content ul {
+            list-style: none;
+            column-count: 2;
+            column-gap: 30px;
+        }
+        
+        @media (max-width: 600px) {
+            .section-content ul {
+                column-count: 1;
+            }
+        }
+        
+        .section-content li {
+            padding: 3px 0;
+            break-inside: avoid;
+        }
+        
+        .section-content li::before {
+            content: "›";
+            color: var(--accent-purple);
+            margin-right: 6px;
+            font-weight: bold;
+        }
+        
+        .section-content a {
+            color: var(--link-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .section-content a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            background: #333;
+            color: #ccc;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .stats-bar span {
+            margin: 0 15px;
+        }
+        
+        .stats-bar strong {
+            color: var(--accent-orange);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(180deg, #220044 0%, #110022 100%);
+            color: #aaa;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: #ccaaff;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        footer .copy {
+            margin-top: 10px;
+            font-family: 'Courier Prime', monospace;
+            color: #666;
+        }
+        
+        /* Collapsible */
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .collapsible::after {
+            content: " [+]";
+            font-size: 0.8rem;
+            color: var(--accent-purple);
+        }
+        
+        .collapsible.active::after {
+            content: " [−]";
+        }
+        
+        .collapse-content {
+            display: none;
+            padding-left: 15px;
+            margin-top: 5px;
+        }
+        
+        .collapse-content.show {
+            display: block;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--border-gray);
+        }
+        
+        .breadcrumb a {
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .new {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div>
+                <a href="https://ouaisfieu.github.io/" class="logo">ouaisfi<span>·</span>eu</a>
+                <div class="tagline">"juste pour info" — Directory Index</div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher..." id="searchInput">
+                <button onclick="filterContent()">Search!</button>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#featured">★ miHonyPOT</a></li>
+            <li><a href="#projets">Projets</a></li>
+            <li><a href="#doctech">DOCTech</a></li>
+            <li><a href="#gpttpardi">GPTPardi</a></li>
+            <li><a href="#bxl">Bruxelles</a></li>
+            <li><a href="#dossiers">Dossiers</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div class="breadcrumb">
+            <a href="https://ouaisfieu.github.io/">Accueil</a> › 
+            <a href="https://ouaisfieu.github.io/miHonyPOT/">miHonyPOT</a> › 
+            <strong>Directory Index</strong>
+        </div>
+        
+        <!-- Featured: miHonyPOT -->
+        <div class="featured" id="featured">
+            <h2>Site en Vedette : miHonyPOT</h2>
+            <a href="https://ouaisfieu.github.io/miHonyPOT/" class="featured-link">
+                WorkFutures 2025 Report — Interactive Dashboard
+            </a>
+            <p class="featured-desc">
+                Rapport interactif sur le télétravail mondial. Basé sur 12 500 employés et 2 000 executives 
+                de 15 pays. Analyse la stabilisation du modèle hybride, les tendances d'adoption, le gap 
+                employés/employeurs et inclut un calculateur d'économies personnalisé.
+            </p>
+            <div class="featured-meta">
+                <span>📊 Single Page App</span>
+                <span>🔧 HTML/CSS/JS</span>
+                <span>📈 Data: 2020-2025</span>
+                <span>🌍 15 pays</span>
+            </div>
+            <div style="margin-top:15px;">
+                <strong style="color:#666;">Sections internes:</strong>
+                <a href="https://ouaisfieu.github.io/miHonyPOT/#overview">#Overview</a> · 
+                <a href="https://ouaisfieu.github.io/miHonyPOT/#trends">#Trends</a> · 
+                <a href="https://ouaisfieu.github.io/miHonyPOT/#sentiment">#Sentiment</a> · 
+                <a href="https://ouaisfieu.github.io/miHonyPOT/#calculator">#Calculator</a>
+            </div>
+        </div>
+        
+        <!-- Main Categories Grid -->
+        <div class="categories" id="projets">
+            <div class="category">
+                <h3><span class="icon">🏠</span> Portail Principal</h3>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/">ouaisfi·eu — Accueil</a></li>
+                    <li class="sub">Dossiers libres (Citoyenneté, info & pouvoir d'agir)</li>
+                    <li><a href="https://ouaisfieu.github.io/economie">Échanges économiques</a></li>
+                    <li><a href="https://ouaisfieu.github.io/citoyennete">La citoyenneté</a></li>
+                    <li><a href="https://ouaisfieu.github.io/guerre-economique">Guerre économique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/information">Information & pouvoir d'agir</a></li>
+                    <li><a href="https://ouaisfieu.github.io/participation">Auftragstaktik citoyenne</a></li>
+                    <li><a href="https://ouaisfieu.github.io/opendata">Civic Tech et Open Data</a></li>
+                    <li><a href="https://ouaisfieu.github.io/intelligence">OSINT & Intelligence Économique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/pouvoir">Empowerment collectif</a></li>
+                    <li><a href="https://ouaisfieu.github.io/veille">Veille citoyenne en FWB</a></li>
+                    <li><a href="https://ouaisfieu.github.io/about">À propos</a></li>
+                </ul>
+            </div>
+            
+            <div class="category">
+                <h3><span class="icon">🔬</span> Projets Spéciaux</h3>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/miHonyPOT/">miHonyPOT</a> <span class="new">Featured</span></li>
+                    <li class="sub">WorkFutures 2025 Report</li>
+                    <li><a href="https://ouaisfieu.github.io/tech/">DOCTech</a></li>
+                    <li class="sub">Petit imprécis de pseudoscience sociale</li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/">GPTPardi</a></li>
+                    <li class="sub">Le dico dans le vent</li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/">BXL2030</a></li>
+                    <li class="sub">Entre brume et ruines</li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2042/">BXL2042</a></li>
+                    <li class="sub">Entre nous, franchement…</li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/">Dossiers</a></li>
+                    <li class="sub">La citoyenneté, c'est le brol</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- DOCTech Section -->
+        <div class="section" id="doctech">
+            <div class="section-header">
+                <h3>📚 DOCTech — Document d'Ordre Citoyen, et Technique</h3>
+                <span class="count">~50 pages</span>
+            </div>
+            <div class="section-content">
+                <h4 style="margin-bottom:10px;color:#666;">Notions</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/subjectivation/">Subjectivation</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/analyse-de-marche/">Analyse de marché</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/kpi/">Indicateurs clés (KPIs)</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/violence/">Violence : panorama général</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/champ-et-marche/">Champ et marché</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/com-co/">Com & Co</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/creation-valeur/">Création de valeur</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/soft-power/">Le Soft Power</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/lead/">Lead</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/operation-strategique/">Opération stratégique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/notions/intersectionnalite.html">Intersectionnalité</a></li>
+                </ul>
+                
+                <h4 style="margin:15px 0 10px;color:#666;">Dossiers DOCTech</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/critique-corpus/">Critique du corpus</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/democratie-belge/">Démocratie belge</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/partis-pouvoir/">Les partis ont‑ils trop de pouvoir ?</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/pouvoir-individuel-collectif/">Pouvoir d'agir</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/budget-participatif/">Budget participatif</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/assemblee-citoyenne/">Assemblée citoyenne</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/veille-citoyenne/">Veille citoyenne</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/donnees-et-vie-privee/">Données et vie privée</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/logiciel-libre-communs/">Logiciel libre & communs</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/inclusion-participation/">Inclusion</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/dossiers/bouger-sa-commune/">Kit express : faire bouger sa commune</a></li>
+                </ul>
+                
+                <h4 style="margin:15px 0 10px;color:#666;">Belgique</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/">État, Nation, Patrie</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/pilarisation/">Pilarisation</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/particratie/">Particratie</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/compromis/">Compromis</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/complexite/">Complexité</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/education-civique-belgique/">Éducation civique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/justice-sociale-belgique/">Justice sociale</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/liberte-et-pluralisme-des-medias/">Liberté des médias</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/participation-citoyenne-belgique/">Participation citoyenne</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/separation-des-pouvoirs-belgique/">Séparation des pouvoirs</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/transparence-et-gouvernance/">Transparence</a></li>
+                    <li><a href="https://ouaisfieu.github.io/tech/belgique/etat-democratie-resiliente/">Démocratie résiliente</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- GPTPardi Section -->
+        <div class="section" id="gpttpardi">
+            <div class="section-header">
+                <h3>🎲 GPTPardi — Le dico dans le vent</h3>
+                <span class="count">~40 pages</span>
+            </div>
+            <div class="section-content">
+                <h4 style="margin-bottom:10px;color:#666;">Scandales & Affaires</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/ecoutes-nsa/">Écoutes de la NSA</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/dieselgate/">Le Dieselgate</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-pegasus/">L'affaire Pegasus</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/qatargate/">Le Qatargate</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/panama-papers/">Les Panama Papers</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-clearstream/">L'affaire Clearstream</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-kazakhgate/">L'affaire du Kazakhgate</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-enron/">L'affaire Enron</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/scandale-lockheed/">Le scandale Lockheed</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/watergate/">Le Watergate</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/iran-contra/">Affaire Iran-Contra</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/financements-occultes/">Financements occultes</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-petrobras/">L'affaire Petrobras</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/cambridge-analytica/">Cambridge Analytica</a></li>
+                    <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/russiagate/">Le Russiagate</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- BXL2030/2042 Section -->
+        <div class="section" id="bxl">
+            <div class="section-header">
+                <h3>🏙️ BXL2030 & BXL2042 — Bruxelles en perspective</h3>
+                <span class="count">~30 pages</span>
+            </div>
+            <div class="section-content">
+                <h4 style="margin-bottom:10px;color:#666;">Analyses temporelles</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/decennie-80/">Belgique - décennie 80</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/decennie-90/">Belgique - décennie 90</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/decennie-00/">Belgique - décennie 00</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/decennie-10/">Belgique - décennie 10</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/decennie-20/">Belgique - décennie 20</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/1980-1984-royaume-en-crise/">1980-1984: Royaume en crise</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/annees-de-plomb-1982-1985/">Années de Plomb 1982-1985</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/1984-nation-en-sursis/">1984 – Nation en sursis</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/1984-1996-desillusion-sideration/">1984-1996 - Désillusion</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/1996-2013-blocage-systemique/">1996-2013 : Blocage systémique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/2013-2020-desaffiliation-silencieuse/">2013-2020 : Désaffiliation</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/2020-2024-gestion-sans-gouvernance/">2020-2024 : Gestion sans gouvernance</a></li>
+                </ul>
+                
+                <h4 style="margin:15px 0 10px;color:#666;">Thématiques</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/bruxelles/crises-systemiques-2023-2025/">Crises systémiques 2023-2025</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/centrales-nucleaires-belges/">Centrales nucléaires belges</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/concepts/etat-democratique-sain/">État démocratique sain</a></li>
+                </ul>
+                
+                <h4 style="margin:15px 0 10px;color:#666;">Lead-dexing (Portraits)</h4>
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/florence-manente/">Florence Manente</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/michel-henrion/">Michel Henrion</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/pac/">PAC asbl</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/experience-ia/">Lead-dexing & IA</a></li>
+                    <li><a href="https://ouaisfieu.github.io/bxl2030/politique/belgique/analyse/2025/10/13/georges-louis-bouchez-stratege-mediatique-liberalisme-belge.html">Georges-Louis Bouchez</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Dossiers Section -->
+        <div class="section" id="dossiers">
+            <div class="section-header">
+                <h3>📂 Dossiers — La citoyenneté, c'est le brol</h3>
+                <span class="count">~20 articles</span>
+            </div>
+            <div class="section-content">
+                <ul>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/resources/echanges-intelligence-stupidite/">Évolution des échanges</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/resources/citoyennete-brol/">La citoyenneté : "c'est le brol"</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/resources/guerre-economique/">Guerre économique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/resources/information-pouvoir-agir/">Information & pouvoir d'agir</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/plaidoyer/">Plaidoyer</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/alerte-site-statique/">Alerte site statique</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/30/pourquoi-nous.html">Pourquoi nous</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/30/citoyennete-droits-variations-engagement.html">Citoyenneté : droits et engagement</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/29/veille-citoyenne-fwb.html">Veille citoyenne en FWB</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/une-bonne-guerre.html">Allez, une bonne guerre</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/trop-d-info.html">Infobésité</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/quelles-societes-vraiment.html">Quelles sociétés vraiment ?</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/kaleidoscope.html">Kaléidoscope</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/dossiers/2025/06/27/guerre-cognitive.html">La guerre cognitive</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/civic-tech-open-data-belgique.html">Civic Tech & Open Data</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/dossiers/2025/06/27/cauchemar-de-prussien.html">Auftragstaktik</a></li>
+                    <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/OSINT-intelligence-economique.html">OSINT & Intelligence économique</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <span>📊 <strong>6</strong> Projets</span>
+            <span>📄 <strong>150+</strong> Pages</span>
+            <span>🔧 <strong>Jekyll</strong> + GitHub Pages</span>
+            <span>📜 <strong>CC BY-NC 4.0</strong></span>
+        </div>
+    </main>
+    
+    <footer>
+        <div>
+            <a href="https://ouaisfieu.github.io/">ouaisfi·eu</a> · 
+            <a href="https://bsky.app/profile/ouaisfi.eu">Bluesky</a> · 
+            <a href="https://github.com/ouaisfieu">GitHub</a>
+        </div>
+        <div class="copy">
+            © 2025 • Dont'be evil, just do it • Pas d'utilisation commerciale
+        </div>
+    </footer>
+    
+    <script>
+        // Search/Filter functionality
+        function filterContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const links = document.querySelectorAll('a[href*="ouaisfieu.github.io"]');
+            
+            links.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                const parent = link.closest('li') || link.parentElement;
+                
+                if (text.includes(query) || query === '') {
+                    parent.style.display = '';
+                    link.style.background = query ? '#ffff00' : '';
+                } else {
+                    parent.style.display = 'none';
+                }
+            });
+        }
+        
+        // Enter key support
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterContent();
+            }
+        });
+        
+        // Clear search on empty
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            if (e.target.value === '') {
+                filterContent();
+            }
+        });
+        
+        // Collapsible sections (optional enhancement)
+        document.querySelectorAll('.collapsible').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        });
+        
+        // Smooth scroll for nav links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

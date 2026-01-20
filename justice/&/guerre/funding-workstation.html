@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRATÉGIE FINANCEMENT 2026-2032 — Mission Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ══════════════════════════════════════════════════════════════════
+           DESIGN SYSTEM — Mission Control / Industrial Dashboard
+           ══════════════════════════════════════════════════════════════════ */
+        :root {
+            /* Base Colors - Dark Industrial */
+            --bg-void: #08090a;
+            --bg-base: #0d0f11;
+            --bg-elevated: #141719;
+            --bg-surface: #1a1d21;
+            --bg-card: #1f2328;
+            --bg-hover: #262b31;
+            
+            /* Accent Colors - Signal System */
+            --signal-green: #00d26a;
+            --signal-green-dim: rgba(0, 210, 106, 0.15);
+            --signal-amber: #ffb300;
+            --signal-amber-dim: rgba(255, 179, 0, 0.15);
+            --signal-red: #ff3d57;
+            --signal-red-dim: rgba(255, 61, 87, 0.15);
+            --signal-blue: #00b4d8;
+            --signal-blue-dim: rgba(0, 180, 216, 0.15);
+            --signal-purple: #a78bfa;
+            --signal-purple-dim: rgba(167, 139, 250, 0.15);
+            --signal-cyan: #22d3ee;
+            --signal-white: #f8fafc;
+            
+            /* Text Hierarchy */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --text-dim: #475569;
+            
+            /* Borders */
+            --border-subtle: rgba(148, 163, 184, 0.08);
+            --border-default: rgba(148, 163, 184, 0.15);
+            --border-strong: rgba(148, 163, 184, 0.25);
+            
+            /* Shadows */
+            --shadow-glow-green: 0 0 30px rgba(0, 210, 106, 0.2);
+            --shadow-glow-amber: 0 0 30px rgba(255, 179, 0, 0.2);
+            --shadow-glow-red: 0 0 30px rgba(255, 61, 87, 0.2);
+            
+            /* Typography */
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            
+            /* Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            
+            /* Transitions */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 150ms var(--ease-out);
+            --transition-base: 250ms var(--ease-out);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           RESET & BASE
+           ══════════════════════════════════════════════════════════════════ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           LAYOUT — Mission Control Grid
+           ══════════════════════════════════════════════════════════════════ */
+        .app-shell {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+
+        /* Header Bar */
+        .header-bar {
+            grid-column: 1 / -1;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 var(--space-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--signal-green), var(--signal-cyan));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--bg-void);
+        }
+
+        .header-title {
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title span {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--signal-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: var(--bg-base);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            padding: var(--space-md);
+        }
+
+        .nav-title {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-xs);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--signal-green);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--signal-red);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-family: var(--font-mono);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            background: var(--bg-void);
+            overflow-y: auto;
+            padding: var(--space-lg);
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           COMPONENTS — Cards, Buttons, Inputs
+           ══════════════════════════════════════════════════════════════════ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--signal-green);
+            color: var(--bg-void);
+        }
+
+        .btn-primary:hover {
+            background: #00e676;
+            box-shadow: var(--shadow-glow-green);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-strong);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-sm {
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.75rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-base);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--signal-green);
+            box-shadow: 0 0 0 3px var(--signal-green-dim);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-dim);
+        }
+
+        select.input-field {
+            cursor: pointer;
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           DASHBOARD — KPI Cards & Metrics
+           ══════════════════════════════════════════════════════════════════ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi-card.green::before { background: var(--signal-green); }
+        .kpi-card.amber::before { background: var(--signal-amber); }
+        .kpi-card.blue::before { background: var(--signal-blue); }
+        .kpi-card.purple::before { background: var(--signal-purple); }
+        .kpi-card.red::before { background: var(--signal-red); }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .kpi-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .kpi-card.green .kpi-value { color: var(--signal-green); }
+        .kpi-card.amber .kpi-value { color: var(--signal-amber); }
+        .kpi-card.blue .kpi-value { color: var(--signal-blue); }
+        .kpi-card.purple .kpi-value { color: var(--signal-purple); }
+        .kpi-card.red .kpi-value { color: var(--signal-red); }
+
+        .kpi-detail {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: var(--space-sm);
+        }
+
+        .kpi-trend.up {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+        }
+
+        .kpi-trend.down {
+            background: var(--signal-red-dim);
+            color: var(--signal-red);
+        }
+
+        /* Section Layout */
+        .section-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-row.equal {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           FUNDING TABLE — Opportunities Tracker
+           ══════════════════════════════════════════════════════════════════ */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-default);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+        }
+
+        .data-table td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr {
+            transition: background var(--transition-fast);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-hover);
+        }
+
+        .funding-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .funding-source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .amount-badge {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .status-badge.prospect {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+        }
+
+        .status-badge.preparing {
+            background: var(--signal-blue-dim);
+            color: var(--signal-blue);
+        }
+
+        .status-badge.submitted {
+            background: var(--signal-amber-dim);
+            color: var(--signal-amber);
+        }
+
+        .status-badge.approved {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+        }
+
+        .status-badge.rejected {
+            background: var(--signal-red-dim);
+            color: var(--signal-red);
+        }
+
+        .priority-indicator {
+            display: flex;
+            gap: 2px;
+        }
+
+        .priority-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-default);
+        }
+
+        .priority-dot.active {
+            background: var(--signal-amber);
+        }
+
+        .deadline-cell {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+
+        .deadline-cell.urgent {
+            color: var(--signal-red);
+            font-weight: 600;
+        }
+
+        .deadline-cell.soon {
+            color: var(--signal-amber);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           TIMELINE / CALENDAR VIEW
+           ══════════════════════════════════════════════════════════════════ */
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .timeline-months {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2px;
+            margin-bottom: var(--space-md);
+        }
+
+        .timeline-month {
+            text-align: center;
+            padding: var(--space-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+        }
+
+        .timeline-month.current {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+        }
+
+        .timeline-events {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--signal-blue);
+            transition: all var(--transition-fast);
+        }
+
+        .timeline-event:hover {
+            background: var(--bg-hover);
+            transform: translateX(4px);
+        }
+
+        .timeline-event.urgent {
+            border-left-color: var(--signal-red);
+            background: var(--signal-red-dim);
+        }
+
+        .timeline-event.soon {
+            border-left-color: var(--signal-amber);
+        }
+
+        .event-date {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 100px;
+        }
+
+        .event-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .event-amount {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--signal-green);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           ANTI-RAPPORT / DECREE AXES
+           ══════════════════════════════════════════════════════════════════ */
+        .axes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .axe-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            position: relative;
+        }
+
+        .axe-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+
+        .axe-number {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--signal-cyan);
+            background: var(--signal-blue-dim);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .axe-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .axe-description {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-base);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: var(--space-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease-out;
+        }
+
+        .progress-fill.green { background: var(--signal-green); }
+        .progress-fill.amber { background: var(--signal-amber); }
+        .progress-fill.red { background: var(--signal-red); }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+
+        .progress-current {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .progress-target {
+            color: var(--text-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           CONTACTS MANAGER
+           ══════════════════════════════════════════════════════════════════ */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .contact-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all var(--transition-fast);
+        }
+
+        .contact-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-2px);
+        }
+
+        .contact-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .contact-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--signal-blue-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--signal-blue);
+        }
+
+        .contact-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .contact-org {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-detail a {
+            color: var(--signal-blue);
+            text-decoration: none;
+        }
+
+        .contact-detail a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-md);
+        }
+
+        .contact-tag {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--bg-base);
+            color: var(--text-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           BUDGET TRACKER
+           ══════════════════════════════════════════════════════════════════ */
+        .budget-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .budget-item {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+        }
+
+        .budget-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+        }
+
+        .budget-amount {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .budget-amount.target { color: var(--text-secondary); }
+        .budget-amount.confirmed { color: var(--signal-green); }
+        .budget-amount.pending { color: var(--signal-amber); }
+
+        /* Year Tabs */
+        .year-tabs {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-lg);
+        }
+
+        .year-tab {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+
+        .year-tab:hover {
+            background: var(--bg-hover);
+        }
+
+        .year-tab.active {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+            border-color: var(--signal-green);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           MODAL
+           ══════════════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform var(--transition-base);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           TOAST NOTIFICATIONS
+           ══════════════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            z-index: 1001;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.success { border-left: 3px solid var(--signal-green); }
+        .toast.error { border-left: 3px solid var(--signal-red); }
+        .toast.warning { border-left: 3px solid var(--signal-amber); }
+
+        /* ══════════════════════════════════════════════════════════════════
+           EXPORT PANEL
+           ══════════════════════════════════════════════════════════════════ */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+        }
+
+        .export-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .export-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--signal-green);
+            transform: translateY(-2px);
+        }
+
+        .export-icon {
+            font-size: 2rem;
+        }
+
+        .export-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .export-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .axes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           UTILITIES
+           ══════════════════════════════════════════════════════════════════ */
+        .text-green { color: var(--signal-green); }
+        .text-amber { color: var(--signal-amber); }
+        .text-red { color: var(--signal-red); }
+        .text-blue { color: var(--signal-blue); }
+        .text-muted { color: var(--text-muted); }
+
+        .mt-lg { margin-top: var(--space-lg); }
+        .mb-lg { margin-bottom: var(--space-lg); }
+
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-sm { gap: var(--space-sm); }
+        .gap-md { gap: var(--space-md); }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            opacity: 0.5;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .filter-chip:hover {
+            background: var(--bg-hover);
+        }
+
+        .filter-chip.active {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+            border-color: var(--signal-green);
+        }
+
+        .search-input {
+            position: relative;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .search-input input {
+            padding-left: 40px;
+        }
+
+        .search-input::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Header Bar -->
+        <header class="header-bar">
+            <div class="header-brand">
+                <div class="header-logo">⚡</div>
+                <div class="header-title">
+                    MISSION CONTROL <span>— Financements 2026-2032</span>
+                </div>
+            </div>
+            <div class="header-status">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span id="last-sync">Synchro locale active</span>
+                </div>
+                <div class="status-indicator">
+                    <span id="current-date"></span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="importData()">📥 Import</button>
+                <button class="btn btn-primary" onclick="showExportModal()">📤 Export</button>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Vue d'ensemble</div>
+                <div class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="calendar">
+                    <span class="nav-icon">📅</span>
+                    <span>Calendrier</span>
+                    <span class="nav-badge" id="urgent-count">3</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Opportunités</div>
+                <div class="nav-item" data-page="micro">
+                    <span class="nav-icon">🏘️</span>
+                    <span>Micro (Local)</span>
+                </div>
+                <div class="nav-item" data-page="meso">
+                    <span class="nav-icon">🏛️</span>
+                    <span>Méso (Régional)</span>
+                </div>
+                <div class="nav-item" data-page="macro">
+                    <span class="nav-icon">🌍</span>
+                    <span>Macro (Européen)</span>
+                </div>
+                <div class="nav-item" data-page="philanthropy">
+                    <span class="nav-icon">💎</span>
+                    <span>Fondations</span>
+                </div>
+                <div class="nav-item" data-page="individual">
+                    <span class="nav-icon">👤</span>
+                    <span>Particuliers</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Suivi</div>
+                <div class="nav-item" data-page="budget">
+                    <span class="nav-icon">💰</span>
+                    <span>Budget</span>
+                </div>
+                <div class="nav-item" data-page="decree">
+                    <span class="nav-icon">📜</span>
+                    <span>Anti-Rapport EP</span>
+                </div>
+                <div class="nav-item" data-page="contacts">
+                    <span class="nav-icon">📇</span>
+                    <span>Contacts</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Outils</div>
+                <div class="nav-item" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Paramètres</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- DASHBOARD PAGE -->
+            <section id="page-dashboard" class="page-section active">
+                <div class="dashboard-grid">
+                    <div class="kpi-card green">
+                        <div class="kpi-label">Budget Potentiel Total</div>
+                        <div class="kpi-value" id="kpi-total-potential">-</div>
+                        <div class="kpi-detail">Sur 6 ans (2026-2032)</div>
+                    </div>
+                    <div class="kpi-card blue">
+                        <div class="kpi-label">Candidatures en cours</div>
+                        <div class="kpi-value" id="kpi-applications">0</div>
+                        <div class="kpi-detail">À lancer</div>
+                    </div>
+                    <div class="kpi-card amber">
+                        <div class="kpi-label">Deadlines < 30j</div>
+                        <div class="kpi-value" id="kpi-urgent">0</div>
+                        <div class="kpi-detail">À surveiller</div>
+                    </div>
+                    <div class="kpi-card purple">
+                        <div class="kpi-label">Taux de succès</div>
+                        <div class="kpi-value" id="kpi-success-rate">-</div>
+                        <div class="kpi-detail">Aucune candidature décidée</div>
+                    </div>
+                </div>
+
+                <div class="section-row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📈 Pipeline des Opportunités</h3>
+                            <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal()">+ Ajouter</button>
+                        </div>
+                        <div class="filter-bar">
+                            <div class="filter-chip active" data-filter="all">Tous</div>
+                            <div class="filter-chip" data-filter="prospect">Prospect</div>
+                            <div class="filter-chip" data-filter="preparing">En préparation</div>
+                            <div class="filter-chip" data-filter="submitted">Soumis</div>
+                            <div class="filter-chip" data-filter="approved">Approuvé</div>
+                            <div class="search-input">
+                                <input type="text" class="input-field" placeholder="Rechercher..." id="search-funding">
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Opportunité</th>
+                                        <th>Montant</th>
+                                        <th>Deadline</th>
+                                        <th>Statut</th>
+                                        <th>Priorité</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="funding-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🎯 Prochaines Échéances</h3>
+                        </div>
+                        <div class="timeline-events" id="upcoming-deadlines">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Répartition par Source</h3>
+                    </div>
+                    <div class="budget-summary" id="source-breakdown">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CALENDAR PAGE -->
+            <section id="page-calendar" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📅 Calendrier des Deadlines 2026</h3>
+                        <div class="year-tabs">
+                            <div class="year-tab active" data-year="2026">2026</div>
+                            <div class="year-tab" data-year="2027">2027</div>
+                            <div class="year-tab" data-year="2028">2028</div>
+                        </div>
+                    </div>
+                    <div class="timeline-months">
+                        <div class="timeline-month current">JAN</div>
+                        <div class="timeline-month">FÉV</div>
+                        <div class="timeline-month">MAR</div>
+                        <div class="timeline-month">AVR</div>
+                        <div class="timeline-month">MAI</div>
+                        <div class="timeline-month">JUN</div>
+                        <div class="timeline-month">JUL</div>
+                        <div class="timeline-month">AOÛ</div>
+                        <div class="timeline-month">SEP</div>
+                        <div class="timeline-month">OCT</div>
+                        <div class="timeline-month">NOV</div>
+                        <div class="timeline-month">DÉC</div>
+                    </div>
+                    <div class="timeline-events" id="calendar-events">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- MICRO PAGE -->
+            <section id="page-micro" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏘️ Financements Micro (Local/Communal)</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal('micro')">+ Ajouter</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Programme</th>
+                                    <th>Source</th>
+                                    <th>Montant</th>
+                                    <th>Taux</th>
+                                    <th>Deadline</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="micro-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MESO PAGE -->
+            <section id="page-meso" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏛️ Financements Méso (Régional/National)</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal('meso')">+ Ajouter</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Programme</th>
+                                    <th>Source</th>
+                                    <th>Montant</th>
+                                    <th>Taux</th>
+                                    <th>Deadline</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="meso-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MACRO PAGE -->
+            <section id="page-macro" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🌍 Financements Macro (Européen/International)</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal('macro')">+ Ajouter</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Programme</th>
+                                    <th>Source</th>
+                                    <th>Montant</th>
+                                    <th>Taux</th>
+                                    <th>Deadline</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="macro-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHILANTHROPY PAGE -->
+            <section id="page-philanthropy" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💎 Fondations & Philanthropie</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal('philanthropy')">+ Ajouter</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Fondation</th>
+                                    <th>Thématique</th>
+                                    <th>Montant</th>
+                                    <th>Processus</th>
+                                    <th>Pertinence</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="philanthropy-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INDIVIDUAL PAGE -->
+            <section id="page-individual" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">👤 Options pour Particuliers</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddFundingModal('individual')">+ Ajouter</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Programme</th>
+                                    <th>Type</th>
+                                    <th>Montant</th>
+                                    <th>Conditions</th>
+                                    <th>Contact</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="individual-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGET PAGE -->
+            <section id="page-budget" class="page-section">
+                <div class="year-tabs mb-lg">
+                    <div class="year-tab active" data-budget-year="2026">2026</div>
+                    <div class="year-tab" data-budget-year="2027">2027</div>
+                    <div class="year-tab" data-budget-year="2028">2028</div>
+                    <div class="year-tab" data-budget-year="2029">2029</div>
+                    <div class="year-tab" data-budget-year="2030">2030</div>
+                    <div class="year-tab" data-budget-year="2031">2031</div>
+                    <div class="year-tab" data-budget-year="2032">2032</div>
+                </div>
+
+                <div class="budget-summary">
+                    <div class="budget-item">
+                        <div class="budget-label">Objectif Annuel</div>
+                        <div class="budget-amount target" id="budget-target">360k€</div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-label">Confirmé</div>
+                        <div class="budget-amount confirmed" id="budget-confirmed">0€</div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-label">En attente</div>
+                        <div class="budget-amount pending" id="budget-pending">0€</div>
+                    </div>
+                </div>
+
+                <div class="section-row equal">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📊 Répartition par Source</h3>
+                        </div>
+                        <div id="budget-by-source">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📈 Projection 6 ans</h3>
+                        </div>
+                        <div id="budget-projection">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DECREE/ANTI-RAPPORT PAGE -->
+            <section id="page-decree" class="page-section">
+                <div class="card mb-lg">
+                    <div class="card-header">
+                        <h3 class="card-title">📜 Anti-Rapport Décret EP — Valorisation des Axes</h3>
+                        <span class="text-muted">Objectif reconnaissance 2030</span>
+                    </div>
+                    <p class="text-muted" style="margin-bottom: var(--space-lg);">
+                        Suivi de la valorisation des activités selon les 4 axes du décret du 17 juillet 2003 (modifié 2021).
+                        Mise à jour automatique basée sur les projets financés.
+                    </p>
+                </div>
+
+                <div class="axes-grid" id="axes-grid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="card mt-lg">
+                    <div class="card-header">
+                        <h3 class="card-title">📋 Actions de Valorisation</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddActionModal()">+ Ajouter Action</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Axe</th>
+                                    <th>Heures</th>
+                                    <th>Public</th>
+                                    <th>Date</th>
+                                    <th>Financement lié</th>
+                                </tr>
+                            </thead>
+                            <tbody id="actions-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACTS PAGE -->
+            <section id="page-contacts" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📇 Carnet de Contacts</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddContactModal()">+ Ajouter Contact</button>
+                    </div>
+                    <div class="filter-bar">
+                        <div class="filter-chip active" data-contact-filter="all">Tous</div>
+                        <div class="filter-chip" data-contact-filter="brussels">Bruxelles</div>
+                        <div class="filter-chip" data-contact-filter="federal">Fédéral</div>
+                        <div class="filter-chip" data-contact-filter="europe">Europe</div>
+                        <div class="filter-chip" data-contact-filter="foundations">Fondations</div>
+                        <div class="search-input">
+                            <input type="text" class="input-field" placeholder="Rechercher..." id="search-contacts">
+                        </div>
+                    </div>
+                    <div class="contacts-grid" id="contacts-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS PAGE -->
+            <section id="page-settings" class="page-section">
+                <div class="section-row equal">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">⚙️ Paramètres Généraux</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom de l'organisation</label>
+                            <input type="text" class="input-field" id="org-name" placeholder="Votre ASBL">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Objectif annuel (€)</label>
+                            <input type="number" class="input-field" id="annual-target" value="360000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Alerte deadline (jours)</label>
+                            <input type="number" class="input-field" id="deadline-alert" value="30">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveSettings()">Sauvegarder</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📤 Export des données</h3>
+                        </div>
+                        <div class="export-options">
+                            <div class="export-btn" onclick="exportJSON()">
+                                <div class="export-icon">📄</div>
+                                <div class="export-label">JSON</div>
+                                <div class="export-desc">Sauvegarde complète</div>
+                            </div>
+                            <div class="export-btn" onclick="exportCSV()">
+                                <div class="export-icon">📊</div>
+                                <div class="export-label">CSV</div>
+                                <div class="export-desc">Tableur</div>
+                            </div>
+                            <div class="export-btn" onclick="exportMarkdown()">
+                                <div class="export-icon">📝</div>
+                                <div class="export-label">Markdown</div>
+                                <div class="export-desc">Documentation</div>
+                            </div>
+                            <div class="export-btn" onclick="exportPDF()">
+                                <div class="export-icon">📕</div>
+                                <div class="export-label">PDF</div>
+                                <div class="export-desc">Rapport</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-lg">
+                    <div class="card-header">
+                        <h3 class="card-title">🔄 Import des données</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fichier JSON</label>
+                        <input type="file" class="input-field" id="import-file" accept=".json">
+                    </div>
+                    <button class="btn btn-secondary" onclick="processImport()">Importer</button>
+                </div>
+
+                <div class="card mt-lg">
+                    <div class="card-header">
+                        <h3 class="card-title">⚠️ Zone dangereuse</h3>
+                    </div>
+                    <p class="text-muted" style="margin-bottom: var(--space-md);">Réinitialiser toutes les données aux valeurs par défaut. Cette action est irréversible.</p>
+                    <button class="btn" style="background: var(--signal-red); color: white;" onclick="resetAllData()">🗑️ Réinitialiser toutes les données</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Adding/Editing -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Ajouter une opportunité</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+                <button class="btn btn-primary" id="modal-save">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📤 Exporter les données</h3>
+                <button class="modal-close" onclick="closeExportModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-btn" onclick="exportJSON()">
+                        <div class="export-icon">📄</div>
+                        <div class="export-label">JSON</div>
+                        <div class="export-desc">Sauvegarde complète réimportable</div>
+                    </div>
+                    <div class="export-btn" onclick="exportCSV()">
+                        <div class="export-icon">📊</div>
+                        <div class="export-label">CSV</div>
+                        <div class="export-desc">Pour Excel/Google Sheets</div>
+                    </div>
+                    <div class="export-btn" onclick="exportMarkdown()">
+                        <div class="export-icon">📝</div>
+                        <div class="export-label">Markdown</div>
+                        <div class="export-desc">Documentation lisible</div>
+                    </div>
+                    <div class="export-btn" onclick="printDashboard()">
+                        <div class="export-icon">🖨️</div>
+                        <div class="export-label">Imprimer</div>
+                        <div class="export-desc">Version papier</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // ══════════════════════════════════════════════════════════════════
+        // DATA MODEL
+        // ══════════════════════════════════════════════════════════════════
+        const DEFAULT_DATA = {
+            version: 2,
+            settings: {
+                orgName: '',
+                annualTarget: 360000,
+                deadlineAlert: 30
+            },
+            fundings: [
+                // MICRO - Opportunités identifiées (toutes en prospect)
+                { id: 1, name: 'Interreg FWV Micro-projets', source: 'Interreg', level: 'micro', amount: 50000, rate: '100% FEDER', deadline: '2026-01-19', status: 'prospect', priority: 3, url: 'interreg-fwvl.eu', notes: 'Partenaire FR ou FL requis' },
+                { id: 2, name: 'PCS Bruxelles', source: 'COCOF', level: 'micro', amount: 25000, rate: '75%', deadline: '', status: 'prospect', priority: 2, notes: 'Vérifier prochains appels' },
+                
+                // MESO - Bruxelles (données vérifiées du PDF)
+                { id: 10, name: 'Innoviris PYSI', source: 'Innoviris', level: 'meso', amount: 100000, rate: '100%', deadline: '', status: 'prospect', priority: 3, url: 'innoviris.brussels/program/prove-your-social-innovation', notes: 'Deadline à vérifier - généralement novembre' },
+                { id: 11, name: 'COCOF Impulsion', source: 'COCOF', level: 'meso', amount: 30000, rate: '100%', deadline: '', status: 'prospect', priority: 3, url: 'ccf.brussels', notes: 'Deadline généralement 31 oct pour année suivante' },
+                { id: 12, name: 'Innoviris Co-Create', source: 'Innoviris', level: 'meso', amount: 80000, rate: '80-100%', deadline: 'Permanent', status: 'prospect', priority: 2 },
+                { id: 13, name: 'R&D Projects Innoviris', source: 'Innoviris', level: 'meso', amount: 50000, rate: '15-70%', deadline: 'Permanent', status: 'prospect', priority: 1 },
+                { id: 14, name: 'BRUSEED', source: 'Finance.brussels', level: 'meso', amount: 250000, rate: 'Capital/prêt', deadline: 'Permanent', status: 'prospect', priority: 2 },
+                
+                // MESO - Fédéral (données vérifiées du PDF)
+                { id: 20, name: 'SPP Intégration Sociale', source: 'SPP IS', level: 'meso', amount: 0, rate: 'Variable', deadline: '', status: 'prospect', priority: 3, notes: 'E-inclusion groupes vulnérables - contact: info@mi-is.be' },
+                { id: 21, name: 'Loterie Nationale', source: 'Loterie Nationale', level: 'meso', amount: 0, rate: 'Variable', deadline: '', status: 'prospect', priority: 3, notes: 'Santé, bien-être, participation - contact: demandesubside.loterie-nationale.be' },
+                { id: 22, name: 'BOSA Digital Skills Fund', source: 'BOSA', level: 'meso', amount: 750000, rate: 'Variable', deadline: '', status: 'prospect', priority: 2, notes: 'Compétences numériques vulnérables - 100-750k€ - contact: digitalopen@bosa.fgov.be' },
+                { id: 23, name: 'SPF Économie Inclusion Numérique', source: 'SPF Économie', level: 'meso', amount: 200000, rate: 'Variable', deadline: '', status: 'prospect', priority: 3, notes: '80-200k€ - contact: bedigitaltogether@economie.fgov.be' },
+                
+                // MACRO - Europe
+                { id: 30, name: 'Erasmus+ KA2 Small-scale', source: 'Erasmus+', level: 'macro', amount: 60000, rate: '100% forfait', deadline: '2026-03-05', status: 'prospect', priority: 3, notes: '30k ou 60k forfaitaire - 2 partenaires min' },
+                { id: 31, name: 'Erasmus+ KA1 Mobilité', source: 'Erasmus+', level: 'macro', amount: 0, rate: '100%', deadline: '2026-02-19', status: 'prospect', priority: 2, notes: 'Forfaits par mobilité' },
+                { id: 32, name: 'CERV Citizens Engagement', source: 'CERV', level: 'macro', amount: 75000, rate: '90%', deadline: '2026-04-29', status: 'prospect', priority: 3, notes: '75k min - 2 entités/2 pays' },
+                { id: 33, name: 'CERV Networks of Towns', source: 'CERV', level: 'macro', amount: 100000, rate: '90%', deadline: '2026-04-16', status: 'prospect', priority: 2 },
+                { id: 34, name: 'FSE+ Wallonie-Bruxelles', source: 'FSE+', level: 'macro', amount: 0, rate: '40-50%', deadline: '', status: 'prospect', priority: 2, notes: 'Cofinancement public requis' },
+                { id: 35, name: 'Creative Europe Coopération', source: 'Creative Europe', level: 'macro', amount: 200000, rate: '80%', deadline: '', status: 'prospect', priority: 2, notes: 'Petite échelle max 200k - 3 partenaires/3 pays' },
+                
+                // PHILANTHROPY (données vérifiées du PDF)
+                { id: 40, name: 'FRB Digital For Youth', source: 'Fondation Roi Baudouin', level: 'philanthropy', amount: 0, rate: '100%', deadline: '', status: 'prospect', priority: 3, notes: 'contact: info@kbs-frb.be +32 2 500 45 55' },
+                { id: 41, name: 'FRB Digital Brussels', source: 'Fondation Roi Baudouin', level: 'philanthropy', amount: 15000, rate: '100%', deadline: '', status: 'prospect', priority: 2, notes: '5-15k€ inclusion numérique BXL' },
+                { id: 42, name: 'FRB Venture Philanthropy', source: 'Fondation Roi Baudouin', level: 'philanthropy', amount: 80000, rate: '100%', deadline: '', status: 'prospect', priority: 2, notes: '80k€/3ans renforcement structurel' },
+                { id: 43, name: 'Cera', source: 'Cera', level: 'philanthropy', amount: 0, rate: 'Partiel', deadline: 'Continu', status: 'prospect', priority: 2, notes: 'Santé mentale, innovation sociale - contact: lies.daenen@cera-holding.be' },
+                { id: 44, name: 'Fondation Bernheim', source: 'Bernheim', level: 'philanthropy', amount: 0, rate: 'Variable', deadline: '', status: 'prospect', priority: 2, notes: 'Jeunes bruxellois vulnérables - contact: info@fondationbernheim.be' },
+                { id: 45, name: 'Wellcome Trust', source: 'Wellcome', level: 'philanthropy', amount: 5000000, rate: '100%', deadline: '', status: 'prospect', priority: 2, notes: '500k-5M£ - Digital Mental Health - Appels ouverts' },
+                { id: 46, name: 'European AI Fund', source: 'EAIF', level: 'philanthropy', amount: 150000, rate: '100%', deadline: '', status: 'prospect', priority: 3, notes: '20-150k€ - Appels périodiques' },
+                { id: 47, name: 'Mozilla Foundation', source: 'Mozilla', level: 'philanthropy', amount: 150000, rate: '100%', deadline: '', status: 'prospect', priority: 2, notes: '50-150k$ - Appels thématiques' },
+                { id: 48, name: 'Stiftung Mercator', source: 'Mercator', level: 'philanthropy', amount: 500000, rate: '100%', deadline: '', status: 'prospect', priority: 1, notes: '50-500k€ - Allemagne priorité - Rolling' },
+                
+                // INDIVIDUAL / Finance solidaire (données vérifiées du PDF)
+                { id: 50, name: 'Prêt Proxi', source: 'Finance.brussels', level: 'individual', amount: 0, rate: 'Prêt', deadline: 'Permanent', status: 'prospect', priority: 1, notes: 'Mobilise épargne particuliers' },
+                { id: 51, name: 'Micro-crédit Starter', source: 'Finance.brussels', level: 'individual', amount: 30000, rate: 'Prêt', deadline: 'Permanent', status: 'prospect', priority: 1, notes: '5-30k€ indépendants' },
+                { id: 52, name: 'Prêt Entreprise Sociale', source: 'Finance.brussels', level: 'individual', amount: 150000, rate: 'Prêt', deadline: 'Permanent', status: 'prospect', priority: 1, notes: 'Entreprise sociale agréée requise' },
+                { id: 53, name: 'Credal', source: 'Credal', level: 'individual', amount: 0, rate: 'Prêt solidaire', deadline: 'Permanent', status: 'prospect', priority: 2, notes: 'Finance solidaire - 010/48.33.50' },
+                { id: 54, name: 'Open Collective', source: 'Open Collective', level: 'individual', amount: 0, rate: 'Dons', deadline: 'Continu', status: 'prospect', priority: 2, notes: 'Fiscal host requis' },
+                { id: 55, name: 'GitHub Sponsors', source: 'GitHub', level: 'individual', amount: 0, rate: 'Dons', deadline: 'Continu', status: 'prospect', priority: 2 }
+            ],
+            contacts: [
+                // Bruxelles
+                { id: 1, name: 'Innoviris', org: 'innovation.brussels', email: 'info@innoviris.brussels', phone: '', category: 'brussels', tags: ['PYSI', 'Co-Create', 'R&D'] },
+                { id: 2, name: 'COCOF Cohésion sociale', org: 'SPFB', email: 'cohesionsociale@spfb.brussels', phone: '', category: 'brussels', tags: ['Impulsion', 'PCS'] },
+                { id: 3, name: 'hub.brussels', org: 'hub.brussels', email: 'info@hub.brussels', phone: '', category: 'brussels', tags: ['Accompagnement', 'Startups'] },
+                { id: 4, name: 'finance.brussels', org: 'finance.brussels', email: '', phone: '', category: 'brussels', tags: ['BRUSEED', 'Prêts'] },
+                { id: 5, name: 'Iriscare', org: 'COCOM', email: 'subsides-subsidies@iriscare.brussels', phone: '', category: 'brussels', tags: ['Santé mentale'] },
+                
+                // Fédéral
+                { id: 10, name: 'SPP Intégration sociale', org: 'SPP IS', email: 'info@mi-is.be', phone: '', category: 'federal', tags: ['E-inclusion'] },
+                { id: 11, name: 'BOSA Digital', org: 'BOSA', email: 'digitalopen@bosa.fgov.be', phone: '', category: 'federal', tags: ['Digital Skills'] },
+                { id: 12, name: 'SPF Économie', org: 'SPF Économie', email: 'bedigitaltogether@economie.fgov.be', phone: '', category: 'federal', tags: ['Inclusion numérique'] },
+                { id: 13, name: 'Loterie Nationale FWB', org: 'FWB', email: 'csc-dgca@cfwb.be', phone: '', category: 'federal', tags: ['Démocratie', 'Participation'] },
+                
+                // Europe
+                { id: 20, name: 'AEF-Europe', org: 'Erasmus+ Belgique', email: '', phone: '02 542 62 89', category: 'europe', tags: ['Erasmus+', 'KA1', 'KA2'] },
+                { id: 21, name: 'NCP Bruxelles', org: 'hub.brussels', email: '', phone: '', category: 'europe', tags: ['Horizon Europe', 'CERV'] },
+                { id: 22, name: 'Agence FSE', org: 'FSE Belgique', email: '', phone: '02 234 39 42', category: 'europe', tags: ['FSE+'] },
+                { id: 23, name: 'NGI/NLnet', org: 'NLnet', email: '', phone: '', category: 'europe', tags: ['NGI Zero', 'Open Source'] },
+                
+                // Fondations
+                { id: 30, name: 'Fondation Roi Baudouin', org: 'FRB', email: 'info@kbs-frb.be', phone: '+32 2 500 45 55', category: 'foundations', tags: ['Digital', 'Youth', 'Philanthropy'] },
+                { id: 31, name: 'Cera', org: 'Cera Holding', email: 'lies.daenen@cera-holding.be', phone: '', category: 'foundations', tags: ['Innovation sociale'] },
+                { id: 32, name: 'Wellcome Trust', org: 'Wellcome', email: '', phone: '', category: 'foundations', tags: ['Digital Health', 'Mental Health'] },
+                { id: 33, name: 'Credal', org: 'Finance solidaire', email: '', phone: '010/48.33.50', category: 'foundations', tags: ['Prêts', 'ESS'] },
+                { id: 34, name: 'Coopcity', org: 'Incubateur ESS', email: '', phone: '', category: 'foundations', tags: ['SEEDS', 'Accompagnement'] }
+            ],
+            axes: [
+                { id: 1, name: 'Axe 1', title: 'Participation, éducation et formation citoyennes', target: 1500, current: 0, actions: [] },
+                { id: 2, name: 'Axe 2', title: 'Formation d\'animateurs et acteurs associatifs', target: 800, current: 0, actions: [] },
+                { id: 3, name: 'Axe 3.1', title: 'Production de services et outils pédagogiques', target: 600, current: 0, actions: [] },
+                { id: 4, name: 'Axe 3.2', title: 'Production d\'analyses et études', target: 400, current: 0, actions: [] },
+                { id: 5, name: 'Axe 4', title: 'Sensibilisation et information', target: 1000, current: 0, actions: [] }
+            ],
+            actions: [],
+            budgetByYear: {
+                2026: { target: 360000, confirmed: 0, pending: 0 },
+                2027: { target: 400000, confirmed: 0, pending: 0 },
+                2028: { target: 450000, confirmed: 0, pending: 0 },
+                2029: { target: 480000, confirmed: 0, pending: 0 },
+                2030: { target: 500000, confirmed: 0, pending: 0 },
+                2031: { target: 520000, confirmed: 0, pending: 0 },
+                2032: { target: 550000, confirmed: 0, pending: 0 }
+            }
+        };
+
+        // State - FORCE RESET si version obsolète
+        const DATA_VERSION = 2; // Incrémenter pour forcer reset
+        let storedData = JSON.parse(localStorage.getItem('fundingData'));
+        let appData;
+        
+        if (!storedData || storedData.version !== DATA_VERSION) {
+            // Reset avec données propres
+            appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+            appData.version = DATA_VERSION;
+            localStorage.setItem('fundingData', JSON.stringify(appData));
+        } else {
+            appData = storedData;
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ══════════════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initFilters();
+            updateCurrentDate();
+            renderAll();
+            saveData();
+        });
+
+        function initNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    if (page) showPage(page);
+                });
+            });
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            const targetPage = document.getElementById(`page-${pageId}`);
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            
+            if (targetPage) targetPage.classList.add('active');
+            if (navItem) navItem.classList.add('active');
+        }
+
+        function initFilters() {
+            // Funding status filters
+            document.querySelectorAll('.filter-chip[data-filter]').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip[data-filter]').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    filterFundings(chip.dataset.filter);
+                });
+            });
+
+            // Contact category filters
+            document.querySelectorAll('.filter-chip[data-contact-filter]').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip[data-contact-filter]').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    filterContacts(chip.dataset.contactFilter);
+                });
+            });
+
+            // Year tabs
+            document.querySelectorAll('.year-tab[data-budget-year]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.year-tab[data-budget-year]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderBudgetForYear(tab.dataset.budgetYear);
+                });
+            });
+
+            // Search
+            document.getElementById('search-funding')?.addEventListener('input', (e) => {
+                searchFundings(e.target.value);
+            });
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('fr-FR', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // RENDERING
+        // ══════════════════════════════════════════════════════════════════
+        function renderAll() {
+            renderDashboard();
+            renderFundingTables();
+            renderCalendar();
+            renderAxes();
+            renderContacts();
+            renderBudget();
+            updateKPIs();
+        }
+
+        function renderDashboard() {
+            renderFundingTable('funding-table-body', appData.fundings);
+            renderUpcomingDeadlines();
+            renderSourceBreakdown();
+        }
+
+        function renderFundingTable(containerId, fundings) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const sorted = [...fundings].sort((a, b) => {
+                if (a.deadline === 'Permanent' || a.deadline === 'Rolling' || a.deadline === 'Continu') return 1;
+                if (b.deadline === 'Permanent' || b.deadline === 'Rolling' || b.deadline === 'Continu') return -1;
+                return new Date(a.deadline) - new Date(b.deadline);
+            });
+
+            container.innerHTML = sorted.map(f => {
+                const deadlineClass = getDeadlineClass(f.deadline);
+                const priorityDots = Array(3).fill(0).map((_, i) => 
+                    `<div class="priority-dot ${i < f.priority ? 'active' : ''}"></div>`
+                ).join('');
+
+                return `
+                    <tr data-id="${f.id}">
+                        <td>
+                            <div class="funding-name">${f.name}</div>
+                            <div class="funding-source">${f.source}</div>
+                        </td>
+                        <td><span class="amount-badge text-green">${formatAmount(f.amount)}</span></td>
+                        <td><span class="deadline-cell ${deadlineClass}">${formatDeadline(f.deadline)}</span></td>
+                        <td><span class="status-badge ${f.status}">${getStatusLabel(f.status)}</span></td>
+                        <td><div class="priority-indicator">${priorityDots}</div></td>
+                        <td>
+                            <button class="btn btn-ghost btn-sm" onclick="editFunding(${f.id})">✏️</button>
+                            <button class="btn btn-ghost btn-sm" onclick="deleteFunding(${f.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderFundingTables() {
+            ['micro', 'meso', 'macro', 'philanthropy', 'individual'].forEach(level => {
+                const filtered = appData.fundings.filter(f => f.level === level);
+                renderFundingTable(`${level}-table-body`, filtered);
+            });
+        }
+
+        function renderUpcomingDeadlines() {
+            const container = document.getElementById('upcoming-deadlines');
+            const now = new Date();
+            const upcoming = appData.fundings
+                .filter(f => {
+                    if (!f.deadline || f.deadline === 'Permanent' || f.deadline === 'Rolling' || f.deadline === 'Continu') return false;
+                    const deadline = new Date(f.deadline);
+                    return deadline >= now;
+                })
+                .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+                .slice(0, 8);
+
+            container.innerHTML = upcoming.map(f => {
+                const daysUntil = Math.ceil((new Date(f.deadline) - now) / (1000 * 60 * 60 * 24));
+                const urgencyClass = daysUntil <= 7 ? 'urgent' : daysUntil <= 30 ? 'soon' : '';
+                
+                return `
+                    <div class="timeline-event ${urgencyClass}">
+                        <span class="event-date">${formatDeadline(f.deadline)}</span>
+                        <span class="event-name">${f.name}</span>
+                        <span class="event-amount">${formatAmount(f.amount)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendar-events');
+            const sorted = appData.fundings
+                .filter(f => f.deadline && !['Permanent', 'Rolling', 'Continu', 'Thématique'].includes(f.deadline))
+                .sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+
+            container.innerHTML = sorted.map(f => {
+                const deadlineClass = getDeadlineClass(f.deadline);
+                return `
+                    <div class="timeline-event ${deadlineClass}">
+                        <span class="event-date">${formatDeadline(f.deadline)}</span>
+                        <span class="event-name">${f.name}</span>
+                        <span class="status-badge ${f.status}">${getStatusLabel(f.status)}</span>
+                        <span class="event-amount">${formatAmount(f.amount)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSourceBreakdown() {
+            const container = document.getElementById('source-breakdown');
+            const byLevel = {
+                micro: { label: 'Micro (Local)', total: 0 },
+                meso: { label: 'Méso (Régional)', total: 0 },
+                macro: { label: 'Macro (Européen)', total: 0 },
+                philanthropy: { label: 'Fondations', total: 0 },
+                individual: { label: 'Particuliers', total: 0 }
+            };
+
+            appData.fundings.forEach(f => {
+                if (byLevel[f.level]) {
+                    byLevel[f.level].total += f.amount || 0;
+                }
+            });
+
+            container.innerHTML = Object.entries(byLevel).map(([key, data]) => `
+                <div class="budget-item">
+                    <div class="budget-label">${data.label}</div>
+                    <div class="budget-amount" style="color: var(--signal-cyan);">${formatAmount(data.total)}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAxes() {
+            const container = document.getElementById('axes-grid');
+            container.innerHTML = appData.axes.map(axe => {
+                const percentage = Math.min(100, Math.round((axe.current / axe.target) * 100));
+                const progressColor = percentage >= 80 ? 'green' : percentage >= 50 ? 'amber' : 'red';
+                
+                return `
+                    <div class="axe-card">
+                        <div class="axe-header">
+                            <span class="axe-number">${axe.name}</span>
+                            <span class="text-muted">${percentage}%</span>
+                        </div>
+                        <div class="axe-title">${axe.title}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${progressColor}" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <span class="progress-current">${axe.current}h réalisées</span>
+                            <span class="progress-target">Objectif: ${axe.target}h</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Actions table
+            const actionsContainer = document.getElementById('actions-table-body');
+            actionsContainer.innerHTML = appData.actions.map(a => {
+                const axe = appData.axes.find(ax => ax.id === a.axe);
+                return `
+                    <tr>
+                        <td>${a.name}</td>
+                        <td><span class="axe-number">${axe?.name || 'N/A'}</span></td>
+                        <td>${a.hours}h</td>
+                        <td>${a.participants || '-'}</td>
+                        <td>${formatDeadline(a.date)}</td>
+                        <td>${a.funding || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderContacts(filter = 'all') {
+            const container = document.getElementById('contacts-grid');
+            const filtered = filter === 'all' 
+                ? appData.contacts 
+                : appData.contacts.filter(c => c.category === filter);
+
+            container.innerHTML = filtered.map(c => `
+                <div class="contact-card">
+                    <div class="contact-header">
+                        <div class="contact-avatar">${c.name.charAt(0)}</div>
+                        <div>
+                            <div class="contact-name">${c.name}</div>
+                            <div class="contact-org">${c.org}</div>
+                        </div>
+                    </div>
+                    <div class="contact-details">
+                        ${c.email ? `<div class="contact-detail">📧 <a href="mailto:${c.email}">${c.email}</a></div>` : ''}
+                        ${c.phone ? `<div class="contact-detail">📞 ${c.phone}</div>` : ''}
+                    </div>
+                    <div class="contact-tags">
+                        ${(c.tags || []).map(t => `<span class="contact-tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBudget() {
+            renderBudgetForYear('2026');
+            renderBudgetProjection();
+        }
+
+        function renderBudgetForYear(year) {
+            const data = appData.budgetByYear[year] || { target: 0, confirmed: 0, pending: 0 };
+            document.getElementById('budget-target').textContent = formatAmount(data.target);
+            document.getElementById('budget-confirmed').textContent = formatAmount(data.confirmed);
+            document.getElementById('budget-pending').textContent = formatAmount(data.pending);
+
+            // Breakdown by source for this year
+            const bySource = document.getElementById('budget-by-source');
+            const sources = ['micro', 'meso', 'macro', 'philanthropy', 'individual'];
+            bySource.innerHTML = sources.map(s => {
+                const total = appData.fundings
+                    .filter(f => f.level === s && f.status === 'approved')
+                    .reduce((sum, f) => sum + (f.amount || 0), 0);
+                return `
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span>${s.charAt(0).toUpperCase() + s.slice(1)}</span>
+                        <span class="text-green">${formatAmount(total)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderBudgetProjection() {
+            const container = document.getElementById('budget-projection');
+            const years = ['2026', '2027', '2028', '2029', '2030', '2031', '2032'];
+            let cumulative = 0;
+
+            container.innerHTML = years.map(y => {
+                const data = appData.budgetByYear[y];
+                cumulative += data.target;
+                return `
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span>${y}</span>
+                        <span>${formatAmount(data.target)}</span>
+                        <span class="text-muted">${formatAmount(cumulative)} cumulé</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateKPIs() {
+            const total = appData.fundings.reduce((sum, f) => sum + (f.amount || 0), 0);
+            const applications = appData.fundings.filter(f => ['preparing', 'submitted'].includes(f.status)).length;
+            const now = new Date();
+            const urgent = appData.fundings.filter(f => {
+                if (!f.deadline || ['Permanent', 'Rolling', 'Continu'].includes(f.deadline)) return false;
+                const deadline = new Date(f.deadline);
+                const daysUntil = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+                return daysUntil <= 30 && daysUntil >= 0;
+            }).length;
+
+            const approved = appData.fundings.filter(f => f.status === 'approved').length;
+            const rejected = appData.fundings.filter(f => f.status === 'rejected').length;
+            const decided = approved + rejected;
+            const successRate = decided > 0 ? Math.round((approved / decided) * 100) : 0;
+
+            document.getElementById('kpi-total-potential').textContent = formatAmount(total);
+            document.getElementById('kpi-applications').textContent = applications;
+            document.getElementById('kpi-urgent').textContent = urgent;
+            document.getElementById('kpi-success-rate').textContent = successRate + '%';
+            document.getElementById('urgent-count').textContent = urgent;
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // FILTERING & SEARCH
+        // ══════════════════════════════════════════════════════════════════
+        function filterFundings(status) {
+            const filtered = status === 'all' 
+                ? appData.fundings 
+                : appData.fundings.filter(f => f.status === status);
+            renderFundingTable('funding-table-body', filtered);
+        }
+
+        function filterContacts(category) {
+            renderContacts(category);
+        }
+
+        function searchFundings(query) {
+            const q = query.toLowerCase();
+            const filtered = appData.fundings.filter(f => 
+                f.name.toLowerCase().includes(q) || 
+                f.source.toLowerCase().includes(q)
+            );
+            renderFundingTable('funding-table-body', filtered);
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // MODALS
+        // ══════════════════════════════════════════════════════════════════
+        function openAddFundingModal(level = null) {
+            const modal = document.getElementById('modal-overlay');
+            document.getElementById('modal-title').textContent = 'Ajouter une opportunité';
+            document.getElementById('modal-body').innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Nom du programme</label>
+                    <input type="text" class="input-field" id="funding-name" placeholder="Ex: Erasmus+ KA2">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Source</label>
+                    <input type="text" class="input-field" id="funding-source" placeholder="Ex: Commission Européenne">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Niveau</label>
+                    <select class="input-field" id="funding-level">
+                        <option value="micro" ${level === 'micro' ? 'selected' : ''}>Micro (Local)</option>
+                        <option value="meso" ${level === 'meso' ? 'selected' : ''}>Méso (Régional/National)</option>
+                        <option value="macro" ${level === 'macro' ? 'selected' : ''}>Macro (Européen)</option>
+                        <option value="philanthropy" ${level === 'philanthropy' ? 'selected' : ''}>Philanthropie</option>
+                        <option value="individual" ${level === 'individual' ? 'selected' : ''}>Particuliers</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Montant (€)</label>
+                    <input type="number" class="input-field" id="funding-amount" placeholder="50000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Taux de financement</label>
+                    <input type="text" class="input-field" id="funding-rate" placeholder="Ex: 100%, 80%, Variable">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deadline</label>
+                    <input type="date" class="input-field" id="funding-deadline">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    <select class="input-field" id="funding-status">
+                        <option value="prospect">Prospect</option>
+                        <option value="preparing">En préparation</option>
+                        <option value="submitted">Soumis</option>
+                        <option value="approved">Approuvé</option>
+                        <option value="rejected">Rejeté</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Priorité (1-3)</label>
+                    <select class="input-field" id="funding-priority">
+                        <option value="1">1 - Basse</option>
+                        <option value="2">2 - Moyenne</option>
+                        <option value="3" selected>3 - Haute</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="input-field" id="funding-notes" placeholder="Notes additionnelles..."></textarea>
+                </div>
+            `;
+            document.getElementById('modal-save').onclick = saveFunding;
+            modal.classList.add('active');
+        }
+
+        function saveFunding() {
+            const newFunding = {
+                id: Date.now(),
+                name: document.getElementById('funding-name').value,
+                source: document.getElementById('funding-source').value,
+                level: document.getElementById('funding-level').value,
+                amount: parseInt(document.getElementById('funding-amount').value) || 0,
+                rate: document.getElementById('funding-rate').value,
+                deadline: document.getElementById('funding-deadline').value || 'À définir',
+                status: document.getElementById('funding-status').value,
+                priority: parseInt(document.getElementById('funding-priority').value),
+                notes: document.getElementById('funding-notes').value
+            };
+
+            appData.fundings.push(newFunding);
+            saveData();
+            renderAll();
+            closeModal();
+            showToast('Opportunité ajoutée avec succès', 'success');
+        }
+
+        function editFunding(id) {
+            const funding = appData.fundings.find(f => f.id === id);
+            if (!funding) return;
+
+            openAddFundingModal(funding.level);
+            document.getElementById('modal-title').textContent = 'Modifier l\'opportunité';
+            
+            setTimeout(() => {
+                document.getElementById('funding-name').value = funding.name;
+                document.getElementById('funding-source').value = funding.source;
+                document.getElementById('funding-level').value = funding.level;
+                document.getElementById('funding-amount').value = funding.amount;
+                document.getElementById('funding-rate').value = funding.rate || '';
+                document.getElementById('funding-deadline').value = funding.deadline;
+                document.getElementById('funding-status').value = funding.status;
+                document.getElementById('funding-priority').value = funding.priority;
+                document.getElementById('funding-notes').value = funding.notes || '';
+                
+                document.getElementById('modal-save').onclick = () => {
+                    funding.name = document.getElementById('funding-name').value;
+                    funding.source = document.getElementById('funding-source').value;
+                    funding.level = document.getElementById('funding-level').value;
+                    funding.amount = parseInt(document.getElementById('funding-amount').value) || 0;
+                    funding.rate = document.getElementById('funding-rate').value;
+                    funding.deadline = document.getElementById('funding-deadline').value;
+                    funding.status = document.getElementById('funding-status').value;
+                    funding.priority = parseInt(document.getElementById('funding-priority').value);
+                    funding.notes = document.getElementById('funding-notes').value;
+                    
+                    saveData();
+                    renderAll();
+                    closeModal();
+                    showToast('Opportunité mise à jour', 'success');
+                };
+            }, 100);
+        }
+
+        function deleteFunding(id) {
+            if (!confirm('Supprimer cette opportunité ?')) return;
+            appData.fundings = appData.fundings.filter(f => f.id !== id);
+            saveData();
+            renderAll();
+            showToast('Opportunité supprimée', 'warning');
+        }
+
+        function openAddContactModal() {
+            const modal = document.getElementById('modal-overlay');
+            document.getElementById('modal-title').textContent = 'Ajouter un contact';
+            document.getElementById('modal-body').innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="input-field" id="contact-name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Organisation</label>
+                    <input type="text" class="input-field" id="contact-org">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="input-field" id="contact-email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="input-field" id="contact-phone">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Catégorie</label>
+                    <select class="input-field" id="contact-category">
+                        <option value="brussels">Bruxelles</option>
+                        <option value="federal">Fédéral</option>
+                        <option value="europe">Europe</option>
+                        <option value="foundations">Fondations</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tags (séparés par virgule)</label>
+                    <input type="text" class="input-field" id="contact-tags">
+                </div>
+            `;
+            document.getElementById('modal-save').onclick = saveContact;
+            modal.classList.add('active');
+        }
+
+        function saveContact() {
+            const newContact = {
+                id: Date.now(),
+                name: document.getElementById('contact-name').value,
+                org: document.getElementById('contact-org').value,
+                email: document.getElementById('contact-email').value,
+                phone: document.getElementById('contact-phone').value,
+                category: document.getElementById('contact-category').value,
+                tags: document.getElementById('contact-tags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+
+            appData.contacts.push(newContact);
+            saveData();
+            renderContacts();
+            closeModal();
+            showToast('Contact ajouté', 'success');
+        }
+
+        function openAddActionModal() {
+            const modal = document.getElementById('modal-overlay');
+            document.getElementById('modal-title').textContent = 'Ajouter une action EP';
+            document.getElementById('modal-body').innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Nom de l'action</label>
+                    <input type="text" class="input-field" id="action-name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Axe du décret</label>
+                    <select class="input-field" id="action-axe">
+                        ${appData.axes.map(a => `<option value="${a.id}">${a.name} - ${a.title}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Heures</label>
+                    <input type="number" class="input-field" id="action-hours">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Participants</label>
+                    <input type="number" class="input-field" id="action-participants">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="input-field" id="action-date">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Financement lié</label>
+                    <select class="input-field" id="action-funding">
+                        <option value="">Aucun</option>
+                        ${appData.fundings.map(f => `<option value="${f.name}">${f.name}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+            document.getElementById('modal-save').onclick = saveAction;
+            modal.classList.add('active');
+        }
+
+        function saveAction() {
+            const axeId = parseInt(document.getElementById('action-axe').value);
+            const hours = parseInt(document.getElementById('action-hours').value) || 0;
+
+            const newAction = {
+                id: Date.now(),
+                name: document.getElementById('action-name').value,
+                axe: axeId,
+                hours: hours,
+                participants: parseInt(document.getElementById('action-participants').value) || null,
+                date: document.getElementById('action-date').value,
+                funding: document.getElementById('action-funding').value || null
+            };
+
+            appData.actions.push(newAction);
+            
+            // Update axe progress
+            const axe = appData.axes.find(a => a.id === axeId);
+            if (axe) {
+                axe.current += hours;
+            }
+
+            saveData();
+            renderAxes();
+            closeModal();
+            showToast('Action ajoutée', 'success');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        function showExportModal() {
+            document.getElementById('export-modal').classList.add('active');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.remove('active');
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // DATA PERSISTENCE & EXPORT
+        // ══════════════════════════════════════════════════════════════════
+        function saveData() {
+            appData.version = DATA_VERSION;
+            localStorage.setItem('fundingData', JSON.stringify(appData));
+        }
+
+        function resetAllData() {
+            if (!confirm('⚠️ ATTENTION: Toutes vos données seront effacées. Cette action est IRRÉVERSIBLE.\n\nContinuer ?')) return;
+            if (!confirm('Êtes-vous VRAIMENT sûr ? Tapez OK pour confirmer.')) return;
+            
+            localStorage.removeItem('fundingData');
+            appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+            appData.version = DATA_VERSION;
+            localStorage.setItem('fundingData', JSON.stringify(appData));
+            renderAll();
+            showToast('Données réinitialisées', 'warning');
+        }
+
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+            downloadBlob(blob, `funding-data-${new Date().toISOString().split('T')[0]}.json`);
+            showToast('Export JSON téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function exportCSV() {
+            const headers = ['Nom', 'Source', 'Niveau', 'Montant', 'Taux', 'Deadline', 'Statut', 'Priorité'];
+            const rows = appData.fundings.map(f => [
+                f.name, f.source, f.level, f.amount, f.rate, f.deadline, f.status, f.priority
+            ]);
+            
+            const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            downloadBlob(blob, `funding-data-${new Date().toISOString().split('T')[0]}.csv`);
+            showToast('Export CSV téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function exportMarkdown() {
+            let md = `# Plan Stratégique Financement 2026-2032\n\n`;
+            md += `*Exporté le ${new Date().toLocaleDateString('fr-FR')}*\n\n`;
+            
+            ['micro', 'meso', 'macro', 'philanthropy', 'individual'].forEach(level => {
+                const levelNames = { micro: 'Micro (Local)', meso: 'Méso (Régional)', macro: 'Macro (Européen)', philanthropy: 'Fondations', individual: 'Particuliers' };
+                const fundings = appData.fundings.filter(f => f.level === level);
+                
+                md += `## ${levelNames[level]}\n\n`;
+                md += `| Programme | Source | Montant | Deadline | Statut |\n`;
+                md += `|-----------|--------|---------|----------|--------|\n`;
+                fundings.forEach(f => {
+                    md += `| ${f.name} | ${f.source} | ${formatAmount(f.amount)} | ${f.deadline} | ${f.status} |\n`;
+                });
+                md += `\n`;
+            });
+
+            const blob = new Blob([md], { type: 'text/markdown' });
+            downloadBlob(blob, `funding-plan-${new Date().toISOString().split('T')[0]}.md`);
+            showToast('Export Markdown téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function printDashboard() {
+            window.print();
+            closeExportModal();
+        }
+
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+
+        function processImport() {
+            const file = document.getElementById('import-file').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    appData = imported;
+                    saveData();
+                    renderAll();
+                    showToast('Données importées avec succès', 'success');
+                } catch (err) {
+                    showToast('Erreur lors de l\'import', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function saveSettings() {
+            appData.settings.orgName = document.getElementById('org-name').value;
+            appData.settings.annualTarget = parseInt(document.getElementById('annual-target').value);
+            appData.settings.deadlineAlert = parseInt(document.getElementById('deadline-alert').value);
+            saveData();
+            showToast('Paramètres sauvegardés', 'success');
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // UTILITIES
+        // ══════════════════════════════════════════════════════════════════
+        function formatAmount(amount) {
+            if (!amount) return '-';
+            if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M€';
+            if (amount >= 1000) return (amount / 1000).toFixed(0) + 'k€';
+            return amount + '€';
+        }
+
+        function formatDeadline(deadline) {
+            if (!deadline || deadline === 'Permanent' || deadline === 'Rolling' || deadline === 'Continu' || deadline === 'Thématique') {
+                return deadline || '-';
+            }
+            try {
+                return new Date(deadline).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+            } catch {
+                return deadline;
+            }
+        }
+
+        function getDeadlineClass(deadline) {
+            if (!deadline || ['Permanent', 'Rolling', 'Continu', 'Thématique'].includes(deadline)) return '';
+            const now = new Date();
+            const d = new Date(deadline);
+            const daysUntil = Math.ceil((d - now) / (1000 * 60 * 60 * 24));
+            if (daysUntil < 0) return 'text-muted';
+            if (daysUntil <= 7) return 'urgent';
+            if (daysUntil <= 30) return 'soon';
+            return '';
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                prospect: 'Prospect',
+                preparing: 'En préparation',
+                submitted: 'Soumis',
+                approved: 'Approuvé',
+                rejected: 'Rejeté'
+            };
+            return labels[status] || status;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Close modals on overlay click
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-overlay') closeModal();
+        });
+        document.getElementById('export-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'export-modal') closeExportModal();
+        });
+    </script>
+</body>
+</html>

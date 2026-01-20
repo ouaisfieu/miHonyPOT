@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚖️ THE COMMONS — L'Économie qui Défie l'Empire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* DUAL ECONOMY COLORS */
+      /* ARIZONA - The Empire */
+      --arizona-dark: #1a0a0a;
+      --arizona-primary: #8b0000;
+      --arizona-secondary: #ff3333;
+      --arizona-accent: #ffd700;
+      --arizona-dim: rgba(139,0,0,0.2);
+      --arizona-glow: rgba(255,51,51,0.4);
+      
+      /* COMMONS - The Alternative */
+      --commons-dark: #0a1a0a;
+      --commons-primary: #00aa55;
+      --commons-secondary: #00ff88;
+      --commons-accent: #88ffcc;
+      --commons-dim: rgba(0,170,85,0.2);
+      --commons-glow: rgba(0,255,136,0.4);
+      
+      /* NEUTRAL */
+      --void: #000000;
+      --night: #0c0e12;
+      --shadow: #14171e;
+      --smoke: #1c2028;
+      --slate: #252a34;
+      --steel: #3a4150;
+      
+      /* CURRENCIES */
+      --sol: #ffd700;
+      --sol-dim: rgba(255,215,0,0.2);
+      --mutual: #00ffaa;
+      --mutual-dim: rgba(0,255,170,0.2);
+      --time: #aa88ff;
+      --time-dim: rgba(170,136,255,0.2);
+      --trust: #ff88aa;
+      --trust-dim: rgba(255,136,170,0.2);
+      
+      /* TEXT */
+      --text: #e8e6e3;
+      --text-soft: #a8b0b8;
+      --text-dim: #606870;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+    @keyframes glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.2); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes ripple { 0% { transform: scale(1); opacity: 0.4; } 100% { transform: scale(2); opacity: 0; } }
+    @keyframes balanceShift { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+    @keyframes growTree { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes flowEnergy { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER - THE BALANCE
+    ═══════════════════════════════════════════════════════════════ */
+    header {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(90deg, var(--arizona-dark), var(--night), var(--commons-dark));
+      border-bottom: 1px solid var(--slate);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--arizona-secondary), var(--sol), var(--commons-secondary));
+    }
+
+    .header-side {
+      flex: 1;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-side.arizona { justify-content: flex-start; }
+    .header-side.commons { justify-content: flex-end; }
+
+    .economy-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid;
+    }
+
+    .economy-badge.arizona {
+      background: var(--arizona-dim);
+      border-color: var(--arizona-primary);
+    }
+
+    .economy-badge.commons {
+      background: var(--commons-dim);
+      border-color: var(--commons-primary);
+    }
+
+    .economy-icon { font-size: 1.5rem; }
+
+    .economy-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .economy-badge.arizona h3 { color: var(--arizona-secondary); }
+    .economy-badge.commons h3 { color: var(--commons-secondary); }
+
+    .economy-info p {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .economy-power {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .economy-badge.arizona .economy-power { color: var(--arizona-secondary); }
+    .economy-badge.commons .economy-power { color: var(--commons-secondary); }
+
+    /* THE BALANCE - Center */
+    .balance-container {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .balance-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      color: var(--sol);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .balance-scale {
+      width: 100%;
+      height: 24px;
+      background: var(--shadow);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--slate);
+    }
+
+    .balance-arizona {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--arizona-primary), var(--arizona-secondary));
+      transition: width 0.5s ease;
+    }
+
+    .balance-commons {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--commons-secondary), var(--commons-primary));
+      transition: width 0.5s ease;
+    }
+
+    .balance-center {
+      position: absolute;
+      left: 50%;
+      top: -4px;
+      bottom: -4px;
+      width: 4px;
+      background: var(--sol);
+      transform: translateX(-50%);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--sol);
+      z-index: 10;
+    }
+
+    .balance-percent {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .balance-percent .arizona { color: var(--arizona-secondary); }
+    .balance-percent .commons { color: var(--commons-secondary); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CURRENCY BAR
+    ═══════════════════════════════════════════════════════════════ */
+    .currency-bar {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      background: var(--shadow);
+      border-bottom: 1px solid var(--slate);
+    }
+
+    .currency-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: var(--night);
+      border-radius: 6px;
+      border: 1px solid var(--slate);
+    }
+
+    .currency-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .currency-icon.sol { background: var(--sol-dim); border: 2px solid var(--sol); }
+    .currency-icon.mutual { background: var(--mutual-dim); border: 2px solid var(--mutual); }
+    .currency-icon.time { background: var(--time-dim); border: 2px solid var(--time); }
+    .currency-icon.trust { background: var(--trust-dim); border: 2px solid var(--trust); }
+
+    .currency-info {
+      text-align: left;
+    }
+
+    .currency-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .currency-value.sol { color: var(--sol); }
+    .currency-value.mutual { color: var(--mutual); }
+    .currency-value.time { color: var(--time); }
+    .currency-value.trust { color: var(--trust); }
+
+    .currency-name {
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* SIDE PANELS */
+    .side-panel {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--slate);
+      overflow: hidden;
+    }
+
+    .side-panel.commons-side {
+      border-right: none;
+      border-left: 1px solid var(--slate);
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      background: var(--smoke);
+      border-bottom: 1px solid var(--slate);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title.arizona { color: var(--arizona-secondary); }
+    .panel-title.commons { color: var(--commons-secondary); }
+
+    .panel-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .panel-badge.arizona { background: var(--arizona-dim); color: var(--arizona-secondary); }
+    .panel-badge.commons { background: var(--commons-dim); color: var(--commons-secondary); }
+
+    .panel-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CENTER - THE AGORA
+    ═══════════════════════════════════════════════════════════════ */
+    .center-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      background: var(--smoke);
+      border-bottom: 1px solid var(--slate);
+      padding: 8px 16px;
+      gap: 6px;
+    }
+
+    .tab {
+      flex: 1;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 12px 16px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--slate);
+    }
+
+    .tab.active {
+      color: var(--commons-secondary);
+      background: var(--commons-dim);
+      border-color: var(--commons-primary);
+    }
+
+    .tab-content {
+      flex: 1;
+      display: none;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .tab-content.active { display: block; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMMONS CARDS
+    ═══════════════════════════════════════════════════════════════ */
+    .commons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .common-card {
+      background: linear-gradient(135deg, var(--smoke), var(--shadow));
+      border: 1px solid var(--commons-dim);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .common-card:hover {
+      border-color: var(--commons-secondary);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px var(--commons-dim);
+    }
+
+    .common-card.owned {
+      border-color: var(--commons-secondary);
+      background: linear-gradient(135deg, var(--commons-dim), var(--shadow));
+    }
+
+    .common-header {
+      padding: 16px;
+      background: linear-gradient(180deg, var(--commons-dim), transparent);
+      border-bottom: 1px solid var(--commons-dim);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .common-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--commons-dim);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      border: 2px solid var(--commons-primary);
+    }
+
+    .common-titles h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--commons-secondary);
+      margin-bottom: 2px;
+    }
+
+    .common-titles p {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .common-body {
+      padding: 16px;
+    }
+
+    .common-desc {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .common-stats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .common-stat {
+      font-size: 0.65rem;
+      padding: 4px 10px;
+      background: var(--night);
+      border-radius: 4px;
+      color: var(--text-soft);
+    }
+
+    .common-stat.mutual { color: var(--mutual); border: 1px solid var(--mutual-dim); }
+    .common-stat.time { color: var(--time); border: 1px solid var(--time-dim); }
+    .common-stat.trust { color: var(--trust); border: 1px solid var(--trust-dim); }
+
+    .common-progress {
+      margin-top: 12px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--night);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--commons-primary), var(--commons-secondary));
+      transition: width 0.5s ease;
+      border-radius: 4px;
+    }
+
+    .common-cost {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--commons-dim);
+    }
+
+    .cost-items {
+      display: flex;
+      gap: 10px;
+    }
+
+    .cost-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+    }
+
+    .cost-item.sol { color: var(--sol); }
+    .cost-item.mutual { color: var(--mutual); }
+    .cost-item.time { color: var(--time); }
+    .cost-item.trust { color: var(--trust); }
+
+    .common-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: var(--commons-primary);
+      border: none;
+      color: var(--void);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .common-btn:hover {
+      background: var(--commons-secondary);
+      transform: scale(1.05);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ASSEMBLY (Voting)
+    ═══════════════════════════════════════════════════════════════ */
+    .assembly-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .assembly-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .assembly-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      color: var(--commons-secondary);
+      margin-bottom: 8px;
+    }
+
+    .assembly-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .proposal-card {
+      background: var(--smoke);
+      border: 2px solid var(--commons-dim);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .proposal-card.active {
+      border-color: var(--commons-secondary);
+      box-shadow: 0 0 30px var(--commons-dim);
+    }
+
+    .proposal-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 4px 10px;
+      background: var(--commons-dim);
+      color: var(--commons-secondary);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .proposal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--commons-secondary);
+      margin-bottom: 10px;
+    }
+
+    .proposal-desc {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .proposal-impact {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .impact-item {
+      flex: 1;
+      padding: 12px;
+      background: var(--night);
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .impact-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .impact-value.positive { color: var(--commons-secondary); }
+    .impact-value.negative { color: var(--arizona-secondary); }
+
+    .impact-label {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .vote-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--commons-dim);
+    }
+
+    .vote-bar {
+      flex: 1;
+      height: 12px;
+      background: var(--night);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .vote-for {
+      height: 100%;
+      background: var(--commons-secondary);
+      transition: width 0.5s;
+    }
+
+    .vote-against {
+      height: 100%;
+      background: var(--arizona-secondary);
+      transition: width 0.5s;
+    }
+
+    .vote-count {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .vote-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .vote-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .vote-btn.for {
+      background: var(--commons-primary);
+      color: var(--void);
+    }
+
+    .vote-btn.against {
+      background: var(--arizona-primary);
+      color: white;
+    }
+
+    .vote-btn:hover { transform: scale(1.05); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MUTUAL AID NETWORK
+    ═══════════════════════════════════════════════════════════════ */
+    .network-viz {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .network-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .net-stat {
+      background: var(--smoke);
+      border: 1px solid var(--commons-dim);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .net-stat-icon { font-size: 2rem; margin-bottom: 10px; }
+
+    .net-stat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--commons-secondary);
+    }
+
+    .net-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    .aid-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .aid-card {
+      background: var(--smoke);
+      border: 1px solid var(--slate);
+      border-radius: 10px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .aid-card:hover {
+      border-color: var(--commons-secondary);
+      transform: translateY(-2px);
+    }
+
+    .aid-card.offer { border-left: 4px solid var(--commons-secondary); }
+    .aid-card.request { border-left: 4px solid var(--time); }
+
+    .aid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .aid-type {
+      font-size: 0.6rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .aid-type.offer { background: var(--commons-dim); color: var(--commons-secondary); }
+    .aid-type.request { background: var(--time-dim); color: var(--time); }
+
+    .aid-time {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .aid-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .aid-desc {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .aid-reward {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--time);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ARIZONA PANEL (Left)
+    ═══════════════════════════════════════════════════════════════ */
+    .arizona-item {
+      padding: 12px;
+      background: var(--arizona-dim);
+      border: 1px solid rgba(139,0,0,0.3);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .arizona-item:hover {
+      border-color: var(--arizona-secondary);
+      transform: translateX(4px);
+    }
+
+    .arizona-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .arizona-item-name {
+      font-weight: 600;
+      color: var(--arizona-secondary);
+    }
+
+    .arizona-item-cost {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--sol);
+    }
+
+    .arizona-item-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .arizona-item-effect {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: var(--arizona-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMMONS PANEL (Right)
+    ═══════════════════════════════════════════════════════════════ */
+    .commons-item {
+      padding: 12px;
+      background: var(--commons-dim);
+      border: 1px solid rgba(0,170,85,0.3);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .commons-item:hover {
+      border-color: var(--commons-secondary);
+      transform: translateX(-4px);
+    }
+
+    .commons-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .commons-item-name {
+      font-weight: 600;
+      color: var(--commons-secondary);
+    }
+
+    .commons-item-cost {
+      display: flex;
+      gap: 8px;
+    }
+
+    .commons-item-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .commons-item-effect {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: var(--commons-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       EVENT LOG
+    ═══════════════════════════════════════════════════════════════ */
+    .event-item {
+      padding: 10px 12px;
+      background: var(--night);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--slate);
+      animation: slideIn 0.3s ease;
+    }
+
+    .event-item.arizona { border-left-color: var(--arizona-secondary); }
+    .event-item.commons { border-left-color: var(--commons-secondary); }
+    .event-item.neutral { border-left-color: var(--sol); }
+
+    .event-time {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .event-text {
+      font-size: 0.8rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--shadow);
+      border: 2px solid var(--commons-secondary);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      animation: scaleIn 0.3s ease;
+    }
+
+    .modal-icon { font-size: 4rem; text-align: center; margin-bottom: 20px; }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--commons-secondary);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .modal-btn.primary {
+      background: var(--commons-secondary);
+      color: var(--void);
+    }
+
+    .modal-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--commons-secondary);
+      color: var(--commons-secondary);
+    }
+
+    .modal-btn:hover { transform: scale(1.05); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      top: 140px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      background: var(--smoke);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+      font-size: 0.85rem;
+    }
+
+    .toast.commons { border: 1px solid var(--commons-secondary); color: var(--commons-secondary); }
+    .toast.arizona { border: 1px solid var(--arizona-secondary); color: var(--arizona-secondary); }
+    .toast.neutral { border: 1px solid var(--sol); color: var(--sol); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--night); }
+    ::-webkit-scrollbar-thumb { background: var(--commons-dim); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--commons-secondary); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+      .side-panel { width: 280px; }
+      .network-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      main { flex-direction: column; }
+      .side-panel { width: 100%; height: 200px; border: none; border-bottom: 1px solid var(--slate); }
+      .side-panel.commons-side { border-top: 1px solid var(--slate); }
+      header { flex-wrap: wrap; height: auto; padding: 10px; }
+      .balance-container { order: 3; width: 100%; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- HEADER - THE BALANCE -->
+    <header>
+      <div class="header-side arizona">
+        <div class="economy-badge arizona">
+          <span class="economy-icon">🏛️</span>
+          <div class="economy-info">
+            <h3>ÉCONOMIE ARIZONA</h3>
+            <p>Extraction • Compétition • Accumulation</p>
+          </div>
+          <div class="economy-power" id="arizona-power">72%</div>
+        </div>
+      </div>
+
+      <div class="balance-container">
+        <div class="balance-title">⚖️ LA BALANCE DU POUVOIR</div>
+        <div class="balance-scale">
+          <div class="balance-arizona" id="balance-arizona" style="width: 72%"></div>
+          <div class="balance-commons" id="balance-commons" style="width: 28%"></div>
+          <div class="balance-center"></div>
+        </div>
+        <div class="balance-percent">
+          <span class="arizona" id="pct-arizona">72%</span>
+          <span class="commons" id="pct-commons">28%</span>
+        </div>
+      </div>
+
+      <div class="header-side commons">
+        <div class="economy-badge commons">
+          <div class="economy-power" id="commons-power">28%</div>
+          <div class="economy-info" style="text-align: right;">
+            <h3>ÉCONOMIE DES COMMUNS</h3>
+            <p>Régénération • Coopération • Partage</p>
+          </div>
+          <span class="economy-icon">🌱</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CURRENCY BAR -->
+    <div class="currency-bar">
+      <div class="currency-item">
+        <div class="currency-icon sol">🪙</div>
+        <div class="currency-info">
+          <div class="currency-value sol" id="cur-sol">1,500</div>
+          <div class="currency-name">Solidaris (SOL)</div>
+        </div>
+      </div>
+      <div class="currency-item">
+        <div class="currency-icon mutual">🤝</div>
+        <div class="currency-info">
+          <div class="currency-value mutual" id="cur-mutual">250</div>
+          <div class="currency-name">Mutual (MUT)</div>
+        </div>
+      </div>
+      <div class="currency-item">
+        <div class="currency-icon time">⏱️</div>
+        <div class="currency-info">
+          <div class="currency-value time" id="cur-time">40h</div>
+          <div class="currency-name">Temps (HRS)</div>
+        </div>
+      </div>
+      <div class="currency-item">
+        <div class="currency-icon trust">💎</div>
+        <div class="currency-info">
+          <div class="currency-value trust" id="cur-trust">150</div>
+          <div class="currency-name">Confiance (TRS)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main>
+      <!-- ARIZONA PANEL -->
+      <div class="side-panel">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title arizona">🏛️ Marché Arizona</div>
+            <div class="panel-badge arizona">Extraction</div>
+          </div>
+          <div class="panel-body" id="arizona-market"></div>
+        </div>
+      </div>
+
+      <!-- CENTER - THE AGORA -->
+      <div class="center-area">
+        <div class="tabs">
+          <button class="tab active" data-tab="commons">🌱 Les Communs</button>
+          <button class="tab" data-tab="assembly">🏛️ L'Assemblée</button>
+          <button class="tab" data-tab="network">🤝 Entraide</button>
+          <button class="tab" data-tab="timeline">📜 Chronique</button>
+        </div>
+
+        <!-- COMMONS TAB -->
+        <div class="tab-content active" id="tab-commons">
+          <div class="commons-grid" id="commons-grid"></div>
+        </div>
+
+        <!-- ASSEMBLY TAB -->
+        <div class="tab-content" id="tab-assembly">
+          <div class="assembly-container">
+            <div class="assembly-header">
+              <div class="assembly-title">🏛️ L'ASSEMBLÉE CITOYENNE</div>
+              <div class="assembly-subtitle">Décidez ensemble de l'avenir des Communs</div>
+            </div>
+            <div id="proposals-list"></div>
+          </div>
+        </div>
+
+        <!-- NETWORK TAB -->
+        <div class="tab-content" id="tab-network">
+          <div class="network-viz">
+            <div class="network-stats">
+              <div class="net-stat">
+                <div class="net-stat-icon">👥</div>
+                <div class="net-stat-value" id="net-members">1,247</div>
+                <div class="net-stat-label">Membres du Réseau</div>
+              </div>
+              <div class="net-stat">
+                <div class="net-stat-icon">🤝</div>
+                <div class="net-stat-value" id="net-exchanges">3,891</div>
+                <div class="net-stat-label">Échanges Réalisés</div>
+              </div>
+              <div class="net-stat">
+                <div class="net-stat-icon">⏱️</div>
+                <div class="net-stat-value" id="net-hours">12,450h</div>
+                <div class="net-stat-label">Heures Partagées</div>
+              </div>
+              <div class="net-stat">
+                <div class="net-stat-icon">💎</div>
+                <div class="net-stat-value" id="net-trust">8.7</div>
+                <div class="net-stat-label">Indice de Confiance</div>
+              </div>
+            </div>
+            <div class="aid-list" id="aid-list"></div>
+          </div>
+        </div>
+
+        <!-- TIMELINE TAB -->
+        <div class="tab-content" id="tab-timeline">
+          <div id="timeline-log"></div>
+        </div>
+      </div>
+
+      <!-- COMMONS PANEL -->
+      <div class="side-panel commons-side">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title commons">🌱 Actions Communes</div>
+            <div class="panel-badge commons">Régénération</div>
+          </div>
+          <div class="panel-body" id="commons-actions"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- INTRO MODAL -->
+  <div class="modal-overlay active" id="modal-intro">
+    <div class="modal">
+      <div class="modal-icon">⚖️</div>
+      <div class="modal-title">Bienvenue dans THE COMMONS</div>
+      <div class="modal-text">
+        Deux économies s'affrontent pour l'âme de la société.<br><br>
+        <strong style="color: var(--arizona-secondary)">L'Économie Arizona</strong> — basée sur l'extraction, la compétition et l'accumulation. Elle domine à 72%.<br><br>
+        <strong style="color: var(--commons-secondary)">L'Économie des Communs</strong> — basée sur la régénération, la coopération et le partage. Elle représente 28%.<br><br>
+        Votre mission : <strong>faire basculer la balance</strong>. Construisez les Communs, participez aux Assemblées, tissez le réseau d'entraide.<br><br>
+        Quand les Communs atteindront 51%, le monde changera.
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn primary" onclick="startGame()">⚡ Entrer dans la Résistance</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toasts"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // GAME STATE
+    // ═══════════════════════════════════════════════════════════════
+    const STATE = {
+      // Currencies
+      sol: 1500,      // Solidaris - mainstream money
+      mutual: 250,    // Mutual - commons currency
+      time: 40,       // Time bank hours
+      trust: 150,     // Trust/reputation
+      
+      // Balance of Power
+      arizonaPower: 72,
+      commonsPower: 28,
+      
+      // Network
+      networkMembers: 1247,
+      networkExchanges: 3891,
+      networkHours: 12450,
+      networkTrust: 8.7,
+      
+      // Owned commons
+      ownedCommons: [],
+      
+      // Voted proposals
+      votedProposals: [],
+      
+      // Cycle
+      cycle: 1
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // DATA
+    // ═══════════════════════════════════════════════════════════════
+    const COMMONS = [
+      {
+        id: "jardin",
+        name: "Jardin Partagé",
+        category: "Alimentaire",
+        icon: "🌻",
+        desc: "Un espace collectif de culture urbaine. Produit des légumes gratuits, crée du lien social, et régénère les sols.",
+        costSol: 200,
+        costMutual: 50,
+        costTime: 10,
+        effects: {commonsPower: 1, mutual: 20, trust: 10},
+        progress: 0,
+        target: 100,
+        stats: ["🥕 50kg/mois", "👥 12 jardiniers", "🌍 -200kg CO2"]
+      },
+      {
+        id: "repair",
+        name: "Repair Café",
+        category: "Réparation",
+        icon: "🔧",
+        desc: "Réparer plutôt que jeter. Des bénévoles aident à donner une seconde vie aux objets.",
+        costSol: 150,
+        costMutual: 30,
+        costTime: 5,
+        effects: {commonsPower: 1, time: 5, trust: 15},
+        progress: 0,
+        target: 100,
+        stats: ["♻️ 200 objets/mois", "💰 -15K€ déchets", "🛠️ 8 réparateurs"]
+      },
+      {
+        id: "amap",
+        name: "AMAP / GASAP",
+        category: "Alimentaire",
+        icon: "🥬",
+        desc: "Association pour le Maintien d'une Agriculture Paysanne. Circuit court, prix justes, lien producteur-consommateur.",
+        costSol: 300,
+        costMutual: 40,
+        costTime: 2,
+        effects: {commonsPower: 2, mutual: 30, trust: 20},
+        progress: 0,
+        target: 100,
+        stats: ["🌾 3 fermes partenaires", "👨‍👩‍👧‍👦 45 familles", "📦 100 paniers/sem"]
+      },
+      {
+        id: "habitat",
+        name: "Habitat Participatif",
+        category: "Logement",
+        icon: "🏘️",
+        desc: "Co-construire son logement avec ses voisins. Espaces partagés, décisions collectives, coût réduit.",
+        costSol: 1000,
+        costMutual: 200,
+        costTime: 50,
+        effects: {commonsPower: 5, trust: 50, mutual: 100},
+        progress: 0,
+        target: 500,
+        stats: ["🏠 12 logements", "🤝 Salle commune", "💶 -30% coût"]
+      },
+      {
+        id: "fablab",
+        name: "FabLab Citoyen",
+        category: "Production",
+        icon: "🖨️",
+        desc: "Un atelier de fabrication ouvert à tous. Imprimantes 3D, découpe laser, électronique. Produire local.",
+        costSol: 500,
+        costMutual: 100,
+        costTime: 20,
+        effects: {commonsPower: 3, time: 10, trust: 25},
+        progress: 0,
+        target: 200,
+        stats: ["🔨 150 projets/an", "📚 Ateliers gratuits", "🌐 Open source"]
+      },
+      {
+        id: "monnaie",
+        name: "Monnaie Locale",
+        category: "Finance",
+        icon: "💱",
+        desc: "Une monnaie complémentaire qui circule localement. Stimule l'économie de proximité, échappe à la spéculation.",
+        costSol: 400,
+        costMutual: 150,
+        costTime: 15,
+        effects: {commonsPower: 4, mutual: 80, trust: 30},
+        progress: 0,
+        target: 300,
+        stats: ["💰 50K en circulation", "🏪 120 commerces", "♻️ x7 vélocité"]
+      },
+      {
+        id: "energie",
+        name: "Coopérative d'Énergie",
+        category: "Énergie",
+        icon: "⚡",
+        desc: "Produire et partager l'énergie renouvelable collectivement. Panneaux solaires citoyens, éoliennes communautaires.",
+        costSol: 800,
+        costMutual: 180,
+        costTime: 30,
+        effects: {commonsPower: 5, sol: 100, trust: 40},
+        progress: 0,
+        target: 400,
+        stats: ["☀️ 200 kWc installés", "👥 350 coopérateurs", "🌍 -150t CO2/an"]
+      },
+      {
+        id: "soin",
+        name: "Maison de Santé Communautaire",
+        category: "Santé",
+        icon: "🏥",
+        desc: "Médecine de proximité, prix solidaires, prévention collective. La santé comme bien commun.",
+        costSol: 600,
+        costMutual: 120,
+        costTime: 25,
+        effects: {commonsPower: 4, trust: 35, time: 15},
+        progress: 0,
+        target: 350,
+        stats: ["👨‍⚕️ 8 praticiens", "🩺 Prix libre", "💊 Prévention"]
+      },
+      {
+        id: "media",
+        name: "Média Citoyen",
+        category: "Information",
+        icon: "📰",
+        desc: "Information indépendante, financée par les citoyens. Contre-pouvoir face aux médias des milliardaires.",
+        costSol: 350,
+        costMutual: 80,
+        costTime: 10,
+        effects: {commonsPower: 3, trust: 25, mutual: 40},
+        progress: 0,
+        target: 200,
+        stats: ["✍️ 15 journalistes", "👁️ 50K lecteurs", "🔓 100% indépendant"]
+      },
+      {
+        id: "banque",
+        name: "Banque Coopérative",
+        category: "Finance",
+        icon: "🏦",
+        desc: "L'argent au service des gens, pas l'inverse. Épargne éthique, crédit solidaire, 0 spéculation.",
+        costSol: 1500,
+        costMutual: 300,
+        costTime: 40,
+        effects: {commonsPower: 6, sol: 200, mutual: 150, trust: 60},
+        progress: 0,
+        target: 600,
+        stats: ["💰 2M€ dépôts", "🏠 Prêts solidaires", "📈 0 paradis fiscaux"]
+      }
+    ];
+
+    const PROPOSALS = [
+      {
+        id: "p1",
+        title: "Revenu de Base Universel",
+        desc: "Instaurer un revenu inconditionnel de 1000€/mois pour tous les citoyens, financé par la Taxe des Seigneurs.",
+        impact: {commonsPower: 8, arizonaPower: -8},
+        votesFor: 687,
+        votesAgainst: 412,
+        status: "active"
+      },
+      {
+        id: "p2",
+        title: "Nationalisation de l'Énergie",
+        desc: "Reprendre le contrôle public de la production et distribution d'énergie. Sortir du marché spéculatif.",
+        impact: {commonsPower: 6, arizonaPower: -6},
+        votesFor: 543,
+        votesAgainst: 389,
+        status: "active"
+      },
+      {
+        id: "p3",
+        title: "Semaine de 4 Jours",
+        desc: "Réduire le temps de travail à 32h/semaine sans perte de salaire. Partager l'emploi, vivre mieux.",
+        impact: {commonsPower: 4, arizonaPower: -4},
+        votesFor: 721,
+        votesAgainst: 298,
+        status: "active"
+      }
+    ];
+
+    const AID_OFFERS = [
+      {type: "offer", title: "Cours de jardinage", desc: "Je partage mes connaissances en permaculture", reward: 2, user: "Marie"},
+      {type: "offer", title: "Réparation vélo", desc: "Je répare votre vélo gratuitement", reward: 3, user: "Ahmed"},
+      {type: "request", title: "Aide déménagement", desc: "Cherche bras pour samedi prochain", reward: 4, user: "Sophie"},
+      {type: "offer", title: "Garde d'enfants", desc: "Disponible mercredi après-midi", reward: 3, user: "Lucas"},
+      {type: "request", title: "Cours de français", desc: "Nouveau arrivant cherche aide", reward: 2, user: "Youssef"},
+      {type: "offer", title: "Covoiturage Bruxelles", desc: "Trajet quotidien, 2 places", reward: 1, user: "Claire"}
+    ];
+
+    const ARIZONA_MARKET = [
+      {name: "Actions Engie", cost: 500, effect: "+50 SOL/cycle", desc: "Dividendes de l'énergie fossile"},
+      {name: "Assurance Premium", cost: 300, effect: "-Risques", desc: "Protection... pour ceux qui paient"},
+      {name: "Formation LinkedIn", cost: 200, effect: "+Employabilité", desc: "Optimisez votre personal branding"},
+      {name: "Crypto Spéculative", cost: 400, effect: "±200 SOL", desc: "Gagnez ou perdez, c'est le jeu"},
+      {name: "Coaching Mindset", cost: 250, effect: "+Productivité", desc: "Devenez votre propre entreprise"}
+    ];
+
+    const COMMONS_ACTIONS = [
+      {name: "Rejoindre une AG", icon: "🗣️", costTime: 2, effect: "+20 MUT, +10 TRS", desc: "Participer aux décisions"},
+      {name: "Donner du temps", icon: "⏱️", costTime: 4, effect: "+40 MUT, +1% Communs", desc: "Contribuer aux projets"},
+      {name: "Parrainer un membre", icon: "👥", costTrust: 20, effect: "+30 TRS, +50 MUT", desc: "Agrandir le réseau"},
+      {name: "Investir solidaire", icon: "💎", costSol: 200, effect: "+100 MUT, +2% Communs", desc: "Financer les Communs"},
+      {name: "Former les autres", icon: "📚", costTime: 6, effect: "+60 TRS, +80 MUT", desc: "Transmettre les savoirs"},
+      {name: "Documenter", icon: "✍️", costTime: 3, effect: "+30 TRS, +1% Communs", desc: "Écrire l'histoire"}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      initTabs();
+      renderAll();
+    });
+
+    function startGame() {
+      document.getElementById('modal-intro').classList.remove('active');
+      addEvent('commons', '🌱 Vous rejoignez le mouvement des Communs. La balance penche à 72% pour Arizona. Inversons la tendance !');
+    }
+
+    function initTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+      });
+    }
+
+    function renderAll() {
+      updateUI();
+      renderCommons();
+      renderProposals();
+      renderAidList();
+      renderArizonaMarket();
+      renderCommonsActions();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // UI UPDATE
+    // ═══════════════════════════════════════════════════════════════
+    function updateUI() {
+      // Currencies
+      document.getElementById('cur-sol').textContent = STATE.sol.toLocaleString();
+      document.getElementById('cur-mutual').textContent = STATE.mutual.toLocaleString();
+      document.getElementById('cur-time').textContent = STATE.time + 'h';
+      document.getElementById('cur-trust').textContent = STATE.trust.toLocaleString();
+      
+      // Balance
+      document.getElementById('arizona-power').textContent = STATE.arizonaPower + '%';
+      document.getElementById('commons-power').textContent = STATE.commonsPower + '%';
+      document.getElementById('pct-arizona').textContent = STATE.arizonaPower + '%';
+      document.getElementById('pct-commons').textContent = STATE.commonsPower + '%';
+      document.getElementById('balance-arizona').style.width = STATE.arizonaPower + '%';
+      document.getElementById('balance-commons').style.width = STATE.commonsPower + '%';
+      
+      // Network
+      document.getElementById('net-members').textContent = STATE.networkMembers.toLocaleString();
+      document.getElementById('net-exchanges').textContent = STATE.networkExchanges.toLocaleString();
+      document.getElementById('net-hours').textContent = STATE.networkHours.toLocaleString() + 'h';
+      document.getElementById('net-trust').textContent = STATE.networkTrust.toFixed(1);
+      
+      // Check victory
+      if (STATE.commonsPower >= 51) {
+        showVictory();
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER FUNCTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function renderCommons() {
+      const grid = document.getElementById('commons-grid');
+      grid.innerHTML = COMMONS.map(c => {
+        const owned = STATE.ownedCommons.includes(c.id);
+        return `
+          <div class="common-card ${owned ? 'owned' : ''}" onclick="investCommon('${c.id}')">
+            <div class="common-header">
+              <div class="common-icon">${c.icon}</div>
+              <div class="common-titles">
+                <h3>${c.name}</h3>
+                <p>${c.category}</p>
+              </div>
+            </div>
+            <div class="common-body">
+              <div class="common-desc">${c.desc}</div>
+              <div class="common-stats">
+                ${c.stats.map(s => `<span class="common-stat">${s}</span>`).join('')}
+              </div>
+              <div class="common-progress">
+                <div class="progress-header">
+                  <span>Développement</span>
+                  <span>${c.progress}/${c.target}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: ${(c.progress / c.target) * 100}%"></div>
+                </div>
+              </div>
+              <div class="common-cost">
+                <div class="cost-items">
+                  ${c.costSol ? `<span class="cost-item sol">🪙 ${c.costSol}</span>` : ''}
+                  ${c.costMutual ? `<span class="cost-item mutual">🤝 ${c.costMutual}</span>` : ''}
+                  ${c.costTime ? `<span class="cost-item time">⏱️ ${c.costTime}h</span>` : ''}
+                </div>
+                <button class="common-btn">${owned ? '✓ Soutenu' : 'Investir'}</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderProposals() {
+      const list = document.getElementById('proposals-list');
+      list.innerHTML = PROPOSALS.map(p => {
+        const voted = STATE.votedProposals.includes(p.id);
+        const total = p.votesFor + p.votesAgainst;
+        const forPct = Math.round((p.votesFor / total) * 100);
+        const againstPct = 100 - forPct;
+        
+        return `
+          <div class="proposal-card ${p.status === 'active' ? 'active' : ''}">
+            <div class="proposal-badge">${p.status === 'active' ? '🗳️ VOTE EN COURS' : '✓ ADOPTÉ'}</div>
+            <div class="proposal-title">${p.title}</div>
+            <div class="proposal-desc">${p.desc}</div>
+            <div class="proposal-impact">
+              <div class="impact-item">
+                <div class="impact-value positive">+${p.impact.commonsPower}%</div>
+                <div class="impact-label">Communs</div>
+              </div>
+              <div class="impact-item">
+                <div class="impact-value negative">${p.impact.arizonaPower}%</div>
+                <div class="impact-label">Arizona</div>
+              </div>
+            </div>
+            <div class="vote-section">
+              <div class="vote-bar">
+                <div class="vote-for" style="width: ${forPct}%"></div>
+                <div class="vote-against" style="width: ${againstPct}%"></div>
+              </div>
+              <div class="vote-count">${forPct}% Pour</div>
+              <div class="vote-buttons">
+                <button class="vote-btn for" onclick="vote('${p.id}', 'for')" ${voted ? 'disabled' : ''}>Pour</button>
+                <button class="vote-btn against" onclick="vote('${p.id}', 'against')" ${voted ? 'disabled' : ''}>Contre</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAidList() {
+      const list = document.getElementById('aid-list');
+      list.innerHTML = AID_OFFERS.map(a => `
+        <div class="aid-card ${a.type}" onclick="respondAid('${a.title}', ${a.reward})">
+          <div class="aid-header">
+            <span class="aid-type ${a.type}">${a.type === 'offer' ? '🎁 Offre' : '🙏 Demande'}</span>
+            <span class="aid-time">par ${a.user}</span>
+          </div>
+          <div class="aid-title">${a.title}</div>
+          <div class="aid-desc">${a.desc}</div>
+          <div class="aid-reward">⏱️ ${a.reward}h</div>
+        </div>
+      `).join('');
+    }
+
+    function renderArizonaMarket() {
+      const container = document.getElementById('arizona-market');
+      container.innerHTML = ARIZONA_MARKET.map(item => `
+        <div class="arizona-item" onclick="buyArizona('${item.name}', ${item.cost})">
+          <div class="arizona-item-header">
+            <span class="arizona-item-name">${item.name}</span>
+            <span class="arizona-item-cost">${item.cost} SOL</span>
+          </div>
+          <div class="arizona-item-desc">${item.desc}</div>
+          <div class="arizona-item-effect">${item.effect}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderCommonsActions() {
+      const container = document.getElementById('commons-actions');
+      container.innerHTML = COMMONS_ACTIONS.map(a => `
+        <div class="commons-item" onclick="doCommonsAction('${a.name}', ${a.costTime || 0}, ${a.costTrust || 0}, ${a.costSol || 0})">
+          <div class="commons-item-header">
+            <span class="commons-item-name">${a.icon} ${a.name}</span>
+            <div class="commons-item-cost">
+              ${a.costTime ? `<span style="color: var(--time)">⏱️${a.costTime}h</span>` : ''}
+              ${a.costTrust ? `<span style="color: var(--trust)">💎${a.costTrust}</span>` : ''}
+              ${a.costSol ? `<span style="color: var(--sol)">🪙${a.costSol}</span>` : ''}
+            </div>
+          </div>
+          <div class="commons-item-desc">${a.desc}</div>
+          <div class="commons-item-effect">${a.effect}</div>
+        </div>
+      `).join('');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // GAME ACTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function investCommon(id) {
+      const common = COMMONS.find(c => c.id === id);
+      if (!common) return;
+      
+      if (STATE.ownedCommons.includes(id)) {
+        toast(`Vous soutenez déjà ${common.name}`, 'neutral');
+        return;
+      }
+      
+      if (STATE.sol < common.costSol || STATE.mutual < common.costMutual || STATE.time < common.costTime) {
+        toast('Ressources insuffisantes !', 'arizona');
+        return;
+      }
+      
+      // Pay
+      STATE.sol -= common.costSol;
+      STATE.mutual -= common.costMutual;
+      STATE.time -= common.costTime;
+      
+      // Gain
+      STATE.ownedCommons.push(id);
+      common.progress += 20;
+      
+      if (common.effects.commonsPower) shiftBalance(common.effects.commonsPower);
+      if (common.effects.mutual) STATE.mutual += common.effects.mutual;
+      if (common.effects.trust) STATE.trust += common.effects.trust;
+      if (common.effects.time) STATE.time += common.effects.time;
+      if (common.effects.sol) STATE.sol += common.effects.sol;
+      
+      STATE.networkExchanges++;
+      
+      addEvent('commons', `🌱 Vous avez investi dans ${common.name} ! Les Communs grandissent.`);
+      toast(`${common.name} rejoint !`, 'commons');
+      renderAll();
+    }
+
+    function vote(proposalId, direction) {
+      const proposal = PROPOSALS.find(p => p.id === proposalId);
+      if (!proposal || STATE.votedProposals.includes(proposalId)) return;
+      
+      STATE.votedProposals.push(proposalId);
+      
+      if (direction === 'for') {
+        proposal.votesFor += 1;
+        STATE.trust += 10;
+        shiftBalance(0.5);
+        addEvent('commons', `🗳️ Vous avez voté POUR "${proposal.title}"`);
+      } else {
+        proposal.votesAgainst += 1;
+        addEvent('neutral', `🗳️ Vous avez voté CONTRE "${proposal.title}"`);
+      }
+      
+      toast('Vote enregistré !', 'commons');
+      renderAll();
+    }
+
+    function respondAid(title, hours) {
+      if (STATE.time < hours) {
+        toast('Pas assez d\'heures !', 'arizona');
+        return;
+      }
+      
+      STATE.time -= hours;
+      STATE.mutual += hours * 15;
+      STATE.trust += hours * 5;
+      STATE.networkExchanges++;
+      STATE.networkHours += hours;
+      
+      shiftBalance(0.3);
+      
+      addEvent('commons', `🤝 Entraide : "${title}" (+${hours * 15} MUT, +${hours * 5} TRS)`);
+      toast('Merci pour votre solidarité !', 'commons');
+      renderAll();
+    }
+
+    function buyArizona(name, cost) {
+      if (STATE.sol < cost) {
+        toast('Pas assez de SOL !', 'arizona');
+        return;
+      }
+      
+      STATE.sol -= cost;
+      // Arizona purchases don't help the commons
+      shiftBalance(-0.2);
+      
+      addEvent('arizona', `🏛️ Achat Arizona : ${name} (-${cost} SOL)`);
+      toast(`${name} acheté`, 'arizona');
+      renderAll();
+    }
+
+    function doCommonsAction(name, costTime, costTrust, costSol) {
+      if (STATE.time < costTime || STATE.trust < costTrust || STATE.sol < costSol) {
+        toast('Ressources insuffisantes !', 'arizona');
+        return;
+      }
+      
+      STATE.time -= costTime;
+      STATE.trust -= costTrust;
+      STATE.sol -= costSol;
+      
+      // Benefits
+      STATE.mutual += 30;
+      STATE.trust += 15;
+      STATE.networkExchanges++;
+      
+      shiftBalance(0.5);
+      
+      addEvent('commons', `🌱 Action : ${name}`);
+      toast(`${name} accompli !`, 'commons');
+      renderAll();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BALANCE
+    // ═══════════════════════════════════════════════════════════════
+    function shiftBalance(amount) {
+      STATE.commonsPower = Math.min(100, Math.max(0, STATE.commonsPower + amount));
+      STATE.arizonaPower = 100 - STATE.commonsPower;
+      
+      if (amount > 0 && STATE.commonsPower % 5 === 0) {
+        addEvent('commons', `📊 Les Communs atteignent ${STATE.commonsPower}% !`);
+      }
+    }
+
+    function showVictory() {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay active';
+      overlay.innerHTML = `
+        <div class="modal" style="border-color: var(--commons-secondary);">
+          <div class="modal-icon">🎉</div>
+          <div class="modal-title" style="color: var(--commons-secondary);">VICTOIRE DES COMMUNS !</div>
+          <div class="modal-text">
+            La balance a basculé !<br><br>
+            Les Communs représentent maintenant <strong>${STATE.commonsPower}%</strong> de l'économie.<br><br>
+            L'Économie Arizona perd son hégémonie. Un nouveau monde est possible.<br><br>
+            <em>"Il n'y a pas de fatalité. Il n'y a que des choix collectifs."</em>
+          </div>
+          <div class="modal-buttons">
+            <button class="modal-btn primary" onclick="this.closest('.modal-overlay').remove()">Continuer à Construire</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // EVENTS & TOASTS
+    // ═══════════════════════════════════════════════════════════════
+    function addEvent(type, text) {
+      const log = document.getElementById('timeline-log');
+      const time = `Cycle ${STATE.cycle} — ${new Date().toLocaleTimeString('fr-BE')}`;
+      
+      const el = document.createElement('div');
+      el.className = 'event-item ' + type;
+      el.innerHTML = `
+        <div class="event-time">${time}</div>
+        <div class="event-text">${text}</div>
+      `;
+      
+      log.insertBefore(el, log.firstChild);
+      
+      while (log.children.length > 50) {
+        log.removeChild(log.lastChild);
+      }
+      
+      STATE.cycle++;
+    }
+
+    function toast(msg, type = 'neutral') {
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = msg;
+      document.getElementById('toasts').appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+  </script>
+</body>
+</html>

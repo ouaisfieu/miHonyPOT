@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAIDOYER CITOYEN · Poste de Travail Pro</title>
+    <meta name="description" content="Outil de référence pour la participation citoyenne - 15 outils méthodologiques VOIR-JUGER-AGIR">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root {
+    --ink:#0a192f;--ink-light:#1d3557;--paper:#f8f4ed;--paper-cool:#f0f4f8;
+    --civic-blue:#457b9d;--civic-blue-lt:#a8dadc;--civic-green:#2a9d8f;
+    --civic-red:#e63946;--civic-gold:#e9c46a;--civic-orange:#f4a261;
+    --civic-purple:#7b2cbf;--phase-voir:#2a9d8f;--phase-juger:#e9c46a;--phase-agir:#e76f51;
+    --text:#1a1a2e;--text-muted:#718096;--border:rgba(26,26,46,0.12);
+    --shadow:0 4px 12px rgba(26,26,46,0.08);--radius:12px;
+    --font-display:'Fraunces',Georgia,serif;--font-body:'Source Sans 3',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--paper);color:var(--text);min-height:100vh;display:grid;grid-template-columns:280px 1fr;grid-template-rows:60px 1fr}
+body.dark{--paper:#0a192f;--paper-cool:#112240;--text:#e6f1ff;--text-muted:#8892b0;--border:rgba(230,241,255,0.1)}
+.sidebar{grid-row:1/-1;background:var(--ink);display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.05)}
+.sidebar-header{padding:1.25rem;display:flex;align-items:center;gap:0.75rem}
+.logo{width:44px;height:44px;background:linear-gradient(135deg,var(--civic-blue),var(--civic-green));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:0 4px 20px rgba(42,157,143,0.4)}
+.brand-title{font-family:var(--font-display);font-weight:700;font-size:1rem;color:#fff}
+.brand-sub{font-size:0.65rem;color:var(--civic-blue-lt);text-transform:uppercase;letter-spacing:0.1em}
+.nav{flex:1;padding:0.75rem;overflow-y:auto}
+.nav-group{margin-bottom:1.5rem}
+.nav-label{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35);padding:0 0.75rem;margin-bottom:0.4rem}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.75rem;border-radius:8px;cursor:pointer;color:rgba(255,255,255,0.7);transition:all 0.15s}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff}
+.nav-item.active{background:rgba(69,123,157,0.2);color:var(--civic-blue-lt)}
+.nav-icon{font-size:1.1rem;width:24px;text-align:center}
+.nav-text{font-size:0.85rem;font-weight:500}
+.header{background:var(--paper);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;gap:1rem}
+.page-title{font-family:var(--font-display);font-size:1.25rem;font-weight:600;display:flex;align-items:center;gap:0.5rem}
+.search-box{flex:1;max-width:400px;display:flex;align-items:center;gap:0.5rem;background:var(--paper-cool);border:1px solid var(--border);border-radius:20px;padding:0.4rem 1rem}
+.search-box input{flex:1;border:none;background:transparent;font-size:0.85rem;color:var(--text);outline:none}
+.header-btns{display:flex;gap:0.4rem}
+.hdr-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--paper);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.15s}
+.hdr-btn:hover{border-color:var(--civic-blue);color:var(--text)}
+.hdr-btn.primary{background:var(--civic-blue);border-color:var(--civic-blue);color:#fff}
+.main{overflow:hidden}
+.content{height:100%;overflow-y:auto;padding:1.5rem}
+.view{display:none;animation:fadeIn 0.3s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{background:linear-gradient(135deg,var(--ink) 0%,var(--ink-light) 100%);border-radius:20px;padding:2.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(ellipse,rgba(42,157,143,0.2) 0%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;max-width:550px}
+.hero-tag{font-size:0.75rem;color:var(--civic-blue-lt);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+.hero-title{font-family:var(--font-display);font-size:1.75rem;font-weight:700;color:#fff;line-height:1.25;margin-bottom:0.5rem}
+.hero-desc{font-size:0.95rem;color:rgba(255,255,255,0.7);line-height:1.6}
+.hero-actions{margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.65rem 1.25rem;border-radius:10px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none}
+.btn-primary{background:var(--civic-green);color:#fff}
+.btn-primary:hover{background:#238b7e;transform:translateY(-2px);box-shadow:0 6px 16px rgba(42,157,143,0.3)}
+.btn-secondary{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.btn-secondary:hover{background:rgba(255,255,255,0.15)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;display:flex;align-items:flex-start;gap:0.75rem;box-shadow:var(--shadow)}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.stat-icon.blue{background:rgba(69,123,157,0.12);color:var(--civic-blue)}
+.stat-icon.green{background:rgba(42,157,143,0.12);color:var(--civic-green)}
+.stat-icon.orange{background:rgba(244,162,97,0.12);color:var(--civic-orange)}
+.stat-icon.purple{background:rgba(123,44,191,0.12);color:var(--civic-purple)}
+.stat-val{font-family:var(--font-display);font-size:1.5rem;font-weight:700;line-height:1}
+.stat-label{font-size:0.75rem;color:var(--text-muted);margin-top:0.15rem}
+.section-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;margin-bottom:1rem}
+.tools-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:1rem}
+.tools-filter{display:flex;gap:0.4rem}
+.filter-btn{padding:0.45rem 0.9rem;border-radius:8px;border:1px solid var(--border);background:var(--paper);color:var(--text-muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.15s}
+.filter-btn:hover{border-color:var(--text-muted)}
+.filter-btn.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.filter-btn[data-phase="voir"].active{background:var(--phase-voir);border-color:var(--phase-voir)}
+.filter-btn[data-phase="juger"].active{background:var(--phase-juger);border-color:var(--phase-juger);color:var(--ink)}
+.filter-btn[data-phase="agir"].active{background:var(--phase-agir);border-color:var(--phase-agir)}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.tool-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.tool-card.voir::before{background:var(--phase-voir)}
+.tool-card.juger::before{background:var(--phase-juger)}
+.tool-card.agir::before{background:var(--phase-agir)}
+.tool-card:hover{border-color:var(--civic-blue);box-shadow:var(--shadow);transform:translateY(-3px)}
+.tool-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem}
+.tool-num{font-family:var(--font-mono);font-size:0.65rem;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--paper-cool);color:var(--text-muted)}
+.tool-phase{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;padding:3px 8px;border-radius:4px}
+.tool-phase.voir{background:rgba(42,157,143,0.12);color:var(--phase-voir)}
+.tool-phase.juger{background:rgba(233,196,106,0.2);color:#b8941c}
+.tool-phase.agir{background:rgba(231,111,81,0.12);color:var(--phase-agir)}
+.tool-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:0.75rem}
+.tool-card.voir .tool-icon{background:linear-gradient(135deg,rgba(42,157,143,0.15) 0%,rgba(42,157,143,0.05) 100%)}
+.tool-card.juger .tool-icon{background:linear-gradient(135deg,rgba(233,196,106,0.2) 0%,rgba(233,196,106,0.05) 100%)}
+.tool-card.agir .tool-icon{background:linear-gradient(135deg,rgba(231,111,81,0.15) 0%,rgba(231,111,81,0.05) 100%)}
+.tool-name{font-family:var(--font-display);font-weight:700;font-size:1.05rem;margin-bottom:0.35rem;line-height:1.3}
+.tool-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.5;flex:1}
+.tool-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+.tool-status{font-size:0.7rem;color:var(--text-muted)}
+.tool-status.done{color:var(--civic-green)}
+.tool-action{font-size:0.75rem;font-weight:600;color:var(--civic-blue)}
+.editor-layout{display:grid;grid-template-columns:240px 1fr 280px;gap:1rem;height:calc(100vh - 60px - 3rem)}
+.editor-panel{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
+.panel-header{padding:0.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-weight:700;font-size:0.85rem}
+.panel-content{flex:1;overflow-y:auto;padding:0.5rem}
+.doc-item{display:flex;align-items:center;gap:0.65rem;padding:0.6rem;border-radius:6px;cursor:pointer;transition:all 0.15s;margin-bottom:2px}
+.doc-item:hover{background:var(--paper-cool)}
+.doc-item.active{background:rgba(69,123,157,0.1)}
+.doc-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.doc-icon.md{background:#e3f2fd;color:#1976d2}
+.doc-icon.json{background:#fff3e0;color:#f57c00}
+.doc-name{font-weight:600;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-meta{font-size:0.65rem;color:var(--text-muted)}
+.editor-toolbar{display:flex;align-items:center;gap:0.4rem;padding:0.6rem 0.75rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.toolbar-group{display:flex;align-items:center;gap:2px;padding-right:0.6rem;border-right:1px solid var(--border)}
+.toolbar-group:last-child{border-right:none}
+.tb-btn{width:28px;height:28px;border-radius:4px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all 0.15s}
+.tb-btn:hover{background:var(--paper-cool);color:var(--text)}
+.tb-btn.active{background:var(--civic-blue);color:#fff}
+.editor-area{flex:1;padding:1.25rem;overflow-y:auto}
+.editor-textarea{width:100%;height:100%;border:none;background:transparent;font-family:var(--font-body);font-size:0.95rem;line-height:1.8;color:var(--text);resize:none;outline:none}
+.editor-preview{display:none}
+.editor-preview h1{font-family:var(--font-display);font-size:1.75rem;margin-bottom:0.75rem}
+.editor-preview h2{font-family:var(--font-display);font-size:1.35rem;margin:1.25rem 0 0.6rem;color:var(--civic-blue)}
+.editor-preview h3{font-family:var(--font-display);font-size:1.1rem;margin:1rem 0 0.4rem}
+.editor-preview p{margin-bottom:0.85rem}
+.editor-preview ul,.editor-preview ol{margin-bottom:0.85rem;padding-left:1.25rem}
+.editor-preview li{margin-bottom:0.35rem}
+.editor-preview blockquote{border-left:3px solid var(--civic-blue);padding-left:1rem;margin:1rem 0;color:var(--text-muted);font-style:italic}
+.editor-preview code{font-family:var(--font-mono);background:var(--paper-cool);padding:2px 5px;border-radius:4px;font-size:0.85em}
+.editor-preview pre{background:var(--ink);color:#fff;padding:1rem;border-radius:8px;overflow-x:auto;margin:1rem 0}
+.editor-preview pre code{background:transparent;padding:0}
+.editor-footer{padding:0.4rem 0.75rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted)}
+.prop-group{margin-bottom:1rem}
+.prop-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);margin-bottom:0.35rem}
+.prop-input{width:100%;padding:0.5rem 0.65rem;border:1px solid var(--border);border-radius:6px;background:var(--paper);color:var(--text);font-size:0.8rem;transition:all 0.15s}
+.prop-input:focus{outline:none;border-color:var(--civic-blue)}
+.io-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:1.25rem}
+.io-section{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.io-header{display:flex;align-items:center;gap:0.65rem;margin-bottom:1rem}
+.io-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.io-icon.import{background:rgba(69,123,157,0.12);color:var(--civic-blue)}
+.io-icon.export{background:rgba(42,157,143,0.12);color:var(--civic-green)}
+.io-title{font-family:var(--font-display);font-weight:700;font-size:1.05rem}
+.io-subtitle{font-size:0.75rem;color:var(--text-muted)}
+.drop-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center;transition:all 0.15s;cursor:pointer}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--civic-blue);background:rgba(69,123,157,0.04)}
+.drop-icon{font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5}
+.drop-title{font-weight:600;margin-bottom:0.35rem}
+.drop-hint{font-size:0.8rem;color:var(--text-muted)}
+.formats{display:flex;justify-content:center;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap}
+.format{font-family:var(--font-mono);font-size:0.65rem;font-weight:600;padding:3px 6px;background:var(--paper-cool);border-radius:4px;color:var(--text-muted)}
+.export-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem}
+.export-opt{display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;text-align:center}
+.export-opt:hover{border-color:var(--civic-blue);background:rgba(69,123,157,0.04);transform:translateY(-2px)}
+.export-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.export-opt.pdf .export-icon{background:#ffebee;color:#d32f2f}
+.export-opt.docx .export-icon{background:#e3f2fd;color:#1976d2}
+.export-opt.json .export-icon{background:#fff3e0;color:#f57c00}
+.export-opt.md .export-icon{background:#f3e5f5;color:#7b1fa2}
+.export-opt.csv .export-icon{background:#e8f5e9;color:#388e3c}
+.export-opt.html .export-icon{background:#fce4ec;color:#c2185b}
+.export-name{font-weight:700;font-size:0.9rem}
+.export-desc{font-size:0.7rem;color:var(--text-muted)}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,25,47,0.8);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:all 0.25s}
+.modal-overlay.active{opacity:1;visibility:visible}
+.modal{background:var(--paper);border-radius:16px;max-width:800px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;transform:scale(0.95) translateY(16px);transition:transform 0.25s;box-shadow:0 24px 64px rgba(10,25,47,0.25)}
+.modal-overlay.active .modal{transform:scale(1) translateY(0)}
+.modal-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:var(--font-display);font-weight:700;font-size:1.15rem;display:flex;align-items:center;gap:0.65rem}
+.modal-close{width:36px;height:36px;border-radius:8px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all 0.15s}
+.modal-close:hover{background:var(--paper-cool);color:var(--text)}
+.modal-body{flex:1;overflow-y:auto;padding:1.25rem}
+.modal-footer{padding:0.85rem 1.25rem;border-top:1px solid var(--border);display:flex;justify-content:space-between}
+.form-group{margin-bottom:1.15rem}
+.form-label{display:block;font-weight:600;font-size:0.85rem;margin-bottom:0.4rem}
+.form-input,.form-textarea,.form-select{width:100%;padding:0.65rem 0.85rem;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--text);font-family:inherit;font-size:0.9rem;transition:all 0.15s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--civic-blue);box-shadow:0 0 0 3px rgba(69,123,157,0.1)}
+.form-textarea{min-height:100px;resize:vertical;line-height:1.65}
+.form-row{display:grid;grid-template-columns:repeat(2,1fr);gap:0.85rem}
+.list-container{margin-bottom:0.5rem}
+.list-item{display:flex;gap:0.4rem;margin-bottom:0.35rem}
+.list-item input{flex:1}
+.list-item button{width:32px;padding:0}
+.toast-container{position:fixed;bottom:1.25rem;right:1.25rem;z-index:2000;display:flex;flex-direction:column;gap:0.6rem}
+.toast{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;box-shadow:0 12px 32px rgba(10,25,47,0.15);display:flex;align-items:center;gap:0.65rem;min-width:280px;max-width:380px;animation:slideIn 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes slideIn{from{opacity:0;transform:translateX(80px)}to{opacity:1;transform:translateX(0)}}
+.toast-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.toast.success .toast-icon{background:rgba(42,157,143,0.12);color:var(--civic-green)}
+.toast.error .toast-icon{background:rgba(230,57,70,0.12);color:var(--civic-red)}
+.toast.info .toast-icon{background:rgba(69,123,157,0.12);color:var(--civic-blue)}
+.toast-content{flex:1;min-width:0}
+.toast-title{font-weight:600;font-size:0.85rem}
+.toast-msg{font-size:0.75rem;color:var(--text-muted);margin-top:1px}
+.toast-close{width:24px;height:24px;border-radius:4px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.toast-close:hover{background:var(--paper-cool)}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;text-align:center}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:0.3}
+.empty-title{font-family:var(--font-display);font-weight:700;font-size:1.15rem;margin-bottom:0.4rem}
+.empty-desc{font-size:0.85rem;color:var(--text-muted);max-width:350px;margin-bottom:1rem}
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+.quick-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:1.15rem;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;gap:0.65rem}
+.quick-card:hover{border-color:var(--civic-blue);box-shadow:var(--shadow);transform:translateY(-2px)}
+.quick-header{display:flex;align-items:center;justify-content:space-between}
+.quick-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.quick-arrow{color:var(--text-muted);font-size:1.1rem;transition:transform 0.15s}
+.quick-card:hover .quick-arrow{transform:translateX(3px);color:var(--civic-blue)}
+.quick-title{font-weight:700;font-size:0.95rem}
+.quick-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.5}
+.sidebar-footer{padding:0.75rem;border-top:1px solid rgba(255,255,255,0.05)}
+.sidebar-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.35rem;text-align:center}
+.s-stat{padding:0.4rem;border-radius:6px;background:rgba(255,255,255,0.03)}
+.s-val{font-family:var(--font-mono);font-size:1rem;font-weight:600;color:var(--civic-blue-lt)}
+.s-label{font-size:0.55rem;color:rgba(255,255,255,0.4);text-transform:uppercase}
+@media(max-width:1100px){.editor-layout{grid-template-columns:200px 1fr}.editor-layout>:last-child{display:none}}
+@media(max-width:800px){body{grid-template-columns:1fr}.sidebar{display:none}.header{padding:0 1rem}.content{padding:1rem}.tools-grid{grid-template-columns:1fr}.io-grid{grid-template-columns:1fr}.editor-layout{grid-template-columns:1fr}.editor-layout>:first-child{display:none}}
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">⚖️</div>
+        <div><div class="brand-title">Plaidoyer Citoyen</div><div class="brand-sub">Poste de Travail</div></div>
+    </div>
+    <nav class="nav">
+        <div class="nav-group">
+            <div class="nav-label">Général</div>
+            <div class="nav-item active" data-view="dashboard"><span class="nav-icon">🏠</span><span class="nav-text">Tableau de bord</span></div>
+            <div class="nav-item" data-view="tools"><span class="nav-icon">🧰</span><span class="nav-text">15 Outils</span></div>
+            <div class="nav-item" data-view="projects"><span class="nav-icon">📁</span><span class="nav-text">Mes Projets</span></div>
+        </div>
+        <div class="nav-group">
+            <div class="nav-label">Production</div>
+            <div class="nav-item" data-view="editor"><span class="nav-icon">✏️</span><span class="nav-text">Éditeur</span></div>
+            <div class="nav-item" data-view="io"><span class="nav-icon">📥</span><span class="nav-text">Import/Export</span></div>
+        </div>
+        <div class="nav-group">
+            <div class="nav-label">Ressources</div>
+            <div class="nav-item" data-view="library"><span class="nav-icon">📚</span><span class="nav-text">Bibliothèque</span></div>
+            <div class="nav-item" data-view="help"><span class="nav-icon">❓</span><span class="nav-text">Aide</span></div>
+        </div>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="sidebar-stats">
+            <div class="s-stat"><div class="s-val" id="s-proj">0</div><div class="s-label">Projets</div></div>
+            <div class="s-stat"><div class="s-val" id="s-docs">0</div><div class="s-label">Docs</div></div>
+            <div class="s-stat"><div class="s-val" id="s-tools">0</div><div class="s-label">Outils</div></div>
+        </div>
+    </div>
+</aside>
+<header class="header">
+    <h1 class="page-title"><span id="pg-icon">🏠</span> <span id="pg-text">Tableau de bord</span></h1>
+    <div class="search-box"><span>🔍</span><input type="text" placeholder="Rechercher..." id="search"></div>
+    <div class="header-btns">
+        <button class="hdr-btn" id="btn-new" title="Nouveau">➕</button>
+        <button class="hdr-btn" id="btn-theme" title="Thème">🌓</button>
+        <button class="hdr-btn primary" id="btn-save" title="Sauvegarder">💾</button>
+    </div>
+</header>
+<main class="main">
+<div class="content">
+<!-- DASHBOARD -->
+<div class="view active" id="view-dashboard">
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">Bienvenue sur votre espace</div>
+            <h2 class="hero-title">Transformez vos idées en actions citoyennes</h2>
+            <p class="hero-desc">Utilisez les 15 outils méthodologiques VOIR-JUGER-AGIR pour construire votre stratégie de plaidoyer.</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="showView('tools')">🧰 Explorer les outils</button>
+                <button class="btn btn-secondary" onclick="createProject()">➕ Nouveau projet</button>
+            </div>
+        </div>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon blue">📁</div><div><div class="stat-val" id="d-proj">0</div><div class="stat-label">Projets actifs</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-val" id="d-tools">0</div><div class="stat-label">Outils complétés</div></div></div>
+        <div class="stat-card"><div class="stat-icon orange">📝</div><div><div class="stat-val" id="d-docs">0</div><div class="stat-label">Documents</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple">🎯</div><div><div class="stat-val" id="d-actors">0</div><div class="stat-label">Acteurs</div></div></div>
+    </div>
+    <h3 class="section-title">Actions rapides</h3>
+    <div class="quick-grid">
+        <div class="quick-card" onclick="openTool(1)"><div class="quick-header"><div class="quick-icon" style="background:rgba(42,157,143,0.12)">🎯</div><span class="quick-arrow">→</span></div><div class="quick-title">Définir ma vision</div><div class="quick-desc">Utilisez le Domino du changement pour clarifier vos objectifs.</div></div>
+        <div class="quick-card" onclick="openTool(4)"><div class="quick-header"><div class="quick-icon" style="background:rgba(42,157,143,0.12)">🗺️</div><span class="quick-arrow">→</span></div><div class="quick-title">Cartographier les acteurs</div><div class="quick-desc">Identifiez alliés, opposants et cibles de votre plaidoyer.</div></div>
+        <div class="quick-card" onclick="openTool(8)"><div class="quick-header"><div class="quick-icon" style="background:rgba(233,196,106,0.12)">🌳</div><span class="quick-arrow">→</span></div><div class="quick-title">Analyser le problème</div><div class="quick-desc">Construisez votre arbre à problème (causes/effets).</div></div>
+        <div class="quick-card" onclick="openTool(13)"><div class="quick-header"><div class="quick-icon" style="background:rgba(231,111,81,0.12)">💬</div><span class="quick-arrow">→</span></div><div class="quick-title">Construire mon message</div><div class="quick-desc">Élaborez un message percutant en 5 composants.</div></div>
+    </div>
+</div>
+<!-- TOOLS -->
+<div class="view" id="view-tools">
+    <div class="tools-header">
+        <h2 class="section-title">Les 15 Outils du Plaidoyer Citoyen</h2>
+        <div class="tools-filter">
+            <button class="filter-btn active" data-phase="all">Tous</button>
+            <button class="filter-btn" data-phase="voir">👁️ VOIR</button>
+            <button class="filter-btn" data-phase="juger">⚖️ JUGER</button>
+            <button class="filter-btn" data-phase="agir">🚀 AGIR</button>
+        </div>
+    </div>
+    <div class="tools-grid" id="tools-grid"></div>
+</div>
+<!-- EDITOR -->
+<div class="view" id="view-editor">
+    <div class="editor-layout">
+        <div class="editor-panel">
+            <div class="panel-header"><span class="panel-title">Documents</span><button class="btn btn-primary" style="padding:0.4rem 0.75rem;font-size:0.75rem" onclick="createDoc()">+ Nouveau</button></div>
+            <div class="panel-content" id="docs-list"></div>
+        </div>
+        <div class="editor-panel">
+            <div class="editor-toolbar">
+                <div class="toolbar-group">
+                    <select class="prop-input" style="width:auto;padding:0.35rem" id="fmt-block"><option value="p">Paragraphe</option><option value="h1">Titre 1</option><option value="h2">Titre 2</option><option value="h3">Titre 3</option></select>
+                </div>
+                <div class="toolbar-group">
+                    <button class="tb-btn" data-cmd="bold" title="Gras">𝐁</button>
+                    <button class="tb-btn" data-cmd="italic" title="Italique">𝐼</button>
+                    <button class="tb-btn" data-cmd="underline" title="Souligné">U̲</button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="tb-btn" data-cmd="insertUnorderedList" title="Liste">•</button>
+                    <button class="tb-btn" data-cmd="insertOrderedList" title="Numérotée">1.</button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="tb-btn" id="btn-preview" title="Aperçu">👁️</button>
+                </div>
+            </div>
+            <div class="editor-area">
+                <textarea class="editor-textarea" id="editor-txt" placeholder="Commencez à écrire...
+
+# Mon Document
+
+Utilisez la syntaxe **Markdown** pour formater votre texte.
+
+## Section
+
+- Point 1
+- Point 2
+
+> Citation importante"></textarea>
+                <div class="editor-preview" id="editor-prev"></div>
+            </div>
+            <div class="editor-footer"><span id="ed-stats">0 mots</span><span id="ed-saved">Non sauvegardé</span></div>
+        </div>
+        <div class="editor-panel">
+            <div class="panel-header"><span class="panel-title">Propriétés</span></div>
+            <div class="panel-content" style="padding:0.75rem">
+                <div class="prop-group"><div class="prop-label">Titre</div><input type="text" class="prop-input" id="doc-title" placeholder="Sans titre"></div>
+                <div class="prop-group"><div class="prop-label">Projet</div><select class="prop-input" id="doc-proj"><option value="">Aucun</option></select></div>
+                <div class="prop-group"><div class="prop-label">Tags</div><input type="text" class="prop-input" id="doc-tags" placeholder="tag1, tag2..."></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- IMPORT/EXPORT -->
+<div class="view" id="view-io">
+    <h2 class="section-title" style="margin-bottom:1rem">Import/Export Multiformats</h2>
+    <div class="io-grid">
+        <div class="io-section">
+            <div class="io-header"><div class="io-icon import">📥</div><div><div class="io-title">Importer</div><div class="io-subtitle">Glissez-déposez vos fichiers</div></div></div>
+            <div class="drop-zone" id="drop-zone">
+                <div class="drop-icon">📄</div>
+                <div class="drop-title">Déposez vos fichiers ici</div>
+                <div class="drop-hint">ou cliquez pour parcourir</div>
+                <div class="formats"><span class="format">.PDF</span><span class="format">.DOCX</span><span class="format">.TXT</span><span class="format">.MD</span><span class="format">.JSON</span><span class="format">.CSV</span></div>
+                <input type="file" id="file-input" multiple accept=".pdf,.docx,.txt,.md,.json,.csv" style="display:none">
+            </div>
+        </div>
+        <div class="io-section">
+            <div class="io-header"><div class="io-icon export">📤</div><div><div class="io-title">Exporter</div><div class="io-subtitle">Choisissez le format</div></div></div>
+            <div class="export-grid">
+                <div class="export-opt pdf" onclick="exportAs('pdf')"><div class="export-icon">📕</div><div class="export-name">PDF</div><div class="export-desc">Document portable</div></div>
+                <div class="export-opt docx" onclick="exportAs('docx')"><div class="export-icon">📘</div><div class="export-name">Word</div><div class="export-desc">Modifiable</div></div>
+                <div class="export-opt json" onclick="exportAs('json')"><div class="export-icon">📙</div><div class="export-name">JSON</div><div class="export-desc">Données complètes</div></div>
+                <div class="export-opt md" onclick="exportAs('md')"><div class="export-icon">📓</div><div class="export-name">Markdown</div><div class="export-desc">Texte formaté</div></div>
+                <div class="export-opt csv" onclick="exportAs('csv')"><div class="export-icon">📗</div><div class="export-name">CSV</div><div class="export-desc">Tableur</div></div>
+                <div class="export-opt html" onclick="exportAs('html')"><div class="export-icon">🌐</div><div class="export-name">HTML</div><div class="export-desc">Page web</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PROJECTS -->
+<div class="view" id="view-projects">
+    <div class="tools-header"><h2 class="section-title">Mes Projets</h2><button class="btn btn-primary" onclick="createProject()">➕ Nouveau Projet</button></div>
+    <div class="tools-grid" id="proj-grid"></div>
+    <div class="empty" id="proj-empty"><div class="empty-icon">📁</div><div class="empty-title">Aucun projet</div><div class="empty-desc">Créez votre premier projet de plaidoyer.</div><button class="btn btn-primary" onclick="createProject()">➕ Créer</button></div>
+</div>
+<!-- LIBRARY -->
+<div class="view" id="view-library">
+    <h2 class="section-title" style="margin-bottom:1rem">📚 Ressources</h2>
+    <div class="tools-grid">
+        <div class="tool-card" onclick="window.open('https://www.justicepaix.be','_blank')"><div class="tool-icon" style="background:rgba(69,123,157,0.12)">📕</div><div class="tool-name">Guide du Plaidoyer Citoyen</div><div class="tool-desc">Justice & Paix - Les 15 outils VOIR-JUGER-AGIR</div></div>
+        <div class="tool-card" onclick="window.open('https://voxpublic.org','_blank')"><div class="tool-icon" style="background:rgba(42,157,143,0.12)">🗣️</div><div class="tool-name">VoxPublic</div><div class="tool-desc">Guides méthodologiques de cartographie et plaidoyer</div></div>
+        <div class="tool-card" onclick="window.open('https://framasoft.org','_blank')"><div class="tool-icon" style="background:rgba(233,196,106,0.12)">🔧</div><div class="tool-name">Framasoft</div><div class="tool-desc">Outils numériques libres pour l'animation</div></div>
+        <div class="tool-card" onclick="window.open('https://decidim.org','_blank')"><div class="tool-icon" style="background:rgba(231,111,81,0.12)">🏛️</div><div class="tool-name">Decidim</div><div class="tool-desc">Plateforme de démocratie participative open source</div></div>
+    </div>
+</div>
+<!-- HELP -->
+<div class="view" id="view-help">
+    <h2 class="section-title" style="margin-bottom:1rem">❓ Aide</h2>
+    <div class="io-grid">
+        <div class="io-section">
+            <h3 style="font-family:var(--font-display);margin-bottom:0.75rem">🚀 Démarrage rapide</h3>
+            <div style="line-height:1.8;color:var(--text-muted);font-size:0.9rem">
+                <p><strong>1.</strong> Créez un projet pour regrouper vos travaux</p>
+                <p><strong>2.</strong> Utilisez les outils VOIR pour analyser le contexte</p>
+                <p><strong>3.</strong> Structurez avec JUGER (théorie du changement, SWOT...)</p>
+                <p><strong>4.</strong> Passez à l'action avec AGIR (objectifs SMART, messages)</p>
+                <p><strong>5.</strong> Exportez vos travaux en PDF, Word ou JSON</p>
+            </div>
+        </div>
+        <div class="io-section">
+            <h3 style="font-family:var(--font-display);margin-bottom:0.75rem">⌨️ Raccourcis</h3>
+            <div style="font-family:var(--font-mono);font-size:0.8rem">
+                <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border)"><span>Recherche</span><span>⌘K</span></div>
+                <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border)"><span>Nouveau doc</span><span>⌘N</span></div>
+                <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border)"><span>Sauvegarder</span><span>⌘S</span></div>
+                <div style="display:flex;justify-content:space-between;padding:0.4rem 0"><span>Aperçu</span><span>⌘P</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</main>
+<!-- TOOL MODAL -->
+<div class="modal-overlay" id="tool-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title"><span id="m-icon">🎯</span><span id="m-name">Outil</span><span class="tool-phase" id="m-phase">VOIR</span></div>
+            <button class="modal-close" onclick="closeModal('tool-modal')">✕</button>
+        </div>
+        <div class="modal-body" id="m-body"></div>
+        <div class="modal-footer">
+            <span id="m-saved" style="font-size:0.75rem;color:var(--text-muted)">Non sauvegardé</span>
+            <div style="display:flex;gap:0.5rem">
+                <button class="btn btn-secondary" onclick="closeModal('tool-modal')">Fermer</button>
+                <button class="btn btn-primary" onclick="saveTool()">💾 Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="proj-modal">
+    <div class="modal" style="max-width:550px">
+        <div class="modal-header">
+            <div class="modal-title"><span>📁</span><span>Nouveau Projet</span></div>
+            <button class="modal-close" onclick="closeModal('proj-modal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group"><label class="form-label">Nom du projet</label><input type="text" class="form-input" id="proj-name" placeholder="Ex: Campagne transports gratuits"></div>
+            <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="proj-desc" placeholder="Objectif de votre plaidoyer..."></textarea></div>
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Niveau</label><select class="form-input" id="proj-level"><option value="local">Local</option><option value="regional">Régional</option><option value="national">National</option><option value="european">Européen</option></select></div>
+                <div class="form-group"><label class="form-label">Thème</label><select class="form-input" id="proj-theme"><option value="environment">Environnement</option><option value="social">Justice sociale</option><option value="democracy">Démocratie</option><option value="rights">Droits humains</option><option value="other">Autre</option></select></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span></span>
+            <div style="display:flex;gap:0.5rem">
+                <button class="btn btn-secondary" onclick="closeModal('proj-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveProject()">✅ Créer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// DATA - Les 15 outils méthodologiques
+// ═══════════════════════════════════════════════════════════════════════════════
+const TOOLS=[
+{id:1,name:"Domino du changement",icon:"🎯",phase:"voir",desc:"Définissez la vision du futur que vous souhaitez construire.",fields:[{id:"vision",label:"Ma vision",type:"textarea",ph:"Le monde idéal..."},{id:"steps",label:"Étapes",type:"list",ph:"Étapes clés..."},{id:"first",label:"Première action",type:"text",ph:"À faire maintenant"}]},
+{id:2,name:"Profil d'engagement",icon:"👤",phase:"voir",desc:"Auto-évaluez votre profil et identifiez vos forces.",fields:[{id:"motivations",label:"Motivations",type:"textarea",ph:"Pourquoi ?"},{id:"skills",label:"Compétences",type:"list",ph:"Vos atouts..."},{id:"time",label:"Temps disponible",type:"select",opts:["1-2h/sem","3-5h/sem","5-10h/sem","+10h/sem"]}]},
+{id:3,name:"Fleur de pouvoir",icon:"🌸",phase:"voir",desc:"Analysez vos privilèges et identités dans les rapports de pouvoir.",fields:[{id:"identities",label:"Identités",type:"list",ph:"Genre, âge..."},{id:"privileges",label:"Privilèges",type:"textarea",ph:"Avantages sociaux..."},{id:"leverage",label:"Utilisation",type:"textarea",ph:"Comment les mobiliser ?"}]},
+{id:4,name:"Cartographie des acteurs",icon:"🗺️",phase:"voir",desc:"Identifiez alliés, opposants et cibles de votre plaidoyer.",fields:[{id:"target",label:"Cible principale",type:"text",ph:"Qui décide ?"},{id:"allies",label:"Alliés",type:"list",ph:"Qui partage vos objectifs ?"},{id:"opponents",label:"Opposants",type:"list",ph:"Qui s'oppose ?"},{id:"neutrals",label:"Neutres",type:"list",ph:"À convaincre..."}]},
+{id:5,name:"Théorie du changement",icon:"🔄",phase:"juger",desc:"Construisez votre théorie selon les 4 quadrants.",fields:[{id:"ind_int",label:"Individuel interne",type:"textarea",ph:"Consciences, valeurs..."},{id:"ind_ext",label:"Individuel externe",type:"textarea",ph:"Comportements..."},{id:"col_int",label:"Collectif interne",type:"textarea",ph:"Cultures, normes..."},{id:"col_ext",label:"Collectif externe",type:"textarea",ph:"Structures, lois..."}]},
+{id:6,name:"Analyse SWOT",icon:"📊",phase:"juger",desc:"Forces, Faiblesses, Opportunités, Menaces.",fields:[{id:"strengths",label:"Forces",type:"list",ph:"Atouts..."},{id:"weaknesses",label:"Faiblesses",type:"list",ph:"Limites..."},{id:"opportunities",label:"Opportunités",type:"list",ph:"Contexte favorable..."},{id:"threats",label:"Menaces",type:"list",ph:"Risques..."}]},
+{id:7,name:"Analyse PESTEL",icon:"🔍",phase:"juger",desc:"Contexte Politique, Économique, Social, Techno, Écolo, Légal.",fields:[{id:"political",label:"Politique",type:"textarea",ph:"Gouvernement..."},{id:"economic",label:"Économique",type:"textarea",ph:"Conjoncture..."},{id:"social",label:"Social",type:"textarea",ph:"Opinion publique..."},{id:"tech",label:"Technologique",type:"textarea",ph:"Innovations..."},{id:"eco",label:"Écologique",type:"textarea",ph:"Enjeux environnementaux..."},{id:"legal",label:"Légal",type:"textarea",ph:"Cadre juridique..."}]},
+{id:8,name:"Arbre à problème",icon:"🌳",phase:"juger",desc:"Visualisez causes (racines) et conséquences (branches).",fields:[{id:"problem",label:"Problème central",type:"text",ph:"En une phrase..."},{id:"causes",label:"Causes",type:"list",ph:"Pourquoi ?"},{id:"effects",label:"Effets",type:"list",ph:"Conséquences..."},{id:"root",label:"Cause racine",type:"text",ph:"La plus profonde..."}]},
+{id:9,name:"Les 5 Pourquoi",icon:"❓",phase:"juger",desc:"Remontez à la cause racine en 5 questions.",fields:[{id:"symptom",label:"Problème observé",type:"text",ph:"Constat..."},{id:"why1",label:"Pourquoi 1",type:"text",ph:""},{id:"why2",label:"Pourquoi 2",type:"text",ph:""},{id:"why3",label:"Pourquoi 3",type:"text",ph:""},{id:"why4",label:"Pourquoi 4",type:"text",ph:""},{id:"why5",label:"Pourquoi 5 (cause racine)",type:"text",ph:""}]},
+{id:10,name:"Avec, sans, contre",icon:"🤝",phase:"agir",desc:"Choisissez votre mode d'action face au pouvoir.",fields:[{id:"with",label:"AVEC le pouvoir",type:"textarea",ph:"Dialogue, lobbying..."},{id:"without",label:"SANS le pouvoir",type:"textarea",ph:"Alternatives, autonomie..."},{id:"against",label:"CONTRE le pouvoir",type:"textarea",ph:"Contestation..."},{id:"choice",label:"Stratégie choisie",type:"select",opts:["AVEC","SANS","CONTRE","Combinaison"]}]},
+{id:11,name:"Objectifs SMART",icon:"🎯",phase:"agir",desc:"Spécifiques, Mesurables, Atteignables, Réalistes, Temporels.",fields:[{id:"objective",label:"Objectif",type:"text",ph:"Que voulez-vous ?"},{id:"specific",label:"Spécifique",type:"textarea",ph:"Précisément..."},{id:"measurable",label:"Mesurable",type:"text",ph:"Indicateur..."},{id:"achievable",label:"Atteignable",type:"textarea",ph:"Avec vos moyens..."},{id:"timebound",label:"Échéance",type:"text",ph:"Date limite..."}]},
+{id:12,name:"Cibles et alliances",icon:"🎪",phase:"agir",desc:"Identifiez cibles et construisez vos alliances.",fields:[{id:"primary",label:"Cible primaire",type:"text",ph:"Décideur final..."},{id:"secondary",label:"Cibles secondaires",type:"list",ph:"Influenceurs..."},{id:"allies",label:"Alliés stratégiques",type:"list",ph:"Partenaires..."},{id:"strategy",label:"Stratégie d'alliance",type:"textarea",ph:"Comment construire ?"}]},
+{id:13,name:"Construction du message",icon:"💬",phase:"agir",desc:"5 composants: accroche, problème, importance, cible, action.",fields:[{id:"hook",label:"1. Accroche",type:"text",ph:"Phrase percutante..."},{id:"problem",label:"2. Problème",type:"textarea",ph:"Exposez clairement..."},{id:"importance",label:"3. Importance",type:"textarea",ph:"Arguments..."},{id:"target_msg",label:"4. Message à la cible",type:"textarea",ph:"Pourquoi agir..."},{id:"cta",label:"5. Action demandée",type:"text",ph:"Demande précise..."}]},
+{id:14,name:"Check-list rencontre",icon:"📋",phase:"agir",desc:"Préparez vos rencontres de plaidoyer.",fields:[{id:"objective",label:"Objectif",type:"text",ph:"À obtenir..."},{id:"messages",label:"Messages clés (3 max)",type:"list",ph:"Arguments..."},{id:"docs",label:"Documents",type:"list",ph:"Supports..."},{id:"questions",label:"Questions",type:"list",ph:"À poser..."},{id:"fallback",label:"Plan B",type:"textarea",ph:"Si refus..."}]},
+{id:15,name:"Suivi-évaluation",icon:"📈",phase:"agir",desc:"Suivez et évaluez votre action de plaidoyer.",fields:[{id:"indicators",label:"Indicateurs",type:"list",ph:"Comment mesurer ?"},{id:"milestones",label:"Jalons",type:"list",ph:"Étapes..."},{id:"method",label:"Méthode d'évaluation",type:"textarea",ph:"Comment évaluer ?"},{id:"lessons",label:"Leçons apprises",type:"textarea",ph:"Ce qui fonctionne..."}]}
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════════════
+const DB_NAME='PlaidoyerDB';const DB_VER=1;let db=null;
+const State={view:'dashboard',projects:[],documents:[],toolsData:{},currentTool:null,currentDoc:null};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INDEXEDDB
+// ═══════════════════════════════════════════════════════════════════════════════
+async function initDB(){return new Promise((res,rej)=>{const req=indexedDB.open(DB_NAME,DB_VER);req.onerror=()=>rej(req.error);req.onsuccess=()=>{db=req.result;res(db)};req.onupgradeneeded=(e)=>{const d=e.target.result;if(!d.objectStoreNames.contains('projects'))d.createObjectStore('projects',{keyPath:'id',autoIncrement:true});if(!d.objectStoreNames.contains('documents'))d.createObjectStore('documents',{keyPath:'id',autoIncrement:true});if(!d.objectStoreNames.contains('toolsData'))d.createObjectStore('toolsData',{keyPath:'id'})}})}
+async function dbSave(store,data){return new Promise((res,rej)=>{const tx=db.transaction([store],'readwrite');const s=tx.objectStore(store);const r=s.put(data);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function dbGetAll(store){return new Promise((res,rej)=>{const tx=db.transaction([store],'readonly');const s=tx.objectStore(store);const r=s.getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function dbDelete(store,id){return new Promise((res,rej)=>{const tx=db.transaction([store],'readwrite');const s=tx.objectStore(store);const r=s.delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════════════════════
+function showView(v){document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===v));document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id===`view-${v}`));const cfg={dashboard:{i:'🏠',t:'Tableau de bord'},tools:{i:'🧰',t:'15 Outils'},editor:{i:'✏️',t:'Éditeur'},io:{i:'📥',t:'Import/Export'},projects:{i:'📁',t:'Mes Projets'},library:{i:'📚',t:'Bibliothèque'},help:{i:'❓',t:'Aide'}};const c=cfg[v]||{i:'📄',t:v};document.getElementById('pg-icon').textContent=c.i;document.getElementById('pg-text').textContent=c.t;State.view=v;if(v==='tools')renderTools();if(v==='projects')renderProjects();if(v==='editor')renderDocs()}
+document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TOOLS
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderTools(filter='all'){const grid=document.getElementById('tools-grid');const filtered=filter==='all'?TOOLS:TOOLS.filter(t=>t.phase===filter);grid.innerHTML=filtered.map(t=>`<div class="tool-card ${t.phase}" onclick="openTool(${t.id})"><div class="tool-header"><span class="tool-num">Outil ${t.id}</span><span class="tool-phase ${t.phase}">${t.phase.toUpperCase()}</span></div><div class="tool-icon">${t.icon}</div><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div><div class="tool-footer"><span class="tool-status ${State.toolsData[t.id]?'done':''}">${State.toolsData[t.id]?'✓ Complété':'○ Non commencé'}</span><span class="tool-action">Ouvrir →</span></div></div>`).join('')}
+document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderTools(b.dataset.phase)}));
+
+function openTool(id){const t=TOOLS.find(x=>x.id===id);if(!t)return;State.currentTool=t;document.getElementById('m-icon').textContent=t.icon;document.getElementById('m-name').textContent=t.name;const ph=document.getElementById('m-phase');ph.textContent=t.phase.toUpperCase();ph.className=`tool-phase ${t.phase}`;const saved=State.toolsData[id]||{};let html=`<p style="color:var(--text-muted);margin-bottom:1rem">${t.desc}</p>`;t.fields.forEach(f=>{const val=saved[f.id]||'';if(f.type==='textarea')html+=`<div class="form-group"><label class="form-label">${f.label}</label><textarea class="form-textarea" id="f-${f.id}" placeholder="${f.ph||''}">${val}</textarea></div>`;else if(f.type==='text')html+=`<div class="form-group"><label class="form-label">${f.label}</label><input type="text" class="form-input" id="f-${f.id}" value="${val}" placeholder="${f.ph||''}"></div>`;else if(f.type==='select')html+=`<div class="form-group"><label class="form-label">${f.label}</label><select class="form-input" id="f-${f.id}">${f.opts.map(o=>`<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}</select></div>`;else if(f.type==='list'){const items=Array.isArray(val)?val:[];html+=`<div class="form-group"><label class="form-label">${f.label}</label><div id="list-${f.id}" class="list-container">${items.map((i,idx)=>`<div class="list-item"><input type="text" class="form-input" value="${i}"><button class="btn btn-secondary btn-sm" onclick="this.parentElement.remove()">✕</button></div>`).join('')}</div><div style="display:flex;gap:0.4rem"><input type="text" class="form-input" id="new-${f.id}" placeholder="${f.ph||''}"><button class="btn btn-secondary" onclick="addListItem('${f.id}')">+</button></div></div>`}});document.getElementById('m-body').innerHTML=html;document.getElementById('tool-modal').classList.add('active')}
+function addListItem(fid){const inp=document.getElementById(`new-${fid}`);if(!inp.value.trim())return;const c=document.getElementById(`list-${fid}`);const div=document.createElement('div');div.className='list-item';div.innerHTML=`<input type="text" class="form-input" value="${inp.value}"><button class="btn btn-secondary btn-sm" onclick="this.parentElement.remove()">✕</button>`;c.appendChild(div);inp.value=''}
+async function saveTool(){const t=State.currentTool;if(!t)return;const data={id:t.id,savedAt:new Date().toISOString()};t.fields.forEach(f=>{if(f.type==='list'){const c=document.getElementById(`list-${f.id}`);const inps=c.querySelectorAll('input');data[f.id]=Array.from(inps).map(i=>i.value).filter(v=>v.trim())}else{const el=document.getElementById(`f-${f.id}`);data[f.id]=el?el.value:''}});State.toolsData[t.id]=data;await dbSave('toolsData',data);toast('success','Sauvegardé',`"${t.name}" enregistré.`);document.getElementById('m-saved').textContent=`Sauvegardé ${new Date().toLocaleTimeString()}`;updateStats()}
+function closeModal(id){document.getElementById(id).classList.remove('active');State.currentTool=null;if(State.view==='tools')renderTools()}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════════════════════════════════════════
+function createProject(){document.getElementById('proj-name').value='';document.getElementById('proj-desc').value='';document.getElementById('proj-modal').classList.add('active')}
+async function saveProject(){const name=document.getElementById('proj-name').value.trim();if(!name){toast('error','Erreur','Entrez un nom.');return}const proj={id:Date.now(),name,description:document.getElementById('proj-desc').value,level:document.getElementById('proj-level').value,theme:document.getElementById('proj-theme').value,created:new Date().toISOString()};await dbSave('projects',proj);State.projects.push(proj);closeModal('proj-modal');toast('success','Projet créé',`"${name}" créé.`);updateStats();renderProjects()}
+function renderProjects(){const grid=document.getElementById('proj-grid');const empty=document.getElementById('proj-empty');if(State.projects.length===0){grid.style.display='none';empty.style.display='flex';return}grid.style.display='grid';empty.style.display='none';const icons={environment:'🌿',social:'⚖️',democracy:'🏛️',rights:'✊',other:'📌'};grid.innerHTML=State.projects.map(p=>`<div class="tool-card" onclick="selectProject(${p.id})"><div class="tool-icon" style="background:rgba(69,123,157,0.12)">${icons[p.theme]||'📁'}</div><div class="tool-name">${p.name}</div><div class="tool-desc">${p.description||'Aucune description'}</div><div class="tool-footer"><span class="tool-status">Créé le ${new Date(p.created).toLocaleDateString()}</span><span class="tool-action">Ouvrir →</span></div></div>`).join('')}
+function selectProject(id){const p=State.projects.find(x=>x.id===id);if(p){toast('info','Projet sélectionné',`"${p.name}"`);showView('tools')}}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DOCUMENTS
+// ═══════════════════════════════════════════════════════════════════════════════
+function renderDocs(){const list=document.getElementById('docs-list');if(State.documents.length===0){list.innerHTML=`<div class="empty" style="padding:1.5rem"><div class="empty-icon">📝</div><div class="empty-title">Aucun document</div><button class="btn btn-primary btn-sm" onclick="createDoc()">+ Créer</button></div>`;return}list.innerHTML=State.documents.map(d=>`<div class="doc-item ${State.currentDoc?.id===d.id?'active':''}" onclick="openDoc(${d.id})"><div class="doc-icon md">📄</div><div><div class="doc-name">${d.title||'Sans titre'}</div><div class="doc-meta">${new Date(d.modified).toLocaleDateString()}</div></div></div>`).join('')}
+async function createDoc(){const doc={id:Date.now(),title:'Sans titre',content:'',created:new Date().toISOString(),modified:new Date().toISOString()};await dbSave('documents',doc);State.documents.push(doc);State.currentDoc=doc;document.getElementById('editor-txt').value='';document.getElementById('doc-title').value=doc.title;renderDocs();updateStats();if(State.view!=='editor')showView('editor')}
+function openDoc(id){const d=State.documents.find(x=>x.id===id);if(!d)return;State.currentDoc=d;document.getElementById('editor-txt').value=d.content||'';document.getElementById('doc-title').value=d.title;renderDocs();updateEditorStats()}
+async function saveDoc(){const d=State.currentDoc;if(!d)return;d.content=document.getElementById('editor-txt').value;d.title=document.getElementById('doc-title').value||'Sans titre';d.modified=new Date().toISOString();await dbSave('documents',d);document.getElementById('ed-saved').textContent=`Sauvegardé ${new Date().toLocaleTimeString()}`;renderDocs()}
+function updateEditorStats(){const txt=document.getElementById('editor-txt').value;const words=txt.trim()?txt.trim().split(/\s+/).length:0;document.getElementById('ed-stats').textContent=`${words} mots`}
+document.getElementById('editor-txt').addEventListener('input',()=>{updateEditorStats();clearTimeout(window._autoSave);window._autoSave=setTimeout(saveDoc,2000)});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PREVIEW
+// ═══════════════════════════════════════════════════════════════════════════════
+document.getElementById('btn-preview').addEventListener('click',()=>{const txt=document.getElementById('editor-txt');const prev=document.getElementById('editor-prev');const btn=document.getElementById('btn-preview');if(txt.style.display!=='none'){prev.innerHTML=marked.parse(txt.value);txt.style.display='none';prev.style.display='block';btn.classList.add('active')}else{txt.style.display='block';prev.style.display='none';btn.classList.remove('active')}});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// IMPORT/EXPORT
+// ═══════════════════════════════════════════════════════════════════════════════
+function initDropZone(){const dz=document.getElementById('drop-zone');const fi=document.getElementById('file-input');dz.addEventListener('click',()=>fi.click());dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover')});dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');handleFiles(e.dataTransfer.files)});fi.addEventListener('change',e=>handleFiles(e.target.files))}
+async function handleFiles(files){for(const file of files){const ext=file.name.split('.').pop().toLowerCase();try{let content='';if(ext==='txt'||ext==='md')content=await file.text();else if(ext==='json'){const txt=await file.text();const data=JSON.parse(txt);if(data.projects){for(const p of data.projects)await dbSave('projects',{...p,id:Date.now()+Math.random()});await loadData();toast('success','Import réussi','Données importées.');return}content=JSON.stringify(data,null,2)}else if(ext==='csv'){const txt=await file.text();const result=Papa.parse(txt,{header:true});content=JSON.stringify(result.data,null,2)}const doc={id:Date.now(),title:file.name.replace(/\.[^.]+$/,''),content,created:new Date().toISOString(),modified:new Date().toISOString()};await dbSave('documents',doc);State.documents.push(doc);toast('success','Importé',`"${file.name}" ajouté.`)}catch(e){console.error(e);toast('error','Erreur',`Impossible de lire "${file.name}".`)}}updateStats();if(State.view==='editor')renderDocs()}
+
+async function exportAs(fmt){const d=State.currentDoc;const content=d?.content||document.getElementById('editor-txt').value;const title=d?.title||'document';try{if(fmt==='md'){const blob=new Blob([content],{type:'text/markdown'});saveAs(blob,`${title}.md`)}else if(fmt==='json'){const data={projects:State.projects,documents:State.documents,toolsData:State.toolsData,exportDate:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});saveAs(blob,`plaidoyer-export-${Date.now()}.json`)}else if(fmt==='html'){const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:Georgia,serif;max-width:800px;margin:2rem auto;padding:1rem;line-height:1.8}h1{border-bottom:2px solid #333}h2{color:#457b9d}</style></head><body>${marked.parse(content)}</body></html>`;const blob=new Blob([html],{type:'text/html'});saveAs(blob,`${title}.html`)}else if(fmt==='pdf'){const{jsPDF}=window.jspdf;const pdf=new jsPDF();const lines=pdf.splitTextToSize(content,180);let y=20;pdf.setFontSize(12);lines.forEach(line=>{if(y>280){pdf.addPage();y=20}pdf.text(line,15,y);y+=7});pdf.save(`${title}.pdf`)}else if(fmt==='docx'){const{Document,Paragraph,TextRun,Packer}=docx;const paras=content.split('\n').map(line=>new Paragraph({children:[new TextRun(line)]}));const doc=new Document({sections:[{children:paras}]});const blob=await Packer.toBlob(doc);saveAs(blob,`${title}.docx`)}else if(fmt==='csv'){let csv='Outil,Phase,Données\n';TOOLS.forEach(t=>{const data=State.toolsData[t.id];if(data)csv+=`"${t.name}","${t.phase}","${JSON.stringify(data).replace(/"/g,'""')}"\n`});const blob=new Blob([csv],{type:'text/csv'});saveAs(blob,`plaidoyer-tools-${Date.now()}.csv`)}toast('success','Export réussi',`Format ${fmt.toUpperCase()}.`)}catch(e){console.error(e);toast('error','Erreur','Export échoué.')}}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════════════════════
+function toast(type,title,msg){const c=document.getElementById('toasts');const icons={success:'✓',error:'✕',info:'ℹ'};const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<div class="toast-icon">${icons[type]}</div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div><button class="toast-close" onclick="this.parentElement.remove()">✕</button>`;c.appendChild(t);setTimeout(()=>{t.style.animation='slideIn 0.3s ease reverse';setTimeout(()=>t.remove(),300)},4000)}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════════════════════
+function updateStats(){const p=State.projects.length,d=State.documents.length,t=Object.keys(State.toolsData).length;document.getElementById('s-proj').textContent=p;document.getElementById('s-docs').textContent=d;document.getElementById('s-tools').textContent=t;const dp=document.getElementById('d-proj'),dt=document.getElementById('d-tools'),dd=document.getElementById('d-docs');if(dp)dp.textContent=p;if(dt)dt.textContent=t;if(dd)dd.textContent=d}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════════════════════════════
+document.getElementById('btn-theme').addEventListener('click',()=>document.body.classList.toggle('dark'));
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SHORTCUTS
+// ═══════════════════════════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();document.getElementById('search').focus()}if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();if(State.view==='editor')saveDoc();else if(State.currentTool)saveTool()}if((e.metaKey||e.ctrlKey)&&e.key==='n'){e.preventDefault();createDoc()}if(e.key==='Escape'){closeModal('tool-modal');closeModal('proj-modal')}});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BUTTONS
+// ═══════════════════════════════════════════════════════════════════════════════
+document.getElementById('btn-new').addEventListener('click',()=>createDoc());
+document.getElementById('btn-save').addEventListener('click',()=>{if(State.view==='editor')saveDoc();else if(State.currentTool)saveTool();else toast('info','Info','Rien à sauvegarder.')});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════════
+async function loadData(){try{State.projects=await dbGetAll('projects')||[];State.documents=await dbGetAll('documents')||[];const td=await dbGetAll('toolsData')||[];td.forEach(x=>State.toolsData[x.id]=x)}catch(e){console.error(e)}}
+async function init(){try{await initDB();await loadData();initDropZone();updateStats();renderTools();renderProjects();renderDocs();console.log('✅ Plaidoyer Citoyen Workstation initialisé')}catch(e){console.error(e);toast('error','Erreur','Initialisation échouée.')}}
+init();
+</script>
+</body>
+</html>

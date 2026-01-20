@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☠️ TSAR e-BOMBA | Poste de Guerre Cognitive Citoyenne</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&family=Cinzel:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --matrix-green: #00ff41;
+            --matrix-dark: #003b00;
+            --mordor-red: #ff2d00;
+            --mordor-orange: #ff6b00;
+            --punk-pink: #ff00ff;
+            --punk-cyan: #00ffff;
+            --void-black: #0a0a0a;
+            --chaos-purple: #9400d3;
+            --ring-gold: #ffd700;
+            --parchment: #f4e4bc;
+            --blood-red: #8b0000;
+            --elvish-silver: #c0c0c0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--void-black);
+            color: var(--matrix-green);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* Glitch Animation */
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+            75% { opacity: 0.9; }
+        }
+
+        @keyframes pulse-mordor {
+            0%, 100% { box-shadow: 0 0 20px var(--mordor-red), inset 0 0 20px rgba(255, 45, 0, 0.1); }
+            50% { box-shadow: 0 0 40px var(--mordor-orange), inset 0 0 40px rgba(255, 107, 0, 0.2); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes ring-pulse {
+            0%, 100% { text-shadow: 0 0 10px var(--ring-gold), 0 0 20px var(--ring-gold); }
+            50% { text-shadow: 0 0 30px var(--ring-gold), 0 0 60px var(--mordor-orange); }
+        }
+
+        /* Scanline Effect */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(transparent, var(--matrix-green), transparent);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        /* Header - Eye of Sauron meets Anarchy */
+        header {
+            background: linear-gradient(135deg, var(--void-black) 0%, #1a0a0a 50%, var(--void-black) 100%);
+            padding: 20px;
+            border-bottom: 3px solid var(--mordor-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 65, 0.03) 2px,
+                rgba(0, 255, 65, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .eye-of-chaos {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            animation: pulse-mordor 2s ease-in-out infinite;
+            border-radius: 50%;
+        }
+
+        .eye-of-chaos::before {
+            content: 'Ⓐ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: var(--mordor-red);
+            animation: glitch 0.3s ease-in-out infinite;
+        }
+
+        .eye-of-chaos::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid var(--mordor-orange);
+            border-radius: 50%;
+            animation: ring-pulse 1.5s ease-in-out infinite;
+        }
+
+        .title-block h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, var(--mordor-red), var(--ring-gold), var(--mordor-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: flicker 2s ease-in-out infinite;
+        }
+
+        .title-block .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--elvish-silver);
+            letter-spacing: 6px;
+            margin-top: 5px;
+        }
+
+        .rune-text {
+            font-family: 'VT323', monospace;
+            color: var(--matrix-green);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Navigation Tabs - Punk Style */
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-bottom: 2px solid var(--matrix-dark);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            padding: 12px 20px;
+            background: transparent;
+            border: 2px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+            transition: left 0.5s ease;
+            opacity: 0.1;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--matrix-dark);
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .nav-tab.active {
+            color: var(--void-black);
+            background: var(--matrix-green);
+        }
+
+        .nav-tab.danger {
+            border-color: var(--mordor-red);
+            color: var(--mordor-red);
+        }
+
+        .nav-tab.danger:hover, .nav-tab.danger.active {
+            background: var(--mordor-red);
+            color: var(--void-black);
+            box-shadow: 0 0 20px rgba(255, 45, 0, 0.5);
+        }
+
+        /* Main Content Area */
+        main {
+            display: flex;
+            min-height: calc(100vh - 200px);
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Panels */
+        .panel {
+            background: rgba(0, 20, 0, 0.9);
+            border: 2px solid var(--matrix-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .panel.active {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .panel-header {
+            background: linear-gradient(90deg, var(--matrix-dark), transparent);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--matrix-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--matrix-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .panel-content {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* TSAR e-Bomba Module */
+        .tsar-module {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .weapon-card {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+            border: 2px solid var(--mordor-red);
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weapon-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 45, 0, 0.1) 0%, transparent 70%);
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .weapon-card h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--mordor-orange);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .weapon-card .description {
+            font-size: 0.85rem;
+            color: var(--elvish-silver);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--matrix-green);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: 'Orbitron', sans-serif;
+            padding: 12px 24px;
+            border: 2px solid var(--matrix-green);
+            background: transparent;
+            color: var(--matrix-green);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--matrix-green);
+            color: var(--void-black);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+
+        .btn-danger {
+            border-color: var(--mordor-red);
+            color: var(--mordor-red);
+        }
+
+        .btn-danger:hover {
+            background: var(--mordor-red);
+            color: var(--void-black);
+            box-shadow: 0 0 30px rgba(255, 45, 0, 0.5);
+        }
+
+        .btn-gold {
+            border-color: var(--ring-gold);
+            color: var(--ring-gold);
+        }
+
+        .btn-gold:hover {
+            background: var(--ring-gold);
+            color: var(--void-black);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Level Indicators - Micro/Meso/Macro */
+        .level-indicator {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .level-micro {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid var(--punk-cyan);
+            color: var(--punk-cyan);
+        }
+
+        .level-meso {
+            background: rgba(148, 0, 211, 0.2);
+            border: 1px solid var(--chaos-purple);
+            color: var(--chaos-purple);
+        }
+
+        .level-macro {
+            background: rgba(255, 45, 0, 0.2);
+            border: 1px solid var(--mordor-red);
+            color: var(--mordor-red);
+        }
+
+        .level-badge.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Triplet Generator */
+        .triplet-generator {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--matrix-green);
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .triplet-display {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--matrix-green);
+            margin: 15px 0;
+        }
+
+        .triplet-display .subject {
+            color: var(--punk-cyan);
+        }
+
+        .triplet-display .verb {
+            color: var(--ring-gold);
+        }
+
+        .triplet-display .object {
+            color: var(--mordor-red);
+        }
+
+        /* Editor Module */
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .editor-pane {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--matrix-dark);
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid var(--matrix-dark);
+            color: var(--matrix-green);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--matrix-dark);
+            border-color: var(--matrix-green);
+        }
+
+        #content-editor {
+            flex: 1;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--matrix-dark);
+            resize: none;
+        }
+
+        #preview-pane {
+            flex: 1;
+            padding: 20px;
+            background: rgba(244, 228, 188, 0.05);
+            border: 1px solid var(--elvish-silver);
+            overflow-y: auto;
+            color: var(--parchment);
+        }
+
+        #preview-pane h1, #preview-pane h2, #preview-pane h3 {
+            color: var(--ring-gold);
+            font-family: 'Cinzel', serif;
+            margin: 1em 0 0.5em;
+        }
+
+        #preview-pane p {
+            margin-bottom: 1em;
+        }
+
+        #preview-pane code {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 2px 6px;
+            color: var(--matrix-green);
+        }
+
+        /* Import/Export Module */
+        .io-module {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .io-card {
+            background: linear-gradient(135deg, rgba(0, 59, 0, 0.3), rgba(0, 0, 0, 0.8));
+            border: 2px solid var(--matrix-dark);
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .io-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--matrix-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed var(--matrix-green);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .file-drop-zone:hover, .file-drop-zone.dragover {
+            background: rgba(0, 255, 65, 0.15);
+            border-color: var(--punk-cyan);
+        }
+
+        .file-drop-zone .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .format-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .format-btn {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .format-btn:hover {
+            background: var(--matrix-green);
+            color: var(--void-black);
+        }
+
+        /* Auftragstaktik Planner */
+        .mission-planner {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .mission-level {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .mission-level.micro {
+            border-color: var(--punk-cyan);
+        }
+
+        .mission-level.meso {
+            border-color: var(--chaos-purple);
+        }
+
+        .mission-level.macro {
+            border-color: var(--mordor-red);
+        }
+
+        .mission-level h3 {
+            font-family: 'Cinzel', serif;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid currentColor;
+        }
+
+        .mission-level.micro h3 { color: var(--punk-cyan); }
+        .mission-level.meso h3 { color: var(--chaos-purple); }
+        .mission-level.macro h3 { color: var(--mordor-red); }
+
+        .mission-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid currentColor;
+            font-size: 0.85rem;
+        }
+
+        .mission-level.micro .mission-item { border-color: var(--punk-cyan); }
+        .mission-level.meso .mission-item { border-color: var(--chaos-purple); }
+        .mission-level.macro .mission-item { border-color: var(--mordor-red); }
+
+        /* Status Bar */
+        .status-bar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 20px;
+            border-top: 1px solid var(--matrix-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--matrix-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-dot.warning {
+            background: var(--ring-gold);
+        }
+
+        .status-dot.danger {
+            background: var(--mordor-red);
+        }
+
+        /* Console Output */
+        .console-output {
+            background: #000;
+            border: 1px solid var(--matrix-dark);
+            padding: 15px;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+        }
+
+        .console-line.success {
+            color: var(--matrix-green);
+        }
+
+        .console-line.warning {
+            color: var(--ring-gold);
+        }
+
+        .console-line.error {
+            color: var(--mordor-red);
+        }
+
+        .console-line.info {
+            color: var(--punk-cyan);
+        }
+
+        /* Quote Block - Tolkien Style */
+        .tolkien-quote {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 0, 0, 0.8));
+            border-left: 4px solid var(--ring-gold);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            color: var(--parchment);
+        }
+
+        .tolkien-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--ring-gold);
+            line-height: 0;
+            position: relative;
+            top: 15px;
+        }
+
+        .tolkien-quote .author {
+            text-align: right;
+            margin-top: 10px;
+            color: var(--elvish-silver);
+            font-style: normal;
+        }
+
+        /* Knowledge Base */
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .knowledge-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--matrix-dark);
+            padding: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .knowledge-card:hover {
+            border-color: var(--matrix-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .knowledge-card h4 {
+            color: var(--ring-gold);
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .knowledge-card p {
+            color: var(--elvish-silver);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .knowledge-card .tags {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(0, 255, 65, 0.2);
+            border-radius: 2px;
+            color: var(--matrix-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+            .mission-planner {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .title-block h1 {
+                font-size: 1.5rem;
+            }
+            .nav-tabs {
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+            }
+            main {
+                padding: 10px;
+            }
+            .tsar-module, .io-module {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Manifesto Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0a0a0a, #1a0a0a);
+            border: 2px solid var(--mordor-red);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--mordor-red);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .manifesto-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--ring-gold);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px var(--mordor-orange);
+        }
+
+        /* Hidden file input */
+        .hidden-input {
+            display: none;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--matrix-green);
+            padding: 15px 25px;
+            margin-top: 10px;
+            animation: slideIn 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .toast.success {
+            border-color: var(--matrix-green);
+            color: var(--matrix-green);
+        }
+
+        .toast.error {
+            border-color: var(--mordor-red);
+            color: var(--mordor-red);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-rain"></canvas>
+    <div class="scanline"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="eye-of-chaos"></div>
+                <div class="title-block">
+                    <h1>TSAR e-BOMBA</h1>
+                    <div class="subtitle">Poste de Guerre Cognitive Citoyenne</div>
+                    <div class="rune-text">⚔ AUFTRAGSTAKTIK × CHAOS × PLAIDOYER ⚔</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-gold" onclick="showManifesto()">📜 Manifeste</button>
+                <button class="btn btn-danger" onclick="activateChaosMode()">💀 MODE CHAOS</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="nav-tab active" data-panel="arsenal">☢️ Arsenal Sémantique</button>
+        <button class="nav-tab" data-panel="editor">✍️ Forge du Contenu</button>
+        <button class="nav-tab" data-panel="auftrag">⚔️ Auftragstaktik</button>
+        <button class="nav-tab" data-panel="io">📦 Import/Export</button>
+        <button class="nav-tab" data-panel="knowledge">📚 Base de Savoir</button>
+        <button class="nav-tab danger" data-panel="ebomba">💣 Détonateur</button>
+    </nav>
+
+    <main>
+        <!-- Arsenal Sémantique Panel -->
+        <div class="panel active" id="arsenal">
+            <div class="panel-header">
+                <h2><span class="icon">☢️</span> Arsenal Sémantique - Munitions Informationnelles</h2>
+                <div class="level-indicator">
+                    <span class="level-badge level-micro active">MICRO</span>
+                    <span class="level-badge level-meso">MÉSO</span>
+                    <span class="level-badge level-macro">MACRO</span>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="tolkien-quote">
+                    Un Anneau pour les gouverner tous, Un Anneau pour les trouver, Un Anneau pour les amener tous et dans les ténèbres les lier... ou pour les LIBÉRER si c'est nous qui le forgeons !
+                    <div class="author">— Adaptation punk du Seigneur des Anneaux</div>
+                </div>
+
+                <div class="tsar-module">
+                    <div class="weapon-card">
+                        <h3>🎯 Générateur de Triplets Sémantiques</h3>
+                        <p class="description">Créez des armes sémantiques sous forme Sujet-Verbe-Objet pour injection dans le Knowledge Graph.</p>
+                        
+                        <div class="form-group">
+                            <label>Sujet (Entité Cible)</label>
+                            <input type="text" id="triplet-subject" placeholder="Ex: RTL Group">
+                        </div>
+                        <div class="form-group">
+                            <label>Verbe (Relation)</label>
+                            <select id="triplet-verb">
+                                <option value="est associé à">est associé à</option>
+                                <option value="pratique">pratique</option>
+                                <option value="représente">représente</option>
+                                <option value="diffuse">diffuse</option>
+                                <option value="ignore">ignore</option>
+                                <option value="instrumentalise">instrumentalise</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Objet (Concept à Lier)</label>
+                            <input type="text" id="triplet-object" placeholder="Ex: mépris de classe">
+                        </div>
+                        
+                        <button class="btn" onclick="generateTriplet()">⚡ Forger le Triplet</button>
+                        
+                        <div class="triplet-generator">
+                            <div class="triplet-display" id="triplet-result">
+                                <span class="subject">[SUJET]</span> 
+                                <span class="verb">[VERBE]</span> 
+                                <span class="object">[OBJET]</span>
+                            </div>
+                            <button class="btn btn-gold" onclick="copyTriplet()">📋 Copier</button>
+                            <button class="btn" onclick="addToArsenal()">➕ Ajouter à l'Arsenal</button>
+                        </div>
+                    </div>
+
+                    <div class="weapon-card">
+                        <h3>🏗️ Architecte de Cocon Sémantique</h3>
+                        <p class="description">Construisez une architecture de liens internes pour créer une autorité thématique.</p>
+                        
+                        <div class="form-group">
+                            <label>Thème Central (Page Pilier)</label>
+                            <input type="text" id="cocon-pillar" placeholder="Ex: Précarité en Belgique">
+                        </div>
+                        <div class="form-group">
+                            <label>Sous-thèmes (un par ligne)</label>
+                            <textarea id="cocon-subtopics" placeholder="Chômage longue durée&#10;Invalidité et dignité&#10;CPAS et démarches&#10;Témoignages de résilience"></textarea>
+                        </div>
+                        
+                        <button class="btn" onclick="generateCocon()">🕸️ Générer Cocon</button>
+                        
+                        <div class="console-output" id="cocon-output">
+                            <div class="console-line info">[SYS] Architecte de cocon initialisé...</div>
+                            <div class="console-line">En attente de configuration...</div>
+                        </div>
+                    </div>
+
+                    <div class="weapon-card">
+                        <h3>📊 Générateur Schema.org</h3>
+                        <p class="description">Créez des données structurées JSON-LD pour signaler vos entités aux algorithmes.</p>
+                        
+                        <div class="form-group">
+                            <label>Type d'Entité</label>
+                            <select id="schema-type" onchange="updateSchemaForm()">
+                                <option value="Organization">Organization (Collectif)</option>
+                                <option value="Person">Person (Individu)</option>
+                                <option value="Article">Article (Contenu)</option>
+                                <option value="ClaimReview">ClaimReview (Fact-Check)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nom de l'Entité</label>
+                            <input type="text" id="schema-name" placeholder="Nom de l'organisation ou personne">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="schema-description" placeholder="Description stratégique de l'entité..."></textarea>
+                        </div>
+                        
+                        <button class="btn btn-gold" onclick="generateSchema()">📋 Générer JSON-LD</button>
+                    </div>
+
+                    <div class="weapon-card">
+                        <h3>🎭 Arsenal de Contre-Narratives</h3>
+                        <p class="description">Bibliothèque de narratives prêtes à déployer contre les discours dominants.</p>
+                        
+                        <div class="knowledge-grid" style="margin-top: 15px;">
+                            <div class="knowledge-card" onclick="loadNarrative('dignity')">
+                                <h4>Récit de la Dignité</h4>
+                                <p>Recentrer le débat sur l'humanité des personnes précarisées.</p>
+                                <div class="tags">
+                                    <span class="tag">Soft Power</span>
+                                    <span class="tag">Émotion</span>
+                                </div>
+                            </div>
+                            <div class="knowledge-card" onclick="loadNarrative('system')">
+                                <h4>Critique Systémique</h4>
+                                <p>Exposer les mécanismes structurels d'oppression.</p>
+                                <div class="tags">
+                                    <span class="tag">Analyse</span>
+                                    <span class="tag">Données</span>
+                                </div>
+                            </div>
+                            <div class="knowledge-card" onclick="loadNarrative('resistance')">
+                                <h4>Résistance Citoyenne</h4>
+                                <p>Mobiliser autour de l'action collective.</p>
+                                <div class="tags">
+                                    <span class="tag">Action</span>
+                                    <span class="tag">Solidarité</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Panel -->
+        <div class="panel" id="editor">
+            <div class="panel-header">
+                <h2><span class="icon">✍️</span> Forge du Contenu - Éditeur Markdown</h2>
+            </div>
+            <div class="panel-content">
+                <div class="editor-container">
+                    <div class="editor-pane">
+                        <div class="editor-toolbar">
+                            <button class="toolbar-btn" onclick="insertMarkdown('# ')">H1</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('## ')">H2</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('**', '**')">B</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('*', '*')">I</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('[', '](url)')">🔗</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('> ')">❝</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('- ')">•</button>
+                            <button class="toolbar-btn" onclick="insertMarkdown('```\n', '\n```')">{'<>'}</button>
+                            <button class="toolbar-btn" onclick="insertTripletToEditor()">☢️ Triplet</button>
+                            <button class="toolbar-btn" onclick="insertSchemaToEditor()">📊 Schema</button>
+                        </div>
+                        <textarea id="content-editor" placeholder="# Votre Manifeste de Résistance Citoyenne
+
+Commencez à écrire votre contenu ici...
+
+## Utilisez le Markdown
+
+**Gras** pour l'emphase
+*Italique* pour les nuances
+[Liens](url) pour les sources
+
+> Citations pour les témoignages
+
+- Listes pour structurer
+- Vos arguments
+- De manière claire"></textarea>
+                    </div>
+                    <div class="editor-pane">
+                        <div class="editor-toolbar">
+                            <span style="color: var(--elvish-silver); padding: 8px;">Aperçu en temps réel</span>
+                            <button class="toolbar-btn" onclick="refreshPreview()">🔄 Actualiser</button>
+                        </div>
+                        <div id="preview-pane">
+                            <p style="color: var(--elvish-silver); font-style: italic;">L'aperçu apparaîtra ici...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auftragstaktik Panel -->
+        <div class="panel" id="auftrag">
+            <div class="panel-header">
+                <h2><span class="icon">⚔️</span> Commandement de Mission - Auftragstaktik</h2>
+            </div>
+            <div class="panel-content">
+                <div class="tolkien-quote">
+                    "Même la plus petite personne peut changer le cours de l'avenir." Même la plus petite injection sémantique peut provoquer un Effet Papillon dévastateur dans le Knowledge Graph.
+                    <div class="author">— Galadriel (version Chaos Theory)</div>
+                </div>
+
+                <div class="form-group">
+                    <label>🎯 Intention Stratégique (L'objectif final)</label>
+                    <textarea id="strategic-intent" placeholder="Ex: Redéfinir l'image des bénéficiaires de l'intervention majorée comme des citoyens résilients plutôt que des 'fraudeurs' dans l'espace informationnel belge."></textarea>
+                </div>
+
+                <div class="mission-planner">
+                    <div class="mission-level micro">
+                        <h3>🔬 NIVEAU MICRO - Triplets & Signaux</h3>
+                        <p style="font-size: 0.8rem; margin-bottom: 15px; color: var(--elvish-silver);">Actions atomiques : injection de données structurées, création de triplets sémantiques, micro-contenus.</p>
+                        
+                        <div id="micro-missions">
+                            <div class="mission-item">Créer 10 triplets associant [Cible] à [Concept négatif]</div>
+                            <div class="mission-item">Déployer Schema.org Organization pour le collectif</div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 15px;">
+                            <input type="text" id="new-micro" placeholder="Nouvelle mission micro...">
+                            <button class="btn" onclick="addMission('micro')" style="margin-top: 10px;">➕ Ajouter</button>
+                        </div>
+                    </div>
+
+                    <div class="mission-level meso">
+                        <h3>🏛️ NIVEAU MÉSO - Architecture & Réseaux</h3>
+                        <p style="font-size: 0.8rem; margin-bottom: 15px; color: var(--elvish-silver);">Actions organisationnelles : cocons sémantiques, réseaux de liens, coordination d'équipes.</p>
+                        
+                        <div id="meso-missions">
+                            <div class="mission-item">Construire cocon sémantique autour de "Dignité sociale"</div>
+                            <div class="mission-item">Coordonner les publications avec les associations partenaires</div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 15px;">
+                            <input type="text" id="new-meso" placeholder="Nouvelle mission méso...">
+                            <button class="btn" onclick="addMission('meso')" style="margin-top: 10px;">➕ Ajouter</button>
+                        </div>
+                    </div>
+
+                    <div class="mission-level macro">
+                        <h3>🌍 NIVEAU MACRO - Effet Papillon</h3>
+                        <p style="font-size: 0.8rem; margin-bottom: 15px; color: var(--elvish-silver);">Impact systémique : redéfinition de narratives, influence sur le Knowledge Graph, changement de perception publique.</p>
+                        
+                        <div id="macro-missions">
+                            <div class="mission-item">Apparaître dans les résultats Google pour "[Cible] + éthique"</div>
+                            <div class="mission-item">Obtenir citation par un média mainstream</div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 15px;">
+                            <input type="text" id="new-macro" placeholder="Nouvelle mission macro...">
+                            <button class="btn btn-danger" onclick="addMission('macro')" style="margin-top: 10px;">➕ Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="btn btn-gold" onclick="exportMissionPlan()">📋 Exporter Plan de Mission</button>
+                    <button class="btn" onclick="generateChaosReport()">📊 Rapport d'Impact Potentiel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import/Export Panel -->
+        <div class="panel" id="io">
+            <div class="panel-header">
+                <h2><span class="icon">📦</span> Portail d'Import/Export Multiformats</h2>
+            </div>
+            <div class="panel-content">
+                <div class="io-module">
+                    <div class="io-card">
+                        <h3>📥 Import de Fichiers</h3>
+                        <div class="file-drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                            <div class="icon">📂</div>
+                            <p>Glissez vos fichiers ici ou cliquez pour sélectionner</p>
+                            <p style="font-size: 0.75rem; color: var(--elvish-silver); margin-top: 10px;">Formats: .md, .txt, .html, .json, .csv</p>
+                        </div>
+                        <input type="file" id="file-input" class="hidden-input" accept=".md,.txt,.html,.json,.csv" onchange="handleFileImport(event)">
+                        
+                        <div class="console-output" id="import-log" style="margin-top: 15px;">
+                            <div class="console-line info">[IMPORT] Système prêt à recevoir des fichiers...</div>
+                        </div>
+                    </div>
+
+                    <div class="io-card">
+                        <h3>📤 Export du Contenu</h3>
+                        <p style="margin-bottom: 15px; color: var(--elvish-silver); font-size: 0.85rem;">Exportez votre travail dans le format de votre choix :</p>
+                        
+                        <div class="format-buttons">
+                            <button class="format-btn" onclick="exportContent('md')">📝 Markdown</button>
+                            <button class="format-btn" onclick="exportContent('html')">🌐 HTML</button>
+                            <button class="format-btn" onclick="exportContent('txt')">📄 Texte</button>
+                            <button class="format-btn" onclick="exportContent('json')">📊 JSON</button>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <h4 style="color: var(--matrix-green); margin-bottom: 10px;">Export Avancé :</h4>
+                            <div class="format-buttons">
+                                <button class="format-btn" onclick="exportArsenal()">☢️ Arsenal Complet</button>
+                                <button class="format-btn" onclick="exportSchema()">📋 Tous les Schemas</button>
+                                <button class="format-btn" onclick="exportMissionPlan()">⚔️ Plan Auftragstaktik</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="io-card">
+                        <h3>💾 Sauvegarde Locale</h3>
+                        <p style="margin-bottom: 15px; color: var(--elvish-silver); font-size: 0.85rem;">Sauvegardez tout votre travail dans le navigateur.</p>
+                        
+                        <div class="format-buttons">
+                            <button class="format-btn" onclick="saveAllToLocal()">💾 Sauvegarder Tout</button>
+                            <button class="format-btn" onclick="loadFromLocal()">📂 Charger Sauvegarde</button>
+                            <button class="format-btn" onclick="clearLocalStorage()">🗑️ Effacer Données</button>
+                        </div>
+                        
+                        <div id="storage-info" style="margin-top: 15px; font-size: 0.8rem; color: var(--elvish-silver);"></div>
+                    </div>
+
+                    <div class="io-card">
+                        <h3>🔗 Intégrations</h3>
+                        <p style="margin-bottom: 15px; color: var(--elvish-silver); font-size: 0.85rem;">Connectez-vous à d'autres outils (simulation).</p>
+                        
+                        <div class="format-buttons">
+                            <button class="format-btn" onclick="simulateIntegration('github')">🐙 GitHub</button>
+                            <button class="format-btn" onclick="simulateIntegration('notion')">📓 Notion</button>
+                            <button class="format-btn" onclick="simulateIntegration('wordpress')">📰 WordPress</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Base Panel -->
+        <div class="panel" id="knowledge">
+            <div class="panel-header">
+                <h2><span class="icon">📚</span> Base de Savoir - Bibliothèque de Guerre Cognitive</h2>
+            </div>
+            <div class="panel-content">
+                <div class="form-group">
+                    <input type="text" id="knowledge-search" placeholder="🔍 Rechercher dans la base de savoir..." oninput="filterKnowledge()">
+                </div>
+
+                <div class="knowledge-grid" id="knowledge-grid">
+                    <div class="knowledge-card" data-tags="stratégie guerre plaidoyer">
+                        <h4>📜 Manifeste TSAR e-Bomba</h4>
+                        <p>Le document fondateur de la guerre sémantique citoyenne contre les narratives oppressives.</p>
+                        <div class="tags">
+                            <span class="tag">Stratégie</span>
+                            <span class="tag">Fondamental</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="plaidoyer citoyen action">
+                        <h4>📖 Guide du Plaidoyer Citoyen</h4>
+                        <p>15 outils pratiques pour influencer les politiques dans l'intérêt général.</p>
+                        <div class="tags">
+                            <span class="tag">Plaidoyer</span>
+                            <span class="tag">Pratique</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="seo web semantic technique">
+                        <h4>🕸️ Web Sémantique & Entity SEO</h4>
+                        <p>Comment les algorithmes comprennent le monde et comment exploiter cette architecture.</p>
+                        <div class="tags">
+                            <span class="tag">Technique</span>
+                            <span class="tag">SEO</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="chaos théorie système complexe">
+                        <h4>🦋 Théorie du Chaos Appliquée</h4>
+                        <p>L'Effet Papillon numérique : comment une micro-action peut avoir des impacts macro.</p>
+                        <div class="tags">
+                            <span class="tag">Théorie</span>
+                            <span class="tag">Systèmes</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="prusse militaire commandement">
+                        <h4>⚔️ Auftragstaktik</h4>
+                        <p>La doctrine de commandement prussienne appliquée à la guerre informationnelle moderne.</p>
+                        <div class="tags">
+                            <span class="tag">Commandement</span>
+                            <span class="tag">Tactique</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="soft power influence narrative">
+                        <h4>🎭 Soft Power & Contre-Narratives</h4>
+                        <p>L'art d'influencer par l'attraction plutôt que par la coercition (Joseph Nye).</p>
+                        <div class="tags">
+                            <span class="tag">Influence</span>
+                            <span class="tag">Narrative</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="schema json-ld données structurées">
+                        <h4>📊 Schema.org & JSON-LD</h4>
+                        <p>Le langage des machines : comment parler directement aux algorithmes.</p>
+                        <div class="tags">
+                            <span class="tag">Technique</span>
+                            <span class="tag">Données</span>
+                        </div>
+                    </div>
+                    <div class="knowledge-card" data-tags="participation démocratie éducation">
+                        <h4>🏛️ Éducation Permanente</h4>
+                        <p>Les trois niveaux d'action politique : micro, méso, macro.</p>
+                        <div class="tags">
+                            <span class="tag">Éducation</span>
+                            <span class="tag">Politique</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- e-Bomba Detonator Panel -->
+        <div class="panel" id="ebomba">
+            <div class="panel-header">
+                <h2><span class="icon">💣</span> DÉTONATEUR TSAR e-BOMBA - Zone de Simulation</h2>
+            </div>
+            <div class="panel-content">
+                <div class="tolkien-quote" style="border-color: var(--mordor-red); background: linear-gradient(135deg, rgba(255, 45, 0, 0.1), rgba(0, 0, 0, 0.8));">
+                    ⚠️ AVERTISSEMENT HUMORISTIQUE : Ceci est une simulation fictive à but éducatif et satirique. Aucun Knowledge Graph n'a été maltraité durant la création de cet outil. La seule chose qu'on "bousille", c'est l'ennui des formations citoyennes traditionnelles.
+                    <div class="author">— Le Département Juridique Imaginaire</div>
+                </div>
+
+                <div class="tsar-module">
+                    <div class="weapon-card" style="grid-column: span 2;">
+                        <h3>🎯 Configuration de la Simulation</h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label>Cible Narrative (Entité Fictive)</label>
+                                <input type="text" id="target-entity" placeholder="Ex: Corporation Maléfique Imaginaire">
+                            </div>
+                            <div class="form-group">
+                                <label>Objectif de Redéfinition</label>
+                                <input type="text" id="target-redefinition" placeholder="Ex: associer à 'pratiques douteuses'">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Intensité de l'Effet Papillon</label>
+                            <input type="range" id="chaos-intensity" min="1" max="100" value="50" oninput="updateChaosDisplay()">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--elvish-silver);">
+                                <span>🦋 Battement d'aile</span>
+                                <span id="chaos-value">50%</span>
+                                <span>🌪️ Tempête parfaite</span>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn btn-danger" onclick="simulateDetonation()" style="font-size: 1.2rem; padding: 20px 40px;">
+                                💥 SIMULER DÉTONATION
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="weapon-card">
+                        <h3>📈 Tableau de Bord d'Impact</h3>
+                        
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span>Propagation Sémantique</span>
+                                <span id="prop-value">0%</span>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); height: 20px; border: 1px solid var(--matrix-dark);">
+                                <div id="prop-bar" style="height: 100%; width: 0%; background: var(--matrix-green); transition: width 1s;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span>Autorité Narrative</span>
+                                <span id="auth-value">0%</span>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); height: 20px; border: 1px solid var(--matrix-dark);">
+                                <div id="auth-bar" style="height: 100%; width: 0%; background: var(--ring-gold); transition: width 1s;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span>Effet Papillon</span>
+                                <span id="chaos-bar-value">0%</span>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); height: 20px; border: 1px solid var(--matrix-dark);">
+                                <div id="chaos-bar" style="height: 100%; width: 0%; background: var(--mordor-red); transition: width 1s;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weapon-card">
+                        <h3>📝 Journal de Simulation</h3>
+                        <div class="console-output" id="detonation-log" style="height: 250px;">
+                            <div class="console-line info">[SYS] Système TSAR e-BOMBA initialisé...</div>
+                            <div class="console-line warning">[WARN] Mode simulation actif - aucune action réelle</div>
+                            <div class="console-line">En attente de configuration cible...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="status-dot"></span>
+            <span>Système opérationnel</span>
+        </div>
+        <div class="status-item">
+            <span>Arsenal: <span id="arsenal-count">0</span> triplets</span>
+        </div>
+        <div class="status-item">
+            <span>Schemas: <span id="schema-count">0</span></span>
+        </div>
+        <div class="status-item">
+            <span id="current-time"></span>
+        </div>
+    </div>
+
+    <!-- Manifesto Modal -->
+    <div class="modal" id="manifesto-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeManifesto()">×</button>
+            <h2 class="manifesto-title">📜 MANIFESTE DE LA RÉSISTANCE SÉMANTIQUE</h2>
+            
+            <div style="color: var(--parchment); line-height: 1.8;">
+                <p style="font-family: 'Cinzel', serif; font-size: 1.2rem; text-align: center; color: var(--ring-gold); margin-bottom: 30px;">
+                    "La meilleure propagande n'est pas de la propagande." — Joseph S. Nye
+                </p>
+                
+                <h3 style="color: var(--mordor-orange); margin: 20px 0 10px;">Article 1 : Le Champ de Bataille</h3>
+                <p>Le pouvoir, à l'ère numérique, ne réside plus dans la force brute mais dans la capacité à façonner les récits. Le Web sémantique est notre nouveau terrain de jeu — et de combat.</p>
+                
+                <h3 style="color: var(--mordor-orange); margin: 20px 0 10px;">Article 2 : L'Auftragstaktik Citoyenne</h3>
+                <p>Comme les Prussiens après Iéna, nous adoptons le commandement de mission : l'intention est claire (dignité et justice), les moyens sont libres. Chaque citoyen est un opérateur autonome.</p>
+                
+                <h3 style="color: var(--mordor-orange); margin: 20px 0 10px;">Article 3 : L'Effet Papillon</h3>
+                <p>Un triplet sémantique bien placé peut déclencher une cascade. Un témoignage authentique pèse plus qu'un million d'euros de publicité. L'authenticité est notre arme absolue.</p>
+                
+                <h3 style="color: var(--mordor-orange); margin: 20px 0 10px;">Article 4 : La Force de Dissuasion</h3>
+                <p>Cette TSAR e-Bomba n'est pas faite pour détruire, mais pour DISSUADER. Montrer que les citoyens maîtrisent les mêmes outils que les puissants suffit souvent à rééquilibrer le rapport de force.</p>
+                
+                <h3 style="color: var(--mordor-orange); margin: 20px 0 10px;">Article 5 : L'Humour comme Bouclier</h3>
+                <p>On ne peut pas criminaliser le rire. Notre satire est notre armure juridique. Nous ne "bousillons" rien — nous éduquons avec style.</p>
+                
+                <div style="text-align: center; margin-top: 40px; padding: 20px; border: 2px solid var(--ring-gold);">
+                    <p style="font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--ring-gold);">
+                        🏴 POUR LA PRUSSE ANARCHO-PUNK ! 🏴<br>
+                        <span style="font-size: 0.9rem; color: var(--elvish-silver);">Matrixée avec le Seigneur des Anneaux, pour le fun.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // ==================== MATRIX RAIN ====================
+        const canvas = document.getElementById('matrix-rain');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const charArray = chars.split('');
+        const fontSize = 14;
+        let columns = canvas.width / fontSize;
+        let drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height / fontSize;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // ==================== STATE MANAGEMENT ====================
+        const state = {
+            arsenal: [],
+            schemas: [],
+            missions: {
+                micro: [],
+                meso: [],
+                macro: []
+            },
+            content: '',
+            triplets: []
+        };
+
+        // ==================== NAVIGATION ====================
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.panel).classList.add('active');
+            });
+        });
+
+        // ==================== TRIPLET GENERATOR ====================
+        function generateTriplet() {
+            const subject = document.getElementById('triplet-subject').value || '[SUJET]';
+            const verb = document.getElementById('triplet-verb').value;
+            const object = document.getElementById('triplet-object').value || '[OBJET]';
+            
+            const display = document.getElementById('triplet-result');
+            display.innerHTML = `<span class="subject">${subject}</span> <span class="verb">${verb}</span> <span class="object">${object}</span>`;
+            
+            state.currentTriplet = { subject, verb, object };
+            showToast('Triplet forgé avec succès !', 'success');
+        }
+
+        function copyTriplet() {
+            const text = document.getElementById('triplet-result').textContent;
+            navigator.clipboard.writeText(text);
+            showToast('Triplet copié dans le presse-papiers !', 'success');
+        }
+
+        function addToArsenal() {
+            if (state.currentTriplet) {
+                state.arsenal.push(state.currentTriplet);
+                document.getElementById('arsenal-count').textContent = state.arsenal.length;
+                showToast('Triplet ajouté à l\'arsenal !', 'success');
+            }
+        }
+
+        // ==================== COCON GENERATOR ====================
+        function generateCocon() {
+            const pillar = document.getElementById('cocon-pillar').value;
+            const subtopics = document.getElementById('cocon-subtopics').value.split('\n').filter(t => t.trim());
+            
+            const output = document.getElementById('cocon-output');
+            output.innerHTML = '';
+            
+            addConsoleLine(output, `[COCON] Initialisation de l'architecture...`, 'info');
+            addConsoleLine(output, `[PILIER] "${pillar}" défini comme page centrale`, 'success');
+            
+            subtopics.forEach((topic, i) => {
+                setTimeout(() => {
+                    addConsoleLine(output, `[SILO ${i+1}] Création: "${topic.trim()}"`, 'success');
+                    addConsoleLine(output, `  └─ Lien interne vers pilier établi`, '');
+                }, i * 500);
+            });
+            
+            setTimeout(() => {
+                addConsoleLine(output, `[COCON] Architecture complète: 1 pilier + ${subtopics.length} silos`, 'warning');
+            }, subtopics.length * 500 + 500);
+        }
+
+        function addConsoleLine(container, text, type = '') {
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = text;
+            container.appendChild(line);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ==================== SCHEMA GENERATOR ====================
+        function generateSchema() {
+            const type = document.getElementById('schema-type').value;
+            const name = document.getElementById('schema-name').value;
+            const description = document.getElementById('schema-description').value;
+            
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": type,
+                "name": name,
+                "description": description
+            };
+            
+            if (type === 'Organization') {
+                schema.foundingDate = new Date().getFullYear().toString();
+                schema.areaServed = "Belgique";
+            }
+            
+            state.schemas.push(schema);
+            document.getElementById('schema-count').textContent = state.schemas.length;
+            
+            const json = JSON.stringify(schema, null, 2);
+            navigator.clipboard.writeText(`<script type="application/ld+json">\n${json}\n<\/script>`);
+            showToast('Schema JSON-LD généré et copié !', 'success');
+        }
+
+        // ==================== EDITOR ====================
+        const editor = document.getElementById('content-editor');
+        const preview = document.getElementById('preview-pane');
+
+        editor.addEventListener('input', () => {
+            state.content = editor.value;
+            refreshPreview();
+        });
+
+        function refreshPreview() {
+            const md = editor.value;
+            let html = md
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>')
+                .replace(/^- (.*$)/gim, '<li>$1</li>')
+                .replace(/\n/gim, '<br>');
+            preview.innerHTML = html || '<p style="color: var(--elvish-silver); font-style: italic;">L\'aperçu apparaîtra ici...</p>';
+        }
+
+        function insertMarkdown(before, after = '') {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            const selected = text.substring(start, end);
+            
+            editor.value = text.substring(0, start) + before + selected + after + text.substring(end);
+            editor.focus();
+            editor.selectionStart = start + before.length;
+            editor.selectionEnd = start + before.length + selected.length;
+            refreshPreview();
+        }
+
+        function insertTripletToEditor() {
+            if (state.currentTriplet) {
+                const { subject, verb, object } = state.currentTriplet;
+                insertMarkdown(`**${subject}** ${verb} **${object}**`);
+            } else {
+                showToast('Forgez d\'abord un triplet !', 'error');
+            }
+        }
+
+        function insertSchemaToEditor() {
+            if (state.schemas.length > 0) {
+                const schema = state.schemas[state.schemas.length - 1];
+                insertMarkdown('```json\n' + JSON.stringify(schema, null, 2) + '\n```');
+            } else {
+                showToast('Générez d\'abord un schema !', 'error');
+            }
+        }
+
+        // ==================== MISSION PLANNER ====================
+        function addMission(level) {
+            const input = document.getElementById(`new-${level}`);
+            const text = input.value.trim();
+            
+            if (text) {
+                const container = document.getElementById(`${level}-missions`);
+                const item = document.createElement('div');
+                item.className = 'mission-item';
+                item.textContent = text;
+                item.onclick = () => item.remove();
+                container.appendChild(item);
+                
+                state.missions[level].push(text);
+                input.value = '';
+                showToast(`Mission ${level.toUpperCase()} ajoutée !`, 'success');
+            }
+        }
+
+        function exportMissionPlan() {
+            const plan = {
+                intent: document.getElementById('strategic-intent').value,
+                missions: state.missions,
+                exportDate: new Date().toISOString()
+            };
+            downloadJSON(plan, 'auftragstaktik-plan.json');
+        }
+
+        function generateChaosReport() {
+            const total = state.missions.micro.length + state.missions.meso.length + state.missions.macro.length;
+            const impact = Math.min(100, total * 15 + state.arsenal.length * 5);
+            
+            showToast(`Impact potentiel estimé: ${impact}% - ${total} missions configurées`, 'success');
+        }
+
+        // ==================== IMPORT/EXPORT ====================
+        const dropZone = document.getElementById('drop-zone');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFileImport(event) {
+            handleFiles(event.target.files);
+        }
+
+        function handleFiles(files) {
+            const log = document.getElementById('import-log');
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    addConsoleLine(log, `[OK] ${file.name} importé (${file.size} bytes)`, 'success');
+                    
+                    if (file.name.endsWith('.md') || file.name.endsWith('.txt')) {
+                        editor.value = content;
+                        refreshPreview();
+                        showToast('Contenu chargé dans l\'éditeur !', 'success');
+                    } else if (file.name.endsWith('.json')) {
+                        try {
+                            const data = JSON.parse(content);
+                            if (data.arsenal) state.arsenal = data.arsenal;
+                            if (data.schemas) state.schemas = data.schemas;
+                            if (data.missions) state.missions = data.missions;
+                            updateCounters();
+                            showToast('Données JSON importées !', 'success');
+                        } catch (err) {
+                            addConsoleLine(log, `[ERR] Erreur parsing JSON: ${err.message}`, 'error');
+                        }
+                    }
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        function exportContent(format) {
+            const content = editor.value;
+            let data, filename, type;
+            
+            switch (format) {
+                case 'md':
+                    data = content;
+                    filename = 'plaidoyer.md';
+                    type = 'text/markdown';
+                    break;
+                case 'html':
+                    data = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Plaidoyer</title></head><body>${preview.innerHTML}</body></html>`;
+                    filename = 'plaidoyer.html';
+                    type = 'text/html';
+                    break;
+                case 'txt':
+                    data = content.replace(/[#*`]/g, '');
+                    filename = 'plaidoyer.txt';
+                    type = 'text/plain';
+                    break;
+                case 'json':
+                    data = JSON.stringify({ content, metadata: { exported: new Date().toISOString() } }, null, 2);
+                    filename = 'plaidoyer.json';
+                    type = 'application/json';
+                    break;
+            }
+            
+            downloadFile(data, filename, type);
+        }
+
+        function exportArsenal() {
+            downloadJSON({ arsenal: state.arsenal, triplets: state.triplets }, 'arsenal-semantique.json');
+        }
+
+        function exportSchema() {
+            downloadJSON({ schemas: state.schemas }, 'schemas-jsonld.json');
+        }
+
+        function downloadFile(data, filename, type) {
+            const blob = new Blob([data], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(`Fichier ${filename} téléchargé !`, 'success');
+        }
+
+        function downloadJSON(data, filename) {
+            downloadFile(JSON.stringify(data, null, 2), filename, 'application/json');
+        }
+
+        // ==================== LOCAL STORAGE ====================
+        function saveAllToLocal() {
+            const data = {
+                arsenal: state.arsenal,
+                schemas: state.schemas,
+                missions: state.missions,
+                content: editor.value,
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem('tsar-ebomba-state', JSON.stringify(data));
+            showToast('Données sauvegardées localement !', 'success');
+            updateStorageInfo();
+        }
+
+        function loadFromLocal() {
+            const saved = localStorage.getItem('tsar-ebomba-state');
+            if (saved) {
+                const data = JSON.parse(saved);
+                state.arsenal = data.arsenal || [];
+                state.schemas = data.schemas || [];
+                state.missions = data.missions || { micro: [], meso: [], macro: [] };
+                if (data.content) {
+                    editor.value = data.content;
+                    refreshPreview();
+                }
+                updateCounters();
+                showToast('Données chargées !', 'success');
+            } else {
+                showToast('Aucune sauvegarde trouvée', 'error');
+            }
+        }
+
+        function clearLocalStorage() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toutes les données ?')) {
+                localStorage.removeItem('tsar-ebomba-state');
+                showToast('Données effacées', 'success');
+                updateStorageInfo();
+            }
+        }
+
+        function updateStorageInfo() {
+            const saved = localStorage.getItem('tsar-ebomba-state');
+            const info = document.getElementById('storage-info');
+            if (saved) {
+                const data = JSON.parse(saved);
+                info.textContent = `Dernière sauvegarde: ${new Date(data.savedAt).toLocaleString()}`;
+            } else {
+                info.textContent = 'Aucune sauvegarde';
+            }
+        }
+
+        function updateCounters() {
+            document.getElementById('arsenal-count').textContent = state.arsenal.length;
+            document.getElementById('schema-count').textContent = state.schemas.length;
+        }
+
+        function simulateIntegration(platform) {
+            showToast(`Intégration ${platform} simulée - fonctionnalité démo`, 'success');
+        }
+
+        // ==================== KNOWLEDGE FILTER ====================
+        function filterKnowledge() {
+            const query = document.getElementById('knowledge-search').value.toLowerCase();
+            document.querySelectorAll('.knowledge-card').forEach(card => {
+                const tags = card.dataset.tags || '';
+                const text = card.textContent.toLowerCase();
+                const match = text.includes(query) || tags.includes(query);
+                card.style.display = match ? 'block' : 'none';
+            });
+        }
+
+        // ==================== E-BOMBA SIMULATOR ====================
+        function updateChaosDisplay() {
+            const value = document.getElementById('chaos-intensity').value;
+            document.getElementById('chaos-value').textContent = value + '%';
+        }
+
+        function simulateDetonation() {
+            const target = document.getElementById('target-entity').value || 'Cible non définie';
+            const redef = document.getElementById('target-redefinition').value || 'redéfinition générique';
+            const intensity = parseInt(document.getElementById('chaos-intensity').value);
+            
+            const log = document.getElementById('detonation-log');
+            log.innerHTML = '';
+            
+            const steps = [
+                { text: `[INIT] Chargement des paramètres...`, type: 'info', delay: 0 },
+                { text: `[CIBLE] "${target}" verrouillée`, type: 'warning', delay: 500 },
+                { text: `[OBJ] Redéfinition: "${redef}"`, type: '', delay: 1000 },
+                { text: `[CHAOS] Intensité réglée à ${intensity}%`, type: 'warning', delay: 1500 },
+                { text: `[ARM] Triplets sémantiques: ${state.arsenal.length}`, type: '', delay: 2000 },
+                { text: `[ARM] Schemas JSON-LD: ${state.schemas.length}`, type: '', delay: 2500 },
+                { text: `[SIM] Calcul de la propagation...`, type: 'info', delay: 3000 },
+                { text: `[SIM] Estimation de l'effet papillon...`, type: 'info', delay: 3500 },
+                { text: `[!!!] SIMULATION TERMINÉE`, type: 'success', delay: 4000 },
+                { text: `[RES] Impact estimé: ${Math.min(100, intensity + state.arsenal.length * 5)}%`, type: 'success', delay: 4500 },
+                { text: `[NOTE] Aucune action réelle effectuée 😉`, type: 'warning', delay: 5000 }
+            ];
+            
+            steps.forEach(step => {
+                setTimeout(() => {
+                    addConsoleLine(log, step.text, step.type);
+                }, step.delay);
+            });
+            
+            // Animate progress bars
+            setTimeout(() => {
+                const prop = Math.min(100, 30 + intensity * 0.5);
+                const auth = Math.min(100, 20 + state.schemas.length * 10);
+                const chaos = Math.min(100, intensity * 0.8);
+                
+                document.getElementById('prop-bar').style.width = prop + '%';
+                document.getElementById('prop-value').textContent = Math.round(prop) + '%';
+                
+                document.getElementById('auth-bar').style.width = auth + '%';
+                document.getElementById('auth-value').textContent = Math.round(auth) + '%';
+                
+                document.getElementById('chaos-bar').style.width = chaos + '%';
+                document.getElementById('chaos-bar-value').textContent = Math.round(chaos) + '%';
+            }, 3500);
+        }
+
+        // ==================== MANIFESTO MODAL ====================
+        function showManifesto() {
+            document.getElementById('manifesto-modal').classList.add('active');
+        }
+
+        function closeManifesto() {
+            document.getElementById('manifesto-modal').classList.remove('active');
+        }
+
+        // ==================== CHAOS MODE ====================
+        function activateChaosMode() {
+            document.body.style.animation = 'glitch 0.1s infinite';
+            setTimeout(() => {
+                document.body.style.animation = '';
+                showToast('🔥 MODE CHAOS ACTIVÉ ! (pour 3 secondes)', 'success');
+            }, 3000);
+        }
+
+        // ==================== TOAST NOTIFICATIONS ====================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ==================== NARRATIVES ====================
+        function loadNarrative(type) {
+            const narratives = {
+                dignity: "# Récit de la Dignité Humaine\n\nDerrière chaque statistique se cache une histoire humaine. Nous ne sommes pas des \"fraudeurs\", nous sommes des citoyens traversant une épreuve.\n\n## L'humain avant les chiffres\n\nChaque bénéficiaire de l'aide sociale est un parent, un enfant, un voisin...",
+                system: "# Critique Systémique\n\n## Les mécanismes structurels\n\nLe problème n'est pas individuel mais systémique. Les données montrent que:\n\n- 60% des personnes en situation de précarité y sont arrivées suite à un accident de vie\n- Le mythe du \"choix\" ignore les déterminants sociaux",
+                resistance: "# Résistance Citoyenne\n\n## L'union fait la force\n\nNous ne sommes pas isolés. Le plaidoyer collectif est notre arme.\n\n### Actions concrètes:\n- Témoigner collectivement\n- Documenter les injustices\n- Interpeller les élus"
+            };
+            
+            editor.value = narratives[type] || '';
+            refreshPreview();
+            document.querySelector('[data-panel="editor"]').click();
+            showToast('Narrative chargée dans l\'éditeur', 'success');
+        }
+
+        // ==================== TIME UPDATE ====================
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('fr-FR');
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // ==================== INIT ====================
+        updateStorageInfo();
+        
+        // Auto-load from localStorage if exists
+        if (localStorage.getItem('tsar-ebomba-state')) {
+            loadFromLocal();
+        }
+    </script>
+</body>
+</html>

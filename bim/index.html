@@ -1,1 +1,604 @@
-<p>lol; #bim</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Social 2026 : Analyse des Réformes</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vib-blue': '#0052CC',      /* Primary: Trust & Authority */
+                        'vib-cyan': '#26C6DA',      /* Secondary: Modernity */
+                        'vib-orange': '#FF6D00',    /* Accent: Urgency/Alert */
+                        'vib-dark': '#172B4D',      /* Text */
+                        'vib-light': '#F4F5F7',     /* Background */
+                        'vib-white': '#FFFFFF',     /* Cards */
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F4F5F7;
+            color: #172B4D;
+        }
+
+        /* Strict Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width to prevent stretching */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;    /* Base mobile height */
+            max-height: 400px;
+            background: white;
+            border-radius: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; /* Tablet height */
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 400px; /* Desktop height */
+            }
+        }
+
+        /* Utility for Flowchart items */
+        .flow-arrow {
+            font-size: 2rem;
+            color: #0052CC;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
+
+    <!-- Chosen Palette: Brilliant Blues & Energetic Orange
+         Source: "colour combinations" (Vibrant/Professional)
+         Colors: #0052CC (Blue), #26C6DA (Cyan), #FF6D00 (Orange)
+    -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Hook & Key Metric (Poverty Gap).
+         2. Context: The "Scissors Effect" (Line Chart) showing Federal savings vs Local costs.
+         3. Process: Visualizing the "Glissement" (Flowchart) from Unemployment to CPAS.
+         4. Demographics: Who is affected? (Doughnut Chart) with focus on students/invalids.
+         5. Simulator: Interactive Bar Chart allowing user to adjust reform severity.
+         6. Stakeholders: Comparative Grid (Cards) of political positions.
+         
+         Narrative: Starts with the big picture (financial divergence), moves to the human mechanism (process), 
+         explains the victims (demographics), lets the user test the impact (simulator), and ends with the political debate.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Gap Analysis -> Goal: Inform -> Big Number Cards -> High impact immediate understanding.
+         2. Funding Shift -> Goal: Change -> Line Chart -> Shows the divergence over time (2020-2026).
+         3. Exclusion Path -> Goal: Organize -> HTML Flowchart -> Visualizes the administrative trap. NO SVG.
+         4. Beneficiaries -> Goal: Compare -> Doughnut Chart -> Composition of the new poor.
+         5. Budget Impact -> Goal: Relationships -> Interactive Bar Chart -> Cause & Effect simulator.
+         6. Opinions -> Goal: Organize -> Grid Layout -> Structured comparison of text data.
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+</head>
+<body class="font-sans antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="bg-vib-blue text-white py-12 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h1 class="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight">L'Onde de Choc Sociale</h1>
+            <p class="text-xl md:text-2xl font-light opacity-90 mb-8">Impact des Réformes Fédérales sur la Belgique (2025-2026)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <!-- KPI 1 -->
+                <div class="bg-vib-white text-vib-dark p-6 rounded-lg shadow-md transform hover:scale-105 transition duration-300">
+                    <p class="text-sm font-bold uppercase text-gray-500">Seuil de Pauvreté</p>
+                    <p class="text-4xl font-display font-bold text-vib-blue">1.450 €</p>
+                    <p class="text-xs mt-2">Pour un isolé (Net/Mois)</p>
+                </div>
+                <!-- KPI 2 -->
+                <div class="bg-vib-white text-vib-dark p-6 rounded-lg shadow-md transform hover:scale-105 transition duration-300 border-b-4 border-vib-orange">
+                    <p class="text-sm font-bold uppercase text-gray-500">Revenu (RIS)</p>
+                    <p class="text-4xl font-display font-bold text-vib-orange">1.295 €</p>
+                    <p class="text-xs mt-2 text-vib-orange font-bold">⚠️ Écart de -155 €</p>
+                </div>
+                <!-- KPI 3 -->
+                <div class="bg-vib-white text-vib-dark p-6 rounded-lg shadow-md transform hover:scale-105 transition duration-300">
+                    <p class="text-sm font-bold uppercase text-gray-500">Impact Communes</p>
+                    <p class="text-4xl font-display font-bold text-vib-cyan">+240 M€</p>
+                    <p class="text-xs mt-2">Surcoût estimé 2026</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: THE SCISSORS EFFECT (TRENDS) -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <div class="mb-8">
+            <h2 class="font-display text-3xl font-bold text-vib-blue mb-4 border-l-8 border-vib-orange pl-4">La Mécanique des Vases Communicants</h2>
+            <p class="text-gray-700 leading-relaxed text-lg">
+                Le cœur de la problématique réside dans le transfert de charge du niveau Fédéral vers le niveau Local. 
+                Alors que le gouvernement fédéral ("Arizona") restreint l'accès au chômage pour assainir son budget, 
+                les exclus ne disparaissent pas : ils "glissent" vers le CPAS, financé en partie par les communes.
+                Ce graphique illustre la divergence historique et projetée des dépenses.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="font-bold text-lg mb-4 text-center">Évolution des Dépenses (Indice 100 = 2021)</h3>
+                <!-- Chart Container -->
+                <div class="chart-container">
+                    <canvas id="scissorsChart"></canvas>
+                </div>
+                <p class="text-xs text-center text-gray-400 mt-2">Source: Bureau du Plan & Fédérations CPAS (Projections)</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-vib-blue">
+                    <h4 class="font-bold text-vib-blue text-xl mb-2">📉 Niveau Fédéral (ONEM)</h4>
+                    <p class="text-sm text-gray-700">
+                        Objectif : Réduire les allocations de chômage dans le temps (limite à 2 ans) et durcir les contrôles d'activation. 
+                        Résultat : Baisse mécanique des dépenses fédérales.
+                    </p>
+                </div>
+                <div class="bg-orange-50 p-6 rounded-lg border-l-4 border-vib-orange">
+                    <h4 class="font-bold text-vib-orange text-xl mb-2">📈 Niveau Local (CPAS)</h4>
+                    <p class="text-sm text-gray-700">
+                        Conséquence : Les exclus de l'ONEM demandent le Revenu d'Intégration (RIS). 
+                        Les communes doivent assumer la part non-remboursée du RIS + les frais de personnel (assistants sociaux) qui explosent.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: THE PROCESS (DIAGRAM) -->
+    <section class="bg-white py-12 shadow-inner">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="font-display text-3xl font-bold text-vib-blue mb-8 text-center">Le Parcours de l'Exclusion</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+                Comment un travailleur devient-il un bénéficiaire de l'aide sociale ? Visualisation du parcours administratif simplifié sous les nouvelles réformes.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <!-- Step 1 -->
+                <div class="w-full md:w-1/4 bg-vib-light p-6 rounded-xl border-2 border-gray-200 text-center relative hover:shadow-lg transition">
+                    <div class="text-4xl mb-2">👷‍♂️</div>
+                    <h3 class="font-bold text-vib-blue">Perte d'Emploi</h3>
+                    <p class="text-xs text-gray-500 mt-2">Entrée au chômage</p>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:block text-2xl text-gray-400">➜</div>
+                <div class="md:hidden text-2xl text-gray-400">⬇</div>
+
+                <!-- Step 2 -->
+                <div class="w-full md:w-1/4 bg-blue-50 p-6 rounded-xl border-2 border-vib-blue text-center relative hover:shadow-lg transition">
+                    <div class="text-4xl mb-2">⏳</div>
+                    <h3 class="font-bold text-vib-blue">Compte à Rebours</h3>
+                    <p class="text-xs text-gray-500 mt-2">Allocation dégressive (Max 2 ans)</p>
+                    <span class="absolute -top-3 -right-3 bg-vib-orange text-white text-xs font-bold px-2 py-1 rounded-full shadow">Réforme</span>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:block text-2xl text-gray-400">➜</div>
+                <div class="md:hidden text-2xl text-gray-400">⬇</div>
+
+                <!-- Step 3 -->
+                <div class="w-full md:w-1/4 bg-orange-50 p-6 rounded-xl border-2 border-vib-orange text-center relative hover:shadow-lg transition">
+                    <div class="text-4xl mb-2">🛑</div>
+                    <h3 class="font-bold text-vib-orange">Fin de Droits</h3>
+                    <p class="text-xs text-gray-500 mt-2">Exclusion de l'ONEM</p>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:block text-2xl text-gray-400">➜</div>
+                <div class="md:hidden text-2xl text-gray-400">⬇</div>
+
+                <!-- Step 4 -->
+                <div class="w-full md:w-1/4 bg-vib-dark text-white p-6 rounded-xl shadow-xl text-center relative hover:scale-105 transition">
+                    <div class="text-4xl mb-2">🏛️</div>
+                    <h3 class="font-bold text-vib-cyan">Filet du CPAS</h3>
+                    <p class="text-xs text-gray-400 mt-2">Revenu d'Intégration (RIS)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: DEMOGRAPHICS (DOUGHNUT) -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <h2 class="font-display text-3xl font-bold text-vib-blue mb-4 border-l-8 border-vib-orange pl-4">Qui sont les Nouveaux Bénéficiaires ?</h2>
+        <p class="text-gray-700 leading-relaxed text-lg mb-8">
+            Le profil des bénéficiaires du CPAS change. Ce n'est plus seulement une aide pour les chômeurs de longue durée. 
+            On observe une "étudiantisation" de la précarité et une augmentation inquiétante des problèmes de santé mentale.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Chart Column -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-center">
+                <h3 class="font-bold text-center mb-4 text-gray-700">Répartition des Nouveaux Dossiers (2025)</h3>
+                <div class="chart-container">
+                    <canvas id="demographicsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Context Column -->
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Stat Card 1 -->
+                <div class="flex items-center p-4 bg-white rounded-lg shadow border-l-4 border-vib-cyan">
+                    <div class="text-3xl mr-4">🎓</div>
+                    <div>
+                        <h4 class="font-bold text-vib-dark">Les Étudiants (+8%)</h4>
+                        <p class="text-sm text-gray-600">L'augmentation la plus rapide. Le coût des études et du logement pousse les jeunes vers le CPAS.</p>
+                    </div>
+                </div>
+                <!-- Stat Card 2 -->
+                <div class="flex items-center p-4 bg-white rounded-lg shadow border-l-4 border-vib-orange">
+                    <div class="text-3xl mr-4">🏥</div>
+                    <div>
+                        <h4 class="font-bold text-vib-dark">Invalides & Santé Mentale</h4>
+                        <p class="text-sm text-gray-600">Le trajet de réintégration échoue souvent, laissant les personnes malades sans ressources autres que le RIS.</p>
+                    </div>
+                </div>
+                <!-- Stat Card 3 -->
+                <div class="flex items-center p-4 bg-white rounded-lg shadow border-l-4 border-vib-blue">
+                    <div class="text-3xl mr-4">👩‍👧</div>
+                    <div>
+                        <h4 class="font-bold text-vib-dark">Familles Monoparentales</h4>
+                        <p class="text-sm text-gray-600">Représentent 1/3 du stock total. Le statut de cohabitant reste un piège à la pauvreté.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE SIMULATOR -->
+    <section class="bg-vib-dark text-white py-16">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <span class="bg-vib-orange text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Interactif</span>
+                <h2 class="font-display text-3xl md:text-4xl font-bold mt-4">Simulateur d'Impact Budgétaire</h2>
+                <p class="text-gray-300 mt-4 max-w-2xl mx-auto">
+                    Ajustez la durée maximale des allocations de chômage pour voir l'impact direct sur les finances locales.
+                </p>
+            </div>
+
+            <div class="bg-white text-vib-dark rounded-xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+                
+                <!-- Controls Side -->
+                <div class="lg:col-span-4 p-8 bg-gray-100 border-r border-gray-200 flex flex-col justify-center">
+                    <label class="block font-bold text-lg mb-4 text-vib-blue">Limitation Chômage</label>
+                    
+                    <input type="range" id="reformInput" min="12" max="60" value="24" step="12" 
+                           class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-vib-orange mb-4">
+                    
+                    <div class="flex justify-between text-sm font-bold text-gray-500 mb-8">
+                        <span>Stricte (1 an)</span>
+                        <span id="reformLabel" class="text-vib-orange text-xl">2 ans</span>
+                        <span>Souple (5 ans)</span>
+                    </div>
+
+                    <div class="bg-white p-4 rounded shadow-sm border border-gray-200">
+                        <p class="text-xs text-gray-500 uppercase font-bold">Estimation Exclus ONEM</p>
+                        <p id="exclusValue" class="text-2xl font-bold text-vib-dark">25.000</p>
+                        <p class="text-xs text-gray-400 mt-1">Personnes perdant leurs droits</p>
+                    </div>
+                </div>
+
+                <!-- Visualization Side -->
+                <div class="lg:col-span-8 p-8">
+                    <h3 class="font-bold text-lg mb-6 text-center">Transfert de Coût vers les Communes (M€)</h3>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="simulationChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-gray-400 mt-4 italic">Hypothèse : 80% des exclus demandent le RIS. Coût moyen par dossier intégré.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: STAKEHOLDERS & BIM -->
+    <section class="py-12 px-4 max-w-6xl mx-auto">
+        <h2 class="font-display text-3xl font-bold text-vib-blue mb-8 border-l-8 border-vib-orange pl-4">Débat : Le Statut BIM et les Positions</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- BIM INFO -->
+            <div class="lg:col-span-1 bg-vib-blue text-white p-6 rounded-lg shadow-lg">
+                <h3 class="font-bold text-xl mb-4 border-b border-blue-400 pb-2">Statut BIM 2025</h3>
+                <p class="text-sm opacity-90 mb-4">
+                    L'Intervention Majorée (BIM) est cruciale pour l'accès aux soins de santé à tarif réduit.
+                </p>
+                <div class="space-y-4">
+                    <div class="bg-blue-800 bg-opacity-50 p-3 rounded">
+                        <p class="text-xs uppercase opacity-75">Plafond (Isolé)</p>
+                        <p class="font-bold text-lg">26.450 € Brut/An</p>
+                    </div>
+                    <div class="bg-blue-800 bg-opacity-50 p-3 rounded">
+                        <p class="text-xs uppercase opacity-75">Plafond (Ménage)</p>
+                        <p class="font-bold text-lg">31.300 € Brut/An</p>
+                    </div>
+                </div>
+                <div class="mt-6 text-sm italic opacity-75">
+                    "La classe moyenne inférieure risque de perdre ce statut avec l'indexation des salaires, créant un effet de seuil."
+                </div>
+            </div>
+
+            <!-- POSITIONS GRID -->
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Position 1 -->
+                <div class="bg-white p-5 rounded-lg shadow border-t-4 border-gray-800">
+                    <h4 class="font-bold text-gray-800 mb-2">Gouvernement</h4>
+                    <p class="text-sm text-gray-600">Priorité à l'activation ("Jobs Deal"). Le travail doit payer plus que l'inactivité. Limitation nécessaire pour l'équilibre budgétaire.</p>
+                </div>
+                <!-- Position 2 -->
+                <div class="bg-white p-5 rounded-lg shadow border-t-4 border-vib-orange">
+                    <h4 class="font-bold text-vib-orange mb-2">Fédérations CPAS</h4>
+                    <p class="text-sm text-gray-600">Alerte rouge financière. Demandent un refinancement fédéral du RIS à 90% (vs 70% actuel) pour compenser le glissement.</p>
+                </div>
+                <!-- Position 3 -->
+                <div class="bg-white p-5 rounded-lg shadow border-t-4 border-red-600">
+                    <h4 class="font-bold text-red-600 mb-2">Syndicats (FGTB/CSC)</h4>
+                    <p class="text-sm text-gray-600">Revendiquent la hausse des minima sociaux au-dessus du seuil de pauvreté et la suppression du statut de cohabitant.</p>
+                </div>
+                <!-- Position 4 -->
+                <div class="bg-white p-5 rounded-lg shadow border-t-4 border-green-600">
+                    <h4 class="font-bold text-green-600 mb-2">Secteur Associatif</h4>
+                    <p class="text-sm text-gray-600">Craint une explosion du sans-abrisme due au "non-recours" (30% des ayants droit ne demandent pas le RIS).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-100 py-8 text-center border-t border-gray-200 mt-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="text-sm text-gray-500 font-bold mb-2">© 2026 Observatoire Social Belge</p>
+            <p class="text-xs text-gray-400">
+                Sources : Rapports SPP Intégration Sociale, Bureau Fédéral du Plan, Notes de politique générale. 
+                Les données 2026 sont des projections basées sur les accords de gouvernement "Arizona".
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ---------------------------------------------------------
+        // HELPER: LABEL WRAPPING (16 Chars)
+        // ---------------------------------------------------------
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // ---------------------------------------------------------
+        // CHART CONFIGURATION
+        // ---------------------------------------------------------
+        
+        // Common Options for consistency
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    backgroundColor: '#172B4D',
+                    padding: 12,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { family: "'Open Sans', sans-serif" },
+                        usePointStyle: true
+                    }
+                }
+            }
+        };
+
+        // ---------------------------------------------------------
+        // 1. SCISSORS CHART (LINE)
+        // ---------------------------------------------------------
+        const ctxScissors = document.getElementById('scissorsChart').getContext('2d');
+        const scissorsChart = new Chart(ctxScissors, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026 (Proj)'],
+                datasets: [
+                    {
+                        label: wrapLabel('Dépenses Fédérales (Chômage)'),
+                        data: [100, 98, 96, 92, 88, 85, 80],
+                        borderColor: '#0052CC', // Vib Blue
+                        backgroundColor: 'rgba(0, 82, 204, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: wrapLabel('Dépenses Locales (CPAS/RIS)'),
+                        data: [100, 103, 110, 118, 128, 140, 155],
+                        borderColor: '#FF6D00', // Vib Orange
+                        backgroundColor: 'rgba(255, 109, 0, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        grid: { color: '#f0f0f0' },
+                        title: { display: true, text: 'Indice (Base 100 = 2020)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // ---------------------------------------------------------
+        // 2. DEMOGRAPHICS CHART (DOUGHNUT)
+        // ---------------------------------------------------------
+        const ctxDemo = document.getElementById('demographicsChart').getContext('2d');
+        const demoData = {
+            labels: [
+                wrapLabel('Etudiants & Jeunes'),
+                wrapLabel('Exclus Chômage'),
+                wrapLabel('Invalides/Maladie'),
+                wrapLabel('Monoparental (Femmes)'),
+                wrapLabel('Réfugiés/Autres')
+            ],
+            data: [20, 35, 15, 20, 10]
+        };
+
+        // Wrap labels for data object
+        demoData.labels = demoData.labels.map(l => typeof l === 'string' ? wrapLabel(l) : l);
+
+        const demographicsChart = new Chart(ctxDemo, {
+            type: 'doughnut',
+            data: {
+                labels: demoData.labels,
+                datasets: [{
+                    data: demoData.data,
+                    backgroundColor: [
+                        '#26C6DA', // Cyan (Youth)
+                        '#0052CC', // Blue (Unemployed)
+                        '#FF6D00', // Orange (Health)
+                        '#7B1FA2', // Purple (Single Parents)
+                        '#B0BEC5'  // Grey (Others)
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                ...commonOptions,
+                cutout: '60%',
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: { position: 'right' }
+                }
+            }
+        });
+
+        // ---------------------------------------------------------
+        // 3. SIMULATOR CHART (BAR) & LOGIC
+        // ---------------------------------------------------------
+        const ctxSim = document.getElementById('simulationChart').getContext('2d');
+        const simulationChart = new Chart(ctxSim, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabel('Surcoût Communes')],
+                datasets: [{
+                    label: 'Millions d\'Euros',
+                    data: [240], // Initial value for 24 months
+                    backgroundColor: '#FF6D00',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y', // Horizontal bar
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 500, // Fixed max for visual consistency
+                        grid: { color: '#f0f0f0' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Interactive Logic
+        const slider = document.getElementById('reformInput');
+        const labelDisplay = document.getElementById('reformLabel');
+        const exclusDisplay = document.getElementById('exclusValue');
+
+        slider.addEventListener('input', function(e) {
+            const months = parseInt(e.target.value);
+            
+            // 1. Update Label
+            if (months === 24) {
+                labelDisplay.textContent = "2 ans (Actuel)";
+                labelDisplay.className = "text-vib-orange text-xl font-bold";
+            } else {
+                labelDisplay.textContent = (months / 12) + " ans";
+                labelDisplay.className = "text-vib-blue text-xl font-bold";
+            }
+
+            // 2. Calculate Impact (Simulated Model)
+            // Less months = More exclusion = Higher Cost
+            // Base: 24 months -> 25k exclus -> 240 M€ cost
+            // Formula approximation: 
+            // 60 months (5 years) -> minimal exclusion (~5k)
+            // 12 months (1 year) -> max exclusion (~40k)
+            
+            // Linear interpolation for simplicity:
+            // Exclus = 45000 - (months * 833)
+            const estimatedExclus = Math.round(45000 - (months * 833));
+            
+            // Cost = Exclus * 0.8 (transfer rate) * 12k (annual cost) / 1M
+            const estimatedCost = Math.round((estimatedExclus * 0.8 * 12000) / 1000000);
+
+            // 3. Update Text
+            exclusDisplay.textContent = estimatedExclus.toLocaleString('fr-BE');
+
+            // 4. Update Chart
+            simulationChart.data.datasets[0].data = [estimatedCost];
+            simulationChart.update();
+        });
+
+    </script>
+</body>
+</html>

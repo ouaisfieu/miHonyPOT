@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartographie Numérique : L'Univers de Ouaisfieu</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Application Configuration & Styles -->
+    <style>
+        /* * Palette: 'Cosmic Vibrant'
+         * Background: Soft White / Slate
+         * Text: Deep Space Blue
+         * Accents: Electric Purple, Solar Orange, Cyber Cyan
+         */
+        :root {
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --accent-primary: #6366F1; /* Indigo */
+            --accent-secondary: #F59E0B; /* Amber */
+            --accent-tertiary: #10B981; /* Emerald */
+            --accent-quaternary: #EC4899; /* Pink */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Default to full width of parent column */
+            margin-left: auto;
+            margin-right: auto;
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Responsive max-widths for charts to prevent massive stretching */
+        @media (min-width: 1024px) {
+            .chart-container-constrained {
+                max-width: 650px; 
+            }
+        }
+
+        .chart-wrapper-large {
+            height: 400px;
+            max-height: 50vh;
+        }
+
+        .chart-wrapper-medium {
+            height: 300px;
+            max-height: 350px;
+        }
+
+        .chart-wrapper-small {
+            height: 250px;
+            max-height: 300px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E0; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8; 
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-bottom: 2px solid var(--accent-primary);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-filter {
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+    </style>
+
+    <!-- Chosen Palette: Cosmic Vibrant (Indigo, Amber, Emerald, Pink on Slate) -->
+    <!-- Application Structure Plan:
+         1. Hero Section: High-level metrics (KPIs) to establish scale.
+         2. Macro Analysis (The Galaxy): A bubble chart mapping projects by Time vs. Complexity vs. Size. This allows users to differentiate between quick scripts and major applications.
+         3. Technical Composition (The Radar): A breakdown of languages used to understand the developer's stack preferences.
+         4. Project Explorer (The Atlas): A filterable grid of cards detailed with metadata, allowing granular exploration of the 'Map'.
+         5. Temporal Trends (The Timeline): A line chart showing activity over time to visualize consistency and bursts of productivity.
+         Why: This structure flows from the abstract (visual patterns) to the concrete (specific repo details), facilitating a "Zoom In" user journey.
+    -->
+    <!-- Visualization & Content Choices:
+         - Galaxy Map (Bubble Chart): Goal -> Compare & Relationships. Shows Complexity (Y) vs Time (X) vs Size (R). Best for spotting "Magnum Opus" projects.
+         - Tech Stack (Doughnut): Goal -> Compare. Shows composition of languages.
+         - Activity Stream (Line): Goal -> Change. Shows evolution of output.
+         - Cards (HTML/JS): Goal -> Inform/Organize. Detailed lookup.
+         - Interaction: Clicking bubbles could scroll to cards (simulated), Buttons filter the grid.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl pt-1">🪐</span>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-800">
+                        Cartographie <span class="text-indigo-600 font-light">Ouaisfieu</span>
+                    </h1>
+                </div>
+                <div class="flex items-center gap-6 text-sm font-medium text-slate-600">
+                    <a href="#dashboard" class="hover:text-indigo-600 transition-colors">Vue Globale</a>
+                    <a href="#catalog" class="hover:text-indigo-600 transition-colors">Explorateur</a>
+                    <a href="#analytics" class="hover:text-indigo-600 transition-colors">Analytique</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Introduction Section -->
+        <section class="text-center max-w-4xl mx-auto mb-12">
+            <h2 class="text-4xl font-bold text-slate-800 mb-4">Atlas de l'Écosystème GitHub</h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Bienvenue dans l'interface de visualisation cartographique des projets de <strong>Ouaisfieu</strong>. 
+                Cette application transforme le code brut en un paysage numérique interactif, permettant d'identifier les pôles de compétence, 
+                l'évolution technique et les projets phares de cet univers de développement.
+            </p>
+            
+            <!-- KPIs -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-3xl" id="total-repos">--</div>
+                    <div class="text-slate-500 text-sm font-medium uppercase tracking-wide mt-1">Dépôts Actifs</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-amber-500 font-bold text-3xl" id="total-stars">--</div>
+                    <div class="text-slate-500 text-sm font-medium uppercase tracking-wide mt-1">Étoiles Cumulées</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-emerald-500 font-bold text-3xl" id="primary-lang">--</div>
+                    <div class="text-slate-500 text-sm font-medium uppercase tracking-wide mt-1">Technologie Dominante</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Macro Analysis (Galaxy & Radar) -->
+        <section id="dashboard" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- The Galaxy Map (Bubble Chart) -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="border-l-4 border-indigo-600 pl-4">
+                        <h3 class="text-xl font-bold text-slate-800">La Galaxie des Projets</h3>
+                        <p class="text-sm text-slate-500 mt-1">
+                            Cartographie multidimensionnelle : L'axe X représente le temps, l'axe Y la complexité du code, 
+                            et la taille des bulles indique le volume du dépôt. Les couleurs identifient les domaines d'application.
+                        </p>
+                    </div>
+                    
+                    <!-- Chart Container -->
+                    <div class="chart-container chart-wrapper-large">
+                        <canvas id="galaxyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tech Radar (Doughnut) -->
+                <div class="space-y-4">
+                    <div class="border-l-4 border-amber-500 pl-4">
+                        <h3 class="text-xl font-bold text-slate-800">Composition Technique</h3>
+                        <p class="text-sm text-slate-500 mt-1">
+                            Répartition des langages de programmation à travers l'ensemble de l'atlas.
+                        </p>
+                    </div>
+                    
+                    <!-- Chart Container -->
+                    <div class="chart-container chart-container-constrained chart-wrapper-medium flex items-center justify-center">
+                        <canvas id="techChart"></canvas>
+                    </div>
+
+                    <!-- Insight Card -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-700 text-sm mb-2 flex items-center gap-2">
+                            <span>💡</span> Analyse Rapide
+                        </h4>
+                        <p id="tech-insight" class="text-sm text-slate-600">
+                            Calcul de la diversité technique en cours...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Catalog Explorer -->
+        <section id="catalog" class="space-y-6 pt-12 border-t border-slate-200">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div class="border-l-4 border-emerald-500 pl-4">
+                    <h3 class="text-2xl font-bold text-slate-800">L'Explorateur de Dépôts</h3>
+                    <p class="text-slate-500 mt-2 max-w-2xl">
+                        Naviguez dans la liste détaillée des projets. Utilisez les filtres ci-dessous pour isoler des types spécifiques 
+                        de développement, des applications web aux outils d'analyse de données.
+                    </p>
+                </div>
+                
+                <!-- Interactive Filters -->
+                <div class="flex flex-wrap gap-2" id="filter-container">
+                    <button class="filter-btn active-filter px-4 py-2 rounded-full text-sm font-medium transition-all border border-slate-200 hover:shadow-md" data-filter="all">Tous</button>
+                    <button class="filter-btn bg-white text-slate-600 px-4 py-2 rounded-full text-sm font-medium transition-all border border-slate-200 hover:shadow-md hover:text-indigo-600" data-filter="Web App">Web Apps</button>
+                    <button class="filter-btn bg-white text-slate-600 px-4 py-2 rounded-full text-sm font-medium transition-all border border-slate-200 hover:shadow-md hover:text-indigo-600" data-filter="Data Viz">Data Viz</button>
+                    <button class="filter-btn bg-white text-slate-600 px-4 py-2 rounded-full text-sm font-medium transition-all border border-slate-200 hover:shadow-md hover:text-indigo-600" data-filter="Tooling">Outils</button>
+                    <button class="filter-btn bg-white text-slate-600 px-4 py-2 rounded-full text-sm font-medium transition-all border border-slate-200 hover:shadow-md hover:text-indigo-600" data-filter="Creative">Créatif</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Grid -->
+            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Javascript will inject cards here -->
+            </div>
+            
+            <div id="no-results" class="hidden text-center py-16 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                <p class="text-slate-400 text-lg">Aucun projet ne correspond à ces coordonnées de recherche.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Temporal Analytics -->
+        <section id="analytics" class="space-y-6 pt-12 border-t border-slate-200 mb-12">
+            <div class="max-w-4xl mx-auto text-center mb-8">
+                <h3 class="text-2xl font-bold text-slate-800">Chronologie de l'Activité</h3>
+                <p class="text-slate-500 mt-2">
+                    Visualisation temporelle des déploiements majeurs. Cette courbe illustre le rythme de production 
+                    et les périodes d'activité intense au sein de l'univers Ouaisfieu.
+                </p>
+            </div>
+
+            <div class="chart-container chart-wrapper-medium">
+                <canvas id="timelineChart"></canvas>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm mb-4">
+                Généré par le Système de Cartographie Portfolio. Données simulées basées sur le profil <span class="font-bold text-indigo-600">Ouaisfieu</span>.
+            </p>
+            <div class="flex justify-center gap-6 text-2xl opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                <span title="Code">💻</span>
+                <span title="Data">📊</span>
+                <span title="Art">🎨</span>
+                <span title="Network">🌐</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- UTILITY FUNCTIONS ---
+        
+        // 16-char wrapping logic for Chart.js labels
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Standard Tooltip Configuration required for Multi-line labels
+        const standardTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            },
+            backgroundColor: '#1E293B',
+            padding: 12,
+            titleFont: { family: 'Space Grotesk', size: 13 },
+            bodyFont: { family: 'Inter', size: 12 },
+            cornerRadius: 8,
+            displayColors: true
+        };
+
+        // --- DATA LAYER (Simulated Portfolio) ---
+        const repoData = [
+            {
+                id: 1,
+                name: "Cartographie Numérique JS",
+                description: "Bibliothèque de visualisation de réseaux complexes sous forme de cartes topographiques interactives.",
+                category: "Data Viz",
+                language: "JavaScript",
+                stars: 124,
+                updated: "2024-11-15",
+                created: "2023-01-10",
+                complexity: 85, 
+                size: 4500 
+            },
+            {
+                id: 2,
+                name: "React Dashboard V2",
+                description: "Interface administrative minimaliste utilisant Tailwind CSS et React avec support natif du mode sombre.",
+                category: "Web App",
+                language: "TypeScript",
+                stars: 89,
+                updated: "2025-01-05",
+                created: "2023-08-20",
+                complexity: 60,
+                size: 3200
+            },
+            {
+                id: 3,
+                name: "Generative Art Collection",
+                description: "Série d'expérimentations algorithmiques utilisant HTML5 Canvas et WebGL pour des motifs infinis.",
+                category: "Creative",
+                language: "JavaScript",
+                stars: 256,
+                updated: "2024-12-01",
+                created: "2022-05-15",
+                complexity: 92,
+                size: 1500
+            },
+            {
+                id: 4,
+                name: "Python Scraper Toolkit",
+                description: "Ensemble d'outils modulaires pour l'extraction éthique et structurée de données web.",
+                category: "Tooling",
+                language: "Python",
+                stars: 45,
+                updated: "2024-09-10",
+                created: "2021-11-02",
+                complexity: 40,
+                size: 800
+            },
+            {
+                id: 5,
+                name: "CSS Battles Solutions",
+                description: "Compendium de solutions optimisées au pixel près pour les défis de design CSS Battles.",
+                category: "Creative",
+                language: "CSS",
+                stars: 312,
+                updated: "2025-01-15",
+                created: "2022-01-20",
+                complexity: 30,
+                size: 200
+            },
+            {
+                id: 6,
+                name: "Node API Boilerplate",
+                description: "Architecture de référence propre pour API REST sécurisées avec Node.js, Express et MongoDB.",
+                category: "Web App",
+                language: "JavaScript",
+                stars: 78,
+                updated: "2024-06-30",
+                created: "2021-08-14",
+                complexity: 55,
+                size: 2100
+            },
+            {
+                id: 7,
+                name: "Financial Forecaster",
+                description: "Application de prévision budgétaire personnelle utilisant des modèles de régression simples.",
+                category: "Data Viz",
+                language: "Python",
+                stars: 34,
+                updated: "2023-12-10",
+                created: "2022-03-01",
+                complexity: 70,
+                size: 5000
+            },
+            {
+                id: 8,
+                name: "Vue Interactive Map",
+                description: "Composant Vue.js performant pour le rendu de cartes SVG interactives et légères.",
+                category: "Web App",
+                language: "Vue",
+                stars: 67,
+                updated: "2024-10-22",
+                created: "2023-02-14",
+                complexity: 65,
+                size: 1200
+            },
+            {
+                id: 9,
+                name: "CLI Todo Master",
+                description: "Gestionnaire de tâches ultra-rapide en ligne de commande avec persistance locale JSON.",
+                category: "Tooling",
+                language: "Rust",
+                stars: 150,
+                updated: "2025-01-02",
+                created: "2023-07-01",
+                complexity: 75,
+                size: 1800
+            },
+            {
+                id: 10,
+                name: "ThreeJS Solar System",
+                description: "Simulation 3D éducative et interactive du système solaire à l'échelle réelle.",
+                category: "Creative",
+                language: "JavaScript",
+                stars: 210,
+                updated: "2022-08-15",
+                created: "2021-12-05",
+                complexity: 88,
+                size: 6000
+            },
+             {
+                id: 11,
+                name: "Hugo Theme Minimal",
+                description: "Thème ultra-léger et accessible pour le générateur de site statique Hugo.",
+                category: "Web App",
+                language: "HTML",
+                stars: 42,
+                updated: "2024-04-10",
+                created: "2022-09-20",
+                complexity: 25,
+                size: 400
+            },
+            {
+                id: 12,
+                name: "Docker Dev Env",
+                description: "Configuration Docker Compose clé en main pour un environnement de développement fullstack.",
+                category: "Tooling",
+                language: "Shell",
+                stars: 95,
+                updated: "2024-11-20",
+                created: "2023-05-05",
+                complexity: 50,
+                size: 150
+            }
+        ];
+
+        // --- APPLICATION STATE ---
+        const state = {
+            filter: 'all',
+            projects: repoData,
+            charts: {}
+        };
+
+        // --- DOM ELEMENTS ---
+        const elements = {
+            grid: document.getElementById('project-grid'),
+            filterBtns: document.querySelectorAll('.filter-btn'),
+            noResults: document.getElementById('no-results'),
+            stats: {
+                repos: document.getElementById('total-repos'),
+                stars: document.getElementById('total-stars'),
+                lang: document.getElementById('primary-lang')
+            },
+            insight: document.getElementById('tech-insight')
+        };
+
+        // --- INITIALIZATION ---
+        function init() {
+            calculateKPIs();
+            renderGrid(state.projects);
+            initCharts();
+            setupEventListeners();
+        }
+
+        // --- RENDER LOGIC ---
+        
+        function calculateKPIs() {
+            const totalRepos = state.projects.length;
+            const totalStars = state.projects.reduce((acc, curr) => acc + curr.stars, 0);
+            
+            // Calc Dominant Language
+            const langs = {};
+            state.projects.forEach(p => { langs[p.language] = (langs[p.language] || 0) + 1; });
+            const dominant = Object.entries(langs).reduce((a, b) => a[1] > b[1] ? a : b);
+
+            elements.stats.repos.innerText = totalRepos;
+            elements.stats.stars.innerText = totalStars.toLocaleString();
+            elements.stats.lang.innerText = dominant[0];
+        }
+
+        function getCategoryColor(cat) {
+            const map = {
+                'Web App': '#6366F1', // Indigo
+                'Data Viz': '#10B981', // Emerald
+                'Tooling': '#64748B', // Slate
+                'Creative': '#EC4899' // Pink
+            };
+            return map[cat] || '#F59E0B';
+        }
+
+        function getLanguageColor(lang) {
+            const map = {
+                'JavaScript': '#F7DF1E',
+                'TypeScript': '#3178C6',
+                'Python': '#3776AB',
+                'CSS': '#1572B6',
+                'HTML': '#E34F26',
+                'Rust': '#DEA584',
+                'Vue': '#4FC08D',
+                'Shell': '#89E051'
+            };
+            return map[lang] || '#CBD5E0';
+        }
+
+        function renderGrid(projects) {
+            elements.grid.innerHTML = '';
+            
+            if (projects.length === 0) {
+                elements.noResults.classList.remove('hidden');
+                return;
+            } else {
+                elements.noResults.classList.add('hidden');
+            }
+
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between h-full';
+                
+                const langColor = getLanguageColor(project.language);
+                const catColor = getCategoryColor(project.category);
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2 py-1 text-xs font-bold rounded-md text-white uppercase tracking-wide shadow-sm" style="background-color: ${catColor}">
+                                ${project.category}
+                            </span>
+                            <div class="flex items-center gap-1 text-slate-500 text-sm font-semibold bg-slate-50 px-2 py-1 rounded-full">
+                                <span class="text-amber-400">★</span>
+                                <span>${project.stars}</span>
+                            </div>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-800 mb-2 leading-tight">${project.name}</h4>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-3 leading-relaxed">${project.description}</p>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${langColor}"></span>
+                            <span class="text-xs font-semibold text-slate-700 uppercase">${project.language}</span>
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">${new Date(project.updated).getFullYear()}</span>
+                    </div>
+                `;
+                elements.grid.appendChild(card);
+            });
+        }
+
+        // --- CHARTS LOGIC ---
+
+        function initCharts() {
+            initGalaxyChart();
+            initTechChart();
+            initTimelineChart();
+        }
+
+        function initGalaxyChart() {
+            const ctx = document.getElementById('galaxyChart').getContext('2d');
+            
+            const data = state.projects.map(p => ({
+                x: new Date(p.created).getTime(), // Time
+                y: p.complexity, // Complexity
+                r: Math.min(Math.max(Math.sqrt(p.size) / 1.5, 5), 25), // Size normalized
+                project: p 
+            }));
+
+            state.charts.galaxy = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Projets',
+                        data: data,
+                        backgroundColor: (context) => {
+                            const val = context.raw?.project?.category;
+                            const color = getCategoryColor(val);
+                            return color + 'B3'; // Add transparency
+                        },
+                        borderColor: (context) => {
+                             const val = context.raw?.project?.category;
+                             return getCategoryColor(val);
+                        },
+                        borderWidth: 2,
+                        hoverRadius: 2,
+                        hoverBorderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            ...standardTooltipConfig,
+                            callbacks: {
+                                label: (context) => {
+                                    const p = context.raw.project;
+                                    return `${p.name} (${p.category})`;
+                                },
+                                afterLabel: (context) => {
+                                    const p = context.raw.project;
+                                    return `Technologie: ${p.language} \nComplexité: ${p.complexity}/100`;
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: { display: true, text: 'Chronologie (Année de Création)', font: {size: 11} },
+                            ticks: {
+                                callback: function(value) { return new Date(value).getFullYear(); },
+                                color: '#64748B'
+                            },
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Indice de Complexité', font: {size: 11} },
+                            beginAtZero: true,
+                            max: 110,
+                            ticks: { color: '#64748B' },
+                            grid: { color: '#F1F5F9' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initTechChart() {
+            const ctx = document.getElementById('techChart').getContext('2d');
+            
+            const langs = {};
+            state.projects.forEach(p => { langs[p.language] = (langs[p.language] || 0) + 1; });
+            const labels = Object.keys(langs);
+            const counts = Object.values(langs);
+            const colors = labels.map(l => getLanguageColor(l));
+
+            // Wrap labels if needed
+            const wrappedLabels = labels.map(l => wrapLabel(l));
+
+            // Update insight text
+            const topLang = labels[counts.indexOf(Math.max(...counts))];
+            const pct = Math.round((Math.max(...counts) / state.projects.length) * 100);
+            elements.insight.innerText = `L'écosystème est ancré dans ${topLang} (${pct}% des projets), mais présente une diversité saine avec ${labels.length} langages distincts, indiquant une polyvalence "Full Stack".`;
+
+            state.charts.tech = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: wrappedLabels,
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: 'Inter', size: 11 },
+                                color: '#475569'
+                            }
+                        },
+                        tooltip: standardTooltipConfig
+                    }
+                }
+            });
+        }
+
+        function initTimelineChart() {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+
+            const years = {};
+            state.projects.forEach(p => {
+                const y = new Date(p.created).getFullYear();
+                years[y] = (years[y] || 0) + 1;
+            });
+
+            const labels = Object.keys(years).sort();
+            const data = labels.map(y => years[y]);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nouveaux Dépôts',
+                        data: data,
+                        borderColor: '#6366F1', // Indigo
+                        backgroundColor: (context) => {
+                            const ctx = context.chart.ctx;
+                            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+                            gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+                            return gradient;
+                        },
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#6366F1',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: standardTooltipConfig
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, color: '#64748B' },
+                            grid: { borderDash: [4, 4], color: '#E2E8F0' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#64748B' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            elements.filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Update Styles
+                    elements.filterBtns.forEach(b => {
+                        b.classList.remove('active-filter', 'text-white');
+                        b.classList.add('bg-white', 'text-slate-600');
+                    });
+                    e.target.classList.remove('bg-white', 'text-slate-600');
+                    e.target.classList.add('active-filter', 'text-white');
+
+                    // Filter Logic
+                    const filterVal = e.target.dataset.filter;
+                    state.filter = filterVal;
+
+                    const filteredProjects = filterVal === 'all' 
+                        ? state.projects 
+                        : state.projects.filter(p => p.category === filterVal);
+
+                    renderGrid(filteredProjects);
+                });
+            });
+        }
+
+        // --- BOOTSTRAP ---
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>

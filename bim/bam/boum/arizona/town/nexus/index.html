@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚔️ ARIZONA NEXUS — Le Quartier Général de la Résistance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* VOID SPECTRUM */
+      --void: #000000;
+      --abyss: #03040a;
+      --deep: #070a12;
+      --night: #0c1018;
+      --shadow: #121620;
+      --smoke: #1a1f2c;
+      --slate: #242b3a;
+      --steel: #343d50;
+      
+      /* FACTIONS */
+      --arizona: #dc2626;
+      --arizona-dim: rgba(220,38,38,0.15);
+      --arizona-glow: rgba(220,38,38,0.4);
+      
+      --commons: #10b981;
+      --commons-dim: rgba(16,185,129,0.15);
+      --commons-glow: rgba(16,185,129,0.4);
+      
+      --neutral: #f59e0b;
+      --neutral-dim: rgba(245,158,11,0.15);
+      
+      /* CURRENCIES */
+      --sol: #fbbf24;
+      --mutual: #34d399;
+      --time: #a78bfa;
+      --trust: #f472b6;
+      --influence: #60a5fa;
+      
+      /* RARITY */
+      --common: #9ca3af;
+      --uncommon: #10b981;
+      --rare: #3b82f6;
+      --epic: #8b5cf6;
+      --legendary: #f59e0b;
+      --mythic: #ef4444;
+      
+      /* TEXT */
+      --text: #f1f5f9;
+      --text-soft: #94a3b8;
+      --text-dim: #64748b;
+      
+      /* FONTS */
+      --font-display: 'Cinzel', serif;
+      --font-tech: 'Orbitron', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-prose: 'Crimson Pro', Georgia, serif;
+      --font-ui: 'Space Grotesk', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--void);
+      color: var(--text);
+      font-family: var(--font-ui);
+      font-size: 13px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    @keyframes glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes cardFlip { 0% { transform: rotateY(0); } 100% { transform: rotateY(180deg); } }
+    @keyframes hologram { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; filter: hue-rotate(10deg); } }
+    @keyframes warPulse { 0%, 100% { box-shadow: 0 0 20px var(--arizona-glow); } 50% { box-shadow: 0 0 40px var(--arizona-glow), 0 0 60px var(--arizona-dim); } }
+    @keyframes peacePulse { 0%, 100% { box-shadow: 0 0 20px var(--commons-glow); } 50% { box-shadow: 0 0 40px var(--commons-glow), 0 0 60px var(--commons-dim); } }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes scan { 0% { top: 0; opacity: 0.5; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0.5; } }
+    @keyframes glitch { 0%, 90%, 100% { transform: translate(0); } 92% { transform: translate(-3px, 1px); } 94% { transform: translate(3px, -1px); } 96% { transform: translate(-2px, -2px); } }
+
+    /* ═══════════════════════════════════════════════════════════════
+       BACKGROUND LAYERS
+    ═══════════════════════════════════════════════════════════════ */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .layer-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .layer-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, var(--void) 100%);
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    .layer-scanline {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--commons), transparent);
+      opacity: 0.3;
+      animation: scan 4s linear infinite;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       APP LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER - COMMAND CENTER
+    ═══════════════════════════════════════════════════════════════ */
+    header {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 20px;
+      background: linear-gradient(180deg, var(--shadow), var(--night));
+      border-bottom: 1px solid var(--slate);
+      position: relative;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--arizona), var(--neutral), var(--commons));
+    }
+
+    /* LOGO */
+    .nexus-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-emblem {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .emblem-ring {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--commons);
+      border-radius: 50%;
+      animation: spin 20s linear infinite;
+    }
+
+    .emblem-ring::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--commons);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px var(--commons);
+    }
+
+    .emblem-core {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--commons-dim), var(--arizona-dim));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      border: 2px solid var(--neutral);
+    }
+
+    .logo-text h1 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--commons), var(--neutral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 3px;
+    }
+
+    .logo-text p {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    /* GLOBAL STATS */
+    .global-stats {
+      display: flex;
+      gap: 16px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .g-stat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: var(--deep);
+      border: 1px solid var(--slate);
+      border-radius: 8px;
+    }
+
+    .g-stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .g-stat-icon.war { background: var(--arizona-dim); border: 1px solid var(--arizona); }
+    .g-stat-icon.peace { background: var(--commons-dim); border: 1px solid var(--commons); }
+    .g-stat-icon.gold { background: var(--neutral-dim); border: 1px solid var(--neutral); }
+
+    .g-stat-value {
+      font-family: var(--font-tech);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .g-stat-value.arizona { color: var(--arizona); }
+    .g-stat-value.commons { color: var(--commons); }
+    .g-stat-value.neutral { color: var(--neutral); }
+
+    .g-stat-label {
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* PLAYER */
+    .player-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, var(--commons-dim), var(--deep));
+      border: 1px solid var(--commons);
+      border-radius: 8px;
+    }
+
+    .player-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--commons);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .player-info h3 {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      color: var(--commons);
+    }
+
+    .player-info p {
+      font-size: 0.6rem;
+      color: var(--text-soft);
+    }
+
+    .player-level {
+      font-family: var(--font-tech);
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--neutral);
+      padding: 4px 10px;
+      background: var(--neutral-dim);
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       WAR TICKER
+    ═══════════════════════════════════════════════════════════════ */
+    .war-ticker {
+      height: 36px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--slate);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-label {
+      padding: 0 16px;
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      color: var(--arizona);
+      background: var(--arizona-dim);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid var(--arizona);
+      animation: blink 2s infinite;
+    }
+
+    .ticker-track {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .ticker-content {
+      display: flex;
+      animation: ticker 40s linear infinite;
+      white-space: nowrap;
+    }
+
+    .ticker-item {
+      padding: 0 40px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ticker-item .hot { color: var(--arizona); }
+    .ticker-item .good { color: var(--commons); }
+    .ticker-item .warn { color: var(--neutral); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LEFT SIDEBAR - MODULES
+    ═══════════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: 280px;
+      background: var(--shadow);
+      border-right: 1px solid var(--slate);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      background: var(--smoke);
+      border-bottom: 1px solid var(--slate);
+    }
+
+    .sidebar-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      color: var(--neutral);
+      letter-spacing: 2px;
+    }
+
+    .modules-list {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+
+    .module-card {
+      background: var(--night);
+      border: 1px solid var(--slate);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--commons);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .module-card:hover {
+      border-color: var(--commons);
+      transform: translateX(4px);
+    }
+
+    .module-card:hover::before { opacity: 1; }
+
+    .module-card.active {
+      border-color: var(--commons);
+      background: var(--commons-dim);
+    }
+
+    .module-card.active::before { opacity: 1; }
+
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .module-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--slate);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .module-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .module-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .module-stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .module-stat {
+      font-size: 0.6rem;
+      padding: 3px 8px;
+      background: var(--deep);
+      border-radius: 4px;
+      color: var(--text-soft);
+    }
+
+    /* CURRENCIES PANEL */
+    .currencies-panel {
+      padding: 16px;
+      background: var(--smoke);
+      border-top: 1px solid var(--slate);
+    }
+
+    .currencies-title {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .currency-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--slate);
+    }
+
+    .currency-row:last-child { border-bottom: none; }
+
+    .currency-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .currency-value {
+      font-family: var(--font-tech);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .currency-value.sol { color: var(--sol); }
+    .currency-value.mutual { color: var(--mutual); }
+    .currency-value.time { color: var(--time); }
+    .currency-value.trust { color: var(--trust); }
+    .currency-value.influence { color: var(--influence); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CENTER - MAIN VIEW
+    ═══════════════════════════════════════════════════════════════ */
+    .main-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .view-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       VIEW: WAR MAP
+    ═══════════════════════════════════════════════════════════════ */
+    .map-container {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .belgium-map {
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--neutral);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 8px;
+      height: calc(100% - 50px);
+    }
+
+    .territory {
+      background: var(--night);
+      border: 2px solid var(--slate);
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .territory:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    .territory.arizona {
+      background: var(--arizona-dim);
+      border-color: var(--arizona);
+    }
+
+    .territory.commons {
+      background: var(--commons-dim);
+      border-color: var(--commons);
+    }
+
+    .territory.contested {
+      background: linear-gradient(135deg, var(--arizona-dim), var(--commons-dim));
+      border-color: var(--neutral);
+      animation: warPulse 2s infinite;
+    }
+
+    .territory-name {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .territory.arizona .territory-name { color: var(--arizona); }
+    .territory.commons .territory-name { color: var(--commons); }
+    .territory.contested .territory-name { color: var(--neutral); }
+
+    .territory-control {
+      font-family: var(--font-tech);
+      font-size: 0.6rem;
+      color: var(--text-soft);
+    }
+
+    .territory-icon {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    /* WAR PANEL */
+    .war-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .war-status {
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .war-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--arizona);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .war-balance {
+      margin-bottom: 20px;
+    }
+
+    .balance-bar {
+      height: 24px;
+      background: var(--night);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    .balance-arizona {
+      height: 100%;
+      background: linear-gradient(90deg, var(--arizona), #ef4444);
+      transition: width 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-tech);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .balance-commons {
+      height: 100%;
+      background: linear-gradient(90deg, #34d399, var(--commons));
+      transition: width 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-tech);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .balance-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    .war-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .war-stat {
+      background: var(--night);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .war-stat-value {
+      font-family: var(--font-tech);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .war-stat-value.arizona { color: var(--arizona); }
+    .war-stat-value.commons { color: var(--commons); }
+
+    .war-stat-label {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* BATTLES */
+    .battles-panel {
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      border-radius: 12px;
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .battles-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--neutral);
+      margin-bottom: 16px;
+    }
+
+    .battle-item {
+      background: var(--night);
+      border: 1px solid var(--slate);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .battle-item:hover {
+      border-color: var(--neutral);
+      transform: translateX(4px);
+    }
+
+    .battle-item.active {
+      border-color: var(--arizona);
+      animation: warPulse 2s infinite;
+    }
+
+    .battle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .battle-location {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .battle-status {
+      font-size: 0.6rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .battle-status.active { background: var(--arizona-dim); color: var(--arizona); }
+    .battle-status.won { background: var(--commons-dim); color: var(--commons); }
+    .battle-status.lost { background: var(--arizona-dim); color: var(--arizona); }
+
+    .battle-forces {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       VIEW: COLLECTION (NFTs Parodiques)
+    ═══════════════════════════════════════════════════════════════ */
+    .collection-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .collection-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--neutral);
+      margin-bottom: 8px;
+    }
+
+    .collection-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .nft-card {
+      background: var(--shadow);
+      border: 2px solid var(--slate);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .nft-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .nft-card.common { border-color: var(--common); }
+    .nft-card.uncommon { border-color: var(--uncommon); }
+    .nft-card.rare { border-color: var(--rare); }
+    .nft-card.epic { border-color: var(--epic); }
+    .nft-card.legendary { border-color: var(--legendary); }
+    .nft-card.mythic { border-color: var(--mythic); }
+
+    .nft-card.owned::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      background: var(--commons);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+    }
+
+    .nft-image {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: linear-gradient(180deg, var(--smoke), var(--night));
+    }
+
+    .nft-body {
+      padding: 16px;
+    }
+
+    .nft-rarity {
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .nft-rarity.common { background: rgba(156,163,175,0.2); color: var(--common); }
+    .nft-rarity.uncommon { background: var(--commons-dim); color: var(--uncommon); }
+    .nft-rarity.rare { background: rgba(59,130,246,0.2); color: var(--rare); }
+    .nft-rarity.epic { background: rgba(139,92,246,0.2); color: var(--epic); }
+    .nft-rarity.legendary { background: var(--neutral-dim); color: var(--legendary); }
+    .nft-rarity.mythic { background: var(--arizona-dim); color: var(--mythic); }
+
+    .nft-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .nft-type {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .nft-power {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      padding-top: 10px;
+      border-top: 1px solid var(--slate);
+    }
+
+    .nft-power-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nft-power-item .val { font-family: var(--font-tech); font-weight: 700; color: var(--commons); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       VIEW: AI ADVERSARY
+    ═══════════════════════════════════════════════════════════════ */
+    .ai-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .ai-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .ai-avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--arizona-dim), var(--arizona));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border: 4px solid var(--arizona);
+      box-shadow: 0 0 40px var(--arizona-glow);
+      animation: warPulse 3s infinite;
+    }
+
+    .ai-name {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--arizona);
+      margin-bottom: 8px;
+    }
+
+    .ai-title {
+      font-size: 1rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .ai-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .ai-stat {
+      background: var(--shadow);
+      border: 1px solid var(--arizona-dim);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .ai-stat-value {
+      font-family: var(--font-tech);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--arizona);
+    }
+
+    .ai-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    .ai-actions {
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .ai-actions-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--arizona);
+      margin-bottom: 16px;
+    }
+
+    .ai-action {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px;
+      background: var(--night);
+      border: 1px solid var(--arizona-dim);
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .ai-action-icon { font-size: 1.5rem; }
+
+    .ai-action-info { flex: 1; }
+
+    .ai-action-name {
+      font-weight: 600;
+      color: var(--arizona);
+      margin-bottom: 2px;
+    }
+
+    .ai-action-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .ai-action-timer {
+      font-family: var(--font-tech);
+      font-size: 0.9rem;
+      color: var(--neutral);
+      animation: blink 1s infinite;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       VIEW: LORE
+    ═══════════════════════════════════════════════════════════════ */
+    .lore-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .lore-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .lore-nav-btn {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      padding: 10px 18px;
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .lore-nav-btn:hover {
+      border-color: var(--commons);
+      color: var(--commons);
+    }
+
+    .lore-nav-btn.active {
+      background: var(--commons-dim);
+      border-color: var(--commons);
+      color: var(--commons);
+    }
+
+    .lore-content {
+      background: var(--shadow);
+      border: 1px solid var(--slate);
+      border-radius: 12px;
+      padding: 30px;
+    }
+
+    .lore-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--commons);
+      margin-bottom: 8px;
+    }
+
+    .lore-subtitle {
+      font-family: var(--font-prose);
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+
+    .lore-text {
+      font-family: var(--font-prose);
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.9;
+    }
+
+    .lore-text p { margin-bottom: 16px; }
+    .lore-text .highlight { color: var(--commons); font-weight: 600; }
+    .lore-text .danger { color: var(--arizona); }
+    .lore-text .gold { color: var(--neutral); }
+
+    .lore-quote {
+      background: var(--commons-dim);
+      border-left: 4px solid var(--commons);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-style: italic;
+      color: var(--text-soft);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RIGHT SIDEBAR - EVENTS & INTEL
+    ═══════════════════════════════════════════════════════════════ */
+    .intel-sidebar {
+      width: 320px;
+      background: var(--shadow);
+      border-left: 1px solid var(--slate);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .intel-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .intel-header {
+      padding: 14px 16px;
+      background: var(--smoke);
+      border-bottom: 1px solid var(--slate);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .intel-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      color: var(--neutral);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .intel-badge {
+      width: 8px;
+      height: 8px;
+      background: var(--arizona);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    .intel-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+
+    .intel-item {
+      background: var(--night);
+      border: 1px solid var(--slate);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .intel-item.critical {
+      border-color: var(--arizona);
+      border-left: 3px solid var(--arizona);
+    }
+
+    .intel-item.victory {
+      border-color: var(--commons);
+      border-left: 3px solid var(--commons);
+    }
+
+    .intel-item.warning {
+      border-color: var(--neutral);
+      border-left: 3px solid var(--neutral);
+    }
+
+    .intel-time {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .intel-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .intel-effect {
+      margin-top: 8px;
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+    }
+
+    .intel-effect.good { color: var(--commons); }
+    .intel-effect.bad { color: var(--arizona); }
+
+    /* ACHIEVEMENTS */
+    .achievements-panel {
+      padding: 16px;
+      background: var(--smoke);
+      border-top: 1px solid var(--slate);
+    }
+
+    .achievements-title {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .achievement {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: var(--night);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .achievement.locked { opacity: 0.5; }
+
+    .achievement-icon {
+      font-size: 1.5rem;
+    }
+
+    .achievement-info { flex: 1; }
+
+    .achievement-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .achievement-desc {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .achievement-xp {
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      color: var(--neutral);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--shadow);
+      border: 2px solid var(--commons);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      animation: scaleIn 0.3s ease;
+    }
+
+    .modal-icon { font-size: 4rem; text-align: center; margin-bottom: 20px; }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--commons);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-text {
+      font-size: 1rem;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .modal-btn.primary {
+      background: var(--commons);
+      color: var(--void);
+    }
+
+    .modal-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--commons);
+      color: var(--commons);
+    }
+
+    .modal-btn:hover { transform: scale(1.05); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      top: 120px;
+      right: 340px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 12px 20px;
+      background: var(--smoke);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+      font-size: 0.85rem;
+    }
+
+    .toast.success { border: 1px solid var(--commons); color: var(--commons); }
+    .toast.error { border: 1px solid var(--arizona); color: var(--arizona); }
+    .toast.warning { border: 1px solid var(--neutral); color: var(--neutral); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: var(--slate); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--commons); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1400px) {
+      .intel-sidebar { width: 280px; }
+      .toast-container { right: 300px; }
+    }
+
+    @media (max-width: 1200px) {
+      .intel-sidebar { display: none; }
+      .toast-container { right: 20px; }
+      .map-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 240px; }
+      header { flex-wrap: wrap; height: auto; padding: 12px; }
+      .global-stats { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="layer-grid"></div>
+  <div class="layer-scanline"></div>
+  <div class="layer-vignette"></div>
+
+  <div class="app">
+    <!-- HEADER -->
+    <header>
+      <div class="nexus-logo">
+        <div class="logo-emblem">
+          <div class="emblem-ring"></div>
+          <div class="emblem-core">⚔️</div>
+        </div>
+        <div class="logo-text">
+          <h1>ARIZONA NEXUS</h1>
+          <p>QUARTIER GÉNÉRAL DE LA RÉSISTANCE</p>
+        </div>
+      </div>
+
+      <div class="global-stats">
+        <div class="g-stat">
+          <div class="g-stat-icon war">🏛️</div>
+          <div>
+            <div class="g-stat-value arizona" id="global-arizona">68%</div>
+            <div class="g-stat-label">Empire Arizona</div>
+          </div>
+        </div>
+        <div class="g-stat">
+          <div class="g-stat-icon peace">🌱</div>
+          <div>
+            <div class="g-stat-value commons" id="global-commons">32%</div>
+            <div class="g-stat-label">Les Communs</div>
+          </div>
+        </div>
+        <div class="g-stat">
+          <div class="g-stat-icon gold">⚔️</div>
+          <div>
+            <div class="g-stat-value neutral" id="global-battles">7</div>
+            <div class="g-stat-label">Batailles Actives</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="player-badge">
+        <div class="player-avatar">🦊</div>
+        <div class="player-info">
+          <h3>Résistant·e</h3>
+          <p>Front Commun</p>
+        </div>
+        <div class="player-level" id="player-level">12</div>
+      </div>
+    </header>
+
+    <!-- WAR TICKER -->
+    <div class="war-ticker">
+      <div class="ticker-label">⚡ LIVE</div>
+      <div class="ticker-track">
+        <div class="ticker-content" id="ticker-content">
+          <span class="ticker-item"><span class="hot">🔴 BRUXELLES</span> Bataille en cours — Arizona +2.3%</span>
+          <span class="ticker-item"><span class="good">🟢 LIÈGE</span> Victoire des Communs ! +5% territoire</span>
+          <span class="ticker-item"><span class="warn">⚠️ VAGUE II</span> dans 38 jours — 35,000 âmes menacées</span>
+          <span class="ticker-item"><span class="good">🟢 NAMUR</span> Nouveau Jardin Partagé inauguré</span>
+          <span class="ticker-item"><span class="hot">🔴 ANVERS</span> L'Empire lance une offensive</span>
+          <span class="ticker-item"><span class="good">🟢 CHARLEROI</span> Assemblée citoyenne : 2,400 participants</span>
+          <span class="ticker-item"><span class="hot">🔴 BRUXELLES</span> Bataille en cours — Arizona +2.3%</span>
+          <span class="ticker-item"><span class="good">🟢 LIÈGE</span> Victoire des Communs ! +5% territoire</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main>
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">📡 MODULES</div>
+        </div>
+        <div class="modules-list">
+          <div class="module-card active" data-view="map">
+            <div class="module-header">
+              <div class="module-icon">🗺️</div>
+              <div class="module-name">Carte de Guerre</div>
+            </div>
+            <div class="module-desc">Contrôle territorial en temps réel</div>
+            <div class="module-stats">
+              <span class="module-stat">11 provinces</span>
+              <span class="module-stat">7 batailles</span>
+            </div>
+          </div>
+          <div class="module-card" data-view="collection">
+            <div class="module-header">
+              <div class="module-icon">🎴</div>
+              <div class="module-name">Collection</div>
+            </div>
+            <div class="module-desc">Cartes & Artefacts de la Résistance</div>
+            <div class="module-stats">
+              <span class="module-stat">24 cartes</span>
+              <span class="module-stat">6 raretés</span>
+            </div>
+          </div>
+          <div class="module-card" data-view="ai">
+            <div class="module-header">
+              <div class="module-icon">🤖</div>
+              <div class="module-name">L'Adversaire</div>
+            </div>
+            <div class="module-desc">Intelligence de l'Empire Arizona</div>
+            <div class="module-stats">
+              <span class="module-stat">IA Niveau 3</span>
+              <span class="module-stat">4 attaques/jour</span>
+            </div>
+          </div>
+          <div class="module-card" data-view="lore">
+            <div class="module-header">
+              <div class="module-icon">📖</div>
+              <div class="module-name">Le Codex</div>
+            </div>
+            <div class="module-desc">Histoire & Mythologie de l'univers</div>
+            <div class="module-stats">
+              <span class="module-stat">12 chapitres</span>
+              <span class="module-stat">40 entrées</span>
+            </div>
+          </div>
+          <div class="module-card" data-view="economy">
+            <div class="module-header">
+              <div class="module-icon">💰</div>
+              <div class="module-name">Économie</div>
+            </div>
+            <div class="module-desc">Système financier des Communs</div>
+            <div class="module-stats">
+              <span class="module-stat">5 devises</span>
+              <span class="module-stat">10 Communs</span>
+            </div>
+          </div>
+        </div>
+        <div class="currencies-panel">
+          <div class="currencies-title">💎 RESSOURCES</div>
+          <div class="currency-row">
+            <span class="currency-name">🪙 Solidaris</span>
+            <span class="currency-value sol" id="cur-sol">2,450</span>
+          </div>
+          <div class="currency-row">
+            <span class="currency-name">🤝 Mutual</span>
+            <span class="currency-value mutual" id="cur-mutual">680</span>
+          </div>
+          <div class="currency-row">
+            <span class="currency-name">⏱️ Temps</span>
+            <span class="currency-value time" id="cur-time">52h</span>
+          </div>
+          <div class="currency-row">
+            <span class="currency-name">💎 Confiance</span>
+            <span class="currency-value trust" id="cur-trust">340</span>
+          </div>
+          <div class="currency-row">
+            <span class="currency-name">⭐ Influence</span>
+            <span class="currency-value influence" id="cur-influence">125</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN VIEW -->
+      <div class="main-view">
+        <!-- MAP VIEW -->
+        <div class="view-content active" id="view-map">
+          <div class="map-container">
+            <div class="belgium-map">
+              <div class="map-title">🗺️ CARTE DE BELGIQUE — CONTRÔLE TERRITORIAL</div>
+              <div class="map-grid" id="map-grid"></div>
+            </div>
+            <div class="war-panel">
+              <div class="war-status">
+                <div class="war-title">⚔️ ÉTAT DE LA GUERRE</div>
+                <div class="war-balance">
+                  <div class="balance-bar">
+                    <div class="balance-arizona" id="war-arizona" style="width: 68%">68%</div>
+                    <div class="balance-commons" id="war-commons" style="width: 32%">32%</div>
+                  </div>
+                  <div class="balance-labels">
+                    <span>🏛️ Empire Arizona</span>
+                    <span>🌱 Les Communs</span>
+                  </div>
+                </div>
+                <div class="war-stats">
+                  <div class="war-stat">
+                    <div class="war-stat-value arizona" id="terr-arizona">7</div>
+                    <div class="war-stat-label">Territoires Arizona</div>
+                  </div>
+                  <div class="war-stat">
+                    <div class="war-stat-value commons" id="terr-commons">4</div>
+                    <div class="war-stat-label">Territoires Communs</div>
+                  </div>
+                </div>
+              </div>
+              <div class="battles-panel">
+                <div class="battles-title">⚔️ BATAILLES EN COURS</div>
+                <div id="battles-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLLECTION VIEW -->
+        <div class="view-content" id="view-collection">
+          <div class="collection-header">
+            <div class="collection-title">🎴 COLLECTION DE LA RÉSISTANCE</div>
+            <div class="collection-subtitle">Cartes, Artefacts & Héros — "Totalement Pas des NFTs™"</div>
+          </div>
+          <div class="cards-grid" id="cards-grid"></div>
+        </div>
+
+        <!-- AI VIEW -->
+        <div class="view-content" id="view-ai">
+          <div class="ai-container">
+            <div class="ai-header">
+              <div class="ai-avatar">👁️</div>
+              <div class="ai-name">SAURON-AI</div>
+              <div class="ai-title">Intelligence Artificielle de l'Empire Arizona</div>
+            </div>
+            <div class="ai-stats">
+              <div class="ai-stat">
+                <div class="ai-stat-value">3</div>
+                <div class="ai-stat-label">Niveau d'IA</div>
+              </div>
+              <div class="ai-stat">
+                <div class="ai-stat-value">68%</div>
+                <div class="ai-stat-label">Contrôle</div>
+              </div>
+              <div class="ai-stat">
+                <div class="ai-stat-value">4</div>
+                <div class="ai-stat-label">Attaques/Jour</div>
+              </div>
+              <div class="ai-stat">
+                <div class="ai-stat-value">12</div>
+                <div class="ai-stat-label">Stratagèmes</div>
+              </div>
+            </div>
+            <div class="ai-actions">
+              <div class="ai-actions-title">🎯 PROCHAINES ACTIONS DE L'EMPIRE</div>
+              <div id="ai-actions-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LORE VIEW -->
+        <div class="view-content" id="view-lore">
+          <div class="lore-container">
+            <div class="lore-nav" id="lore-nav"></div>
+            <div class="lore-content" id="lore-content"></div>
+          </div>
+        </div>
+
+        <!-- ECONOMY VIEW -->
+        <div class="view-content" id="view-economy">
+          <div style="text-align: center; padding: 60px;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🏗️</div>
+            <div style="font-family: var(--font-display); font-size: 1.4rem; color: var(--neutral); margin-bottom: 10px;">MODULE EN CONSTRUCTION</div>
+            <div style="color: var(--text-dim);">L'économie complète sera bientôt disponible.<br>En attendant, explorez les autres modules !</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="intel-sidebar">
+        <div class="intel-panel">
+          <div class="intel-header">
+            <div class="intel-title">
+              <span class="intel-badge"></span>
+              📡 RENSEIGNEMENTS
+            </div>
+          </div>
+          <div class="intel-body" id="intel-feed"></div>
+        </div>
+        <div class="achievements-panel">
+          <div class="achievements-title">🏆 SUCCÈS RÉCENTS</div>
+          <div id="achievements-list"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- INTRO MODAL -->
+  <div class="modal-overlay active" id="modal-intro">
+    <div class="modal">
+      <div class="modal-icon">⚔️</div>
+      <div class="modal-title">Bienvenue au Quartier Général</div>
+      <div class="modal-text">
+        <strong>ARIZONA NEXUS</strong> est le centre de commandement de la Résistance.<br><br>
+        Ici, vous coordonnez la guerre contre l'Empire Arizona sur tous les fronts :<br><br>
+        🗺️ <strong>Carte de Guerre</strong> — Contrôlez les 11 provinces de Belgique<br>
+        🎴 <strong>Collection</strong> — Collectez les cartes de la Résistance<br>
+        🤖 <strong>L'Adversaire</strong> — Surveillez l'IA de l'Empire<br>
+        📖 <strong>Le Codex</strong> — Apprenez l'histoire de la lutte<br><br>
+        La balance est à <strong style="color: #dc2626;">68% Arizona</strong> / <strong style="color: #10b981;">32% Communs</strong>.<br>
+        Votre mission : <strong>inverser la tendance</strong>.
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn primary" onclick="startNexus()">⚔️ Rejoindre la Résistance</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toasts"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // GAME STATE
+    // ═══════════════════════════════════════════════════════════════
+    const NEXUS = {
+      // Player
+      level: 12,
+      xp: 2400,
+      
+      // Currencies
+      sol: 2450,
+      mutual: 680,
+      time: 52,
+      trust: 340,
+      influence: 125,
+      
+      // War State
+      arizonaPower: 68,
+      commonsPower: 32,
+      
+      // Owned cards
+      ownedCards: ['hero_bodson', 'artifact_art23', 'common_jardin'],
+      
+      // Achievements
+      achievements: ['first_battle', 'collector']
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // TERRITORIES
+    // ═══════════════════════════════════════════════════════════════
+    const TERRITORIES = [
+      {id: 'bxl', name: 'Bruxelles', icon: '🏙️', control: 'contested', arizona: 52, commons: 48},
+      {id: 'anvers', name: 'Anvers', icon: '⚓', control: 'arizona', arizona: 75, commons: 25},
+      {id: 'flandreOcc', name: 'Flandre Occ.', icon: '🌊', control: 'arizona', arizona: 70, commons: 30},
+      {id: 'flandreOr', name: 'Flandre Or.', icon: '🏰', control: 'arizona', arizona: 68, commons: 32},
+      {id: 'limbourg', name: 'Limbourg', icon: '🌲', control: 'arizona', arizona: 72, commons: 28},
+      {id: 'brabantFl', name: 'Brabant Fl.', icon: '🏛️', control: 'arizona', arizona: 65, commons: 35},
+      {id: 'brabantWa', name: 'Brabant Wa.', icon: '🏘️', control: 'contested', arizona: 48, commons: 52},
+      {id: 'liege', name: 'Liège', icon: '🔥', control: 'commons', arizona: 35, commons: 65},
+      {id: 'namur', name: 'Namur', icon: '🏔️', control: 'commons', arizona: 40, commons: 60},
+      {id: 'hainaut', name: 'Hainaut', icon: '⚒️', control: 'commons', arizona: 38, commons: 62},
+      {id: 'luxembourg', name: 'Luxembourg', icon: '🌳', control: 'commons', arizona: 42, commons: 58}
+    ];
+
+    const BATTLES = [
+      {location: 'Bruxelles', status: 'active', arizona: 52, commons: 48, stakes: 'Capitale'},
+      {location: 'Brabant Wallon', status: 'active', arizona: 48, commons: 52, stakes: 'Basculement'},
+      {location: 'Anvers', status: 'active', arizona: 75, commons: 25, stakes: 'Offensive'},
+      {location: 'Charleroi', status: 'active', arizona: 45, commons: 55, stakes: 'Défense'},
+      {location: 'Gand', status: 'active', arizona: 60, commons: 40, stakes: 'Infiltration'},
+      {location: 'Mons', status: 'active', arizona: 42, commons: 58, stakes: 'Consolidation'},
+      {location: 'Verviers', status: 'active', arizona: 35, commons: 65, stakes: 'Expansion'}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // NFT CARDS
+    // ═══════════════════════════════════════════════════════════════
+    const CARDS = [
+      // HEROES
+      {id: 'hero_bodson', type: 'Héros', name: 'Thierry Bodson', rarity: 'legendary', icon: '⚔️', power: 85, defense: 70, desc: 'Leader du Front Commun'},
+      {id: 'hero_magnette', type: 'Héros', name: 'Paul Magnette', rarity: 'epic', icon: '🧙', power: 75, defense: 65, desc: 'Le Magicien Rouge'},
+      {id: 'hero_anonymous', type: 'Héros', name: 'Anonyme du CPAS', rarity: 'rare', icon: '👤', power: 50, defense: 80, desc: 'Survivant du système'},
+      {id: 'hero_student', type: 'Héros', name: 'Étudiante FEF', rarity: 'uncommon', icon: '📚', power: 45, defense: 55, desc: '58% de faim, 100% de rage'},
+      
+      // VILLAINS
+      {id: 'villain_sauron', type: 'Antagoniste', name: 'Bart-h Sauron', rarity: 'mythic', icon: '👁️', power: 95, defense: 90, desc: 'L\'Œil du Wetstraat'},
+      {id: 'villain_bouchez', type: 'Antagoniste', name: 'Darth Bouchez', rarity: 'legendary', icon: '⚡', power: 80, defense: 60, desc: 'Le Sith Libéral'},
+      {id: 'villain_agent', type: 'Antagoniste', name: 'Agent Smith-Vandenbroucke', rarity: 'epic', icon: '🤖', power: 65, defense: 75, desc: 'Le Programme'},
+      
+      // ARTIFACTS
+      {id: 'artifact_art23', type: 'Artefact', name: 'Article 23', rarity: 'mythic', icon: '📜', power: 100, defense: 100, desc: 'L\'Anneau de Pouvoir'},
+      {id: 'artifact_pill', type: 'Artefact', name: 'Pilule Rouge', rarity: 'legendary', icon: '💊', power: 70, defense: 30, desc: 'La Vérité'},
+      {id: 'artifact_saber', type: 'Artefact', name: 'Sabre Syndical', rarity: 'epic', icon: '⚔️', power: 80, defense: 50, desc: 'Forgé dans les grèves'},
+      
+      // COMMONS (ironic)
+      {id: 'common_jardin', type: 'Commun', name: 'Jardin Partagé', rarity: 'common', icon: '🌻', power: 20, defense: 40, desc: 'La base de tout'},
+      {id: 'common_repair', type: 'Commun', name: 'Repair Café', rarity: 'common', icon: '🔧', power: 25, defense: 35, desc: 'Réparer, pas jeter'},
+      {id: 'common_amap', type: 'Commun', name: 'AMAP / GASAP', rarity: 'uncommon', icon: '🥬', power: 30, defense: 45, desc: 'Circuit court'},
+      {id: 'common_coop', type: 'Commun', name: 'Coopérative', rarity: 'rare', icon: '🤝', power: 50, defense: 60, desc: 'Un membre, une voix'},
+      
+      // EVENTS
+      {id: 'event_manif', type: 'Événement', name: 'Grande Manifestation', rarity: 'rare', icon: '✊', power: 60, defense: 20, desc: '140,000 marcheurs'},
+      {id: 'event_greve', type: 'Événement', name: 'Grève Générale', rarity: 'epic', icon: '🔥', power: 85, defense: 10, desc: 'Le pays s\'arrête'},
+      {id: 'event_vote', type: 'Événement', name: 'Vote Citoyen', rarity: 'uncommon', icon: '🗳️', power: 40, defense: 50, desc: 'La démocratie directe'}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // AI ACTIONS
+    // ═══════════════════════════════════════════════════════════════
+    const AI_ACTIONS = [
+      {icon: '📉', name: 'Offensive Médiatique', desc: 'Propagande anti-chômeurs dans la presse', timer: '02:45:00'},
+      {icon: '💼', name: 'Lobbying Européen', desc: 'Pression sur les normes budgétaires', timer: '05:12:00'},
+      {icon: '⚖️', name: 'Recours Juridique', desc: 'Contestation du recours syndical', timer: '08:30:00'},
+      {icon: '🏛️', name: 'Vote Parlementaire', desc: 'Passage en force de la Vague III', timer: '12:00:00'}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // LORE
+    // ═══════════════════════════════════════════════════════════════
+    const LORE = {
+      world: {
+        title: 'Le Monde d\'Arizona',
+        subtitle: 'Quand la fiction rejoint la réalité',
+        content: `<p>Il était une fois un royaume nommé <span class="highlight">Belgique</span>, terre de compromis et de protection sociale. Pendant 80 hivers, ses habitants bénéficièrent d'un pacte sacré : nul ne serait abandonné.</p>
+        <p>Mais en l'an 2025, une coalition nommée <span class="danger">ARIZONA</span> prit le pouvoir. Son nom n'était pas un hasard — c'était une promesse. Transformer le royaume verdoyant en <span class="danger">désert aride</span>.</p>
+        <div class="lore-quote">"L'Arizona n'est pas un lieu. C'est une simulation. Un récit qu'on nous impose pour nous faire accepter l'inacceptable."</div>
+        <p>La <span class="highlight">Matrice Arizona</span> fonctionne ainsi : elle vous fait croire que l'austérité est nécessaire, que les économies sur les plus faibles sont inévitables.</p>
+        <p>Mais ceux qui ont pris la <span class="highlight">Pilule Rouge</span> savent la vérité : <span class="gold">17 milliards</span> dorment dans les coffres des Seigneurs millionnaires.</p>`
+      },
+      factions: {
+        title: 'Les Factions',
+        subtitle: 'Ceux qui s\'affrontent pour l\'âme de la Belgique',
+        content: `<p><span class="danger">L'EMPIRE ARIZONA</span> — La coalition au pouvoir : N-VA, MR, Les Engagés, CD&V, Vooruit. Leur objectif : 23 milliards d'économies sur le dos des plus faibles.</p>
+        <p><span class="highlight">LES COMMUNS</span> — L'économie alternative basée sur la coopération, l'entraide et la participation citoyenne. Jardins partagés, monnaies locales, coopératives...</p>
+        <p><span class="gold">LE FRONT COMMUN</span> — L'alliance syndicale : FGTB, CSC, CGSLB. 1,5 million de membres unis contre la régression sociale.</p>
+        <div class="lore-quote">"Seuls, nous sommes des gouttes. Ensemble, nous sommes un océan."</div>`
+      },
+      currencies: {
+        title: 'Les Monnaies',
+        subtitle: 'Cinq devises pour cinq valeurs',
+        content: `<p>🪙 <span class="gold">SOLIDARIS (SOL)</span> — La monnaie mainstream, le fiat classique. Nécessaire mais insuffisant.</p>
+        <p>🤝 <span class="highlight">MUTUAL (MUT)</span> — La monnaie des Communs. Se gagne par la participation et la solidarité.</p>
+        <p>⏱️ <span class="highlight">TEMPS (HRS)</span> — La banque du temps. Une heure = une heure, peu importe le travail.</p>
+        <p>💎 <span class="highlight">CONFIANCE (TRS)</span> — Le capital social. Se construit par les actes, se perd par la trahison.</p>
+        <p>⭐ <span class="highlight">INFLUENCE (INF)</span> — Le pouvoir de changer les choses. S'accumule par l'engagement.</p>
+        <div class="lore-quote">"Dans l'économie des Communs, la richesse ne se mesure pas en or, mais en liens."</div>`
+      },
+      artifacts: {
+        title: 'Les Artefacts',
+        subtitle: 'Les objets de pouvoir qui peuvent changer le cours de l\'histoire',
+        content: `<p>📜 <span class="gold">L'ARTICLE 23</span> — L'Anneau de Pouvoir. Gravé dans la Constitution : "Chacun a le droit de mener une vie conforme à la dignité humaine."</p>
+        <p>💊 <span class="highlight">LA PILULE ROUGE</span> — Prendre conscience de la Matrice. Voir au-delà du récit dominant.</p>
+        <p>⚔️ <span class="highlight">LE SABRE SYNDICAL</span> — Forgé dans les grèves de 1936, retemperé en 1960, affûté en 2025.</p>
+        <div class="lore-quote">"L'Article 23 n'est pas mort. Tant qu'il existe, l'espoir demeure."</div>`
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // INTEL FEED
+    // ═══════════════════════════════════════════════════════════════
+    const INTEL = [
+      {type: 'critical', text: '🔴 L\'Empire lance une offensive sur Bruxelles', effect: '-2% Communs', time: 'Il y a 5 min'},
+      {type: 'victory', text: '🟢 Nouveau Repair Café inauguré à Liège', effect: '+1% Communs', time: 'Il y a 12 min'},
+      {type: 'warning', text: '⚠️ Vote parlementaire sur la Vague III demain', effect: 'Alerte', time: 'Il y a 25 min'},
+      {type: 'victory', text: '🟢 2,400 citoyens à l\'Assemblée de Charleroi', effect: '+50 Influence', time: 'Il y a 1h'},
+      {type: 'critical', text: '🔴 Propagande médiatique détectée (RTL)', effect: '-1% Communs', time: 'Il y a 2h'}
+    ];
+
+    const ACHIEVEMENTS = [
+      {id: 'first_battle', icon: '⚔️', name: 'Premier Combat', desc: 'Participer à une bataille', xp: 100, locked: false},
+      {id: 'collector', icon: '🎴', name: 'Collectionneur', desc: 'Obtenir 3 cartes', xp: 150, locked: false},
+      {id: 'liberator', icon: '🏆', name: 'Libérateur', desc: 'Libérer un territoire', xp: 500, locked: true},
+      {id: 'legend', icon: '👑', name: 'Légende', desc: 'Atteindre 51% Communs', xp: 1000, locked: true}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      initCanvas();
+      initModules();
+    });
+
+    function startNexus() {
+      document.getElementById('modal-intro').classList.remove('active');
+      renderAll();
+      startWarSimulation();
+    }
+
+    function initCanvas() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      
+      // Particles
+      const particles = [];
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 2 + 0.5,
+          color: ['#10b981', '#f59e0b', '#dc2626'][Math.floor(Math.random() * 3)]
+        });
+      }
+      
+      function animate() {
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = 0.3;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        });
+        
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function initModules() {
+      document.querySelectorAll('.module-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.module-card').forEach(c => c.classList.remove('active'));
+          document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+          card.classList.add('active');
+          document.getElementById('view-' + card.dataset.view).classList.add('active');
+        });
+      });
+    }
+
+    function renderAll() {
+      renderMap();
+      renderBattles();
+      renderCards();
+      renderAI();
+      renderLore();
+      renderIntel();
+      renderAchievements();
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('global-arizona').textContent = NEXUS.arizonaPower + '%';
+      document.getElementById('global-commons').textContent = NEXUS.commonsPower + '%';
+      document.getElementById('player-level').textContent = NEXUS.level;
+      
+      document.getElementById('cur-sol').textContent = NEXUS.sol.toLocaleString();
+      document.getElementById('cur-mutual').textContent = NEXUS.mutual.toLocaleString();
+      document.getElementById('cur-time').textContent = NEXUS.time + 'h';
+      document.getElementById('cur-trust').textContent = NEXUS.trust.toLocaleString();
+      document.getElementById('cur-influence').textContent = NEXUS.influence.toLocaleString();
+      
+      document.getElementById('war-arizona').style.width = NEXUS.arizonaPower + '%';
+      document.getElementById('war-arizona').textContent = NEXUS.arizonaPower + '%';
+      document.getElementById('war-commons').style.width = NEXUS.commonsPower + '%';
+      document.getElementById('war-commons').textContent = NEXUS.commonsPower + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER FUNCTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function renderMap() {
+      const grid = document.getElementById('map-grid');
+      grid.innerHTML = TERRITORIES.map(t => `
+        <div class="territory ${t.control}" onclick="attackTerritory('${t.id}')">
+          <div class="territory-icon">${t.icon}</div>
+          <div class="territory-name">${t.name}</div>
+          <div class="territory-control">${t.arizona}% / ${t.commons}%</div>
+        </div>
+      `).join('');
+      
+      const arizonaTerr = TERRITORIES.filter(t => t.control === 'arizona').length;
+      const commonsTerr = TERRITORIES.filter(t => t.control === 'commons').length;
+      document.getElementById('terr-arizona').textContent = arizonaTerr;
+      document.getElementById('terr-commons').textContent = commonsTerr;
+    }
+
+    function renderBattles() {
+      document.getElementById('battles-list').innerHTML = BATTLES.map(b => `
+        <div class="battle-item ${b.status}" onclick="joinBattle('${b.location}')">
+          <div class="battle-header">
+            <span class="battle-location">${b.location}</span>
+            <span class="battle-status ${b.status}">${b.status === 'active' ? '⚔️ En cours' : b.status}</span>
+          </div>
+          <div class="battle-forces">
+            <span>🏛️ Arizona: ${b.arizona}%</span>
+            <span>🌱 Communs: ${b.commons}%</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCards() {
+      document.getElementById('cards-grid').innerHTML = CARDS.map(c => `
+        <div class="nft-card ${c.rarity} ${NEXUS.ownedCards.includes(c.id) ? 'owned' : ''}" onclick="viewCard('${c.id}')">
+          <div class="nft-image">${c.icon}</div>
+          <div class="nft-body">
+            <div class="nft-rarity ${c.rarity}">${c.rarity.toUpperCase()}</div>
+            <div class="nft-name">${c.name}</div>
+            <div class="nft-type">${c.type}</div>
+            <div class="nft-power">
+              <span class="nft-power-item">⚔️ <span class="val">${c.power}</span></span>
+              <span class="nft-power-item">🛡️ <span class="val">${c.defense}</span></span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAI() {
+      document.getElementById('ai-actions-list').innerHTML = AI_ACTIONS.map(a => `
+        <div class="ai-action">
+          <div class="ai-action-icon">${a.icon}</div>
+          <div class="ai-action-info">
+            <div class="ai-action-name">${a.name}</div>
+            <div class="ai-action-desc">${a.desc}</div>
+          </div>
+          <div class="ai-action-timer">⏱️ ${a.timer}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderLore() {
+      const nav = document.getElementById('lore-nav');
+      const content = document.getElementById('lore-content');
+      
+      nav.innerHTML = Object.keys(LORE).map((key, i) => `
+        <button class="lore-nav-btn ${i === 0 ? 'active' : ''}" onclick="showLore('${key}')">${LORE[key].title}</button>
+      `).join('');
+      
+      showLore('world');
+    }
+
+    function showLore(key) {
+      const l = LORE[key];
+      document.querySelectorAll('.lore-nav-btn').forEach(b => b.classList.remove('active'));
+      event.target?.classList.add('active');
+      
+      document.getElementById('lore-content').innerHTML = `
+        <div class="lore-title">${l.title}</div>
+        <div class="lore-subtitle">${l.subtitle}</div>
+        <div class="lore-text">${l.content}</div>
+      `;
+    }
+
+    function renderIntel() {
+      document.getElementById('intel-feed').innerHTML = INTEL.map(i => `
+        <div class="intel-item ${i.type}">
+          <div class="intel-time">${i.time}</div>
+          <div class="intel-text">${i.text}</div>
+          <div class="intel-effect ${i.type === 'victory' ? 'good' : 'bad'}">${i.effect}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderAchievements() {
+      document.getElementById('achievements-list').innerHTML = ACHIEVEMENTS.slice(0, 3).map(a => `
+        <div class="achievement ${a.locked ? 'locked' : ''}">
+          <div class="achievement-icon">${a.icon}</div>
+          <div class="achievement-info">
+            <div class="achievement-name">${a.name}</div>
+            <div class="achievement-desc">${a.desc}</div>
+          </div>
+          <div class="achievement-xp">+${a.xp} XP</div>
+        </div>
+      `).join('');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // GAME ACTIONS
+    // ═══════════════════════════════════════════════════════════════
+    function attackTerritory(id) {
+      const terr = TERRITORIES.find(t => t.id === id);
+      toast(`Attaque lancée sur ${terr.name} !`, 'warning');
+      
+      // Simulate battle
+      setTimeout(() => {
+        if (Math.random() > 0.5) {
+          terr.commons += 5;
+          terr.arizona -= 5;
+          NEXUS.commonsPower += 0.5;
+          NEXUS.arizonaPower -= 0.5;
+          toast(`Victoire à ${terr.name} ! +5% contrôle`, 'success');
+        } else {
+          toast(`Défaite à ${terr.name}. L'Empire résiste.`, 'error');
+        }
+        renderMap();
+        updateUI();
+      }, 1500);
+    }
+
+    function joinBattle(location) {
+      toast(`Vous rejoignez la bataille de ${location} !`, 'warning');
+      NEXUS.influence += 10;
+      updateUI();
+    }
+
+    function viewCard(id) {
+      const card = CARDS.find(c => c.id === id);
+      toast(`${card.name} — ${card.desc}`, 'success');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // WAR SIMULATION
+    // ═══════════════════════════════════════════════════════════════
+    function startWarSimulation() {
+      setInterval(() => {
+        // Random events
+        if (Math.random() < 0.1) {
+          const isGood = Math.random() > 0.5;
+          if (isGood) {
+            NEXUS.commonsPower = Math.min(100, NEXUS.commonsPower + 0.1);
+            NEXUS.arizonaPower = 100 - NEXUS.commonsPower;
+          } else {
+            NEXUS.arizonaPower = Math.min(100, NEXUS.arizonaPower + 0.1);
+            NEXUS.commonsPower = 100 - NEXUS.arizonaPower;
+          }
+          updateUI();
+        }
+      }, 5000);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // TOAST
+    // ═══════════════════════════════════════════════════════════════
+    function toast(msg, type = 'success') {
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = msg;
+      document.getElementById('toasts').appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+  </script>
+</body>
+</html>

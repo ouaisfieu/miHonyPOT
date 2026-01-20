@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woke the F*** | Strategic Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        /* Chosen Palette: "Cyber-Civic Paper" */
+        /* Background: #f8f5f2 (Warm Paper) */
+        /* Primary Text: #1c1917 (Warm Black) */
+        /* Accents: #f97316 (Vibrant Orange), #0d9488 (Teal), #7c3aed (Electric Purple) */
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f5f2;
+            color: #1c1917;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Chart Container Rules - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; 
+            height: 300px;
+            max-height: 400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn {
+            transition: all 0.2s;
+        }
+        
+        .tab-active {
+            background-color: #fff;
+            border-left-color: #f97316;
+            color: #f97316;
+            font-weight: 600;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-value {
+            background: linear-gradient(135deg, #1c1917 0%, #44403c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom scrollbar for inner content */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+    </style>
+    <!-- Chosen Palette: "Cyber-Civic Paper" - A high-contrast, professional palette blending modern clean aesthetics with vibrant data colors. -->
+    
+    <!-- Application Structure Plan:
+         The app functions as a "Strategic Command Center" for the WTF/CCPLC collective.
+         1. Header: Establish identity (Civic Tech/Low-tech) and mission.
+         2. The "Fork" Model: Visualizing the unique business model (Value Exchange).
+         3. Intelligence Radar: The core "Research" requested. A visual mapping of funding opportunities by deadline, amount, and type.
+         4. Financial Simulator: Interactive tool to project treasury growth based on the "pourliche" (tip) model.
+         5. The Kit (Actionable Resources): Direct access to the strategy's tools (Templates, Dossiers, Legal).
+         6. Timeline: Operational roadmap to the ASBL creation in June 2026.
+         Rationale: This structure moves from "Understanding the Strategy" to "Analyzing the Data" to "Taking Action", facilitating both partner recruitment and internal planning.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Opportunity Radar: Bubble Chart. Goal: Compare funding calls. X=Time, Y=Amount, R=Priority. Justification: Instantly identifies "Low hanging fruit" vs "Big Fish".
+         2. Treasury Simulator: Donut Chart + Dynamic Text. Goal: Inform/Project. Justification: Shows how small contributions aggregate to the 15k goal.
+         3. Timeline: Bar/Line Combo. Goal: Change/Plan. Justification: Maps financial targets against operational milestones.
+         4. The Model: CSS Grid/Flex Diagrams. Goal: Explain Process. Justification: Simple, clean flow without heavy graphics.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#f8f5f2]/90 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-stone-900 rounded-lg flex items-center justify-center text-white font-display font-bold text-xl shadow-lg">W</div>
+                    <div>
+                        <h1 class="font-display font-bold text-lg text-stone-900 leading-none">Woke the F***</h1>
+                        <span class="text-[10px] uppercase tracking-widest text-stone-500 font-semibold">Command Center v1.0</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#model" class="text-stone-600 hover:text-orange-600 font-medium text-sm transition-colors">Le Modèle</a>
+                    <a href="#radar" class="text-stone-600 hover:text-orange-600 font-medium text-sm transition-colors">Radar Financement</a>
+                    <a href="#simulator" class="text-stone-600 hover:text-orange-600 font-medium text-sm transition-colors">Simulateur</a>
+                    <a href="#kit" class="text-stone-600 hover:text-orange-600 font-medium text-sm transition-colors">Le Kit</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-1 bg-stone-200 text-stone-600 text-xs rounded font-medium">Status: Assoc. de Fait</span>
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        
+        <!-- Hero Section -->
+        <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+            <h2 class="text-4xl md:text-6xl font-display font-bold text-stone-900 mb-6 tracking-tight">
+                Forkez le système. <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Financez l'émancipation.</span>
+            </h2>
+            <p class="max-w-2xl mx-auto text-lg text-stone-600 mb-10 leading-relaxed">
+                Le collectif <strong>CCPLC / Nyxo</strong> inverse le rapport de force. Nous fournissons la technologie et les dossiers de financement. 
+                Vous portez les projets. Nous partageons la réussite pour construire une infrastructure civique durable.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#kit" class="px-8 py-3 bg-stone-900 text-white rounded-xl font-medium shadow-xl hover:bg-stone-800 transition transform hover:-translate-y-1">
+                    Accéder au Kit de Fork
+                </a>
+                <a href="#radar" class="px-8 py-3 bg-white text-stone-900 border border-stone-200 rounded-xl font-medium shadow-sm hover:bg-stone-50 transition">
+                    Explorer les Opportunités
+                </a>
+            </div>
+        </header>
+
+        <!-- Section 1: The Model (Concept) -->
+        <section id="model" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 scroll-mt-24">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-stone-200 via-orange-200 to-stone-200 -z-10 transform -translate-y-1/2"></div>
+
+                <!-- Step 1 -->
+                <div class="glass-card p-8 rounded-2xl text-center relative group">
+                    <div class="w-16 h-16 mx-auto bg-stone-100 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner group-hover:scale-110 transition-transform">🎁</div>
+                    <h3 class="font-display font-bold text-xl text-stone-900 mb-2">1. On fournit le Kit</h3>
+                    <p class="text-stone-500 text-sm">
+                        Outils tech (valeur 11.5k€) + Templates de dossiers (Erasmus, Be Planet) prêts à l'emploi.
+                    </p>
+                    <div class="mt-4 inline-block px-3 py-1 bg-stone-100 text-stone-600 text-xs font-bold rounded-full">Open Source</div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass-card p-8 rounded-2xl text-center relative group border-orange-500/20">
+                    <div class="w-16 h-16 mx-auto bg-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner group-hover:scale-110 transition-transform">🚀</div>
+                    <h3 class="font-display font-bold text-xl text-stone-900 mb-2">2. Vous portez le projet</h3>
+                    <p class="text-stone-500 text-sm">
+                        Votre ASBL dépose le dossier. Vous gardez 100% du financement officiel et gérez le projet.
+                    </p>
+                    <div class="mt-4 inline-block px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">Win-Win</div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass-card p-8 rounded-2xl text-center relative group">
+                    <div class="w-16 h-16 mx-auto bg-green-50 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner group-hover:scale-110 transition-transform">🤝</div>
+                    <h3 class="font-display font-bold text-xl text-stone-900 mb-2">3. Contribution Libre</h3>
+                    <p class="text-stone-500 text-sm">
+                        En cas de succès, vous versez un "pourliche" volontaire pour financer la R&D du collectif.
+                    </p>
+                    <div class="mt-4 inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Soutien</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Opportunity Radar (The Research) -->
+        <section id="radar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 scroll-mt-24">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-display font-bold text-stone-900 mb-4">📡 Radar de Financement 2026</h2>
+                    <p class="text-stone-600">
+                        Analyse stratégique des appels à projets identifiés. La taille des bulles indique le montant maximum potentiel. 
+                        L'axe horizontal représente l'urgence (jours avant deadline).
+                    </p>
+                </div>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <div class="flex items-center gap-2 text-xs font-medium text-stone-500">
+                        <span class="w-3 h-3 rounded-full bg-orange-500"></span> Prioritaire
+                    </div>
+                    <div class="flex items-center gap-2 text-xs font-medium text-stone-500">
+                        <span class="w-3 h-3 rounded-full bg-teal-500"></span> Long Terme
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                    <div class="p-4 bg-red-50 border border-red-100 rounded-xl">
+                        <div class="text-xs font-bold text-red-500 uppercase mb-1">Imminent (01/02/26)</div>
+                        <div class="font-bold text-stone-900">Be Planet</div>
+                        <div class="text-sm text-stone-600">Crowdfunding doublé. Cible: 6k€.</div>
+                    </div>
+                    <div class="p-4 bg-orange-50 border border-orange-100 rounded-xl">
+                        <div class="text-xs font-bold text-orange-500 uppercase mb-1">Priorité (05/03/26)</div>
+                        <div class="font-bold text-stone-900">Erasmus+ KA2 Small</div>
+                        <div class="text-sm text-stone-600">30k€ ou 60k€ forfaitaire. Dossier prêt.</div>
+                    </div>
+                    <div class="p-4 bg-purple-50 border border-purple-100 rounded-xl">
+                        <div class="text-xs font-bold text-purple-500 uppercase mb-1">Potentiel (29/04/26)</div>
+                        <div class="font-bold text-stone-900">CERV Citizens</div>
+                        <div class="text-sm text-stone-600">Gros volumes (75k+), complexité moyenne.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Treasury Simulator -->
+        <section id="simulator" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Controls & Context -->
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-stone-900 mb-4">💰 Simulateur de Trésorerie</h2>
+                    <p class="text-stone-600 mb-8">
+                        Pour créer l'ASBL en juin 2026, nous visons <span class="font-bold text-stone-900">15.000 €</span> de fonds propres.
+                        Ce montant provient du crowdfunding direct (Be Planet) et des contributions volontaires des partenaires "forkés".
+                    </p>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-6">
+                        <div>
+                            <label class="flex justify-between text-sm font-medium text-stone-700 mb-2">
+                                <span>Partenaires financés (Fork)</span>
+                                <span id="partnerVal" class="text-orange-600 font-bold">5</span>
+                            </label>
+                            <input type="range" id="partners" min="0" max="15" value="5" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+
+                        <div>
+                            <label class="flex justify-between text-sm font-medium text-stone-700 mb-2">
+                                <span>Contribution moyenne ("Pourliche")</span>
+                                <span id="tipVal" class="text-orange-600 font-bold">1500 €</span>
+                            </label>
+                            <input type="range" id="tip" min="500" max="5000" step="100" value="1500" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+
+                        <div class="pt-4 border-t border-stone-100">
+                            <div class="flex items-center justify-between text-sm text-stone-500">
+                                <span>+ Be Planet (Fixe)</span>
+                                <span class="font-medium text-stone-900">6.000 €</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="glass-card p-8 rounded-2xl relative">
+                    <div class="chart-container h-64">
+                        <canvas id="simChart"></canvas>
+                    </div>
+                    <!-- Center Text Overlay -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pt-6">
+                        <span class="text-sm text-stone-400 font-medium">Projection Juin 26</span>
+                        <span id="totalProj" class="text-4xl font-display font-bold text-stone-900">13.5k €</span>
+                        <span id="statusBadge" class="mt-2 px-3 py-1 bg-stone-100 text-stone-500 text-xs font-bold rounded-full">EN COURS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Kit (Resources) -->
+        <section id="kit" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 scroll-mt-24">
+            <h2 class="text-3xl font-display font-bold text-stone-900 mb-8 text-center">🧰 Le Kit de Fork</h2>
+            
+            <div class="bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+                
+                <!-- Tab Navigation -->
+                <div class="w-full md:w-1/3 bg-stone-50 border-r border-stone-200">
+                    <div class="p-6 border-b border-stone-200">
+                        <h3 class="font-bold text-stone-900">Ressources Disponibles</h3>
+                        <p class="text-xs text-stone-500 mt-1">Sélectionnez un document pour prévisualiser.</p>
+                    </div>
+                    <nav class="flex flex-col">
+                        <button onclick="openTab('erasmus')" class="tab-btn p-4 text-left border-l-4 border-transparent hover:bg-white focus:outline-none tab-active" id="btn-erasmus">
+                            <div class="font-bold text-sm text-stone-800">Erasmus+ KA2 Small</div>
+                            <div class="text-xs text-stone-500 mt-0.5">Template complet (30k/60k)</div>
+                        </button>
+                        <button onclick="openTab('beplanet')" class="tab-btn p-4 text-left border-l-4 border-transparent hover:bg-white focus:outline-none" id="btn-beplanet">
+                            <div class="font-bold text-sm text-stone-800">Be Planet 2026</div>
+                            <div class="text-xs text-stone-500 mt-0.5">Dossier candidature & Pitch</div>
+                        </button>
+                        <button onclick="openTab('legal')" class="tab-btn p-4 text-left border-l-4 border-transparent hover:bg-white focus:outline-none" id="btn-legal">
+                            <div class="font-bold text-sm text-stone-800">Statuts Juridiques</div>
+                            <div class="text-xs text-stone-500 mt-0.5">Convention Assoc. de Fait</div>
+                        </button>
+                        <button onclick="openTab('email')" class="tab-btn p-4 text-left border-l-4 border-transparent hover:bg-white focus:outline-none" id="btn-email">
+                            <div class="font-bold text-sm text-stone-800">Démarchage</div>
+                            <div class="text-xs text-stone-500 mt-0.5">Scripts emails & Cibles</div>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="w-full md:w-2/3 p-8 bg-white relative custom-scroll overflow-y-auto max-h-[600px]">
+                    
+                    <!-- Erasmus Tab -->
+                    <div id="content-erasmus" class="space-y-6 animate-fade-in">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-bold font-display text-stone-900">Template Erasmus+ KA2</h3>
+                            <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-bold">Deadline: 05 Mars</span>
+                        </div>
+                        <div class="prose prose-stone text-sm">
+                            <p><strong>Objectif :</strong> Partenariats de coopération à petite échelle pour l'éducation des adultes.</p>
+                            <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 my-4 font-mono text-xs text-stone-700">
+                                # SECTION 1 — CONTEXTE<br>
+                                Titre : « Digital Advocacy Toolkit — Outils numériques sobres »<br>
+                                Priorité : Transformation numérique & Environnement<br>
+                                <br>
+                                # BUDGET (Forfaitaire)<br>
+                                Option A: 30.000 €<br>
+                                Option B: 60.000 €<br>
+                                Taux de co-financement : 0% (100% financé)
+                            </div>
+                            <h4 class="font-bold mt-4">Checklist Soumission</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>OID Valide pour chaque partenaire (min 2 pays)</li>
+                                <li>Déclaration sur l'honneur signée</li>
+                                <li>Mandats des partenaires</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Be Planet Tab -->
+                    <div id="content-beplanet" class="space-y-6 hidden animate-fade-in">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-bold font-display text-stone-900">Dossier Be Planet</h3>
+                            <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-bold">Urgent: 01 Fév</span>
+                        </div>
+                        <div class="prose prose-stone text-sm">
+                            <p><strong>Programme :</strong> "Le Bon Moment" - Crowdfunding avec doublement des dons.</p>
+                            <div class="grid grid-cols-2 gap-4 my-4">
+                                <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-xs font-bold text-stone-400 uppercase">Cible Collecte</div>
+                                    <div class="text-xl font-bold text-stone-900">3.000 €</div>
+                                </div>
+                                <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                                    <div class="text-xs font-bold text-stone-400 uppercase">Total (Doublé)</div>
+                                    <div class="text-xl font-bold text-green-600">6.000 €</div>
+                                </div>
+                            </div>
+                            <h4 class="font-bold">Pitch (Extrait)</h4>
+                            <p class="italic text-stone-600 border-l-2 border-stone-300 pl-4">
+                                "Le numérique devait démocratiser l'accès au savoir. Il a aussi creusé les inégalités. Notre projet 'Numérique Sobre pour Tou·te·s' propose des outils de plaidoyer qui fonctionnent sur n'importe quel appareil, même ancien."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Legal Tab -->
+                    <div id="content-legal" class="space-y-6 hidden animate-fade-in">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-bold font-display text-stone-900">Statut: Association de Fait</h3>
+                            <span class="px-3 py-1 bg-stone-100 text-stone-800 rounded-full text-xs font-bold">Interne</span>
+                        </div>
+                        <div class="prose prose-stone text-sm">
+                            <p>Convention temporaire pour structurer le collectif avant la création de l'ASBL.</p>
+                            <ul class="space-y-2 mt-4">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-green-500 font-bold">✓</span>
+                                    <span><strong>Objet Social :</strong> Éducation populaire et numérique sobre.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-green-500 font-bold">✓</span>
+                                    <span><strong>Siège :</strong> Bruxelles (Chez responsable admin).</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-500 font-bold">!</span>
+                                    <span><strong>Dissolution :</strong> Fonds transférés à la Fondation Roi Baudouin si pas d'ASBL.</span>
+                                </li>
+                            </ul>
+                            <div class="mt-6 p-4 bg-yellow-50 text-yellow-800 rounded text-xs">
+                                <strong>Note juridique :</strong> Ce statut permet d'ouvrir un compte bancaire et de recevoir des dons, mais n'offre pas la protection de la responsabilité limitée d'une ASBL.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Tab -->
+                    <div id="content-email" class="space-y-6 hidden animate-fade-in">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-bold font-display text-stone-900">Scripts Démarchage</h3>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">Outreach</span>
+                        </div>
+                        <div class="prose prose-stone text-sm">
+                            <h4 class="font-bold">Cibles Prioritaires</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-stone-100 px-2 py-1 rounded text-xs">Lire et Écrire</span>
+                                <span class="bg-stone-100 px-2 py-1 rounded text-xs">Collectif Alpha</span>
+                                <span class="bg-stone-100 px-2 py-1 rounded text-xs">CEMEA</span>
+                                <span class="bg-stone-100 px-2 py-1 rounded text-xs">PAC</span>
+                            </div>
+                            <h4 class="font-bold">Template "Cold Email"</h4>
+                            <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 font-mono text-xs text-stone-700 whitespace-pre-line">
+                                Bonjour,
+                                
+                                Nous sommes un collectif citoyen qui développe des outils open source.
+                                
+                                <strong>Notre proposition :</strong>
+                                1. Vous portez un dossier de financement (Erasmus+, FRB...)
+                                2. On vous fournit le dossier rédigé + les outils techniques
+                                3. C'est 100% financé pour vous.
+                                
+                                Contribution libre uniquement si succès. Dispo pour en parler ?
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Timeline -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+            <h2 class="text-3xl font-display font-bold text-stone-900 mb-8">Roadmap Opérationnelle</h2>
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-display font-bold text-white text-xl mb-2">CCPLC / Nyxo</p>
+            <p class="text-sm mb-6">Bruxelles, Belgique • Civic Tech Collective</p>
+            <div class="text-xs text-stone-600 max-w-lg mx-auto">
+                Basé sur les documents internes "Convention Association de Fait", "Dossier Be Planet 2026" et "Kit de Fork".
+                Les projections financières sont des estimations basées sur le modèle de contribution volontaire.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Tab Logic ---
+        function openTab(tabId) {
+            // Hide all contents
+            ['erasmus', 'beplanet', 'legal', 'email'].forEach(id => {
+                document.getElementById('content-' + id).classList.add('hidden');
+                document.getElementById('btn-' + id).classList.remove('tab-active', 'border-l-4');
+                document.getElementById('btn-' + id).classList.add('border-transparent');
+            });
+            
+            // Show selected
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.add('tab-active', 'border-l-4');
+            btn.classList.remove('border-transparent');
+        }
+
+        // --- Chart.js Configurations ---
+        
+        // 1. Radar Chart (Bubble Style for Timeline/Amount/Priority)
+        // X: Days from Jan 1 2026. Y: Amount (k€). R: Priority/Complexity
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Opportunités',
+                    data: [
+                        { x: 32, y: 6, r: 10, label: 'Be Planet (Crowd)', date: '01 Fév' },
+                        { x: 64, y: 60, r: 25, label: 'Erasmus+ KA2', date: '05 Mars' },
+                        { x: 120, y: 15, r: 8, label: 'FRB Digital', date: 'Avril' },
+                        { x: 120, y: 75, r: 20, label: 'CERV Citizens', date: 'Avril' },
+                        { x: 300, y: 100, r: 15, label: 'Innoviris PYSI', date: 'Nov' }
+                    ],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',   // Red
+                        'rgba(249, 115, 22, 0.8)',  // Orange
+                        'rgba(59, 130, 246, 0.8)',  // Blue
+                        'rgba(168, 85, 247, 0.8)',  // Purple
+                        'rgba(13, 148, 136, 0.8)'   // Teal
+                    ],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Jours (depuis 01/01/2026)' },
+                        min: 0,
+                        max: 330,
+                        grid: { color: '#e7e5e4' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Montant Max (k€)' },
+                        min: 0,
+                        max: 120,
+                        grid: { color: '#e7e5e4' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.label + ': ' + context.raw.y + 'k€ (' + context.raw.date + ')';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Simulator Logic
+        const ctxSim = document.getElementById('simChart').getContext('2d');
+        let simChart;
+        const partnersInput = document.getElementById('partners');
+        const tipInput = document.getElementById('tip');
+        const partnerVal = document.getElementById('partnerVal');
+        const tipVal = document.getElementById('tipVal');
+        const totalProj = document.getElementById('totalProj');
+        const statusBadge = document.getElementById('statusBadge');
+
+        function updateSim() {
+            const p = parseInt(partnersInput.value);
+            const t = parseInt(tipInput.value);
+            const bePlanet = 6000;
+            const forkTotal = p * t;
+            const grandTotal = bePlanet + forkTotal;
+            const goal = 15000;
+
+            // Update Text
+            partnerVal.innerText = p;
+            tipVal.innerText = t + ' €';
+            totalProj.innerText = (grandTotal / 1000).toFixed(1) + 'k €';
+            
+            // Status Logic
+            if(grandTotal >= 15000) {
+                statusBadge.innerText = "GO ASBL ✅";
+                statusBadge.className = "mt-2 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full";
+                totalProj.classList.replace('text-stone-900', 'text-green-600');
+            } else if (grandTotal >= 10000) {
+                statusBadge.innerText = "POSSIBLE ⚠️";
+                statusBadge.className = "mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full";
+                totalProj.classList.replace('text-stone-900', 'text-yellow-600');
+            } else {
+                statusBadge.innerText = "INSUFFISANT 🛑";
+                statusBadge.className = "mt-2 px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full";
+                totalProj.classList.replace('text-green-600', 'text-stone-900');
+                totalProj.classList.replace('text-yellow-600', 'text-stone-900');
+            }
+
+            // Update Chart
+            const data = {
+                labels: ['Be Planet', 'Fork (Variable)', 'Manquant'],
+                datasets: [{
+                    data: [bePlanet, forkTotal, Math.max(0, goal - grandTotal)],
+                    backgroundColor: ['#ef4444', '#f97316', '#e7e5e4'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            };
+
+            if (simChart) {
+                simChart.data = data;
+                simChart.update();
+            } else {
+                simChart = new Chart(ctxSim, {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.raw.toLocaleString() + '€';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        partnersInput.addEventListener('input', updateSim);
+        tipInput.addEventListener('input', updateSim);
+        updateSim(); // Init
+
+        // 3. Timeline Chart (Bar/Line Combo)
+        const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+        new Chart(ctxTimeline, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Objectif Trésorerie Cumulée',
+                        data: [0, 2000, 5000, 8000, 11000, 15000],
+                        borderColor: '#0d9488', // Teal
+                        borderWidth: 3,
+                        tension: 0.3,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Intensité Opérationnelle',
+                        data: [30, 90, 70, 40, 30, 80],
+                        backgroundColor: 'rgba(28, 25, 23, 0.2)', // Stone 900 low opacity
+                        borderRadius: 4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Trésorerie (€)' }
+                    },
+                    y1: {
+                        display: false,
+                        max: 100
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                // Multiline handler requirement
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

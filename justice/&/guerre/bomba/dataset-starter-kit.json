@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "name": "KIT DE DÉMARRAGE — Plaidoyer Citoyen",
+    "version": "2.0",
+    "description": "Dataset pré-rempli pour déploiement viral. Inspiré du Manifeste TSAR e-BOMBA et du Guide du Plaidoyer Citoyen de Justice et Paix.",
+    "license": "CC BY-SA 4.0",
+    "sources": [
+      "Justice et Paix - Petit Guide du Plaidoyer Citoyen",
+      "Manifeste TSAR e-BOMBA",
+      "Actes Journée Éducation Permanente 2011-2012",
+      "Kit Citoyen·ne"
+    ],
+    "created": "2026-01-20",
+    "quote": "La meilleure propagande n'est pas de la propagande. — Joseph S. Nye"
+  },
+  "fields": {
+    "domino_pourquoi": "Je ne supporte plus de voir les plus vulnérables systématiquement stigmatisés par des médias qui ne leur donnent jamais la parole. Je refuse qu'on parle DES précaires sans jamais parler AVEC eux.",
+    "domino_valeurs": "Dignité humaine inconditionnelle • Justice sociale • Solidarité active • Droit à la parole • Éducation populaire • Démocratie participative",
+    "domino_changements": "1. Que les médias appliquent le principe du contradictoire quand ils parlent des précaires\n2. Que les concernés soient consultés sur les politiques sociales\n3. Que le discours public cesse de criminaliser la pauvreté\n4. Que la fraude sociale des entreprises soit traitée avec la même sévérité que celle des particuliers",
+    "domino_vision": "Une société où personne n'est réduit à une étiquette, où chaque voix compte, où l'information est un bien commun au service de l'émancipation et non de la domination.",
+    
+    "profil_temps": "5-10h par semaine, plus en période de campagne",
+    "profil_competences": "Rédaction • Recherche documentaire • Réseaux sociaux • Animation de groupe • Témoignage du vécu",
+    "profil_reseau": "3 associations partenaires • 50 contacts actifs • 1 journaliste sympathisant • Réseau d'éducation permanente",
+    "profil_limites": "Pas d'actions illégales • Pas de harcèlement en ligne • Respect de la vie privée des personnes",
+    "profil_risques": "Accepte d'être identifié publiquement • Accepte les critiques • Accepte de donner du temps",
+    
+    "fleur_genre": "Variable selon les membres du collectif — diversité = force",
+    "fleur_origine": "Belgique multiculturelle — la précarité n'a pas de frontière",
+    "fleur_classe": "Précaires, ex-précaires, alliés de classe moyenne — alliance nécessaire",
+    "fleur_education": "Tous niveaux — le savoir d'expérience vaut le savoir académique",
+    "fleur_sante": "Personnes valides et invalides — la maladie ne disqualifie pas la parole",
+    "fleur_age": "Intergénérationnel — les jeunes et les seniors sont également touchés",
+    
+    "toc_ind_int": "Prise de conscience que les précaires ne sont pas responsables de leur situation • Déconstruction des préjugés • Empathie",
+    "toc_ind_ext": "Partage de témoignages • Signature de pétitions • Participation aux actions • Vote informé",
+    "toc_coll_int": "Changement du regard médiatique • Nouvelle narrative collective • Reconnaissance de l'expertise du vécu",
+    "toc_coll_ext": "Modification des pratiques journalistiques • Consultation systématique des associations • Politiques publiques plus justes",
+    "toc_vision": "Une démocratie où les concernés sont les premiers experts de leur situation, où le débat public est nourri par la diversité des voix, où les médias sont au service du bien commun.",
+    
+    "swot_forces": "• Légitimité du vécu (authenticité imbattable)\n• Réseau d'éducation permanente existant\n• Outils numériques accessibles\n• Doctrine stratégique claire (TSAR e-BOMBA)",
+    "swot_faiblesses": "• Moyens financiers limités\n• Fatigue militante\n• Faible visibilité médiatique initiale\n• Dispersion géographique",
+    "swot_opportunites": "• Crise sociale = attention du public\n• Web sémantique favorise l'authenticité\n• Défiance envers les médias mainstream\n• Outils IA accessibles",
+    "swot_menaces": "• Contre-offensive médiatique\n• Récupération politique\n• Épuisement des militants\n• Censure algorithmique",
+    
+    "arbre_consequences": "Stigmatisation → Isolement → Problèmes de santé mentale → Non-recours aux droits → Aggravation de la précarité → Cercle vicieux",
+    "arbre_probleme": "Les médias dominants produisent une narrative qui criminalise les précaires et détourne l'attention des causes structurelles de la pauvreté.",
+    "arbre_causes": "• Concentration des médias aux mains de groupes financiers\n• Absence de diversité sociale dans les rédactions\n• Logique du buzz et de l'audimat\n• Méconnaissance du terrain\n• Intérêts économiques à maintenir le statu quo",
+    
+    "why_start": "Les médias stigmatisent les précaires",
+    "why_1": "Parce que les journalistes reproduisent des stéréotypes",
+    "why_2": "Parce qu'ils ne connaissent pas la réalité du terrain",
+    "why_3": "Parce qu'ils appartiennent majoritairement à une classe sociale privilégiée",
+    "why_4": "Parce que le recrutement médiatique favorise les profils CSP+",
+    "why_5": "CAUSE RACINE: Le système médiatique est structurellement biaisé en faveur des narratives dominantes qui protègent les intérêts des classes possédantes",
+    
+    "pouvoir_avec": "• Rencontrer les parlementaires sympathisants\n• Participer aux consultations publiques\n• Collaborer avec le CSA/CDJ\n• Former des partenariats avec des journalistes éthiques",
+    "pouvoir_sans": "• Créer nos propres médias (blogs, podcasts, réseaux)\n• Documenter nos propres récits\n• Construire une base de données de témoignages\n• Développer notre propre expertise",
+    "pouvoir_contre": "• Dénoncer publiquement les biais médiatiques\n• Lancer des contre-narratives virales\n• Organiser des actions symboliques\n• Utiliser les outils de guerre sémantique (SEO, Schema.org)",
+    
+    "smart_s": "Obtenir l'audition de 3 associations de précaires devant la Commission parlementaire des Affaires sociales",
+    "smart_m": "3 auditions confirmées + couverture dans 2 médias nationaux minimum",
+    "smart_a": "Oui: contacts avec 2 députés sympathisants, témoignages prêts, dossier documenté",
+    "smart_r": "Étape vers l'objectif de modification de la loi sur le droit de réponse médiatique",
+    "smart_t": "Avant la fin de la session parlementaire de printemps (juin 2026)",
+    
+    "msg_accroche": "En Belgique, un enfant sur cinq vit sous le seuil de pauvreté. Mais dans les médias, les pauvres sont plus souvent accusés que défendus.",
+    "msg_probleme": "Les reportages sur les précaires reproduisent systématiquement les mêmes biais: focus sur les cas de fraude (0,5% des allocataires), absence de parole des concernés, questions culpabilisantes. Cette narrative toxique a des conséquences concrètes: non-recours aux droits, honte, isolement.",
+    "msg_importance": "Quand les médias participent à la stigmatisation des plus vulnérables, ils renforcent les inégalités qu'ils devraient dénoncer. Le coût social de cette désinformation se chiffre en milliards: santé mentale, non-recours, violences symboliques.",
+    "msg_cible": "Mesdames et Messieurs les parlementaires, vous avez le pouvoir de faire entendre une autre voix.",
+    "msg_action": "Nous demandons l'audition des principales associations représentant les précaires devant la Commission des Affaires sociales, pour que la parole des concernés soit enfin entendue avant tout débat sur les politiques sociales.",
+    
+    "suivi_quanti": "• Nombre de signatures sur la pétition\n• Couverture médiatique (articles, passages TV/radio)\n• Engagement sur les réseaux sociaux (partages, commentaires)\n• Nombre de rencontres avec des élus\n• Auditions obtenues",
+    "suivi_quali": "• Évolution du ton médiatique sur les précaires\n• Qualité des relations avec les alliés\n• Moral et engagement des militants\n• Changements dans le discours politique",
+    
+    "sem_entite": "Collectif des Précaires de Belgique",
+    "sem_attributs": "résilience • dignité • expertise du vécu • légitimité • solidarité • courage",
+    "sem_longtail": "témoignage précarité belgique • droit de réponse médias • stigmatisation chômeurs • fraude sociale réalité • pauvreté enfants belgique • éducation permanente belgique",
+    
+    "narr_dominant": "\"Les précaires sont des fraudeurs qui profitent du système. Ils ne veulent pas travailler. Ils coûtent cher à la société. Il faut durcir les contrôles.\"",
+    "narr_biais": "• Jamais de témoignages directs des concernés\n• Focus sur les cas de fraude (0,5%) plutôt que sur les 99,5% de légitimes\n• Chiffres sortis de leur contexte\n• Questions culpabilisantes (\"Pourquoi ne travaillez-vous pas?\")\n• Absence d'analyse des causes structurelles",
+    "narr_contre": "\"Les précaires sont des survivants résilients qui font face à un système qui les broie. La fraude sociale des entreprises coûte 10× plus que celle des particuliers. Les allocataires sont des citoyens qui exercent leurs droits, pas des assistés.\"",
+    "narr_preuves": "• Statistiques officielles de l'ONEM sur la fraude (<0,5%)\n• Études sur le non-recours aux droits (30% des ayants-droit)\n• Témoignages directs et sourcés\n• Comparaison avec la fraude fiscale des entreprises\n• Travaux académiques sur la stigmatisation",
+    
+    "viral_tweet": "📊 0,5% de fraude. 30% de non-recours aux droits. \n\nMais les médias préfèrent chasser les \"fraudeurs\" plutôt que défendre les oubliés.\n\nIl est temps de changer de récit. #StopStigmatisation",
+    "viral_hashtags": "#StopStigmatisation #PrécaritéVisible #DroitDeRéponse #ÉducationPopulaire #PlaidoyerCitoyen",
+    "viral_cta": "Partagez si vous pensez que les précaires méritent d'être entendus, pas jugés. Ensemble, changeons le récit. 💪"
+  },
+  "actors": [
+    {
+      "id": 1,
+      "name": "Ministre des Affaires sociales",
+      "type": "institution",
+      "position": "target",
+      "power": 9,
+      "notes": "Cible primaire. Pouvoir de décision sur les politiques sociales."
+    },
+    {
+      "id": 2,
+      "name": "Commission parlementaire Affaires sociales",
+      "type": "institution",
+      "position": "target",
+      "power": 8,
+      "notes": "Peut convoquer des auditions. Relais essentiel vers le législatif."
+    },
+    {
+      "id": 3,
+      "name": "RTL-TVI / Groupe RTL",
+      "type": "media",
+      "position": "target",
+      "power": 8,
+      "notes": "Cible sémantique secondaire. Vecteur principal de la narrative stigmatisante."
+    },
+    {
+      "id": 4,
+      "name": "CSA (Conseil Supérieur de l'Audiovisuel)",
+      "type": "institution",
+      "position": "neutral",
+      "power": 6,
+      "notes": "Régulateur. Peut être un levier si bien utilisé."
+    },
+    {
+      "id": 5,
+      "name": "FESEFA",
+      "type": "association",
+      "position": "ally",
+      "power": 5,
+      "notes": "Fédération des employeurs du secteur de l'éducation permanente. Allié naturel."
+    },
+    {
+      "id": 6,
+      "name": "Lire et Écrire",
+      "type": "association",
+      "position": "ally",
+      "power": 5,
+      "notes": "Réseau d'alphabétisation. Touche les publics les plus fragiles."
+    },
+    {
+      "id": 7,
+      "name": "CNCD-11.11.11",
+      "type": "association",
+      "position": "ally",
+      "power": 6,
+      "notes": "Coupole ONG. Expérience en plaidoyer et campagnes."
+    },
+    {
+      "id": 8,
+      "name": "Justice et Paix",
+      "type": "association",
+      "position": "ally",
+      "power": 4,
+      "notes": "Auteur du Guide du Plaidoyer Citoyen. Expertise méthodologique."
+    },
+    {
+      "id": 9,
+      "name": "Journalistes indépendants sympathisants",
+      "type": "personne",
+      "position": "ally",
+      "power": 4,
+      "notes": "Relais médiatiques potentiels. À cultiver."
+    },
+    {
+      "id": 10,
+      "name": "Députés de l'opposition sociale",
+      "type": "personne",
+      "position": "ally",
+      "power": 5,
+      "notes": "Peuvent poser des questions parlementaires. Relais politique."
+    }
+  ],
+  "journal": [
+    {
+      "id": 1,
+      "date": "2026-01-20T00:00:00.000Z",
+      "text": "📋 INITIALISATION: Dataset de démarrage créé. Les 15 outils méthodologiques sont prêts. La doctrine est claire. L'arsenal est chargé. Mode: DISSUASION PÉDAGOGIQUE. Objectif: Construire pour ne jamais avoir à détruire."
+    }
+  ],
+  "doctrine": {
+    "principe_fondamental": "La meilleure propagande n'est pas de la propagande. L'authenticité est notre arme absolue.",
+    "règles_engagement": [
+      "Jamais d'attaque ad hominem — nos cibles sont des entités sémantiques, pas des personnes",
+      "Toujours factuel et sourcé — la rigueur est notre légitimité",
+      "Mobilisation authentique — les témoignages du vécu sont notre force",
+      "Judo informationnel — retourner les arguments adverses contre eux-mêmes",
+      "Saturation positive — occuper l'espace sémantique avec notre récit"
+    ],
+    "citation_sun_tzu": "L'art suprême de la guerre, c'est soumettre l'ennemi sans combat.",
+    "citation_arendt": "La liberté, c'est l'action.",
+    "citation_maurel": "L'éducation populaire, c'est de se mettre debout!",
+    "objectif_final": "Construire cet arsenal pour ne jamais avoir à l'utiliser de manière offensive. La connaissance de la guerre cognitive est notre meilleure défense."
+  }
+}

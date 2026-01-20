@@ -1,0 +1,3156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Poste de Travail Plaidoyer Citoyen - 15 outils méthodologiques pour l'action citoyenne">
+    <meta name="theme-color" content="#1a365d">
+    <title>Plaidoyer Citoyen — Poste de Travail v3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Civic Authority Theme
+   Inspiré des systèmes de design gouvernementaux (GOV.UK, DSFR)
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+    /* Couleurs — Palette Institutionnelle */
+    --navy-900: #0d1b2a;
+    --navy-800: #1b263b;
+    --navy-700: #253342;
+    --navy-600: #324a5f;
+    --navy-500: #415a77;
+    
+    /* Accents Civiques */
+    --civic-gold: #d4a574;
+    --civic-gold-light: #e8c9a0;
+    --civic-gold-dark: #b8956a;
+    --civic-teal: #4ecdc4;
+    --civic-teal-light: #7ee8e1;
+    --civic-red: #e63946;
+    --civic-green: #52b788;
+    --civic-green-light: #74c69d;
+    
+    /* Texte */
+    --text-primary: #f8f9fa;
+    --text-secondary: #adb5bd;
+    --text-muted: #6c757d;
+    --text-dark: #212529;
+    
+    /* Surfaces */
+    --surface-base: var(--navy-900);
+    --surface-raised: var(--navy-800);
+    --surface-overlay: var(--navy-700);
+    --surface-input: rgba(255,255,255,0.05);
+    
+    /* Bordures */
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-default: rgba(255,255,255,0.15);
+    --border-active: var(--civic-gold);
+    
+    /* Effets */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 30px rgba(212,165,116,0.2);
+    
+    /* Rayons */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+    
+    /* Transitions */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 150ms;
+    --duration-base: 250ms;
+    --duration-slow: 400ms;
+    
+    /* Layout */
+    --sidebar-width: 260px;
+    --header-height: 60px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESET & FONDATIONS
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { 
+    scroll-behavior: smooth; 
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--surface-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus visible pour accessibilité */
+:focus-visible {
+    outline: 2px solid var(--civic-gold);
+    outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT — Application Shell
+   ═══════════════════════════════════════════════════════════════ */
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--surface-raised);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: transform var(--duration-base) var(--ease);
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--civic-gold), var(--civic-gold-dark));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: var(--shadow-glow);
+}
+
+.logo-text {
+    flex: 1;
+}
+
+.logo-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.logo-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Navigation */
+.nav-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.nav-group {
+    margin-bottom: 0.5rem;
+}
+
+.nav-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    border-radius: var(--radius-sm);
+    transition: background var(--duration-fast) var(--ease);
+}
+
+.nav-group-header:hover {
+    background: var(--surface-input);
+}
+
+.nav-group-header .chevron {
+    transition: transform var(--duration-fast) var(--ease);
+}
+
+.nav-group.collapsed .chevron {
+    transform: rotate(-90deg);
+}
+
+.nav-group.collapsed .nav-items {
+    display: none;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.nav-item:hover {
+    background: var(--surface-input);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(212,165,116,0.15);
+    color: var(--civic-gold);
+}
+
+.nav-item-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.nav-item-badge {
+    margin-left: auto;
+    background: var(--civic-gold);
+    color: var(--navy-900);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.progress-indicator {
+    margin-bottom: 0.75rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+}
+
+.progress-bar {
+    height: 6px;
+    background: var(--surface-input);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--civic-teal), var(--civic-green));
+    border-radius: 3px;
+    transition: width var(--duration-slow) var(--ease);
+}
+
+/* MAIN CONTENT */
+.main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    height: var(--header-height);
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Boutons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+    white-space: nowrap;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    width: 36px;
+    height: 36px;
+}
+
+.btn-primary {
+    background: var(--civic-gold);
+    color: var(--navy-900);
+}
+
+.btn-primary:hover {
+    background: var(--civic-gold-light);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+    background: var(--surface-overlay);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-secondary:hover {
+    background: var(--navy-600);
+    border-color: var(--border-active);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+    background: var(--surface-input);
+    color: var(--text-primary);
+}
+
+.btn-danger {
+    background: var(--civic-red);
+    color: white;
+}
+
+.btn-success {
+    background: var(--civic-green);
+    color: var(--navy-900);
+}
+
+/* Content Area */
+.content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.content-header {
+    margin-bottom: 1.5rem;
+}
+
+.content-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.content-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    max-width: 65ch;
+}
+
+/* Cards */
+.card {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.card:hover {
+    border-color: var(--border-default);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-title-icon {
+    color: var(--civic-gold);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: var(--surface-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--civic-gold);
+    background: var(--surface-overlay);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Grid Layouts */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--surface-input);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+}
+
+.tab {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.tab:hover {
+    color: var(--text-secondary);
+}
+
+.tab.active {
+    background: var(--surface-overlay);
+    color: var(--civic-gold);
+}
+
+/* Tags */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 20px;
+    background: var(--surface-input);
+    color: var(--text-secondary);
+}
+
+.tag-voir { background: rgba(78,205,196,0.15); color: var(--civic-teal); }
+.tag-juger { background: rgba(212,165,116,0.15); color: var(--civic-gold); }
+.tag-agir { background: rgba(82,183,136,0.15); color: var(--civic-green); }
+
+/* Panels & Sections */
+.panel {
+    display: none;
+}
+
+.panel.active {
+    display: block;
+    animation: fadeIn var(--duration-base) var(--ease);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-base) var(--ease);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform var(--duration-base) var(--ease);
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+}
+
+.modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    background: var(--surface-overlay);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn var(--duration-base) var(--ease);
+}
+
+.toast.success { border-left: 3px solid var(--civic-green); }
+.toast.error { border-left: 3px solid var(--civic-red); }
+.toast.info { border-left: 3px solid var(--civic-teal); }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Actors Map */
+.actor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.actor-card {
+    background: var(--surface-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.actor-card:hover {
+    border-color: var(--civic-gold);
+    transform: translateY(-2px);
+}
+
+.actor-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.actor-type {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.actor-power {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.power-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--surface-overlay);
+}
+
+.power-dot.filled {
+    background: var(--civic-gold);
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.25rem;
+    background: var(--surface-overlay);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    min-width: 180px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--duration-fast) var(--ease);
+    z-index: 100;
+}
+
+.dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.dropdown-item:hover {
+    background: var(--surface-input);
+    color: var(--text-primary);
+}
+
+.dropdown-item:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.dropdown-item:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0.25rem 0;
+}
+
+/* File Upload Zone */
+.upload-zone {
+    border: 2px dashed var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+    border-color: var(--civic-gold);
+    background: rgba(212,165,116,0.05);
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.upload-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.upload-formats {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Quick Stats */
+.stats-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    flex: 1;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--civic-gold);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main {
+        margin-left: 0;
+    }
+    
+    .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-row {
+        flex-wrap: wrap;
+    }
+    
+    .stat-card {
+        flex: 1 1 45%;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sidebar, .header, .btn, .toast-container {
+        display: none !important;
+    }
+    
+    .main {
+        margin-left: 0;
+    }
+    
+    .content {
+        padding: 0;
+    }
+    
+    .card {
+        break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface-base);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--navy-600);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--navy-500);
+}
+
+/* Helper Classes */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--civic-green); }
+.text-warning { color: var(--civic-gold); }
+.text-danger { color: var(--civic-red); }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">⚖️</div>
+                <div class="logo-text">
+                    <div class="logo-title">Plaidoyer Citoyen</div>
+                    <div class="logo-subtitle">Poste de Travail v3</div>
+                </div>
+            </div>
+            
+            <nav class="nav-section">
+                <!-- Dashboard -->
+                <div class="nav-group">
+                    <div class="nav-item active" data-panel="dashboard">
+                        <span class="nav-item-icon">📊</span>
+                        <span>Tableau de bord</span>
+                    </div>
+                </div>
+                
+                <!-- VOIR -->
+                <div class="nav-group">
+                    <div class="nav-group-header" onclick="toggleNavGroup(this)">
+                        <span>👁️ VOIR — Analyse</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="nav-items">
+                        <div class="nav-item" data-panel="domino">
+                            <span class="nav-item-icon">🎯</span>
+                            <span>Domino du changement</span>
+                        </div>
+                        <div class="nav-item" data-panel="profil">
+                            <span class="nav-item-icon">🪞</span>
+                            <span>Profil d'engagement</span>
+                        </div>
+                        <div class="nav-item" data-panel="fleur">
+                            <span class="nav-item-icon">🌸</span>
+                            <span>Fleur de pouvoir</span>
+                        </div>
+                        <div class="nav-item" data-panel="acteurs">
+                            <span class="nav-item-icon">👥</span>
+                            <span>Cartographie acteurs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- JUGER -->
+                <div class="nav-group">
+                    <div class="nav-group-header" onclick="toggleNavGroup(this)">
+                        <span>⚖️ JUGER — Stratégie</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="nav-items">
+                        <div class="nav-item" data-panel="toc">
+                            <span class="nav-item-icon">🔄</span>
+                            <span>Théorie du changement</span>
+                        </div>
+                        <div class="nav-item" data-panel="swot">
+                            <span class="nav-item-icon">📐</span>
+                            <span>Analyse SWOT</span>
+                        </div>
+                        <div class="nav-item" data-panel="pestel">
+                            <span class="nav-item-icon">🌍</span>
+                            <span>Analyse PESTEL</span>
+                        </div>
+                        <div class="nav-item" data-panel="arbre">
+                            <span class="nav-item-icon">🌳</span>
+                            <span>Arbre à problème</span>
+                        </div>
+                        <div class="nav-item" data-panel="why">
+                            <span class="nav-item-icon">❓</span>
+                            <span>Les 5 Pourquoi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AGIR -->
+                <div class="nav-group">
+                    <div class="nav-group-header" onclick="toggleNavGroup(this)">
+                        <span>🚀 AGIR — Action</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="nav-items">
+                        <div class="nav-item" data-panel="pouvoir">
+                            <span class="nav-item-icon">💪</span>
+                            <span>Avec/Sans/Contre</span>
+                        </div>
+                        <div class="nav-item" data-panel="smart">
+                            <span class="nav-item-icon">🎯</span>
+                            <span>Objectifs SMART</span>
+                        </div>
+                        <div class="nav-item" data-panel="cibles">
+                            <span class="nav-item-icon">🎪</span>
+                            <span>Cibles et alliances</span>
+                        </div>
+                        <div class="nav-item" data-panel="message">
+                            <span class="nav-item-icon">💬</span>
+                            <span>Construction message</span>
+                        </div>
+                        <div class="nav-item" data-panel="checklist">
+                            <span class="nav-item-icon">✅</span>
+                            <span>Check-list rencontre</span>
+                        </div>
+                        <div class="nav-item" data-panel="suivi">
+                            <span class="nav-item-icon">📈</span>
+                            <span>Suivi-évaluation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Outils -->
+                <div class="nav-group">
+                    <div class="nav-group-header" onclick="toggleNavGroup(this)">
+                        <span>🛠️ OUTILS</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="nav-items">
+                        <div class="nav-item" data-panel="journal">
+                            <span class="nav-item-icon">📔</span>
+                            <span>Journal de bord</span>
+                        </div>
+                        <div class="nav-item" data-panel="ressources">
+                            <span class="nav-item-icon">📚</span>
+                            <span>Ressources</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="progress-indicator">
+                    <div class="progress-label">
+                        <span>Progression globale</span>
+                        <span id="globalProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="globalProgressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%" onclick="saveProject()">
+                    💾 Sauvegarder
+                </button>
+            </div>
+        </aside>
+        
+        <!-- MAIN CONTENT -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="btn btn-ghost btn-icon" id="menuToggle" onclick="toggleSidebar()">☰</button>
+                    <div class="breadcrumb">
+                        <span>Plaidoyer</span>
+                        <span>›</span>
+                        <span class="breadcrumb-current" id="currentSection">Tableau de bord</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="dropdown" id="importDropdown">
+                        <button class="btn btn-secondary" onclick="toggleDropdown('importDropdown')">
+                            📥 Importer
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="importFile('json')">
+                                <span>📄</span> Fichier JSON
+                            </div>
+                            <div class="dropdown-item" onclick="importFile('csv')">
+                                <span>📊</span> Fichier CSV
+                            </div>
+                            <div class="dropdown-item" onclick="importFile('md')">
+                                <span>📝</span> Fichier Markdown
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="importFromLocalStorage()">
+                                <span>💾</span> Récupérer sauvegarde
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown" id="exportDropdown">
+                        <button class="btn btn-primary" onclick="toggleDropdown('exportDropdown')">
+                            📤 Exporter
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="exportJSON()">
+                                <span>📄</span> Export JSON
+                            </div>
+                            <div class="dropdown-item" onclick="exportCSV()">
+                                <span>📊</span> Export CSV
+                            </div>
+                            <div class="dropdown-item" onclick="exportMarkdown()">
+                                <span>📝</span> Export Markdown
+                            </div>
+                            <div class="dropdown-item" onclick="exportHTML()">
+                                <span>🌐</span> Export HTML
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="window.print()">
+                                <span>🖨️</span> Imprimer / PDF
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content Area -->
+            <div class="content">
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     DASHBOARD
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel active" id="panel-dashboard">
+                    <div class="content-header">
+                        <h1 class="content-title">Tableau de bord</h1>
+                        <p class="content-description">
+                            Vue d'ensemble de votre projet de plaidoyer citoyen. 
+                            Suivez votre progression à travers les 15 outils méthodologiques.
+                        </p>
+                    </div>
+                    
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-value" id="statVoir">0%</div>
+                            <div class="stat-label">👁️ Phase VOIR</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statJuger">0%</div>
+                            <div class="stat-label">⚖️ Phase JUGER</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statAgir">0%</div>
+                            <div class="stat-label">🚀 Phase AGIR</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statActeurs">0</div>
+                            <div class="stat-label">👥 Acteurs</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span class="card-title-icon">📋</span>
+                                Informations du projet
+                            </h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Nom du projet</label>
+                                <input type="text" class="form-input" id="projectName" 
+                                       placeholder="Ex: Mobilisation pour le climat local"
+                                       onchange="updateField('meta', 'name', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Organisation / Collectif</label>
+                                <input type="text" class="form-input" id="projectOrg" 
+                                       placeholder="Ex: Collectif Citoyens Verts"
+                                       onchange="updateField('meta', 'org', this.value)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description courte</label>
+                            <textarea class="form-textarea" id="projectDesc" rows="2"
+                                      placeholder="Décrivez brièvement l'objectif de votre plaidoyer..."
+                                      onchange="updateField('meta', 'description', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span class="card-title-icon">🚀</span>
+                                Démarrage rapide
+                            </h3>
+                        </div>
+                        <div class="grid-3">
+                            <div class="upload-zone" onclick="importFile('json')" 
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)"
+                                 ondrop="handleDrop(event)">
+                                <div class="upload-icon">📥</div>
+                                <div class="upload-text">Importer un projet</div>
+                                <div class="upload-formats">JSON, CSV, Markdown</div>
+                            </div>
+                            <div class="upload-zone" onclick="navigateTo('domino')">
+                                <div class="upload-icon">🎯</div>
+                                <div class="upload-text">Commencer par la vision</div>
+                                <div class="upload-formats">Outil Domino du changement</div>
+                            </div>
+                            <div class="upload-zone" onclick="openModal('helpModal')">
+                                <div class="upload-icon">📚</div>
+                                <div class="upload-text">Guide méthodologique</div>
+                                <div class="upload-formats">VOIR → JUGER → AGIR</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     DOMINO DU CHANGEMENT
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-domino">
+                    <div class="content-header">
+                        <span class="tag tag-voir">👁️ VOIR</span>
+                        <h1 class="content-title">Domino du changement</h1>
+                        <p class="content-description">
+                            Clarifiez votre vision du changement : pourquoi agissez-vous ? 
+                            Quelles valeurs vous portent ? Quel monde souhaitez-vous construire ?
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🔥 Pourquoi vous engagez-vous ?</label>
+                            <textarea class="form-textarea" id="domino_pourquoi" rows="3"
+                                      placeholder="Qu'est-ce qui vous pousse à agir ? Quelle injustice ou quel problème vous révolte ?"
+                                      onchange="updateField('domino', 'pourquoi', this.value)"></textarea>
+                            <p class="form-hint">Soyez personnel et authentique. C'est le moteur de votre engagement.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">💎 Quelles valeurs vous portent ?</label>
+                            <textarea class="form-textarea" id="domino_valeurs" rows="3"
+                                      placeholder="Justice sociale, solidarité, écologie, dignité humaine, démocratie..."
+                                      onchange="updateField('domino', 'valeurs', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🔄 Quels changements voulez-vous voir ?</label>
+                            <textarea class="form-textarea" id="domino_changements" rows="3"
+                                      placeholder="Décrivez les changements concrets que vous souhaitez provoquer..."
+                                      onchange="updateField('domino', 'changements', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🌟 Votre vision du monde idéal</label>
+                            <textarea class="form-textarea" id="domino_vision" rows="3"
+                                      placeholder="Si votre plaidoyer réussit parfaitement, à quoi ressemblerait le monde ?"
+                                      onchange="updateField('domino', 'vision', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     PROFIL D'ENGAGEMENT
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-profil">
+                    <div class="content-header">
+                        <span class="tag tag-voir">👁️ VOIR</span>
+                        <h1 class="content-title">Profil d'engagement</h1>
+                        <p class="content-description">
+                            Auto-évaluez vos compétences, ressources et disponibilités 
+                            pour mieux planifier votre action.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title mb-1">Vos compétences</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Compétences fortes</label>
+                                <textarea class="form-textarea" id="profil_competences_fortes" rows="2"
+                                          placeholder="Rédaction, prise de parole, organisation, réseaux sociaux..."
+                                          onchange="updateField('profil', 'competences_fortes', this.value)"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Compétences à développer</label>
+                                <textarea class="form-textarea" id="profil_competences_dev" rows="2"
+                                          placeholder="Négociation, analyse juridique, communication média..."
+                                          onchange="updateField('profil', 'competences_dev', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title mb-1">Ressources disponibles</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Temps disponible</label>
+                                <select class="form-select" id="profil_temps"
+                                        onchange="updateField('profil', 'temps', this.value)">
+                                    <option value="">Sélectionner...</option>
+                                    <option value="ponctuel">Ponctuel (quelques heures/mois)</option>
+                                    <option value="regulier">Régulier (quelques heures/semaine)</option>
+                                    <option value="intensif">Intensif (plusieurs heures/jour)</option>
+                                    <option value="temps_plein">Temps plein (professionnel)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Réseaux et contacts</label>
+                                <textarea class="form-textarea" id="profil_reseaux" rows="2"
+                                          placeholder="Associations, élus, journalistes, experts..."
+                                          onchange="updateField('profil', 'reseaux', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">Expériences passées en plaidoyer</label>
+                            <textarea class="form-textarea" id="profil_experience" rows="3"
+                                      placeholder="Décrivez vos expériences antérieures : pétitions, rencontres d'élus, mobilisations..."
+                                      onchange="updateField('profil', 'experience', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     FLEUR DE POUVOIR
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-fleur">
+                    <div class="content-header">
+                        <span class="tag tag-voir">👁️ VOIR</span>
+                        <h1 class="content-title">Fleur de pouvoir</h1>
+                        <p class="content-description">
+                            Analysez vos privilèges et votre positionnement social. 
+                            Comprendre d'où l'on parle pour mieux dialoguer.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <p class="text-muted mb-2">
+                            La "fleur de pouvoir" permet de prendre conscience des différentes dimensions 
+                            de notre identité et de notre position sociale. Ces éléments influencent 
+                            la façon dont nous sommes perçus et entendus dans le plaidoyer.
+                        </p>
+                        
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Genre / Identité de genre</label>
+                                <input type="text" class="form-input" id="fleur_genre"
+                                       placeholder="Comment cela influence votre position ?"
+                                       onchange="updateField('fleur', 'genre', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Origine / Ethnicité</label>
+                                <input type="text" class="form-input" id="fleur_origine"
+                                       placeholder="Comment cela influence votre position ?"
+                                       onchange="updateField('fleur', 'origine', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Classe sociale / Situation économique</label>
+                                <input type="text" class="form-input" id="fleur_classe"
+                                       placeholder="Comment cela influence votre position ?"
+                                       onchange="updateField('fleur', 'classe', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Niveau d'éducation</label>
+                                <input type="text" class="form-input" id="fleur_education"
+                                       placeholder="Comment cela influence votre position ?"
+                                       onchange="updateField('fleur', 'education', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Âge / Génération</label>
+                                <input type="text" class="form-input" id="fleur_age"
+                                       placeholder="Comment cela influence votre position ?"
+                                       onchange="updateField('fleur', 'age', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Autres dimensions pertinentes</label>
+                                <input type="text" class="form-input" id="fleur_autres"
+                                       placeholder="Handicap, religion, orientation sexuelle..."
+                                       onchange="updateField('fleur', 'autres', this.value)">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">Réflexion sur votre positionnement</label>
+                            <textarea class="form-textarea" id="fleur_reflexion" rows="4"
+                                      placeholder="Comment ces éléments peuvent-ils influencer votre plaidoyer ? Quels privilèges ou obstacles identifiez-vous ?"
+                                      onchange="updateField('fleur', 'reflexion', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     CARTOGRAPHIE DES ACTEURS
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-acteurs">
+                    <div class="content-header">
+                        <span class="tag tag-voir">👁️ VOIR</span>
+                        <h1 class="content-title">Cartographie des acteurs</h1>
+                        <p class="content-description">
+                            Identifiez tous les acteurs concernés par votre sujet : 
+                            qui a du pouvoir ? qui peut vous aider ? qui risque de s'opposer ?
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span class="card-title-icon">👥</span>
+                                Acteurs identifiés (<span id="actorCount">0</span>)
+                            </h3>
+                            <button class="btn btn-primary" onclick="openModal('actorModal')">
+                                + Ajouter un acteur
+                            </button>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="filterActors('all', this)">Tous</button>
+                            <button class="tab" onclick="filterActors('ally', this)">🟢 Alliés</button>
+                            <button class="tab" onclick="filterActors('neutral', this)">🟡 Neutres</button>
+                            <button class="tab" onclick="filterActors('opponent', this)">🔴 Opposants</button>
+                        </div>
+                        
+                        <div class="actor-grid" id="actorGrid">
+                            <div class="text-center text-muted" style="grid-column: 1/-1; padding: 3rem;">
+                                Aucun acteur ajouté.<br>
+                                Cliquez sur "Ajouter un acteur" pour commencer.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     THÉORIE DU CHANGEMENT
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-toc">
+                    <div class="content-header">
+                        <span class="tag tag-juger">⚖️ JUGER</span>
+                        <h1 class="content-title">Théorie du changement</h1>
+                        <p class="content-description">
+                            Comment pensez-vous que le changement va se produire ? 
+                            Articulez les liens entre vos actions et l'impact souhaité.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <p class="text-muted mb-2">
+                            La théorie du changement décrit la logique de votre intervention : 
+                            SI vous faites X, ALORS Y se produira, CE QUI mènera à Z.
+                        </p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">🎯 Impact final visé (long terme)</label>
+                            <textarea class="form-textarea" id="toc_impact" rows="2"
+                                      placeholder="Le changement systémique que vous souhaitez voir dans 5-10 ans..."
+                                      onchange="updateField('toc', 'impact', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">📈 Résultats intermédiaires (moyen terme)</label>
+                            <textarea class="form-textarea" id="toc_resultats" rows="2"
+                                      placeholder="Les changements mesurables attendus dans 1-3 ans..."
+                                      onchange="updateField('toc', 'resultats', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">📤 Outputs / Livrables (court terme)</label>
+                            <textarea class="form-textarea" id="toc_outputs" rows="2"
+                                      placeholder="Ce que votre plaidoyer va produire concrètement : rapports, réunions, mobilisations..."
+                                      onchange="updateField('toc', 'outputs', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">⚙️ Activités clés</label>
+                            <textarea class="form-textarea" id="toc_activites" rows="2"
+                                      placeholder="Les actions que vous allez mener..."
+                                      onchange="updateField('toc', 'activites', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">🔗 Hypothèses de changement</label>
+                            <textarea class="form-textarea" id="toc_hypotheses" rows="3"
+                                      placeholder="Quelles conditions doivent être réunies pour que votre théorie fonctionne ? Quels sont les risques ?"
+                                      onchange="updateField('toc', 'hypotheses', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     ANALYSE SWOT
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-swot">
+                    <div class="content-header">
+                        <span class="tag tag-juger">⚖️ JUGER</span>
+                        <h1 class="content-title">Analyse SWOT</h1>
+                        <p class="content-description">
+                            Forces, Faiblesses, Opportunités, Menaces — 
+                            évaluez votre position stratégique.
+                        </p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="card" style="border-left: 3px solid var(--civic-green);">
+                            <h3 class="card-title text-success">💪 Forces (internes)</h3>
+                            <textarea class="form-textarea" id="swot_forces" rows="4"
+                                      placeholder="Vos atouts : expertise, réseau, légitimité, ressources..."
+                                      onchange="updateField('swot', 'forces', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card" style="border-left: 3px solid var(--civic-red);">
+                            <h3 class="card-title text-danger">⚠️ Faiblesses (internes)</h3>
+                            <textarea class="form-textarea" id="swot_faiblesses" rows="4"
+                                      placeholder="Vos points faibles : manque de temps, ressources limitées, expertise manquante..."
+                                      onchange="updateField('swot', 'faiblesses', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card" style="border-left: 3px solid var(--civic-teal);">
+                            <h3 class="card-title" style="color: var(--civic-teal);">🌟 Opportunités (externes)</h3>
+                            <textarea class="form-textarea" id="swot_opportunites" rows="4"
+                                      placeholder="Contexte favorable : actualité, élections, alliés potentiels, fenêtre politique..."
+                                      onchange="updateField('swot', 'opportunites', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card" style="border-left: 3px solid var(--civic-gold);">
+                            <h3 class="card-title text-warning">⚡ Menaces (externes)</h3>
+                            <textarea class="form-textarea" id="swot_menaces" rows="4"
+                                      placeholder="Risques : opposition, changement politique, fatigue militante, désinformation..."
+                                      onchange="updateField('swot', 'menaces', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     ANALYSE PESTEL
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-pestel">
+                    <div class="content-header">
+                        <span class="tag tag-juger">⚖️ JUGER</span>
+                        <h1 class="content-title">Analyse PESTEL</h1>
+                        <p class="content-description">
+                            Analysez l'environnement macro : Politique, Économique, Social, 
+                            Technologique, Environnemental, Légal.
+                        </p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3 class="card-title">🏛️ Politique</h3>
+                            <textarea class="form-textarea" id="pestel_p" rows="3"
+                                      placeholder="Contexte politique, gouvernement, élections, rapports de force..."
+                                      onchange="updateField('pestel', 'p', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">💰 Économique</h3>
+                            <textarea class="form-textarea" id="pestel_e" rows="3"
+                                      placeholder="Conjoncture, budgets, financements, intérêts économiques..."
+                                      onchange="updateField('pestel', 'e', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">👥 Social</h3>
+                            <textarea class="form-textarea" id="pestel_s" rows="3"
+                                      placeholder="Opinion publique, mouvements sociaux, valeurs dominantes..."
+                                      onchange="updateField('pestel', 's', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">💻 Technologique</h3>
+                            <textarea class="form-textarea" id="pestel_t" rows="3"
+                                      placeholder="Outils numériques, réseaux sociaux, innovations..."
+                                      onchange="updateField('pestel', 't', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">🌍 Environnemental</h3>
+                            <textarea class="form-textarea" id="pestel_env" rows="3"
+                                      placeholder="Enjeux écologiques, climat, ressources..."
+                                      onchange="updateField('pestel', 'env', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">⚖️ Légal</h3>
+                            <textarea class="form-textarea" id="pestel_l" rows="3"
+                                      placeholder="Cadre juridique, lois, règlements, jurisprudence..."
+                                      onchange="updateField('pestel', 'l', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     ARBRE À PROBLÈME
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-arbre">
+                    <div class="content-header">
+                        <span class="tag tag-juger">⚖️ JUGER</span>
+                        <h1 class="content-title">Arbre à problème / objectif</h1>
+                        <p class="content-description">
+                            Identifiez le problème central, ses causes profondes (racines) 
+                            et ses conséquences (branches).
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🌳 Problème central</label>
+                            <textarea class="form-textarea" id="arbre_probleme" rows="2"
+                                      placeholder="Formulez le problème principal que vous voulez résoudre..."
+                                      onchange="updateField('arbre', 'probleme', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3 class="card-title">🌱 Causes (racines)</h3>
+                            <textarea class="form-textarea" id="arbre_causes" rows="5"
+                                      placeholder="Listez les causes du problème, des plus directes aux plus profondes...&#10;• Cause 1&#10;• Cause 2&#10;• Cause 3"
+                                      onchange="updateField('arbre', 'causes', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">🍃 Conséquences (branches)</h3>
+                            <textarea class="form-textarea" id="arbre_consequences" rows="5"
+                                      placeholder="Listez les effets du problème...&#10;• Conséquence 1&#10;• Conséquence 2&#10;• Conséquence 3"
+                                      onchange="updateField('arbre', 'consequences', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🎯 Objectif (reformulation positive)</label>
+                            <textarea class="form-textarea" id="arbre_objectif" rows="2"
+                                      placeholder="Reformulez le problème en objectif positif..."
+                                      onchange="updateField('arbre', 'objectif', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     LES 5 POURQUOI
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-why">
+                    <div class="content-header">
+                        <span class="tag tag-juger">⚖️ JUGER</span>
+                        <h1 class="content-title">Les 5 Pourquoi</h1>
+                        <p class="content-description">
+                            Technique d'analyse de cause racine : posez "Pourquoi ?" 
+                            5 fois de suite pour atteindre la cause fondamentale.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">Problème de départ</label>
+                            <input type="text" class="form-input" id="why_depart"
+                                   placeholder="Quel est le problème que vous observez ?"
+                                   onchange="updateField('why', 'depart', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❓ Pourquoi 1 ?</label>
+                            <input type="text" class="form-input" id="why_1"
+                                   placeholder="Pourquoi ce problème existe-t-il ?"
+                                   onchange="updateField('why', 'w1', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❓ Pourquoi 2 ?</label>
+                            <input type="text" class="form-input" id="why_2"
+                                   placeholder="Pourquoi cette première cause existe-t-elle ?"
+                                   onchange="updateField('why', 'w2', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❓ Pourquoi 3 ?</label>
+                            <input type="text" class="form-input" id="why_3"
+                                   placeholder="Pourquoi cette deuxième cause existe-t-elle ?"
+                                   onchange="updateField('why', 'w3', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❓ Pourquoi 4 ?</label>
+                            <input type="text" class="form-input" id="why_4"
+                                   placeholder="Pourquoi cette troisième cause existe-t-elle ?"
+                                   onchange="updateField('why', 'w4', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❓ Pourquoi 5 ?</label>
+                            <input type="text" class="form-input" id="why_5"
+                                   placeholder="Pourquoi cette quatrième cause existe-t-elle ?"
+                                   onchange="updateField('why', 'w5', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">🎯 Cause racine identifiée</label>
+                            <textarea class="form-textarea" id="why_racine" rows="2"
+                                      placeholder="Synthétisez la cause fondamentale que vous avez identifiée..."
+                                      onchange="updateField('why', 'racine', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     AVEC/SANS/CONTRE LE POUVOIR
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-pouvoir">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Avec / Sans / Contre le pouvoir</h1>
+                        <p class="content-description">
+                            Trois modes d'action complémentaires pour votre stratégie de plaidoyer.
+                        </p>
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="card" style="border-top: 3px solid var(--civic-green);">
+                            <h3 class="card-title text-success">🤝 AVEC le pouvoir</h3>
+                            <p class="text-muted mb-1" style="font-size: 0.8rem;">Collaboration, dialogue, négociation</p>
+                            <textarea class="form-textarea" id="pouvoir_avec" rows="4"
+                                      placeholder="Actions de collaboration : rencontres d'élus, participation à des consultations, partenariats..."
+                                      onchange="updateField('pouvoir', 'avec', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card" style="border-top: 3px solid var(--civic-teal);">
+                            <h3 class="card-title" style="color: var(--civic-teal);">🔄 SANS le pouvoir</h3>
+                            <p class="text-muted mb-1" style="font-size: 0.8rem;">Alternatives, expérimentations autonomes</p>
+                            <textarea class="form-textarea" id="pouvoir_sans" rows="4"
+                                      placeholder="Actions autonomes : création d'alternatives, expérimentations citoyennes, initiatives parallèles..."
+                                      onchange="updateField('pouvoir', 'sans', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="card" style="border-top: 3px solid var(--civic-red);">
+                            <h3 class="card-title text-danger">✊ CONTRE le pouvoir</h3>
+                            <p class="text-muted mb-1" style="font-size: 0.8rem;">Contestation, pression, mobilisation</p>
+                            <textarea class="form-textarea" id="pouvoir_contre" rows="4"
+                                      placeholder="Actions de pression : manifestations, pétitions, campagnes médiatiques, désobéissance civile..."
+                                      onchange="updateField('pouvoir', 'contre', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🎯 Stratégie combinée</label>
+                            <textarea class="form-textarea" id="pouvoir_strategie" rows="3"
+                                      placeholder="Comment articulez-vous ces trois modes d'action dans votre stratégie globale ?"
+                                      onchange="updateField('pouvoir', 'strategie', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     OBJECTIFS SMART
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-smart">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Objectifs SMART</h1>
+                        <p class="content-description">
+                            Définissez des objectifs Spécifiques, Mesurables, Atteignables, Réalistes et Temporellement définis.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🎯 S — Spécifique</label>
+                            <textarea class="form-textarea" id="smart_s" rows="2"
+                                      placeholder="Que voulez-vous accomplir exactement ? Soyez précis."
+                                      onchange="updateField('smart', 's', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">📊 M — Mesurable</label>
+                            <textarea class="form-textarea" id="smart_m" rows="2"
+                                      placeholder="Comment saurez-vous que l'objectif est atteint ? Quels indicateurs ?"
+                                      onchange="updateField('smart', 'm', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">✅ A — Atteignable</label>
+                            <textarea class="form-textarea" id="smart_a" rows="2"
+                                      placeholder="L'objectif est-il réalisable avec vos ressources actuelles ?"
+                                      onchange="updateField('smart', 'a', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">🎲 R — Réaliste</label>
+                            <textarea class="form-textarea" id="smart_r" rows="2"
+                                      placeholder="L'objectif est-il pertinent par rapport à votre vision ? A-t-il du sens ?"
+                                      onchange="updateField('smart', 'r', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">⏰ T — Temporel</label>
+                            <textarea class="form-textarea" id="smart_t" rows="2"
+                                      placeholder="Quelle est la date limite ? Quelles étapes intermédiaires ?"
+                                      onchange="updateField('smart', 't', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">📝 Objectif SMART reformulé</label>
+                            <textarea class="form-textarea" id="smart_final" rows="3"
+                                      placeholder="Reformulez votre objectif en une phrase SMART complète..."
+                                      onchange="updateField('smart', 'final', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     CIBLES ET ALLIANCES
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-cibles">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Cibles et alliances</h1>
+                        <p class="content-description">
+                            Identifiez vos cibles prioritaires et vos alliés stratégiques.
+                        </p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3 class="card-title">🎯 Cible principale</h3>
+                            <div class="form-group">
+                                <label class="form-label">Qui a le pouvoir de décision ?</label>
+                                <input type="text" class="form-input" id="cible_principale"
+                                       placeholder="Ex: Ministre de l'Environnement"
+                                       onchange="updateField('cibles', 'principale', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Pourquoi cette cible ?</label>
+                                <textarea class="form-textarea" id="cible_pourquoi" rows="2"
+                                          placeholder="Justifiez le choix de cette cible..."
+                                          onchange="updateField('cibles', 'pourquoi', this.value)"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">🎪 Cibles secondaires</h3>
+                            <div class="form-group">
+                                <label class="form-label">Qui peut influencer la cible principale ?</label>
+                                <textarea class="form-textarea" id="cibles_secondaires" rows="4"
+                                          placeholder="Listez les personnes ou institutions qui peuvent influencer votre cible principale..."
+                                          onchange="updateField('cibles', 'secondaires', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">🤝 Alliances stratégiques</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Alliés actuels</label>
+                                <textarea class="form-textarea" id="alliances_actuels" rows="3"
+                                          placeholder="Organisations, collectifs, personnalités qui vous soutiennent déjà..."
+                                          onchange="updateField('cibles', 'allies_actuels', this.value)"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Alliés potentiels à mobiliser</label>
+                                <textarea class="form-textarea" id="alliances_potentiels" rows="3"
+                                          placeholder="Qui pourrait rejoindre votre cause ? Comment les convaincre ?"
+                                          onchange="updateField('cibles', 'allies_potentiels', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     CONSTRUCTION DU MESSAGE
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-message">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Construction du message</h1>
+                        <p class="content-description">
+                            Les 5 composants d'un message de plaidoyer efficace.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">🎣 1. Accroche</label>
+                            <textarea class="form-textarea" id="msg_accroche" rows="2"
+                                      placeholder="Une phrase percutante qui capte l'attention..."
+                                      onchange="updateField('message', 'accroche', this.value)"></textarea>
+                            <p class="form-hint">Utilisez un chiffre choc, une question, une affirmation forte</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">⚠️ 2. Problème</label>
+                            <textarea class="form-textarea" id="msg_probleme" rows="2"
+                                      placeholder="Décrivez clairement le problème et ses impacts..."
+                                      onchange="updateField('message', 'probleme', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">❗ 3. Importance</label>
+                            <textarea class="form-textarea" id="msg_importance" rows="2"
+                                      placeholder="Pourquoi est-il urgent d'agir maintenant ?"
+                                      onchange="updateField('message', 'importance', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">🎯 4. Cible</label>
+                            <textarea class="form-textarea" id="msg_cible" rows="2"
+                                      placeholder="À qui vous adressez-vous ? Pourquoi cette personne/institution ?"
+                                      onchange="updateField('message', 'cible', this.value)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">📢 5. Action demandée</label>
+                            <textarea class="form-textarea" id="msg_action" rows="2"
+                                      placeholder="Que demandez-vous concrètement ? Quelle action précise ?"
+                                      onchange="updateField('message', 'action', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">📝 Message complet</label>
+                            <textarea class="form-textarea" id="msg_complet" rows="5"
+                                      placeholder="Rédigez votre message complet en assemblant les 5 composants..."
+                                      onchange="updateField('message', 'complet', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     CHECK-LIST RENCONTRE
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-checklist">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Check-list rencontre</h1>
+                        <p class="content-description">
+                            Préparez efficacement vos rencontres de plaidoyer.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">📋 Avant la rencontre</h3>
+                        <div class="form-group">
+                            <label class="form-label">Qui rencontrez-vous ?</label>
+                            <input type="text" class="form-input" id="check_qui"
+                                   placeholder="Nom, fonction, contexte..."
+                                   onchange="updateField('checklist', 'qui', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Objectif de la rencontre</label>
+                            <textarea class="form-textarea" id="check_objectif" rows="2"
+                                      placeholder="Que voulez-vous obtenir concrètement ?"
+                                      onchange="updateField('checklist', 'objectif', this.value)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Arguments clés</label>
+                            <textarea class="form-textarea" id="check_arguments" rows="3"
+                                      placeholder="3-5 arguments principaux que vous allez développer..."
+                                      onchange="updateField('checklist', 'arguments', this.value)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Objections anticipées et réponses</label>
+                            <textarea class="form-textarea" id="check_objections" rows="3"
+                                      placeholder="Quelles objections risquez-vous d'entendre ? Comment y répondre ?"
+                                      onchange="updateField('checklist', 'objections', this.value)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">📝 Après la rencontre</h3>
+                        <div class="form-group">
+                            <label class="form-label">Compte-rendu</label>
+                            <textarea class="form-textarea" id="check_cr" rows="4"
+                                      placeholder="Ce qui s'est dit, les engagements pris, les prochaines étapes..."
+                                      onchange="updateField('checklist', 'compte_rendu', this.value)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Actions de suivi</label>
+                            <textarea class="form-textarea" id="check_suivi" rows="2"
+                                      placeholder="Que devez-vous faire suite à cette rencontre ?"
+                                      onchange="updateField('checklist', 'suivi', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     SUIVI-ÉVALUATION
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-suivi">
+                    <div class="content-header">
+                        <span class="tag tag-agir">🚀 AGIR</span>
+                        <h1 class="content-title">Suivi-évaluation</h1>
+                        <p class="content-description">
+                            Mesurez l'impact de votre plaidoyer et tirez les leçons.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">📊 Indicateurs de suivi</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Indicateurs d'activité (outputs)</label>
+                                <textarea class="form-textarea" id="eval_outputs" rows="3"
+                                          placeholder="Nombre de rencontres, participants, médiatisations..."
+                                          onchange="updateField('suivi', 'outputs', this.value)"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Indicateurs de résultat (outcomes)</label>
+                                <textarea class="form-textarea" id="eval_outcomes" rows="3"
+                                          placeholder="Changements de discours, de comportement, de politique..."
+                                          onchange="updateField('suivi', 'outcomes', this.value)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">📝 Bilan et apprentissages</h3>
+                        <div class="form-group">
+                            <label class="form-label">Ce qui a bien fonctionné</label>
+                            <textarea class="form-textarea" id="eval_succes" rows="3"
+                                      placeholder="Vos réussites, les facteurs de succès..."
+                                      onchange="updateField('suivi', 'succes', this.value)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ce qui pourrait être amélioré</label>
+                            <textarea class="form-textarea" id="eval_ameliorations" rows="3"
+                                      placeholder="Les difficultés rencontrées, les leçons apprises..."
+                                      onchange="updateField('suivi', 'ameliorations', this.value)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Prochaines étapes</label>
+                            <textarea class="form-textarea" id="eval_prochaines" rows="2"
+                                      placeholder="Comment allez-vous continuer ?"
+                                      onchange="updateField('suivi', 'prochaines', this.value)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     JOURNAL DE BORD
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-journal">
+                    <div class="content-header">
+                        <h1 class="content-title">Journal de bord</h1>
+                        <p class="content-description">
+                            Documentez vos actions, réflexions et apprentissages au fil du temps.
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span class="card-title-icon">📔</span>
+                                Nouvelle entrée
+                            </h3>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-input" id="journalDate">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Type</label>
+                                <select class="form-select" id="journalType">
+                                    <option value="action">Action menée</option>
+                                    <option value="rencontre">Rencontre</option>
+                                    <option value="reflexion">Réflexion</option>
+                                    <option value="media">Couverture média</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" class="form-input" id="journalTitle"
+                                   placeholder="Titre de l'entrée...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contenu</label>
+                            <textarea class="form-textarea" id="journalContent" rows="4"
+                                      placeholder="Décrivez l'événement, vos observations, vos apprentissages..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addJournalEntry()">
+                            Ajouter l'entrée
+                        </button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title mb-1">Historique</h3>
+                        <div id="journalEntries">
+                            <p class="text-muted text-center" style="padding: 2rem;">
+                                Aucune entrée dans le journal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ═══════════════════════════════════════════════════════════════
+                     RESSOURCES
+                     ═══════════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-ressources">
+                    <div class="content-header">
+                        <h1 class="content-title">Ressources</h1>
+                        <p class="content-description">
+                            Guides, formations et outils pour approfondir votre plaidoyer.
+                        </p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3 class="card-title">📚 Guides méthodologiques</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://justicepaix.be/wp-content/uploads/2021/10/20200110_Guide_plaidoyer_citoyen_VD.pdf" 
+                                       target="_blank" style="color: var(--civic-gold);">
+                                        📄 Petit Guide du Plaidoyer Citoyen — Justice et Paix
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://voxpublic.org" target="_blank" style="color: var(--civic-gold);">
+                                        📄 Ressources VoxPublic — Plaidoyer citoyen
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://www.amnesty.fr/formation-quelques-outils-pour-militer" 
+                                       target="_blank" style="color: var(--civic-gold);">
+                                        📄 Outils pour militer — Amnesty International
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">🌐 Plateformes civic tech</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://decidim.org" target="_blank" style="color: var(--civic-gold);">
+                                        🔗 Decidim — Participation citoyenne
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://framasoft.org" target="_blank" style="color: var(--civic-gold);">
+                                        🔗 Framasoft — Outils libres
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://data.gov.be" target="_blank" style="color: var(--civic-gold);">
+                                        🔗 Open Data Belgique
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">🇧🇪 Éducation permanente Belgique</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://educationpermanente.cfwb.be" target="_blank" style="color: var(--civic-gold);">
+                                        🏛️ Portail Éducation Permanente FWB
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://fesefa.be" target="_blank" style="color: var(--civic-gold);">
+                                        🏛️ FESEFA — Fédération des employeurs EP
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://cncd.be" target="_blank" style="color: var(--civic-gold);">
+                                        🏛️ CNCD-11.11.11
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="card-title">📊 Données parlementaires</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://www.dekamer.be" target="_blank" style="color: var(--civic-gold);">
+                                        🏛️ Chambre des représentants
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://www.senate.be" target="_blank" style="color: var(--civic-gold);">
+                                        🏛️ Sénat de Belgique
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 0.75rem;">
+                                    <a href="https://data.europarl.europa.eu" target="_blank" style="color: var(--civic-gold);">
+                                        🇪🇺 Open Data Parlement européen
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════
+         MODALS
+         ═══════════════════════════════════════════════════════════════ -->
+    
+    <!-- Actor Modal -->
+    <div class="modal-overlay" id="actorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Ajouter un acteur</h2>
+                <button class="btn btn-ghost btn-icon" onclick="closeModal('actorModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nom de l'acteur</label>
+                    <input type="text" class="form-input" id="actorName" 
+                           placeholder="Ex: Ministre de l'Environnement">
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Type d'acteur</label>
+                        <select class="form-select" id="actorType">
+                            <option value="politique">Politique / Élu</option>
+                            <option value="admin">Administration</option>
+                            <option value="societe_civile">Société civile</option>
+                            <option value="media">Média</option>
+                            <option value="entreprise">Entreprise</option>
+                            <option value="expert">Expert / Académique</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Position</label>
+                        <select class="form-select" id="actorPosition">
+                            <option value="ally">🟢 Allié</option>
+                            <option value="neutral">🟡 Neutre</option>
+                            <option value="opponent">🔴 Opposant</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Niveau de pouvoir (1-5)</label>
+                    <select class="form-select" id="actorPower">
+                        <option value="1">1 — Très faible</option>
+                        <option value="2">2 — Faible</option>
+                        <option value="3" selected>3 — Moyen</option>
+                        <option value="4">4 — Élevé</option>
+                        <option value="5">5 — Très élevé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-textarea" id="actorNotes" rows="3"
+                              placeholder="Informations complémentaires, stratégie d'approche..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('actorModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addActor()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Guide méthodologique</h2>
+                <button class="btn btn-ghost btn-icon" onclick="closeModal('helpModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <h3 style="color: var(--civic-teal); margin-bottom: 0.5rem;">👁️ VOIR — Phase d'analyse</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Comprenez votre contexte : vos motivations (Domino), vos capacités (Profil), 
+                    votre positionnement (Fleur de pouvoir), et les acteurs en jeu (Cartographie).
+                </p>
+                
+                <h3 style="color: var(--civic-gold); margin-bottom: 0.5rem;">⚖️ JUGER — Phase stratégique</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Analysez le contexte : comment le changement se produit (Théorie), 
+                    vos forces/faiblesses (SWOT), l'environnement (PESTEL), 
+                    les causes profondes (Arbre, 5 Pourquoi).
+                </p>
+                
+                <h3 style="color: var(--civic-green); margin-bottom: 0.5rem;">🚀 AGIR — Phase d'action</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Passez à l'action : choisissez votre mode (Avec/Sans/Contre), 
+                    définissez des objectifs (SMART), identifiez vos cibles, 
+                    construisez votre message, préparez vos rencontres, et évaluez.
+                </p>
+                
+                <div style="background: var(--surface-input); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong style="color: var(--civic-gold);">💡 Conseil :</strong> 
+                        Vous n'êtes pas obligé de remplir tous les outils. 
+                        Choisissez ceux qui sont pertinents pour votre projet.
+                        La méthodologie est un guide, pas une contrainte.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal('helpModal')">Compris !</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" style="display: none;" accept=".json,.csv,.md,.markdown">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         JAVASCRIPT
+         ═══════════════════════════════════════════════════════════════ -->
+    <script>
+// ═══════════════════════════════════════════════════════════════
+// APPLICATION STATE
+// ═══════════════════════════════════════════════════════════════
+const APP_VERSION = '3.0.0';
+const STORAGE_KEY = 'plaidoyer_citoyen_v3';
+
+let state = {
+    meta: {
+        version: APP_VERSION,
+        name: '',
+        org: '',
+        description: '',
+        created: new Date().toISOString(),
+        updated: new Date().toISOString()
+    },
+    domino: {},
+    profil: {},
+    fleur: {},
+    acteurs: [],
+    toc: {},
+    swot: {},
+    pestel: {},
+    arbre: {},
+    why: {},
+    pouvoir: {},
+    smart: {},
+    cibles: {},
+    message: {},
+    checklist: {},
+    suivi: {},
+    journal: []
+};
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    loadFromStorage();
+    initNavigation();
+    initFileInput();
+    updateStats();
+    
+    // Set today's date for journal
+    document.getElementById('journalDate').valueAsDate = new Date();
+});
+
+function loadFromStorage() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            state = { ...state, ...parsed };
+            populateFields();
+            renderActors();
+            renderJournal();
+            showToast('Projet chargé', 'info');
+        }
+    } catch (e) {
+        console.error('Error loading state:', e);
+    }
+}
+
+function populateFields() {
+    // Meta
+    document.getElementById('projectName').value = state.meta.name || '';
+    document.getElementById('projectOrg').value = state.meta.org || '';
+    document.getElementById('projectDesc').value = state.meta.description || '';
+    
+    // All other fields
+    const sections = ['domino', 'profil', 'fleur', 'toc', 'swot', 'pestel', 'arbre', 'why', 'pouvoir', 'smart', 'cibles', 'message', 'checklist', 'suivi'];
+    
+    sections.forEach(section => {
+        if (state[section]) {
+            Object.entries(state[section]).forEach(([key, value]) => {
+                const el = document.getElementById(`${section}_${key}`);
+                if (el) el.value = value || '';
+            });
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function initNavigation() {
+    document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
+        item.addEventListener('click', () => {
+            const panel = item.dataset.panel;
+            navigateTo(panel);
+        });
+    });
+}
+
+function navigateTo(panelId) {
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const navItem = document.querySelector(`.nav-item[data-panel="${panelId}"]`);
+    if (navItem) navItem.classList.add('active');
+    
+    // Update panels
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(`panel-${panelId}`);
+    if (panel) panel.classList.add('active');
+    
+    // Update breadcrumb
+    const titles = {
+        dashboard: 'Tableau de bord',
+        domino: 'Domino du changement',
+        profil: "Profil d'engagement",
+        fleur: 'Fleur de pouvoir',
+        acteurs: 'Cartographie des acteurs',
+        toc: 'Théorie du changement',
+        swot: 'Analyse SWOT',
+        pestel: 'Analyse PESTEL',
+        arbre: 'Arbre à problème',
+        why: 'Les 5 Pourquoi',
+        pouvoir: 'Avec/Sans/Contre',
+        smart: 'Objectifs SMART',
+        cibles: 'Cibles et alliances',
+        message: 'Construction message',
+        checklist: 'Check-list rencontre',
+        suivi: 'Suivi-évaluation',
+        journal: 'Journal de bord',
+        ressources: 'Ressources'
+    };
+    document.getElementById('currentSection').textContent = titles[panelId] || panelId;
+    
+    // Close sidebar on mobile
+    if (window.innerWidth < 900) {
+        document.getElementById('sidebar').classList.remove('open');
+    }
+}
+
+function toggleNavGroup(header) {
+    header.parentElement.classList.toggle('collapsed');
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+function updateField(section, key, value) {
+    if (section === 'meta') {
+        state.meta[key] = value;
+    } else {
+        if (!state[section]) state[section] = {};
+        state[section][key] = value;
+    }
+    state.meta.updated = new Date().toISOString();
+    autoSave();
+    updateStats();
+}
+
+function autoSave() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        console.error('Auto-save failed:', e);
+    }
+}
+
+function saveProject() {
+    autoSave();
+    showToast('Projet sauvegardé !', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACTORS MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+function addActor() {
+    const name = document.getElementById('actorName').value.trim();
+    if (!name) {
+        showToast('Veuillez entrer un nom', 'error');
+        return;
+    }
+    
+    const actor = {
+        id: Date.now(),
+        name,
+        type: document.getElementById('actorType').value,
+        position: document.getElementById('actorPosition').value,
+        power: parseInt(document.getElementById('actorPower').value),
+        notes: document.getElementById('actorNotes').value
+    };
+    
+    state.acteurs.push(actor);
+    autoSave();
+    renderActors();
+    closeModal('actorModal');
+    
+    // Reset form
+    document.getElementById('actorName').value = '';
+    document.getElementById('actorNotes').value = '';
+    
+    showToast('Acteur ajouté', 'success');
+    updateStats();
+}
+
+function renderActors(filter = 'all') {
+    const grid = document.getElementById('actorGrid');
+    const actors = filter === 'all' 
+        ? state.acteurs 
+        : state.acteurs.filter(a => a.position === filter);
+    
+    document.getElementById('actorCount').textContent = state.acteurs.length;
+    
+    if (actors.length === 0) {
+        grid.innerHTML = `
+            <div class="text-center text-muted" style="grid-column: 1/-1; padding: 3rem;">
+                ${filter === 'all' ? 'Aucun acteur ajouté.' : 'Aucun acteur dans cette catégorie.'}
+            </div>
+        `;
+        return;
+    }
+    
+    grid.innerHTML = actors.map(actor => {
+        const positionColors = {
+            ally: 'var(--civic-green)',
+            neutral: 'var(--civic-gold)',
+            opponent: 'var(--civic-red)'
+        };
+        const typeLabels = {
+            politique: 'Politique',
+            admin: 'Administration',
+            societe_civile: 'Société civile',
+            media: 'Média',
+            entreprise: 'Entreprise',
+            expert: 'Expert',
+            autre: 'Autre'
+        };
+        
+        return `
+            <div class="actor-card" onclick="editActor(${actor.id})" 
+                 style="border-left: 3px solid ${positionColors[actor.position]};">
+                <div class="actor-name">${actor.name}</div>
+                <div class="actor-type">${typeLabels[actor.type]}</div>
+                <div class="actor-power">
+                    ${[1,2,3,4,5].map(i => 
+                        `<div class="power-dot ${i <= actor.power ? 'filled' : ''}"></div>`
+                    ).join('')}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function filterActors(filter, btn) {
+    document.querySelectorAll('#panel-acteurs .tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderActors(filter);
+}
+
+function editActor(id) {
+    const actor = state.acteurs.find(a => a.id === id);
+    if (!actor) return;
+    
+    if (confirm(`Supprimer "${actor.name}" ?`)) {
+        state.acteurs = state.acteurs.filter(a => a.id !== id);
+        autoSave();
+        renderActors();
+        updateStats();
+        showToast('Acteur supprimé', 'info');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// JOURNAL
+// ═══════════════════════════════════════════════════════════════
+function addJournalEntry() {
+    const title = document.getElementById('journalTitle').value.trim();
+    const content = document.getElementById('journalContent').value.trim();
+    
+    if (!title || !content) {
+        showToast('Veuillez remplir le titre et le contenu', 'error');
+        return;
+    }
+    
+    const entry = {
+        id: Date.now(),
+        date: document.getElementById('journalDate').value,
+        type: document.getElementById('journalType').value,
+        title,
+        content
+    };
+    
+    state.journal.unshift(entry);
+    autoSave();
+    renderJournal();
+    
+    // Reset form
+    document.getElementById('journalTitle').value = '';
+    document.getElementById('journalContent').value = '';
+    
+    showToast('Entrée ajoutée', 'success');
+}
+
+function renderJournal() {
+    const container = document.getElementById('journalEntries');
+    
+    if (state.journal.length === 0) {
+        container.innerHTML = `
+            <p class="text-muted text-center" style="padding: 2rem;">
+                Aucune entrée dans le journal.
+            </p>
+        `;
+        return;
+    }
+    
+    const typeIcons = {
+        action: '⚡',
+        rencontre: '🤝',
+        reflexion: '💭',
+        media: '📰',
+        autre: '📌'
+    };
+    
+    container.innerHTML = state.journal.map(entry => `
+        <div style="border-bottom: 1px solid var(--border-subtle); padding: 1rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <span style="font-size: 1.1rem;">${typeIcons[entry.type]}</span>
+                    <strong style="margin-left: 0.5rem;">${entry.title}</strong>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="text-muted" style="font-size: 0.8rem;">${formatDate(entry.date)}</span>
+                    <button class="btn btn-ghost btn-icon" style="width: 28px; height: 28px;" 
+                            onclick="deleteJournalEntry(${entry.id})">🗑️</button>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">
+                ${entry.content}
+            </p>
+        </div>
+    `).join('');
+}
+
+function deleteJournalEntry(id) {
+    if (confirm('Supprimer cette entrée ?')) {
+        state.journal = state.journal.filter(e => e.id !== id);
+        autoSave();
+        renderJournal();
+        showToast('Entrée supprimée', 'info');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STATISTICS
+// ═══════════════════════════════════════════════════════════════
+function updateStats() {
+    const voirFields = ['domino_pourquoi', 'domino_valeurs', 'domino_changements', 'domino_vision', 
+                        'profil_competences_fortes', 'profil_temps', 'fleur_reflexion'];
+    const jugerFields = ['toc_impact', 'swot_forces', 'swot_faiblesses', 'pestel_p', 
+                         'arbre_probleme', 'why_racine'];
+    const agirFields = ['pouvoir_avec', 'smart_final', 'cibles_principale', 
+                        'message_complet', 'suivi_outputs'];
+    
+    const calcProgress = (fields) => {
+        const filled = fields.filter(f => {
+            const [section, key] = f.split('_');
+            return state[section] && state[section][key] && state[section][key].trim();
+        }).length;
+        return Math.round((filled / fields.length) * 100);
+    };
+    
+    const voirProgress = calcProgress(voirFields);
+    const jugerProgress = calcProgress(jugerFields);
+    const agirProgress = calcProgress(agirFields);
+    const globalProgress = Math.round((voirProgress + jugerProgress + agirProgress) / 3);
+    
+    document.getElementById('statVoir').textContent = voirProgress + '%';
+    document.getElementById('statJuger').textContent = jugerProgress + '%';
+    document.getElementById('statAgir').textContent = agirProgress + '%';
+    document.getElementById('statActeurs').textContent = state.acteurs.length;
+    
+    document.getElementById('globalProgress').textContent = globalProgress + '%';
+    document.getElementById('globalProgressFill').style.width = globalProgress + '%';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// IMPORT / EXPORT
+// ═══════════════════════════════════════════════════════════════
+function initFileInput() {
+    const input = document.getElementById('fileInput');
+    input.addEventListener('change', handleFileSelect);
+}
+
+function importFile(format) {
+    const input = document.getElementById('fileInput');
+    input.accept = format === 'json' ? '.json' : format === 'csv' ? '.csv' : '.md,.markdown';
+    input.click();
+    closeAllDropdowns();
+}
+
+function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const ext = file.name.split('.').pop().toLowerCase();
+            
+            if (ext === 'json') {
+                const data = JSON.parse(event.target.result);
+                state = { ...state, ...data };
+                populateFields();
+                renderActors();
+                renderJournal();
+                showToast('Projet importé !', 'success');
+            } else if (ext === 'csv') {
+                importCSV(event.target.result);
+            } else if (ext === 'md' || ext === 'markdown') {
+                importMarkdown(event.target.result);
+            }
+            
+            autoSave();
+            updateStats();
+        } catch (err) {
+            showToast('Erreur d\'importation: ' + err.message, 'error');
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+}
+
+function importCSV(content) {
+    const lines = content.split('\n').filter(l => l.trim());
+    if (lines.length < 2) throw new Error('CSV vide ou invalide');
+    
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+        const row = {};
+        headers.forEach((h, idx) => row[h] = values[idx] || '');
+        
+        // Try to map to state
+        if (row.section && row.key && row.value) {
+            if (!state[row.section]) state[row.section] = {};
+            state[row.section][row.key] = row.value;
+        }
+    }
+    
+    populateFields();
+    showToast('CSV importé !', 'success');
+}
+
+function importMarkdown(content) {
+    // Simple markdown parsing
+    const sections = content.split(/^## /m).filter(s => s.trim());
+    
+    sections.forEach(section => {
+        const lines = section.split('\n');
+        const title = lines[0].trim().toLowerCase();
+        const body = lines.slice(1).join('\n').trim();
+        
+        // Map titles to state sections
+        if (title.includes('vision') || title.includes('domino')) {
+            state.domino = state.domino || {};
+            state.domino.vision = body;
+        } else if (title.includes('swot')) {
+            state.swot = state.swot || {};
+            state.swot.notes = body;
+        }
+        // Add more mappings as needed
+    });
+    
+    populateFields();
+    showToast('Markdown importé !', 'success');
+}
+
+function importFromLocalStorage() {
+    loadFromStorage();
+    closeAllDropdowns();
+}
+
+// EXPORTS
+function exportJSON() {
+    const data = JSON.stringify(state, null, 2);
+    downloadFile(data, `plaidoyer_${formatFilename()}.json`, 'application/json');
+    closeAllDropdowns();
+    showToast('Export JSON téléchargé', 'success');
+}
+
+function exportCSV() {
+    const rows = [['section', 'key', 'value']];
+    
+    Object.entries(state).forEach(([section, data]) => {
+        if (typeof data === 'object' && !Array.isArray(data)) {
+            Object.entries(data).forEach(([key, value]) => {
+                if (typeof value === 'string') {
+                    rows.push([section, key, `"${value.replace(/"/g, '""')}"`]);
+                }
+            });
+        }
+    });
+    
+    // Add actors
+    state.acteurs.forEach((actor, idx) => {
+        rows.push(['acteur', `${idx}_name`, actor.name]);
+        rows.push(['acteur', `${idx}_type`, actor.type]);
+        rows.push(['acteur', `${idx}_position`, actor.position]);
+        rows.push(['acteur', `${idx}_power`, actor.power]);
+    });
+    
+    const csv = rows.map(r => r.join(',')).join('\n');
+    downloadFile(csv, `plaidoyer_${formatFilename()}.csv`, 'text/csv');
+    closeAllDropdowns();
+    showToast('Export CSV téléchargé', 'success');
+}
+
+function exportMarkdown() {
+    let md = `# ${state.meta.name || 'Projet de Plaidoyer Citoyen'}\n\n`;
+    md += `**Organisation:** ${state.meta.org || 'Non spécifié'}\n\n`;
+    md += `**Description:** ${state.meta.description || ''}\n\n`;
+    md += `---\n\n`;
+    
+    // VOIR
+    md += `## 👁️ PHASE VOIR\n\n`;
+    
+    if (state.domino) {
+        md += `### Domino du changement\n\n`;
+        if (state.domino.pourquoi) md += `**Pourquoi s'engager:**\n${state.domino.pourquoi}\n\n`;
+        if (state.domino.valeurs) md += `**Valeurs:**\n${state.domino.valeurs}\n\n`;
+        if (state.domino.vision) md += `**Vision:**\n${state.domino.vision}\n\n`;
+    }
+    
+    if (state.acteurs && state.acteurs.length > 0) {
+        md += `### Acteurs cartographiés\n\n`;
+        state.acteurs.forEach(a => {
+            const positions = { ally: '🟢 Allié', neutral: '🟡 Neutre', opponent: '🔴 Opposant' };
+            md += `- **${a.name}** (${positions[a.position]}, Pouvoir: ${a.power}/5)\n`;
+        });
+        md += '\n';
+    }
+    
+    // JUGER
+    md += `## ⚖️ PHASE JUGER\n\n`;
+    
+    if (state.swot) {
+        md += `### Analyse SWOT\n\n`;
+        if (state.swot.forces) md += `**Forces:**\n${state.swot.forces}\n\n`;
+        if (state.swot.faiblesses) md += `**Faiblesses:**\n${state.swot.faiblesses}\n\n`;
+        if (state.swot.opportunites) md += `**Opportunités:**\n${state.swot.opportunites}\n\n`;
+        if (state.swot.menaces) md += `**Menaces:**\n${state.swot.menaces}\n\n`;
+    }
+    
+    if (state.arbre && state.arbre.probleme) {
+        md += `### Arbre à problème\n\n`;
+        md += `**Problème central:**\n${state.arbre.probleme}\n\n`;
+        if (state.arbre.causes) md += `**Causes:**\n${state.arbre.causes}\n\n`;
+        if (state.arbre.consequences) md += `**Conséquences:**\n${state.arbre.consequences}\n\n`;
+    }
+    
+    // AGIR
+    md += `## 🚀 PHASE AGIR\n\n`;
+    
+    if (state.smart && state.smart.final) {
+        md += `### Objectif SMART\n\n${state.smart.final}\n\n`;
+    }
+    
+    if (state.message && state.message.complet) {
+        md += `### Message clé\n\n${state.message.complet}\n\n`;
+    }
+    
+    // Journal
+    if (state.journal && state.journal.length > 0) {
+        md += `## 📔 Journal de bord\n\n`;
+        state.journal.forEach(entry => {
+            md += `### ${entry.title} (${formatDate(entry.date)})\n\n${entry.content}\n\n`;
+        });
+    }
+    
+    md += `---\n\n*Exporté le ${new Date().toLocaleDateString('fr-FR')} depuis Plaidoyer Citoyen v${APP_VERSION}*\n`;
+    
+    downloadFile(md, `plaidoyer_${formatFilename()}.md`, 'text/markdown');
+    closeAllDropdowns();
+    showToast('Export Markdown téléchargé', 'success');
+}
+
+function exportHTML() {
+    const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${state.meta.name || 'Projet de Plaidoyer'}</title>
+    <style>
+        :root { --primary: #1a365d; --accent: #d4a574; --text: #212529; --bg: #f8f9fa; }
+        body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; background: var(--bg); color: var(--text); line-height: 1.6; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 0.5rem; }
+        h2 { color: var(--primary); margin-top: 2rem; }
+        h3 { color: var(--accent); margin-top: 1.5rem; }
+        .card { background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .meta { color: #6c757d; font-size: 0.9rem; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-right: 0.5rem; }
+        .tag-voir { background: #e0f7f6; color: #0d9488; }
+        .tag-juger { background: #fef3e2; color: #b8956a; }
+        .tag-agir { background: #dcfce7; color: #16a34a; }
+        .actor { display: inline-block; background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 8px; margin: 0.25rem; border-left: 3px solid var(--accent); }
+        @media print { body { padding: 0; } .card { box-shadow: none; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+    <h1>⚖️ ${state.meta.name || 'Projet de Plaidoyer Citoyen'}</h1>
+    <p class="meta"><strong>Organisation:</strong> ${state.meta.org || 'Non spécifié'}</p>
+    <p class="meta"><strong>Exporté le:</strong> ${new Date().toLocaleDateString('fr-FR')}</p>
+    ${state.meta.description ? `<p>${state.meta.description}</p>` : ''}
+    
+    <h2><span class="tag tag-voir">👁️ VOIR</span> Phase d'analyse</h2>
+    
+    ${state.domino && Object.values(state.domino).some(v => v) ? `
+    <div class="card">
+        <h3>🎯 Domino du changement</h3>
+        ${state.domino.pourquoi ? `<p><strong>Pourquoi s'engager:</strong> ${state.domino.pourquoi}</p>` : ''}
+        ${state.domino.valeurs ? `<p><strong>Valeurs:</strong> ${state.domino.valeurs}</p>` : ''}
+        ${state.domino.changements ? `<p><strong>Changements visés:</strong> ${state.domino.changements}</p>` : ''}
+        ${state.domino.vision ? `<p><strong>Vision:</strong> ${state.domino.vision}</p>` : ''}
+    </div>
+    ` : ''}
+    
+    ${state.acteurs && state.acteurs.length > 0 ? `
+    <div class="card">
+        <h3>👥 Acteurs cartographiés (${state.acteurs.length})</h3>
+        ${state.acteurs.map(a => `<span class="actor">${a.name}</span>`).join('')}
+    </div>
+    ` : ''}
+    
+    <h2><span class="tag tag-juger">⚖️ JUGER</span> Phase stratégique</h2>
+    
+    ${state.swot && Object.values(state.swot).some(v => v) ? `
+    <div class="card">
+        <h3>📐 Analyse SWOT</h3>
+        ${state.swot.forces ? `<p><strong>💪 Forces:</strong> ${state.swot.forces}</p>` : ''}
+        ${state.swot.faiblesses ? `<p><strong>⚠️ Faiblesses:</strong> ${state.swot.faiblesses}</p>` : ''}
+        ${state.swot.opportunites ? `<p><strong>🌟 Opportunités:</strong> ${state.swot.opportunites}</p>` : ''}
+        ${state.swot.menaces ? `<p><strong>⚡ Menaces:</strong> ${state.swot.menaces}</p>` : ''}
+    </div>
+    ` : ''}
+    
+    ${state.arbre && state.arbre.probleme ? `
+    <div class="card">
+        <h3>🌳 Arbre à problème</h3>
+        <p><strong>Problème central:</strong> ${state.arbre.probleme}</p>
+        ${state.arbre.causes ? `<p><strong>Causes:</strong> ${state.arbre.causes}</p>` : ''}
+        ${state.arbre.consequences ? `<p><strong>Conséquences:</strong> ${state.arbre.consequences}</p>` : ''}
+        ${state.arbre.objectif ? `<p><strong>Objectif:</strong> ${state.arbre.objectif}</p>` : ''}
+    </div>
+    ` : ''}
+    
+    <h2><span class="tag tag-agir">🚀 AGIR</span> Phase d'action</h2>
+    
+    ${state.smart && state.smart.final ? `
+    <div class="card">
+        <h3>🎯 Objectif SMART</h3>
+        <p>${state.smart.final}</p>
+    </div>
+    ` : ''}
+    
+    ${state.message && state.message.complet ? `
+    <div class="card">
+        <h3>💬 Message clé</h3>
+        <p>${state.message.complet}</p>
+    </div>
+    ` : ''}
+    
+    ${state.journal && state.journal.length > 0 ? `
+    <h2>📔 Journal de bord</h2>
+    ${state.journal.slice(0, 10).map(entry => `
+    <div class="card">
+        <h3>${entry.title}</h3>
+        <p class="meta">${formatDate(entry.date)}</p>
+        <p>${entry.content}</p>
+    </div>
+    `).join('')}
+    ` : ''}
+    
+    <hr style="margin: 2rem 0; border: none; border-top: 1px solid #ddd;">
+    <p class="meta" style="text-align: center;">
+        Généré avec Plaidoyer Citoyen v${APP_VERSION} — 
+        <a href="https://justicepaix.be" target="_blank">Justice et Paix</a>
+    </p>
+</body>
+</html>`;
+    
+    downloadFile(html, `plaidoyer_${formatFilename()}.html`, 'text/html');
+    closeAllDropdowns();
+    showToast('Export HTML téléchargé', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function openModal(id) {
+    document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+function toggleDropdown(id) {
+    const dropdown = document.getElementById(id);
+    const wasOpen = dropdown.classList.contains('open');
+    closeAllDropdowns();
+    if (!wasOpen) dropdown.classList.add('open');
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+        <span>${message}</span>
+    `;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function downloadFile(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function formatFilename() {
+    const name = state.meta.name || 'projet';
+    const date = new Date().toISOString().slice(0, 10);
+    return `${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${date}`;
+}
+
+// Drag & Drop
+function handleDragOver(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+    e.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    
+    const file = e.dataTransfer.files[0];
+    if (file) {
+        const input = document.getElementById('fileInput');
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        input.files = dataTransfer.files;
+        handleFileSelect({ target: input });
+    }
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+        closeAllDropdowns();
+    }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+        closeAllDropdowns();
+    }
+    // Ctrl+S to save
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        saveProject();
+    }
+});
+    </script>
+</body>
+</html>

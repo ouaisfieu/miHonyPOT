@@ -1,0 +1,2808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAIDOYER CITOYEN — Poste de Travail</title>
+    <meta name="description" content="Outil méthodologique d'éducation permanente pour le plaidoyer citoyen - 15 outils VOIR-JUGER-AGIR">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ══════════════════════════════════════════════════════════════════
+           DESIGN SYSTEM — Mission Control / Civic Tech
+           ══════════════════════════════════════════════════════════════════ */
+        :root {
+            --bg-void: #08090a;
+            --bg-base: #0d0f11;
+            --bg-elevated: #141719;
+            --bg-surface: #1a1d21;
+            --bg-card: #1f2328;
+            --bg-hover: #262b31;
+            
+            --signal-green: #00d26a;
+            --signal-green-dim: rgba(0, 210, 106, 0.15);
+            --signal-amber: #ffb300;
+            --signal-amber-dim: rgba(255, 179, 0, 0.15);
+            --signal-red: #ff3d57;
+            --signal-red-dim: rgba(255, 61, 87, 0.15);
+            --signal-blue: #00b4d8;
+            --signal-blue-dim: rgba(0, 180, 216, 0.15);
+            --signal-purple: #a78bfa;
+            --signal-purple-dim: rgba(167, 139, 250, 0.15);
+            --signal-cyan: #22d3ee;
+            
+            /* Phase Colors */
+            --phase-voir: #00b4d8;
+            --phase-voir-dim: rgba(0, 180, 216, 0.15);
+            --phase-juger: #a78bfa;
+            --phase-juger-dim: rgba(167, 139, 250, 0.15);
+            --phase-agir: #00d26a;
+            --phase-agir-dim: rgba(0, 210, 106, 0.15);
+            
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --text-dim: #475569;
+            
+            --border-subtle: rgba(148, 163, 184, 0.08);
+            --border-default: rgba(148, 163, 184, 0.15);
+            --border-strong: rgba(148, 163, 184, 0.25);
+            
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 150ms var(--ease-out);
+            --transition-base: 250ms var(--ease-out);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+        /* ══════════════════════════════════════════════════════════════════
+           LAYOUT
+           ══════════════════════════════════════════════════════════════════ */
+        .app-shell {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+
+        .header-bar {
+            grid-column: 1 / -1;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 var(--space-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--phase-voir), var(--phase-juger), var(--phase-agir));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--bg-void);
+        }
+
+        .header-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title span {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-base);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: var(--space-xl);
+        }
+
+        .nav-section {
+            padding: var(--space-md);
+        }
+
+        .nav-title {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .nav-title .phase-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .nav-title .phase-dot.voir { background: var(--phase-voir); }
+        .nav-title .phase-dot.juger { background: var(--phase-juger); }
+        .nav-title .phase-dot.agir { background: var(--phase-agir); }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--signal-green-dim);
+            color: var(--signal-green);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--signal-green);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-item .tool-number {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface);
+        }
+
+        .nav-item.voir .tool-number { background: var(--phase-voir-dim); color: var(--phase-voir); }
+        .nav-item.juger .tool-number { background: var(--phase-juger-dim); color: var(--phase-juger); }
+        .nav-item.agir .tool-number { background: var(--phase-agir-dim); color: var(--phase-agir); }
+
+        .nav-item .completion-check {
+            margin-left: auto;
+            color: var(--signal-green);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .nav-item.completed .completion-check {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-void);
+            overflow-y: auto;
+            padding: var(--space-lg);
+        }
+
+        .page-section {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           COMPONENTS
+           ══════════════════════════════════════════════════════════════════ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .phase-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-badge.voir { background: var(--phase-voir-dim); color: var(--phase-voir); }
+        .phase-badge.juger { background: var(--phase-juger-dim); color: var(--phase-juger); }
+        .phase-badge.agir { background: var(--phase-agir-dim); color: var(--phase-agir); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--signal-green);
+            color: var(--bg-void);
+        }
+
+        .btn-primary:hover {
+            background: #00e676;
+            box-shadow: 0 0 30px rgba(0, 210, 106, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-strong);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-base);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--signal-green);
+            box-shadow: 0 0 0 3px var(--signal-green-dim);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-dim);
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           DASHBOARD
+           ══════════════════════════════════════════════════════════════════ */
+        .dashboard-hero {
+            background: linear-gradient(135deg, var(--bg-surface), var(--bg-card));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+
+        .dashboard-hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--phase-voir), var(--phase-juger), var(--phase-agir));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-hero p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .progress-phase {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+        }
+
+        .progress-phase.voir { border-top: 3px solid var(--phase-voir); }
+        .progress-phase.juger { border-top: 3px solid var(--phase-juger); }
+        .progress-phase.agir { border-top: 3px solid var(--phase-agir); }
+
+        .progress-phase h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .progress-phase.voir h3 { color: var(--phase-voir); }
+        .progress-phase.juger h3 { color: var(--phase-juger); }
+        .progress-phase.agir h3 { color: var(--phase-agir); }
+
+        .progress-count {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .progress-count span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-container {
+            height: 6px;
+            background: var(--bg-base);
+            border-radius: 3px;
+            margin-top: var(--space-md);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease-out;
+        }
+
+        .progress-phase.voir .progress-bar-fill { background: var(--phase-voir); }
+        .progress-phase.juger .progress-bar-fill { background: var(--phase-juger); }
+        .progress-phase.agir .progress-bar-fill { background: var(--phase-agir); }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .quick-action:hover {
+            background: var(--bg-hover);
+            border-color: var(--signal-green);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--signal-green-dim);
+        }
+
+        .quick-action-content h4 {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .quick-action-content p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           TOOL PAGES
+           ══════════════════════════════════════════════════════════════════ */
+        .tool-header {
+            margin-bottom: var(--space-xl);
+        }
+
+        .tool-header h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .tool-header .tool-number-big {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 700;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+        }
+
+        .tool-header .tool-number-big.voir { background: var(--phase-voir-dim); color: var(--phase-voir); }
+        .tool-header .tool-number-big.juger { background: var(--phase-juger-dim); color: var(--phase-juger); }
+        .tool-header .tool-number-big.agir { background: var(--phase-agir-dim); color: var(--phase-agir); }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 800px;
+        }
+
+        .tool-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--space-xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* Specific Tool Styles */
+        .domino-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        .domino-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .domino-item.highlight {
+            border-color: var(--signal-green);
+            background: var(--signal-green-dim);
+        }
+
+        .stakeholder-map {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 2px;
+            background: var(--border-default);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .stakeholder-quadrant {
+            background: var(--bg-surface);
+            padding: var(--space-lg);
+            position: relative;
+        }
+
+        .stakeholder-quadrant::before {
+            content: attr(data-label);
+            position: absolute;
+            top: var(--space-sm);
+            left: var(--space-sm);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stakeholder-list {
+            margin-top: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .stakeholder-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .stakeholder-item .delete-btn {
+            margin-left: auto;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .stakeholder-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .swot-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            min-height: 200px;
+        }
+
+        .swot-box h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .swot-box.strengths h4 { color: var(--signal-green); }
+        .swot-box.weaknesses h4 { color: var(--signal-red); }
+        .swot-box.opportunities h4 { color: var(--signal-blue); }
+        .swot-box.threats h4 { color: var(--signal-amber); }
+
+        .pestel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        .pestel-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .pestel-box h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--signal-cyan);
+        }
+
+        .tree-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            min-height: 400px;
+        }
+
+        .tree-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+        }
+
+        .tree-node.root {
+            background: var(--signal-red-dim);
+            border-color: var(--signal-red);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .tree-node.cause {
+            margin-left: var(--space-xl);
+            border-left: 3px solid var(--signal-amber);
+        }
+
+        .tree-node.effect {
+            margin-left: var(--space-xl);
+            border-left: 3px solid var(--signal-blue);
+        }
+
+        .smart-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .smart-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: var(--space-md);
+            align-items: start;
+        }
+
+        .smart-letter {
+            background: var(--signal-green-dim);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            text-align: center;
+        }
+
+        .smart-letter span {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--signal-green);
+        }
+
+        .smart-letter small {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .message-builder {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .message-component {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .message-component h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--signal-cyan);
+        }
+
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .checklist-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .checklist-item.checked {
+            background: var(--signal-green-dim);
+            border-color: var(--signal-green);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--signal-green);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           PROJECTS LIST
+           ══════════════════════════════════════════════════════════════════ */
+        .projects-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .project-card:hover {
+            border-color: var(--signal-green);
+            transform: translateY(-2px);
+        }
+
+        .project-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-meta {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .project-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .project-progress-bar {
+            width: 100px;
+            height: 4px;
+            background: var(--bg-base);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .project-progress-fill {
+            height: 100%;
+            background: var(--signal-green);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           EXPORT PANEL
+           ══════════════════════════════════════════════════════════════════ */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+        }
+
+        .export-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .export-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--signal-green);
+            transform: translateY(-2px);
+        }
+
+        .export-icon {
+            font-size: 2rem;
+        }
+
+        .export-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           MODAL
+           ══════════════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform var(--transition-base);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           TOAST
+           ══════════════════════════════════════════════════════════════════ */
+        .toast-container {
+            position: fixed;
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            z-index: 1001;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.success { border-left: 3px solid var(--signal-green); }
+        .toast.error { border-left: 3px solid var(--signal-red); }
+        .toast.warning { border-left: 3px solid var(--signal-amber); }
+
+        /* ══════════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .progress-overview { grid-template-columns: 1fr; }
+            .quick-actions { grid-template-columns: 1fr; }
+            .swot-grid { grid-template-columns: 1fr; }
+            .pestel-grid { grid-template-columns: 1fr 1fr; }
+            .stakeholder-map { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .export-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .app-shell { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .domino-grid { grid-template-columns: 1fr; }
+            .pestel-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           UTILITIES
+           ══════════════════════════════════════════════════════════════════ */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
+        .mt-lg { margin-top: var(--space-lg); }
+        .mb-lg { margin-bottom: var(--space-lg); }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-sm { gap: var(--space-sm); }
+        .gap-md { gap: var(--space-md); }
+
+        .list-input-container {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .list-input-container input {
+            flex: 1;
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .item-list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-base);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+
+        .item-list-item .remove-btn {
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity var(--transition-fast);
+        }
+
+        .item-list-item:hover .remove-btn {
+            opacity: 1;
+        }
+
+        @media print {
+            .sidebar, .header-bar, .tool-nav, .btn { display: none !important; }
+            .app-shell { display: block; }
+            .main-content { padding: 0; }
+            .card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Header -->
+        <header class="header-bar">
+            <div class="header-brand">
+                <div class="header-logo">⚡</div>
+                <div class="header-title">
+                    PLAIDOYER CITOYEN <span>— Poste de Travail</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="showProjectsModal()">📁 Projets</button>
+                <button class="btn btn-ghost" onclick="importData()">📥 Import</button>
+                <button class="btn btn-primary" onclick="showExportModal()">📤 Export</button>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-item active" data-page="dashboard">
+                    <span class="tool-number" style="background: var(--signal-green-dim); color: var(--signal-green);">🏠</span>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title"><span class="phase-dot voir"></span> VOIR — Analyse</div>
+                <div class="nav-item voir" data-page="tool-1">
+                    <span class="tool-number">01</span>
+                    <span>Domino du changement</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item voir" data-page="tool-2">
+                    <span class="tool-number">02</span>
+                    <span>Profil d'engagement</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item voir" data-page="tool-3">
+                    <span class="tool-number">03</span>
+                    <span>Fleur de pouvoir</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item voir" data-page="tool-4">
+                    <span class="tool-number">04</span>
+                    <span>Cartographie acteurs</span>
+                    <span class="completion-check">✓</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title"><span class="phase-dot juger"></span> JUGER — Stratégie</div>
+                <div class="nav-item juger" data-page="tool-5">
+                    <span class="tool-number">05</span>
+                    <span>Théorie du changement</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item juger" data-page="tool-6">
+                    <span class="tool-number">06</span>
+                    <span>Analyse SWOT</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item juger" data-page="tool-7">
+                    <span class="tool-number">07</span>
+                    <span>Analyse PESTEL</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item juger" data-page="tool-8">
+                    <span class="tool-number">08</span>
+                    <span>Arbre à problèmes</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item juger" data-page="tool-9">
+                    <span class="tool-number">09</span>
+                    <span>Les 5 Pourquoi</span>
+                    <span class="completion-check">✓</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title"><span class="phase-dot agir"></span> AGIR — Action</div>
+                <div class="nav-item agir" data-page="tool-10">
+                    <span class="tool-number">10</span>
+                    <span>Modes d'action</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item agir" data-page="tool-11">
+                    <span class="tool-number">11</span>
+                    <span>Objectifs SMART</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item agir" data-page="tool-12">
+                    <span class="tool-number">12</span>
+                    <span>Cibles et alliances</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item agir" data-page="tool-13">
+                    <span class="tool-number">13</span>
+                    <span>Construction message</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item agir" data-page="tool-14">
+                    <span class="tool-number">14</span>
+                    <span>Check-list rencontre</span>
+                    <span class="completion-check">✓</span>
+                </div>
+                <div class="nav-item agir" data-page="tool-15">
+                    <span class="tool-number">15</span>
+                    <span>Suivi-évaluation</span>
+                    <span class="completion-check">✓</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- DASHBOARD -->
+            <section id="page-dashboard" class="page-section active">
+                <div class="dashboard-hero">
+                    <h1>Plaidoyer Citoyen</h1>
+                    <p>15 outils méthodologiques pour structurer votre action citoyenne selon la méthode VOIR-JUGER-AGIR de Justice et Paix.</p>
+                    <button class="btn btn-primary" onclick="startNewProject()">🚀 Nouveau projet</button>
+                </div>
+
+                <div class="progress-overview">
+                    <div class="progress-phase voir">
+                        <h3>👁️ VOIR</h3>
+                        <div class="progress-count"><span id="voir-count">0</span><span>/4</span></div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="voir-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-phase juger">
+                        <h3>⚖️ JUGER</h3>
+                        <div class="progress-count"><span id="juger-count">0</span><span>/5</span></div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="juger-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-phase agir">
+                        <h3>✊ AGIR</h3>
+                        <div class="progress-count"><span id="agir-count">0</span><span>/6</span></div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="agir-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🎯 Actions rapides</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="showPage('tool-1')">
+                            <div class="quick-action-icon">🎯</div>
+                            <div class="quick-action-content">
+                                <h4>Commencer par la vision</h4>
+                                <p>Définir le changement souhaité avec le Domino</p>
+                            </div>
+                        </div>
+                        <div class="quick-action" onclick="showPage('tool-4')">
+                            <div class="quick-action-icon">🗺️</div>
+                            <div class="quick-action-content">
+                                <h4>Cartographier les acteurs</h4>
+                                <p>Identifier alliés et opposants</p>
+                            </div>
+                        </div>
+                        <div class="quick-action" onclick="showPage('tool-13')">
+                            <div class="quick-action-icon">💬</div>
+                            <div class="quick-action-content">
+                                <h4>Construire votre message</h4>
+                                <p>5 composants d'un message efficace</p>
+                            </div>
+                        </div>
+                        <div class="quick-action" onclick="showPage('tool-11')">
+                            <div class="quick-action-icon">📋</div>
+                            <div class="quick-action-content">
+                                <h4>Définir des objectifs SMART</h4>
+                                <p>Des objectifs mesurables et atteignables</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📚 Projet en cours</h3>
+                        <button class="btn btn-secondary" onclick="showProjectsModal()">Changer</button>
+                    </div>
+                    <div id="current-project-info">
+                        <p class="text-muted">Aucun projet actif. Créez un nouveau projet pour commencer.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOOL 1: Domino du changement -->
+            <section id="page-tool-1" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big voir">01</span> Domino du changement</h1>
+                    <span class="phase-badge voir">VOIR</span>
+                </div>
+                <p class="tool-description">Le Domino du changement vous aide à visualiser la chaîne de transformations nécessaires pour atteindre votre vision. Partez de votre objectif ultime et remontez les étapes intermédiaires.</p>
+
+                <div class="card mt-lg">
+                    <div class="form-group">
+                        <label class="form-label">🌟 Vision finale — Le monde que vous voulez voir</label>
+                        <textarea class="input-field" id="domino-vision" placeholder="Décrivez le changement ultime que vous souhaitez voir advenir..." data-tool="1" data-field="vision"></textarea>
+                        <p class="form-hint">Pensez grand. Quel est l'idéal vers lequel vous tendez ?</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title mb-lg">🎯 Étapes du changement</h3>
+                    <p class="text-muted mb-lg">Quelles transformations doivent se produire pour atteindre cette vision ? Listez-les de la plus proche à la plus lointaine.</p>
+                    
+                    <div class="domino-grid" id="domino-steps">
+                        <div class="domino-item">
+                            <div class="form-group">
+                                <label class="form-label">Étape 1 — Court terme</label>
+                                <textarea class="input-field" placeholder="Premier changement observable..." data-tool="1" data-field="step1"></textarea>
+                            </div>
+                        </div>
+                        <div class="domino-item">
+                            <div class="form-group">
+                                <label class="form-label">Étape 2 — Moyen terme</label>
+                                <textarea class="input-field" placeholder="Changement suivant..." data-tool="1" data-field="step2"></textarea>
+                            </div>
+                        </div>
+                        <div class="domino-item">
+                            <div class="form-group">
+                                <label class="form-label">Étape 3 — Long terme</label>
+                                <textarea class="input-field" placeholder="Transformation majeure..." data-tool="1" data-field="step3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">🔗 Comment ces étapes s'enchaînent-elles ?</label>
+                        <textarea class="input-field" placeholder="Expliquez la logique de causalité entre les étapes..." data-tool="1" data-field="logic"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('dashboard')">← Retour</button>
+                    <button class="btn btn-primary" onclick="markComplete(1); showPage('tool-2')">Suivant: Profil d'engagement →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 2: Profil d'engagement -->
+            <section id="page-tool-2" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big voir">02</span> Profil d'engagement</h1>
+                    <span class="phase-badge voir">VOIR</span>
+                </div>
+                <p class="tool-description">Faites le point sur vos motivations, vos ressources et vos limites. Un engagement durable repose sur une bonne connaissance de soi.</p>
+
+                <div class="card mt-lg">
+                    <div class="form-group">
+                        <label class="form-label">💪 Mes motivations profondes</label>
+                        <textarea class="input-field" placeholder="Qu'est-ce qui vous pousse à vous engager sur ce sujet ?" data-tool="2" data-field="motivations"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🎁 Mes compétences et ressources</label>
+                        <textarea class="input-field" placeholder="Quelles compétences, réseaux, temps pouvez-vous mobiliser ?" data-tool="2" data-field="resources"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">⚠️ Mes limites et contraintes</label>
+                        <textarea class="input-field" placeholder="Quelles sont vos limites de temps, d'énergie, de compétences ?" data-tool="2" data-field="limits"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">📊 Niveau d'engagement souhaité</label>
+                        <select class="input-field" data-tool="2" data-field="level">
+                            <option value="">Sélectionnez...</option>
+                            <option value="ponctuel">Ponctuel — Actions occasionnelles</option>
+                            <option value="regulier">Régulier — Quelques heures par semaine</option>
+                            <option value="intensif">Intensif — Engagement majeur</option>
+                            <option value="professionnel">Professionnel — Activité principale</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-1')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(2); showPage('tool-3')">Suivant: Fleur de pouvoir →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 3: Fleur de pouvoir -->
+            <section id="page-tool-3" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big voir">03</span> Fleur de pouvoir</h1>
+                    <span class="phase-badge voir">VOIR</span>
+                </div>
+                <p class="tool-description">Analysez votre positionnement social : vos privilèges, vos identités multiples, et comment ils influencent votre capacité d'action et votre légitimité sur le sujet.</p>
+
+                <div class="card mt-lg">
+                    <div class="form-group">
+                        <label class="form-label">🌸 Mes identités sociales</label>
+                        <textarea class="input-field" placeholder="Genre, âge, origine, classe sociale, profession, handicap, orientation..." data-tool="3" data-field="identities"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">✨ Mes privilèges dans ce contexte</label>
+                        <textarea class="input-field" placeholder="Quels avantages votre position vous confère-t-elle ?" data-tool="3" data-field="privileges"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🚧 Mes positions de vulnérabilité</label>
+                        <textarea class="input-field" placeholder="Où êtes-vous en position de faiblesse ou de discrimination ?" data-tool="3" data-field="vulnerabilities"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🎯 Impact sur ma légitimité</label>
+                        <textarea class="input-field" placeholder="Comment ces positions affectent-elles votre légitimité à parler de ce sujet ?" data-tool="3" data-field="legitimacy"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-2')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(3); showPage('tool-4')">Suivant: Cartographie →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 4: Cartographie des acteurs -->
+            <section id="page-tool-4" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big voir">04</span> Cartographie des acteurs</h1>
+                    <span class="phase-badge voir">VOIR</span>
+                </div>
+                <p class="tool-description">Identifiez et positionnez les acteurs clés selon leur pouvoir d'influence et leur position (favorable/défavorable) par rapport à votre cause.</p>
+
+                <div class="card mt-lg">
+                    <h3 class="card-title mb-lg">🗺️ Matrice Pouvoir / Position</h3>
+                    <p class="text-muted mb-lg">Ajoutez des acteurs et positionnez-les dans la matrice.</p>
+                    
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="actor-name" placeholder="Nom de l'acteur...">
+                        <select class="input-field" id="actor-power" style="width: 150px;">
+                            <option value="high">Pouvoir élevé</option>
+                            <option value="low">Pouvoir faible</option>
+                        </select>
+                        <select class="input-field" id="actor-position" style="width: 150px;">
+                            <option value="favorable">Favorable</option>
+                            <option value="neutral">Neutre</option>
+                            <option value="opposed">Opposé</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="addActor()">Ajouter</button>
+                    </div>
+
+                    <div class="stakeholder-map">
+                        <div class="stakeholder-quadrant" data-label="Fort pouvoir / Favorable — ALLIÉS CLÉS">
+                            <div class="stakeholder-list" id="quadrant-high-favorable"></div>
+                        </div>
+                        <div class="stakeholder-quadrant" data-label="Fort pouvoir / Opposé — CIBLES PRIORITAIRES">
+                            <div class="stakeholder-list" id="quadrant-high-opposed"></div>
+                        </div>
+                        <div class="stakeholder-quadrant" data-label="Faible pouvoir / Favorable — BASE DE SOUTIEN">
+                            <div class="stakeholder-list" id="quadrant-low-favorable"></div>
+                        </div>
+                        <div class="stakeholder-quadrant" data-label="Faible pouvoir / Opposé — À SURVEILLER">
+                            <div class="stakeholder-list" id="quadrant-low-opposed"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-3')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(4); showPage('tool-5')">Suivant: Théorie du changement →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 5: Théorie du changement -->
+            <section id="page-tool-5" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big juger">05</span> Théorie du changement</h1>
+                    <span class="phase-badge juger">JUGER</span>
+                </div>
+                <p class="tool-description">Formalisez votre théorie du changement selon les 4 quadrants : changement individuel/collectif × interne/externe.</p>
+
+                <div class="card mt-lg">
+                    <div class="swot-grid">
+                        <div class="swot-box strengths">
+                            <h4>🧠 Individuel Interne</h4>
+                            <p class="form-hint">Changement de conscience, valeurs, croyances des individus</p>
+                            <textarea class="input-field mt-lg" placeholder="Quels changements intérieurs chez les personnes ?" data-tool="5" data-field="indiv-interne"></textarea>
+                        </div>
+                        <div class="swot-box opportunities">
+                            <h4>👤 Individuel Externe</h4>
+                            <p class="form-hint">Changement de comportements individuels observables</p>
+                            <textarea class="input-field mt-lg" placeholder="Quels nouveaux comportements ?" data-tool="5" data-field="indiv-externe"></textarea>
+                        </div>
+                        <div class="swot-box weaknesses">
+                            <h4>🏛️ Collectif Interne</h4>
+                            <p class="form-hint">Changement de culture, normes sociales, représentations</p>
+                            <textarea class="input-field mt-lg" placeholder="Quels changements culturels collectifs ?" data-tool="5" data-field="coll-interne"></textarea>
+                        </div>
+                        <div class="swot-box threats">
+                            <h4>📜 Collectif Externe</h4>
+                            <p class="form-hint">Changement de lois, politiques, institutions</p>
+                            <textarea class="input-field mt-lg" placeholder="Quels changements structurels ?" data-tool="5" data-field="coll-externe"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-4')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(5); showPage('tool-6')">Suivant: SWOT →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 6: Analyse SWOT -->
+            <section id="page-tool-6" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big juger">06</span> Analyse SWOT</h1>
+                    <span class="phase-badge juger">JUGER</span>
+                </div>
+                <p class="tool-description">Analysez vos Forces, Faiblesses, Opportunités et Menaces pour définir une stratégie réaliste.</p>
+
+                <div class="card mt-lg">
+                    <div class="swot-grid">
+                        <div class="swot-box strengths">
+                            <h4>💪 Forces (internes)</h4>
+                            <div class="list-input-container">
+                                <input type="text" class="input-field" id="swot-strength-input" placeholder="Ajouter une force...">
+                                <button class="btn btn-secondary" onclick="addSwotItem('strengths')">+</button>
+                            </div>
+                            <div class="item-list" id="swot-strengths-list"></div>
+                        </div>
+                        <div class="swot-box weaknesses">
+                            <h4>😓 Faiblesses (internes)</h4>
+                            <div class="list-input-container">
+                                <input type="text" class="input-field" id="swot-weakness-input" placeholder="Ajouter une faiblesse...">
+                                <button class="btn btn-secondary" onclick="addSwotItem('weaknesses')">+</button>
+                            </div>
+                            <div class="item-list" id="swot-weaknesses-list"></div>
+                        </div>
+                        <div class="swot-box opportunities">
+                            <h4>🌟 Opportunités (externes)</h4>
+                            <div class="list-input-container">
+                                <input type="text" class="input-field" id="swot-opportunity-input" placeholder="Ajouter une opportunité...">
+                                <button class="btn btn-secondary" onclick="addSwotItem('opportunities')">+</button>
+                            </div>
+                            <div class="item-list" id="swot-opportunities-list"></div>
+                        </div>
+                        <div class="swot-box threats">
+                            <h4>⚠️ Menaces (externes)</h4>
+                            <div class="list-input-container">
+                                <input type="text" class="input-field" id="swot-threat-input" placeholder="Ajouter une menace...">
+                                <button class="btn btn-secondary" onclick="addSwotItem('threats')">+</button>
+                            </div>
+                            <div class="item-list" id="swot-threats-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-5')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(6); showPage('tool-7')">Suivant: PESTEL →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 7: Analyse PESTEL -->
+            <section id="page-tool-7" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big juger">07</span> Analyse PESTEL</h1>
+                    <span class="phase-badge juger">JUGER</span>
+                </div>
+                <p class="tool-description">Analysez le macro-environnement selon 6 dimensions : Politique, Économique, Social, Technologique, Environnemental, Légal.</p>
+
+                <div class="card mt-lg">
+                    <div class="pestel-grid">
+                        <div class="pestel-box">
+                            <h4>🏛️ Politique</h4>
+                            <textarea class="input-field" placeholder="Contexte politique, gouvernement, stabilité..." data-tool="7" data-field="political"></textarea>
+                        </div>
+                        <div class="pestel-box">
+                            <h4>💰 Économique</h4>
+                            <textarea class="input-field" placeholder="Conjoncture, budgets, financement..." data-tool="7" data-field="economic"></textarea>
+                        </div>
+                        <div class="pestel-box">
+                            <h4>👥 Social</h4>
+                            <textarea class="input-field" placeholder="Tendances sociales, démographie, opinions..." data-tool="7" data-field="social"></textarea>
+                        </div>
+                        <div class="pestel-box">
+                            <h4>💻 Technologique</h4>
+                            <textarea class="input-field" placeholder="Innovations, outils, digital..." data-tool="7" data-field="technological"></textarea>
+                        </div>
+                        <div class="pestel-box">
+                            <h4>🌍 Environnemental</h4>
+                            <textarea class="input-field" placeholder="Enjeux écologiques, climat, ressources..." data-tool="7" data-field="environmental"></textarea>
+                        </div>
+                        <div class="pestel-box">
+                            <h4>⚖️ Légal</h4>
+                            <textarea class="input-field" placeholder="Cadre juridique, réglementations, droits..." data-tool="7" data-field="legal"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-6')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(7); showPage('tool-8')">Suivant: Arbre à problèmes →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 8: Arbre à problèmes -->
+            <section id="page-tool-8" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big juger">08</span> Arbre à problèmes</h1>
+                    <span class="phase-badge juger">JUGER</span>
+                </div>
+                <p class="tool-description">Identifiez le problème central, ses causes profondes (racines) et ses conséquences (branches).</p>
+
+                <div class="card mt-lg">
+                    <div class="form-group">
+                        <label class="form-label">🎯 Problème central</label>
+                        <input type="text" class="input-field" placeholder="Formulez le problème principal..." data-tool="8" data-field="problem">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg" style="color: var(--signal-amber);">🌱 Causes (Pourquoi ce problème existe ?)</h4>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="cause-input" placeholder="Ajouter une cause...">
+                        <button class="btn btn-secondary" onclick="addTreeItem('causes')">+</button>
+                    </div>
+                    <div class="item-list" id="causes-list"></div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg" style="color: var(--signal-blue);">🍃 Conséquences (Quels effets produit ce problème ?)</h4>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="effect-input" placeholder="Ajouter une conséquence...">
+                        <button class="btn btn-secondary" onclick="addTreeItem('effects')">+</button>
+                    </div>
+                    <div class="item-list" id="effects-list"></div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-7')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(8); showPage('tool-9')">Suivant: 5 Pourquoi →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 9: Les 5 Pourquoi -->
+            <section id="page-tool-9" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big juger">09</span> Les 5 Pourquoi</h1>
+                    <span class="phase-badge juger">JUGER</span>
+                </div>
+                <p class="tool-description">Technique d'analyse causale : posez 5 fois la question "Pourquoi ?" pour remonter à la cause racine du problème.</p>
+
+                <div class="card mt-lg">
+                    <div class="form-group">
+                        <label class="form-label">❓ Problème initial</label>
+                        <input type="text" class="input-field" placeholder="Quel est le problème de départ ?" data-tool="9" data-field="problem">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">1️⃣ Pourquoi ? (Première réponse)</label>
+                        <input type="text" class="input-field" placeholder="" data-tool="9" data-field="why1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">2️⃣ Pourquoi ? (Creusez...)</label>
+                        <input type="text" class="input-field" placeholder="" data-tool="9" data-field="why2">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">3️⃣ Pourquoi ? (Encore plus profond...)</label>
+                        <input type="text" class="input-field" placeholder="" data-tool="9" data-field="why3">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">4️⃣ Pourquoi ?</label>
+                        <input type="text" class="input-field" placeholder="" data-tool="9" data-field="why4">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">5️⃣ Pourquoi ? (Cause racine)</label>
+                        <input type="text" class="input-field" placeholder="" data-tool="9" data-field="why5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🎯 Cause racine identifiée</label>
+                        <textarea class="input-field" placeholder="Résumez la cause profonde que vous avez identifiée..." data-tool="9" data-field="rootcause"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-8')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(9); showPage('tool-10')">Suivant: Modes d'action →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 10: Modes d'action -->
+            <section id="page-tool-10" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">10</span> Avec / Sans / Contre le pouvoir</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Trois modes d'action : collaborer AVEC le pouvoir, agir SANS lui (alternatives), ou CONTRE lui (contestation). Définissez votre stratégie.</p>
+
+                <div class="card mt-lg">
+                    <div class="domino-grid">
+                        <div class="domino-item">
+                            <h4 style="color: var(--signal-green); margin-bottom: var(--space-md);">🤝 AVEC le pouvoir</h4>
+                            <p class="form-hint mb-lg">Collaboration, négociation, participation aux instances</p>
+                            <textarea class="input-field" placeholder="Quelles actions de collaboration ?" data-tool="10" data-field="with"></textarea>
+                        </div>
+                        <div class="domino-item">
+                            <h4 style="color: var(--signal-blue); margin-bottom: var(--space-md);">🔄 SANS le pouvoir</h4>
+                            <p class="form-hint mb-lg">Alternatives, expérimentations, création de précédents</p>
+                            <textarea class="input-field" placeholder="Quelles alternatives construire ?" data-tool="10" data-field="without"></textarea>
+                        </div>
+                        <div class="domino-item">
+                            <h4 style="color: var(--signal-red); margin-bottom: var(--space-md);">✊ CONTRE le pouvoir</h4>
+                            <p class="form-hint mb-lg">Contestation, mobilisation, pression, désobéissance</p>
+                            <textarea class="input-field" placeholder="Quelles actions de contestation ?" data-tool="10" data-field="against"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">⚖️ Quelle combinaison privilégier ?</label>
+                        <textarea class="input-field" placeholder="Comment articulez-vous ces trois modes ? Lequel est prioritaire et pourquoi ?" data-tool="10" data-field="strategy"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-9')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(10); showPage('tool-11')">Suivant: Objectifs SMART →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 11: Objectifs SMART -->
+            <section id="page-tool-11" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">11</span> Objectifs SMART</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Définissez des objectifs Spécifiques, Mesurables, Atteignables, Réalistes et Temporellement définis.</p>
+
+                <div class="card mt-lg">
+                    <div class="smart-grid">
+                        <div class="smart-item">
+                            <div class="smart-letter">
+                                <span>S</span>
+                                <small>Spécifique</small>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <textarea class="input-field" placeholder="Quoi exactement ? Qui ? Où ?" data-tool="11" data-field="specific"></textarea>
+                            </div>
+                        </div>
+                        <div class="smart-item">
+                            <div class="smart-letter">
+                                <span>M</span>
+                                <small>Mesurable</small>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <textarea class="input-field" placeholder="Comment mesurer le succès ? Quels indicateurs ?" data-tool="11" data-field="measurable"></textarea>
+                            </div>
+                        </div>
+                        <div class="smart-item">
+                            <div class="smart-letter">
+                                <span>A</span>
+                                <small>Atteignable</small>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <textarea class="input-field" placeholder="Avec quelles ressources ? Est-ce réaliste ?" data-tool="11" data-field="achievable"></textarea>
+                            </div>
+                        </div>
+                        <div class="smart-item">
+                            <div class="smart-letter">
+                                <span>R</span>
+                                <small>Relevant</small>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <textarea class="input-field" placeholder="Pourquoi cet objectif ? Lien avec la vision ?" data-tool="11" data-field="relevant"></textarea>
+                            </div>
+                        </div>
+                        <div class="smart-item">
+                            <div class="smart-letter">
+                                <span>T</span>
+                                <small>Temporel</small>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <textarea class="input-field" placeholder="Pour quand ? Quelles échéances intermédiaires ?" data-tool="11" data-field="timebound"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">📋 Objectif SMART reformulé</label>
+                        <textarea class="input-field" placeholder="Synthétisez votre objectif en une phrase complète..." data-tool="11" data-field="objective"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-10')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(11); showPage('tool-12')">Suivant: Cibles et alliances →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 12: Cibles et alliances -->
+            <section id="page-tool-12" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">12</span> Cibles et alliances</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Identifiez précisément vos cibles de plaidoyer et les alliances à construire.</p>
+
+                <div class="card mt-lg">
+                    <h4 class="mb-lg" style="color: var(--signal-red);">🎯 Cibles primaires</h4>
+                    <p class="form-hint mb-lg">Décideurs qui ont le pouvoir de répondre à vos demandes</p>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="target-primary-input" placeholder="Ajouter une cible primaire...">
+                        <button class="btn btn-secondary" onclick="addTargetItem('primary')">+</button>
+                    </div>
+                    <div class="item-list" id="targets-primary-list"></div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg" style="color: var(--signal-amber);">🎯 Cibles secondaires</h4>
+                    <p class="form-hint mb-lg">Personnes qui peuvent influencer les cibles primaires</p>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="target-secondary-input" placeholder="Ajouter une cible secondaire...">
+                        <button class="btn btn-secondary" onclick="addTargetItem('secondary')">+</button>
+                    </div>
+                    <div class="item-list" id="targets-secondary-list"></div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg" style="color: var(--signal-green);">🤝 Alliances potentielles</h4>
+                    <p class="form-hint mb-lg">Organisations, personnes avec qui vous pouvez faire cause commune</p>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="alliance-input" placeholder="Ajouter une alliance potentielle...">
+                        <button class="btn btn-secondary" onclick="addTargetItem('alliances')">+</button>
+                    </div>
+                    <div class="item-list" id="alliances-list"></div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-11')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(12); showPage('tool-13')">Suivant: Construction message →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 13: Construction de message -->
+            <section id="page-tool-13" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">13</span> Construction de message</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Un message de plaidoyer efficace comporte 5 composants : accroche, problème, importance, cible, action demandée.</p>
+
+                <div class="card mt-lg">
+                    <div class="message-builder">
+                        <div class="message-component">
+                            <h4>1. 🎣 Accroche</h4>
+                            <p class="form-hint">Captez l'attention en 1 phrase percutante</p>
+                            <textarea class="input-field mt-lg" placeholder="Votre accroche..." data-tool="13" data-field="hook"></textarea>
+                        </div>
+                        <div class="message-component">
+                            <h4>2. 😰 Le problème</h4>
+                            <p class="form-hint">Décrivez le problème de manière concrète et émotionnelle</p>
+                            <textarea class="input-field mt-lg" placeholder="Le problème est que..." data-tool="13" data-field="problem"></textarea>
+                        </div>
+                        <div class="message-component">
+                            <h4>3. ❗ Pourquoi c'est important</h4>
+                            <p class="form-hint">Enjeux, conséquences, urgence</p>
+                            <textarea class="input-field mt-lg" placeholder="C'est important parce que..." data-tool="13" data-field="importance"></textarea>
+                        </div>
+                        <div class="message-component">
+                            <h4>4. 🎯 À qui vous parlez</h4>
+                            <p class="form-hint">Adaptez le message à votre cible</p>
+                            <textarea class="input-field mt-lg" placeholder="Ce message s'adresse à... qui peut..." data-tool="13" data-field="target"></textarea>
+                        </div>
+                        <div class="message-component">
+                            <h4>5. ✊ L'action demandée</h4>
+                            <p class="form-hint">Que doit faire la cible ? Soyez précis.</p>
+                            <textarea class="input-field mt-lg" placeholder="Nous demandons que..." data-tool="13" data-field="action"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">📝 Message complet assemblé</label>
+                        <textarea class="input-field" style="min-height: 150px;" placeholder="Assemblez votre message final ici..." data-tool="13" data-field="full-message"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-12')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(13); showPage('tool-14')">Suivant: Check-list rencontre →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 14: Check-list rencontre -->
+            <section id="page-tool-14" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">14</span> Check-list rencontre</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Préparez méthodiquement vos rencontres avec les décideurs.</p>
+
+                <div class="card mt-lg">
+                    <h4 class="mb-lg">📋 Avant la rencontre</h4>
+                    <div class="checklist" id="checklist-before">
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="research"> Recherches sur la personne et son institution</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="objectives"> Objectifs clairs de la rencontre définis</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="arguments"> Arguments principaux préparés (max 3)</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="documents"> Documents de support prêts</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="questions"> Questions anticipées et réponses préparées</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="roles"> Rôles distribués si rencontre en groupe</label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg">🤝 Pendant la rencontre</h4>
+                    <div class="checklist" id="checklist-during">
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="intro"> Introduction et contexte posés</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="listen"> Écoute active des positions de l'autre</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="present"> Présentation des arguments</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="ask"> Demande concrète formulée</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="notes"> Prise de notes</label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg">📨 Après la rencontre</h4>
+                    <div class="checklist" id="checklist-after">
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="debrief"> Débriefing en équipe</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="thanks"> Email de remerciement envoyé</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="summary"> Compte-rendu rédigé</label>
+                        <label class="checklist-item"><input type="checkbox" data-tool="14" data-check="followup"> Actions de suivi planifiées</label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">📝 Notes de préparation</label>
+                        <textarea class="input-field" placeholder="Notes libres pour préparer votre rencontre..." data-tool="14" data-field="notes"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-13')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(14); showPage('tool-15')">Suivant: Suivi-évaluation →</button>
+                </div>
+            </section>
+
+            <!-- TOOL 15: Suivi-évaluation -->
+            <section id="page-tool-15" class="page-section">
+                <div class="tool-header">
+                    <h1><span class="tool-number-big agir">15</span> Suivi-évaluation</h1>
+                    <span class="phase-badge agir">AGIR</span>
+                </div>
+                <p class="tool-description">Définissez vos indicateurs de suivi et évaluez l'impact de vos actions.</p>
+
+                <div class="card mt-lg">
+                    <h4 class="mb-lg">📊 Indicateurs de processus</h4>
+                    <p class="form-hint mb-lg">Ce que vous avez fait (outputs)</p>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="indicator-process-input" placeholder="Ex: Nombre de rencontres, de signatures...">
+                        <button class="btn btn-secondary" onclick="addIndicator('process')">+</button>
+                    </div>
+                    <div class="item-list" id="indicators-process-list"></div>
+                </div>
+
+                <div class="card">
+                    <h4 class="mb-lg">🎯 Indicateurs de résultat</h4>
+                    <p class="form-hint mb-lg">Ce qui a changé grâce à vos actions (outcomes)</p>
+                    <div class="list-input-container">
+                        <input type="text" class="input-field" id="indicator-result-input" placeholder="Ex: Vote favorable, nouvelle politique...">
+                        <button class="btn btn-secondary" onclick="addIndicator('result')">+</button>
+                    </div>
+                    <div class="item-list" id="indicators-result-list"></div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">📝 Journal de bord</label>
+                        <textarea class="input-field" style="min-height: 150px;" placeholder="Notez ici les événements significatifs, les succès, les difficultés..." data-tool="15" data-field="journal"></textarea>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">🔄 Leçons apprises et ajustements</label>
+                        <textarea class="input-field" placeholder="Qu'avez-vous appris ? Que feriez-vous différemment ?" data-tool="15" data-field="lessons"></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-nav">
+                    <button class="btn btn-ghost" onclick="showPage('tool-14')">← Précédent</button>
+                    <button class="btn btn-primary" onclick="markComplete(15); showPage('dashboard')">✅ Terminer →</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Projects Modal -->
+    <div class="modal-overlay" id="projects-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📁 Mes projets</h3>
+                <button class="modal-close" onclick="closeProjectsModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="projects-grid" id="projects-list"></div>
+                <button class="btn btn-primary mt-lg" onclick="startNewProject()" style="width: 100%;">+ Nouveau projet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Project Modal -->
+    <div class="modal-overlay" id="new-project-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🚀 Nouveau projet</h3>
+                <button class="modal-close" onclick="closeNewProjectModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nom du projet</label>
+                    <input type="text" class="input-field" id="new-project-name" placeholder="Ex: Campagne climat 2026">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description courte</label>
+                    <textarea class="input-field" id="new-project-desc" placeholder="De quoi s'agit-il ?"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeNewProjectModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="createProject()">Créer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">📤 Exporter le projet</h3>
+                <button class="modal-close" onclick="closeExportModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-grid">
+                    <div class="export-btn" onclick="exportJSON()">
+                        <div class="export-icon">💾</div>
+                        <div class="export-label">JSON</div>
+                    </div>
+                    <div class="export-btn" onclick="exportMarkdown()">
+                        <div class="export-icon">📝</div>
+                        <div class="export-label">Markdown</div>
+                    </div>
+                    <div class="export-btn" onclick="exportPrint()">
+                        <div class="export-icon">🖨️</div>
+                        <div class="export-label">Imprimer</div>
+                    </div>
+                    <div class="export-btn" onclick="exportCSV()">
+                        <div class="export-icon">📊</div>
+                        <div class="export-label">CSV</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="import-file" accept=".json" style="display: none;" onchange="processImport(event)">
+
+    <script>
+        // ══════════════════════════════════════════════════════════════════
+        // DATA MODEL
+        // ══════════════════════════════════════════════════════════════════
+        const APP_VERSION = 1;
+        
+        const DEFAULT_PROJECT = {
+            id: null,
+            name: '',
+            description: '',
+            createdAt: null,
+            updatedAt: null,
+            completed: Array(15).fill(false),
+            tools: {},
+            lists: {
+                actors: [],
+                swot: { strengths: [], weaknesses: [], opportunities: [], threats: [] },
+                causes: [],
+                effects: [],
+                targets: { primary: [], secondary: [], alliances: [] },
+                indicators: { process: [], result: [] }
+            }
+        };
+
+        let appState = {
+            version: APP_VERSION,
+            currentProjectId: null,
+            projects: []
+        };
+
+        let currentProject = null;
+
+        // ══════════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ══════════════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            initNavigation();
+            initAutoSave();
+            renderAll();
+        });
+
+        function loadState() {
+            const saved = localStorage.getItem('plaidoyerState');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                    if (appState.currentProjectId) {
+                        currentProject = appState.projects.find(p => p.id === appState.currentProjectId);
+                    }
+                } catch (e) {
+                    console.error('Error loading state', e);
+                }
+            }
+        }
+
+        function saveState() {
+            if (currentProject) {
+                currentProject.updatedAt = new Date().toISOString();
+                const idx = appState.projects.findIndex(p => p.id === currentProject.id);
+                if (idx >= 0) {
+                    appState.projects[idx] = currentProject;
+                }
+            }
+            localStorage.setItem('plaidoyerState', JSON.stringify(appState));
+        }
+
+        function initNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    if (page) showPage(page);
+                });
+            });
+        }
+
+        function initAutoSave() {
+            // Auto-save on input change
+            document.querySelectorAll('[data-tool][data-field]').forEach(el => {
+                el.addEventListener('input', () => {
+                    if (!currentProject) return;
+                    const tool = el.dataset.tool;
+                    const field = el.dataset.field;
+                    if (!currentProject.tools[tool]) currentProject.tools[tool] = {};
+                    currentProject.tools[tool][field] = el.value;
+                    saveState();
+                });
+            });
+
+            // Checkbox auto-save
+            document.querySelectorAll('[data-tool][data-check]').forEach(el => {
+                el.addEventListener('change', () => {
+                    if (!currentProject) return;
+                    const tool = el.dataset.tool;
+                    const check = el.dataset.check;
+                    if (!currentProject.tools[tool]) currentProject.tools[tool] = {};
+                    if (!currentProject.tools[tool].checks) currentProject.tools[tool].checks = {};
+                    currentProject.tools[tool].checks[check] = el.checked;
+                    saveState();
+                });
+            });
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            const targetPage = document.getElementById(`page-${pageId}`);
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            
+            if (targetPage) targetPage.classList.add('active');
+            if (navItem) navItem.classList.add('active');
+
+            // Load data for this page
+            loadPageData(pageId);
+        }
+
+        function loadPageData(pageId) {
+            if (!currentProject) return;
+
+            // Load text fields
+            document.querySelectorAll(`#page-${pageId} [data-tool][data-field]`).forEach(el => {
+                const tool = el.dataset.tool;
+                const field = el.dataset.field;
+                if (currentProject.tools[tool] && currentProject.tools[tool][field]) {
+                    el.value = currentProject.tools[tool][field];
+                } else {
+                    el.value = '';
+                }
+            });
+
+            // Load checkboxes
+            document.querySelectorAll(`#page-${pageId} [data-tool][data-check]`).forEach(el => {
+                const tool = el.dataset.tool;
+                const check = el.dataset.check;
+                if (currentProject.tools[tool]?.checks?.[check]) {
+                    el.checked = true;
+                    el.closest('.checklist-item')?.classList.add('checked');
+                } else {
+                    el.checked = false;
+                    el.closest('.checklist-item')?.classList.remove('checked');
+                }
+            });
+
+            // Render lists
+            if (pageId === 'tool-4') renderActors();
+            if (pageId === 'tool-6') renderSwot();
+            if (pageId === 'tool-8') renderTree();
+            if (pageId === 'tool-12') renderTargets();
+            if (pageId === 'tool-15') renderIndicators();
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // RENDERING
+        // ══════════════════════════════════════════════════════════════════
+        function renderAll() {
+            renderProgress();
+            renderCurrentProject();
+            updateNavCompletion();
+        }
+
+        function renderProgress() {
+            if (!currentProject) {
+                document.getElementById('voir-count').textContent = '0';
+                document.getElementById('juger-count').textContent = '0';
+                document.getElementById('agir-count').textContent = '0';
+                document.getElementById('voir-progress').style.width = '0%';
+                document.getElementById('juger-progress').style.width = '0%';
+                document.getElementById('agir-progress').style.width = '0%';
+                return;
+            }
+
+            const voir = currentProject.completed.slice(0, 4).filter(Boolean).length;
+            const juger = currentProject.completed.slice(4, 9).filter(Boolean).length;
+            const agir = currentProject.completed.slice(9, 15).filter(Boolean).length;
+
+            document.getElementById('voir-count').textContent = voir;
+            document.getElementById('juger-count').textContent = juger;
+            document.getElementById('agir-count').textContent = agir;
+
+            document.getElementById('voir-progress').style.width = `${(voir / 4) * 100}%`;
+            document.getElementById('juger-progress').style.width = `${(juger / 5) * 100}%`;
+            document.getElementById('agir-progress').style.width = `${(agir / 6) * 100}%`;
+        }
+
+        function renderCurrentProject() {
+            const container = document.getElementById('current-project-info');
+            if (!currentProject) {
+                container.innerHTML = '<p class="text-muted">Aucun projet actif. Créez un nouveau projet pour commencer.</p>';
+                return;
+            }
+
+            const total = currentProject.completed.filter(Boolean).length;
+            container.innerHTML = `
+                <h4 style="margin-bottom: var(--space-sm);">${currentProject.name}</h4>
+                <p class="text-muted">${currentProject.description || 'Pas de description'}</p>
+                <div class="project-progress mt-lg">
+                    <span class="text-muted">Progression: ${total}/15 outils complétés</span>
+                    <div class="project-progress-bar" style="width: 200px; margin-left: var(--space-md);">
+                        <div class="project-progress-fill" style="width: ${(total / 15) * 100}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateNavCompletion() {
+            document.querySelectorAll('.nav-item[data-page^="tool-"]').forEach(item => {
+                const toolNum = parseInt(item.dataset.page.replace('tool-', ''));
+                if (currentProject && currentProject.completed[toolNum - 1]) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // PROJECT MANAGEMENT
+        // ══════════════════════════════════════════════════════════════════
+        function showProjectsModal() {
+            const container = document.getElementById('projects-list');
+            if (appState.projects.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">Aucun projet. Créez votre premier projet !</p>';
+            } else {
+                container.innerHTML = appState.projects.map(p => {
+                    const total = p.completed.filter(Boolean).length;
+                    const isActive = currentProject && currentProject.id === p.id;
+                    return `
+                        <div class="project-card ${isActive ? 'active' : ''}" onclick="selectProject('${p.id}')">
+                            <h3>${p.name} ${isActive ? '✓' : ''}</h3>
+                            <p>${p.description || 'Pas de description'}</p>
+                            <div class="project-meta">
+                                <span>${total}/15 outils</span>
+                                <span>Modifié: ${new Date(p.updatedAt).toLocaleDateString('fr-FR')}</span>
+                            </div>
+                            <div class="project-progress">
+                                <div class="project-progress-bar">
+                                    <div class="project-progress-fill" style="width: ${(total / 15) * 100}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            document.getElementById('projects-modal').classList.add('active');
+        }
+
+        function closeProjectsModal() {
+            document.getElementById('projects-modal').classList.remove('active');
+        }
+
+        function selectProject(id) {
+            currentProject = appState.projects.find(p => p.id === id);
+            appState.currentProjectId = id;
+            saveState();
+            renderAll();
+            closeProjectsModal();
+            showToast(`Projet "${currentProject.name}" chargé`, 'success');
+        }
+
+        function startNewProject() {
+            closeProjectsModal();
+            document.getElementById('new-project-modal').classList.add('active');
+            document.getElementById('new-project-name').value = '';
+            document.getElementById('new-project-desc').value = '';
+            document.getElementById('new-project-name').focus();
+        }
+
+        function closeNewProjectModal() {
+            document.getElementById('new-project-modal').classList.remove('active');
+        }
+
+        function createProject() {
+            const name = document.getElementById('new-project-name').value.trim();
+            const desc = document.getElementById('new-project-desc').value.trim();
+
+            if (!name) {
+                showToast('Veuillez donner un nom au projet', 'error');
+                return;
+            }
+
+            const newProject = JSON.parse(JSON.stringify(DEFAULT_PROJECT));
+            newProject.id = 'proj_' + Date.now();
+            newProject.name = name;
+            newProject.description = desc;
+            newProject.createdAt = new Date().toISOString();
+            newProject.updatedAt = new Date().toISOString();
+
+            appState.projects.push(newProject);
+            currentProject = newProject;
+            appState.currentProjectId = newProject.id;
+            
+            saveState();
+            renderAll();
+            closeNewProjectModal();
+            showToast(`Projet "${name}" créé`, 'success');
+            showPage('tool-1');
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // TOOL SPECIFIC FUNCTIONS
+        // ══════════════════════════════════════════════════════════════════
+        function markComplete(toolNum) {
+            if (!currentProject) return;
+            currentProject.completed[toolNum - 1] = true;
+            saveState();
+            renderAll();
+        }
+
+        // Tool 4: Actors
+        function addActor() {
+            if (!currentProject) { showToast('Créez d\'abord un projet', 'warning'); return; }
+            
+            const name = document.getElementById('actor-name').value.trim();
+            const power = document.getElementById('actor-power').value;
+            const position = document.getElementById('actor-position').value;
+
+            if (!name) return;
+
+            currentProject.lists.actors.push({ name, power, position });
+            saveState();
+            renderActors();
+            document.getElementById('actor-name').value = '';
+        }
+
+        function renderActors() {
+            if (!currentProject) return;
+
+            const quadrants = {
+                'high-favorable': document.getElementById('quadrant-high-favorable'),
+                'high-opposed': document.getElementById('quadrant-high-opposed'),
+                'low-favorable': document.getElementById('quadrant-low-favorable'),
+                'low-opposed': document.getElementById('quadrant-low-opposed')
+            };
+
+            Object.values(quadrants).forEach(q => q.innerHTML = '');
+
+            currentProject.lists.actors.forEach((actor, idx) => {
+                const key = `${actor.power}-${actor.position === 'neutral' ? 'favorable' : actor.position}`;
+                const quadrant = quadrants[key];
+                if (quadrant) {
+                    quadrant.innerHTML += `
+                        <div class="stakeholder-item">
+                            <span>${actor.position === 'neutral' ? '⚪' : actor.position === 'favorable' ? '🟢' : '🔴'}</span>
+                            <span>${actor.name}</span>
+                            <button class="btn btn-ghost btn-sm delete-btn" onclick="removeActor(${idx})">×</button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function removeActor(idx) {
+            currentProject.lists.actors.splice(idx, 1);
+            saveState();
+            renderActors();
+        }
+
+        // Tool 6: SWOT
+        function addSwotItem(category) {
+            if (!currentProject) { showToast('Créez d\'abord un projet', 'warning'); return; }
+            
+            const inputId = `swot-${category.slice(0, -1)}-input`;
+            const input = document.getElementById(inputId) || document.getElementById(`swot-${category.slice(0, -2)}-input`);
+            // Fix input IDs
+            const realInput = document.getElementById(`swot-${category === 'strengths' ? 'strength' : category === 'weaknesses' ? 'weakness' : category === 'opportunities' ? 'opportunity' : 'threat'}-input`);
+            
+            if (!realInput) return;
+            const value = realInput.value.trim();
+            if (!value) return;
+
+            currentProject.lists.swot[category].push(value);
+            saveState();
+            renderSwot();
+            realInput.value = '';
+        }
+
+        function renderSwot() {
+            if (!currentProject) return;
+
+            ['strengths', 'weaknesses', 'opportunities', 'threats'].forEach(cat => {
+                const list = document.getElementById(`swot-${cat}-list`);
+                if (!list) return;
+                list.innerHTML = currentProject.lists.swot[cat].map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeSwotItem('${cat}', ${idx})">×</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function removeSwotItem(category, idx) {
+            currentProject.lists.swot[category].splice(idx, 1);
+            saveState();
+            renderSwot();
+        }
+
+        // Tool 8: Problem Tree
+        function addTreeItem(type) {
+            if (!currentProject) { showToast('Créez d\'abord un projet', 'warning'); return; }
+            
+            const input = document.getElementById(`${type === 'causes' ? 'cause' : 'effect'}-input`);
+            const value = input.value.trim();
+            if (!value) return;
+
+            currentProject.lists[type].push(value);
+            saveState();
+            renderTree();
+            input.value = '';
+        }
+
+        function renderTree() {
+            if (!currentProject) return;
+
+            const causesList = document.getElementById('causes-list');
+            const effectsList = document.getElementById('effects-list');
+
+            if (causesList) {
+                causesList.innerHTML = currentProject.lists.causes.map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>🌱</span>
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeTreeItem('causes', ${idx})">×</span>
+                    </div>
+                `).join('');
+            }
+
+            if (effectsList) {
+                effectsList.innerHTML = currentProject.lists.effects.map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>🍃</span>
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeTreeItem('effects', ${idx})">×</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeTreeItem(type, idx) {
+            currentProject.lists[type].splice(idx, 1);
+            saveState();
+            renderTree();
+        }
+
+        // Tool 12: Targets
+        function addTargetItem(type) {
+            if (!currentProject) { showToast('Créez d\'abord un projet', 'warning'); return; }
+            
+            const input = document.getElementById(`${type === 'alliances' ? 'alliance' : `target-${type}`}-input`);
+            const value = input.value.trim();
+            if (!value) return;
+
+            if (type === 'alliances') {
+                currentProject.lists.targets.alliances.push(value);
+            } else {
+                currentProject.lists.targets[type].push(value);
+            }
+            saveState();
+            renderTargets();
+            input.value = '';
+        }
+
+        function renderTargets() {
+            if (!currentProject) return;
+
+            ['primary', 'secondary'].forEach(type => {
+                const list = document.getElementById(`targets-${type}-list`);
+                if (!list) return;
+                list.innerHTML = currentProject.lists.targets[type].map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>🎯</span>
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeTargetItem('${type}', ${idx})">×</span>
+                    </div>
+                `).join('');
+            });
+
+            const alliancesList = document.getElementById('alliances-list');
+            if (alliancesList) {
+                alliancesList.innerHTML = currentProject.lists.targets.alliances.map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>🤝</span>
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeTargetItem('alliances', ${idx})">×</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeTargetItem(type, idx) {
+            if (type === 'alliances') {
+                currentProject.lists.targets.alliances.splice(idx, 1);
+            } else {
+                currentProject.lists.targets[type].splice(idx, 1);
+            }
+            saveState();
+            renderTargets();
+        }
+
+        // Tool 15: Indicators
+        function addIndicator(type) {
+            if (!currentProject) { showToast('Créez d\'abord un projet', 'warning'); return; }
+            
+            const input = document.getElementById(`indicator-${type}-input`);
+            const value = input.value.trim();
+            if (!value) return;
+
+            currentProject.lists.indicators[type].push(value);
+            saveState();
+            renderIndicators();
+            input.value = '';
+        }
+
+        function renderIndicators() {
+            if (!currentProject) return;
+
+            ['process', 'result'].forEach(type => {
+                const list = document.getElementById(`indicators-${type}-list`);
+                if (!list) return;
+                list.innerHTML = currentProject.lists.indicators[type].map((item, idx) => `
+                    <div class="item-list-item">
+                        <span>📊</span>
+                        <span>${item}</span>
+                        <span class="remove-btn" onclick="removeIndicator('${type}', ${idx})">×</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function removeIndicator(type, idx) {
+            currentProject.lists.indicators[type].splice(idx, 1);
+            saveState();
+            renderIndicators();
+        }
+
+        // Checkbox styling
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    this.closest('.checklist-item').classList.add('checked');
+                } else {
+                    this.closest('.checklist-item').classList.remove('checked');
+                }
+            });
+        });
+
+        // ══════════════════════════════════════════════════════════════════
+        // IMPORT / EXPORT
+        // ══════════════════════════════════════════════════════════════════
+        function showExportModal() {
+            if (!currentProject) {
+                showToast('Aucun projet à exporter', 'warning');
+                return;
+            }
+            document.getElementById('export-modal').classList.add('active');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.remove('active');
+        }
+
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(currentProject, null, 2)], { type: 'application/json' });
+            downloadBlob(blob, `${currentProject.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`);
+            showToast('Export JSON téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function exportMarkdown() {
+            let md = `# ${currentProject.name}\n\n`;
+            md += `*${currentProject.description || ''}*\n\n`;
+            md += `Exporté le ${new Date().toLocaleDateString('fr-FR')}\n\n---\n\n`;
+
+            const tools = [
+                { num: 1, phase: 'VOIR', name: 'Domino du changement' },
+                { num: 2, phase: 'VOIR', name: 'Profil d\'engagement' },
+                { num: 3, phase: 'VOIR', name: 'Fleur de pouvoir' },
+                { num: 4, phase: 'VOIR', name: 'Cartographie des acteurs' },
+                { num: 5, phase: 'JUGER', name: 'Théorie du changement' },
+                { num: 6, phase: 'JUGER', name: 'Analyse SWOT' },
+                { num: 7, phase: 'JUGER', name: 'Analyse PESTEL' },
+                { num: 8, phase: 'JUGER', name: 'Arbre à problèmes' },
+                { num: 9, phase: 'JUGER', name: 'Les 5 Pourquoi' },
+                { num: 10, phase: 'AGIR', name: 'Modes d\'action' },
+                { num: 11, phase: 'AGIR', name: 'Objectifs SMART' },
+                { num: 12, phase: 'AGIR', name: 'Cibles et alliances' },
+                { num: 13, phase: 'AGIR', name: 'Construction de message' },
+                { num: 14, phase: 'AGIR', name: 'Check-list rencontre' },
+                { num: 15, phase: 'AGIR', name: 'Suivi-évaluation' }
+            ];
+
+            tools.forEach(tool => {
+                md += `## ${tool.num}. ${tool.name} [${tool.phase}]\n\n`;
+                const data = currentProject.tools[tool.num];
+                if (data) {
+                    Object.entries(data).forEach(([key, value]) => {
+                        if (key !== 'checks' && value) {
+                            md += `**${key}**: ${value}\n\n`;
+                        }
+                    });
+                }
+                md += '\n';
+            });
+
+            // Lists
+            if (currentProject.lists.actors.length > 0) {
+                md += `## Acteurs identifiés\n\n`;
+                currentProject.lists.actors.forEach(a => {
+                    md += `- ${a.name} (${a.power === 'high' ? 'Fort pouvoir' : 'Faible pouvoir'}, ${a.position})\n`;
+                });
+                md += '\n';
+            }
+
+            const blob = new Blob([md], { type: 'text/markdown' });
+            downloadBlob(blob, `${currentProject.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.md`);
+            showToast('Export Markdown téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function exportCSV() {
+            let csv = 'Outil,Champ,Valeur\n';
+            
+            for (let i = 1; i <= 15; i++) {
+                const data = currentProject.tools[i];
+                if (data) {
+                    Object.entries(data).forEach(([key, value]) => {
+                        if (key !== 'checks' && value) {
+                            csv += `"Outil ${i}","${key}","${value.replace(/"/g, '""')}"\n`;
+                        }
+                    });
+                }
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            downloadBlob(blob, `${currentProject.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`);
+            showToast('Export CSV téléchargé', 'success');
+            closeExportModal();
+        }
+
+        function exportPrint() {
+            closeExportModal();
+            window.print();
+        }
+
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+
+        function processImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    // Check if it's a project or full state
+                    if (imported.id && imported.tools) {
+                        // It's a project
+                        imported.id = 'proj_' + Date.now(); // New ID
+                        appState.projects.push(imported);
+                        currentProject = imported;
+                        appState.currentProjectId = imported.id;
+                    }
+                    
+                    saveState();
+                    renderAll();
+                    showToast('Projet importé avec succès', 'success');
+                } catch (err) {
+                    showToast('Erreur lors de l\'import', 'error');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // UTILITIES
+        // ══════════════════════════════════════════════════════════════════
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

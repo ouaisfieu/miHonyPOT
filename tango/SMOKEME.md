@@ -1,4 +1,6 @@
-Parfait. Je construis tout le package opérationnel.Trouvé. Je crée maintenant le package complet.## ✅ PACKAGE LIVRÉ
+Parfait. Je construis tout le package opérationnel.Trouvé. Je crée maintenant le package complet.
+
+## ✅ PACKAGE LIVRÉ
 
 | # | Document | Usage |
 |---|----------|-------|

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL D'ACCÈS DISTANT V3.4.2 - CIBLE: KORBEN_MAINFRAME</title>
+    <style>
+        /* --- ESTHÉTIQUE CRT RÉALISTE --- */
+        :root {
+            --phosphor-color: #ffb000; /* Ambre rétro, plus sérieux que le vert */
+            --bg-color: #110f0c;
+        }
+        body {
+            margin: 0; background: var(--bg-color); color: var(--phosphor-color);
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh; overflow: hidden; padding: 20px; box-sizing: border-box;
+            text-shadow: 0 0 4px var(--phosphor-color);
+        }
+        #terminal-container {
+            height: 90%; overflow-y: auto; 
+            border: 2px solid var(--phosphor-color);
+            padding: 10px; position: relative;
+        }
+        /* Effet d'écran bombé et scanlines */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.1) 1px, transparent 2px);
+            pointer-events: none; z-index: 99;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+        }
+        /* Flicker de l'écran */
+        @keyframes flicker { 0% {opacity: 0.95;} 50% {opacity: 1;} 100% {opacity: 0.98;} }
+        body { animation: flicker 0.1s infinite; }
+
+        .output-line { margin-bottom: 4px; white-space: pre-wrap; }
+        .system-msg { color: #ff5555; } /* Rouge pour les erreurs/système */
+        .dir-color { color: #ffffff; font-weight: bold; }
+        .file-color { color: var(--phosphor-color); }
+
+        #input-line { display: flex; margin-top: 10px; }
+        #prompt { margin-right: 10px; font-weight: bold; }
+        #cmd-input { 
+            flex-grow: 1; background: transparent; border: none; 
+            color: inherit; font-family: inherit; font-size: inherit; outline: none;
+        }
+
+        /* BARRE DE TRAÇAGE */
+        #trace-container {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            border: 2px solid #ff5555; padding: 5px;
+        }
+        #trace-label { color: #ff5555; font-size: 12px; margin-bottom: 5px; display: flex; justify-content: space-between;}
+        #trace-bar-bg { background: #330000; height: 20px; width: 100%; }
+        #trace-bar-fill { 
+            background: #ff5555; height: 100%; width: 0%; 
+            transition: width 0.5s linear;
+        }
+        .blink-alert { animation: blink 0.5s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div id="terminal-container">
+    <div id="output"></div>
+    <div id="input-line" style="display:none;"> <span id="prompt">guest@korben-gateway:~$</span>
+        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false">
+    </div>
+</div>
+
+<div id="trace-container">
+    <div id="trace-label"><span>TRAÇAGE ACTIF DU SIGNAL</span><span id="trace-pct">0%</span></div>
+    <div id="trace-bar-bg"><div id="trace-bar-fill"></div></div>
+</div>
+
+<script>
+    // --- CONFIGURATION DU SYSTÈME ---
+    const terminal = document.getElementById('terminal-container');
+    const output = document.getElementById('output');
+    const inputLine = document.getElementById('input-line');
+    const cmdInput = document.getElementById('cmd-input');
+    const promptSpan = document.getElementById('prompt');
+    const traceFill = document.getElementById('trace-bar-fill');
+    const tracePct = document.getElementById('trace-pct');
+
+    // État du jeu
+    let currentUser = 'guest';
+    let currentPath = ['home', 'guest'];
+    let traceLevel = 0;
+    let gameActive = false;
+    let rootAccess = false;
+
+    // Système de Fichiers Virtuel (VFS) - LE COEUR DU JEU
+    const vfs = {
+        'home': {
+            type: 'dir',
+            content: {
+                'guest': {
+                    type: 'dir',
+                    content: {
+                        'todo.txt': { type: 'file', content: "A faire :\n1. Nettoyer les logs d'accès (URGENT).\n2. Le nouveau port d'admin est dans le dossier de config, ne pas oublier.\n3. Acheter du lait." },
+                        'memo_securite.msg': { type: 'file', content: "DE: Sysadmin\nPOUR: Guest\nRappel : Suite à l'incident 'Cinquième Élément', le mot de passe root a été changé. Indice pour les admins : 'Le nom de la diva'." }
+                    }
+                }
+            }
+        },
+        'etc': {
+            type: 'dir',
+            content: {
+                'korben_config.cfg': { type: 'file', restricted: true, content: "ACCESS DENIED. Root privileges required." },
+                'network_map.txt': { type: 'file', content: "Serveur Principal: 10.0.0.1\nPortail Admin (Nouveau Port): Voir /var/log/syslog" }
+            }
+        },
+        'var': {
+            type: 'dir',
+            content: {
+                'log': {
+                    type: 'dir',
+                    content: {
+                        'syslog': { type: 'file', content: "[INFO] Service démarré.\n[WARN] Tentative de connexion échouée sur port 22.\n[INFO] Admin 'korben' connecté avec succès sur le port 5555.\n[INFO] Firewall actif." }
+                    }
+                }
+            }
+        },
+        'root': { type: 'dir', restricted: true, content: {} } // Zone inaccessible au départ
+    };
+
+    // --- MOTEUR DU TERMINAL ---
+
+    function print(text, type = '') {
+        const line = document.createElement('div');
+        line.className = 'output-line ' + type;
+        line.textContent = text;
+        output.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    async function bootSequence() {
+        print("INITIALISING KORBEN_GATEWAY KERNEL v4.19...", "system-msg");
+        await new Promise(r => setTimeout(r, 500));
+        print("Loading drivers... OK");
+        await new Promise(r => setTimeout(r, 500));
+        print("Mounting virtual filesystem... OK");
+        await new Promise(r => setTimeout(r, 800));
+        print("Establishing secure tunnel... WARNING: TRACE DETECTED.");
+        print("--- BIENVENUE SUR LE RÉSEAU PRIVÉ KORBEN/CODEPEN ---", "dir-color");
+        print("Connecté en tant qu'invité. Tapez 'help' pour les commandes.");
+        print("ATTENTION : Le contre-espionnage est actif. Agissez vite.", "system-msg");
+        inputLine.style.display = 'flex';
+        cmdInput.focus();
+        gameActive = true;
+        startTrace();
+    }
+
+    // Gestion du Traceur
+    function startTrace() {
+        const traceInterval = setInterval(() => {
+            if(!gameActive) clearInterval(traceInterval);
+            traceLevel += 0.2; // Augmentation passive lente
+            updateTraceUI();
+        }, 100);
+    }
+
+    function updateTraceUI() {
+        traceFill.style.width = traceLevel + '%';
+        tracePct.textContent = Math.floor(traceLevel) + '%';
+        if(traceLevel > 80) traceFill.classList.add('blink-alert');
+        if(traceLevel >= 100) gameOver();
+    }
+
+    function gameOver() {
+        gameActive = false;
+        inputLine.style.display = 'none';
+        document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-size:4em;" class="blink-alert">SIGNAL LOCALISÉ.<br>CONNEXION TERMINÉE.</h1>';
+    }
+
+    // --- PARSEUR DE COMMANDES ---
+
+    cmdInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && gameActive) {
+            const cmdRaw = cmdInput.value.trim();
+            if(cmdRaw === '') return;
+            print(`${promptSpan.textContent} ${cmdRaw}`);
+            cmdInput.value = '';
+            
+            // Pénalité de traçage par commande
+            traceLevel += 2; 
+            updateTraceUI();
+
+            const args = cmdRaw.split(' ');
+            const cmd = args[0].toLowerCase();
+            processCommand(cmd, args.slice(1));
+        }
+    });
+
+    function resolvePath(pathArray) {
+        let current = vfs;
+        for (let segment of pathArray) {
+            if (current.content && current.content[segment]) {
+                current = current.content[segment];
+            } else {
+                return null;
+            }
+        }
+        return current;
+    }
+
+    function processCommand(cmd, args) {
+        const currentDirObj = resolvePath(currentPath);
+
+        switch(cmd) {
+            case 'help':
+                print("Commandes disponibles :");
+                print("- ls : Lister le contenu du dossier courant");
+                print("- cd [dossier] : Changer de dossier (.. pour remonter)");
+                print("- cat [fichier] : Lire le contenu d'un fichier");
+                print("- whoami : Afficher l'utilisateur actuel");
+                print("- login [user] [port] : Tenter une élévation de privilèges");
+                break;
+
+            case 'ls':
+                if(currentDirObj.restricted && currentUser !== 'root') {
+                    print("Erreur : Accès refusé.", "system-msg"); return;
+                }
+                const contents = Object.keys(currentDirObj.content);
+                contents.forEach(item => {
+                    const type = currentDirObj.content[item].type;
+                    print(item + (type === 'dir' ? '/' : ''), type === 'dir' ? 'dir-color' : 'file-color');
+                });
+                if(contents.length === 0) print("(dossier vide)");
+                break;
+
+            case 'cat':
+                if(args.length === 0) { print("Usage: cat [nom_du_fichier]"); return; }
+                const targetFile = currentDirObj.content[args[0]];
+                if(targetFile && targetFile.type === 'file') {
+                    if(targetFile.restricted && currentUser !== 'root') {
+                        print("Erreur : Fichier protégé. Accès Root requis.", "system-msg");
+                    } else {
+                        print("--- DÉBUT DU FICHIER ---");
+                        print(targetFile.content);
+                        print("--- FIN DU FICHIER ---");
+                    }
+                } else {
+                    print(`Erreur : Fichier '${args[0]}' introuvable.`);
+                }
+                break;
+
+            case 'cd':
+                if(args.length === 0 || args[0] === '~') {
+                    currentPath = ['home', currentUser];
+                } else if (args[0] === '..') {
+                    if (currentPath.length > 0) currentPath.pop();
+                } else {
+                    const targetDir = currentDirObj.content[args[0]];
+                    if(targetDir && targetDir.type === 'dir') {
+                        currentPath.push(args[0]);
+                    } else {
+                        print(`Erreur : Dossier '${args[0]}' introuvable.`);
+                    }
+                }
+                // Mise à jour du prompt
+                let pathStr = currentPath.length === 0 ? '/' : '/' + currentPath.join('/');
+                promptSpan.textContent = `${currentUser}@korben-gateway:${pathStr}$`;
+                break;
+            
+            case 'whoami':
+                print(currentUser);
+                break;
+
+            case 'login':
+                 // C'est ici que se joue la victoire
+                if(args.length < 2) { print("Usage: login [user] [password/port]"); return;}
+                if(args[0] === 'root' && args[1] === 'plavalaguna') { // La réponse à l'énigme
+                    currentUser = 'root';
+                    rootAccess = true;
+                    traceLevel = 0; // Le traçage s'arrête quand on est root
+                    print("ACCÈS ROOT AUTORISÉ. Traçage désactivé.", "dir-color");
+                    print("Bienvenue, Korben. Le système est à vous.");
+                    promptSpan.textContent = `root@korben-mainframe:/#`;
+                    promptSpan.style.color = '#ff5555';
+                    // On débloque les dossiers
+                    vfs['root'].restricted = false;
+                    vfs['etc'].content['korben_config.cfg'].restricted = false;
+                    vfs['etc'].content['korben_config.cfg'].content = "SUCCESS !! Vous avez réussi l'ARG. Le code source de CodePen est... 42.";
+                } else {
+                    print("ÉCHEC D'AUTHENTIFICATION. ALERTE DE SÉCURITÉ.", "system-msg");
+                    traceLevel += 15; // Grosse pénalité
+                }
+                break;
+                
+            // Easter egg pour faire plaisir au user
+            case 'nuke':
+                if(rootAccess) {
+                     document.body.innerHTML = '<h1 style="color:var(--phosphor-color);text-align:center;margin-top:20%;">INITIALISATION DU PROTOCOLE DE DESTRUCTION...<br>BYE BYE CODEPEN.</h1>';
+                } else {
+                    print("Erreur : Vous n'êtes pas root. Commande refusée.", "system-msg");
+                }
+                break;
+
+            default:
+                print(`Commande '${cmd}' inconnue. Tapez 'help'.`);
+        }
+    }
+
+    // Lancement
+    bootSequence();
+    cmdInput.focus();
+    document.addEventListener('click', () => cmdInput.focus());
+
+</script>
+</body>
+</html>

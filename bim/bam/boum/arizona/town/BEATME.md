@@ -1,4 +1,6 @@
-Je vais maintenant créer une **version de démonstration** avec le dataset Arizona pré-chargé pour tester toute la puissance de l'application :Je vais créer la **version de démonstration complète** avec le dataset Arizona pré-chargé :L'injection a fonctionné. Maintenant, présentons les fichiers :## ✅ Livraison complète — Plaidoyer Citoyen exploité à fond
+Je vais maintenant créer une **version de démonstration** avec le dataset Arizona pré-chargé pour tester toute la puissance de l'application :Je vais créer la **version de démonstration complète** avec le dataset Arizona pré-chargé :L'injection a fonctionné. Maintenant, présentons les fichiers :
+
+## ✅ Livraison complète — Plaidoyer Citoyen exploité à fond
 
 ### 📦 Fichiers générés
 

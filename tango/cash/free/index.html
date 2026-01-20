@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCPLC — Outils citoyens open source</title>
+    <meta name="description" content="Outils numériques sobres et open source pour le plaidoyer citoyen et l'éducation permanente. Gratuit. Low-tech. Hors-ligne.">
+    <meta name="keywords" content="plaidoyer citoyen, éducation permanente, open source, low-tech, numérique sobre, participation citoyenne">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="CCPLC — Outils citoyens open source">
+    <meta property="og:description" content="Outils numériques sobres pour le plaidoyer citoyen. Gratuit. Low-tech. Hors-ligne.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ccplc.eu">
+    <meta property="og:image" content="https://ccplc.eu/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --dark: #141414;
+            --darker: #1a1a1a;
+            --gray-900: #1f1f1f;
+            --gray-800: #2a2a2a;
+            --gray-700: #3a3a3a;
+            --gray-600: #4a4a4a;
+            --gray-500: #6a6a6a;
+            --gray-400: #8a8a8a;
+            --gray-300: #aaa;
+            --gray-200: #ccc;
+            --gray-100: #eee;
+            --white: #fff;
+            
+            --accent: #00ff88;
+            --accent-dim: rgba(0, 255, 136, 0.1);
+            --accent-glow: rgba(0, 255, 136, 0.3);
+            --secondary: #00d4ff;
+            --warning: #ffaa00;
+            --danger: #ff4466;
+            
+            --font-main: 'Space Grotesk', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+            
+            --max-width: 1200px;
+        }
+        
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--black);
+            color: var(--gray-200);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        ::selection {
+            background: var(--accent);
+            color: var(--black);
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           LAYOUT
+           ═══════════════════════════════════════════════════════════════ */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+        
+        section {
+            padding: var(--space-4xl) 0;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════════════════════ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-800);
+        }
+        
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .nav-brand:hover {
+            text-decoration: none;
+        }
+        
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .nav-link {
+            color: var(--gray-400);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .nav-cta {
+            background: var(--accent);
+            color: var(--black);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .nav-cta:hover {
+            background: var(--white);
+            text-decoration: none;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           HERO
+           ═══════════════════════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--gray-900);
+            border: 1px solid var(--gray-700);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            color: var(--gray-300);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.03em;
+        }
+        
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto var(--space-2xl);
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--black);
+        }
+        
+        .btn-primary:hover {
+            background: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--accent-glow);
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--gray-600);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-800);
+            border-color: var(--gray-500);
+            text-decoration: none;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-3xl);
+            margin-top: var(--space-4xl);
+            padding-top: var(--space-2xl);
+            border-top: 1px solid var(--gray-800);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: var(--space-xs);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           FEATURES
+           ═══════════════════════════════════════════════════════════════ */
+        .features {
+            background: var(--dark);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+        
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: var(--space-md);
+        }
+        
+        .section-subtitle {
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .feature-card {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-dim);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .feature-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           HOW IT WORKS
+           ═══════════════════════════════════════════════════════════════ */
+        .how-it-works {
+            background: var(--black);
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            counter-reset: step;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: var(--space-3xl);
+        }
+        
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+        
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .step-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           TOOLS
+           ═══════════════════════════════════════════════════════════════ */
+        .tools {
+            background: var(--dark);
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .tool-card {
+            background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+            border: 1px solid var(--gray-700);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+        
+        .tool-badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-md);
+        }
+        
+        .tool-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .tool-desc {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        
+        .tool-feature {
+            font-size: 0.75rem;
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--gray-800);
+            border-radius: var(--radius-sm);
+            color: var(--gray-300);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           PARTNERS CTA
+           ═══════════════════════════════════════════════════════════════ */
+        .partners-cta {
+            background: linear-gradient(135deg, var(--gray-900), var(--dark));
+            border-top: 1px solid var(--gray-800);
+            border-bottom: 1px solid var(--gray-800);
+        }
+        
+        .partners-cta-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+        
+        .partners-cta-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: var(--space-md);
+        }
+        
+        .partners-cta-content p {
+            color: var(--gray-400);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .partners-benefits {
+            display: grid;
+            gap: var(--space-md);
+        }
+        
+        .benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
+        
+        .benefit-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        
+        .benefit-text {
+            color: var(--gray-300);
+        }
+        
+        .benefit-text strong {
+            color: var(--white);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           FAQ
+           ═══════════════════════════════════════════════════════════════ */
+        .faq {
+            background: var(--black);
+        }
+        
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-xl);
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--gray-800);
+            padding-bottom: var(--space-lg);
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .faq-answer {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           CONTACT
+           ═══════════════════════════════════════════════════════════════ */
+        .contact {
+            background: var(--dark);
+        }
+        
+        .contact-inner {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-email {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--accent);
+            display: block;
+            margin: var(--space-xl) 0;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .contact-link {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+        
+        .contact-link:hover {
+            color: var(--white);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            background: var(--black);
+            border-top: 1px solid var(--gray-800);
+            padding: var(--space-2xl) 0;
+        }
+        
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--gray-400);
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+        }
+        
+        .footer-link {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+        
+        .footer-link:hover {
+            color: var(--gray-300);
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: var(--space-lg);
+            }
+            
+            .partners-cta-inner {
+                grid-template-columns: 1fr;
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════
+           UTILS
+           ═══════════════════════════════════════════════════════════════ */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-inner">
+            <a href="#" class="nav-brand">
+                <span class="nav-logo">⚡</span>
+                CCPLC
+            </a>
+            <div class="nav-links">
+                <a href="#outils" class="nav-link">Outils</a>
+                <a href="#comment" class="nav-link">Comment ça marche</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#contact" class="nav-cta">Devenir partenaire</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Open source · Low-tech · Hors-ligne
+            </div>
+            <h1 class="hero-title">
+                Outils citoyens<br>
+                <span class="highlight">pour ceux qui agissent</span>
+            </h1>
+            <p class="hero-subtitle">
+                Plaidoyer citoyen, participation démocratique, éducation populaire. 
+                Des outils numériques sobres, gratuits, qui marchent même sans internet.
+            </p>
+            <div class="hero-ctas">
+                <a href="#outils" class="btn btn-primary">
+                    🚀 Découvrir les outils
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    🤝 Devenir partenaire
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Outils méthodologiques</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Gratuit et open source</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">-90%</div>
+                    <div class="stat-label">Consommation data</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="pourquoi">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Pourquoi nous</div>
+                <h2 class="section-title">Le numérique sobre au service du changement</h2>
+                <p class="section-subtitle">
+                    Parce que la technologie ne devrait jamais être un obstacle à l'action citoyenne.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📴</div>
+                    <h3 class="feature-title">Fonctionne hors-ligne</h3>
+                    <p class="feature-desc">
+                        Pas de wifi ? Pas de problème. Nos outils marchent sur votre appareil, 
+                        même sans connexion. Vos données restent chez vous.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3 class="feature-title">Numérique sobre</h3>
+                    <p class="feature-desc">
+                        90% de bande passante en moins. Compatible avec les vieux ordinateurs. 
+                        Parce que la transition écologique passe aussi par là.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔓</div>
+                    <h3 class="feature-title">Open source</h3>
+                    <p class="feature-desc">
+                        Code ouvert, licence libre. Vous pouvez utiliser, modifier, redistribuer. 
+                        Pas de vendor lock-in, pas de surprises.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Méthodologie éprouvée</h3>
+                    <p class="feature-desc">
+                        Basé sur 15 outils de Justice et Paix, structurés en VOIR-JUGER-AGIR. 
+                        Testé par des associations depuis des années.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🇪🇺</div>
+                    <h3 class="feature-title">Aligné avec l'EP</h3>
+                    <p class="feature-desc">
+                        Conforme au décret Éducation Permanente 2003/2021. 
+                        Valorisable sur les 4 axes. Pensé pour le secteur associatif belge.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3 class="feature-title">Communauté</h3>
+                    <p class="feature-desc">
+                        Vous n'êtes pas seul·e. Rejoignez un réseau d'associations qui partagent 
+                        les mêmes valeurs et mutualisent les efforts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works" id="comment">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Comment ça marche</div>
+                <h2 class="section-title">Simple. Gratuit. Maintenant.</h2>
+                <p class="section-subtitle">
+                    Pas de compte à créer, pas de logiciel à installer, pas de carte bleue.
+                </p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <h3 class="step-title">Téléchargez</h3>
+                    <p class="step-desc">
+                        Un simple fichier HTML. Ouvrez-le dans votre navigateur. C'est tout.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3 class="step-title">Travaillez</h3>
+                    <p class="step-desc">
+                        Remplissez les outils à votre rythme. Tout est sauvegardé localement, automatiquement.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3 class="step-title">Exportez</h3>
+                    <p class="step-desc">
+                        JSON, Markdown, CSV, PDF. Partagez avec votre équipe, intégrez dans vos dossiers.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3 class="step-title">Contribuez</h3>
+                    <p class="step-desc">
+                        Si c'est utile, contribuez librement. Temps, idées, retours, ou soutien financier.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="tools" id="outils">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Nos outils</div>
+                <h2 class="section-title">Tout ce qu'il faut pour agir</h2>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <span class="tool-badge">DISPONIBLE</span>
+                    <h3 class="tool-title">Plaidoyer Citoyen</h3>
+                    <p class="tool-desc">
+                        15 outils méthodologiques VOIR-JUGER-AGIR : Domino du changement, 
+                        Cartographie des acteurs, SWOT, PESTEL, Construction de message...
+                    </p>
+                    <div class="tool-features">
+                        <span class="tool-feature">Multi-projets</span>
+                        <span class="tool-feature">Export PDF/MD</span>
+                        <span class="tool-feature">Hors-ligne</span>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <span class="tool-badge">DISPONIBLE</span>
+                    <h3 class="tool-title">Monitoring Financements</h3>
+                    <p class="tool-desc">
+                        Suivi des opportunités de financement européennes, fédérales et régionales. 
+                        Calendrier des deadlines, contacts, budget prévisionnel.
+                    </p>
+                    <div class="tool-features">
+                        <span class="tool-feature">50+ opportunités</span>
+                        <span class="tool-feature">Alertes deadline</span>
+                        <span class="tool-feature">Anti-rapport EP</span>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <span class="tool-badge">BIENTÔT</span>
+                    <h3 class="tool-title">Veille & Intelligence</h3>
+                    <p class="tool-desc">
+                        Agrégateur de flux RSS, bookmarks intelligents, notes et annotations 
+                        pour rester informé·e sur vos thématiques.
+                    </p>
+                    <div class="tool-features">
+                        <span class="tool-feature">Flux RSS</span>
+                        <span class="tool-feature">Bookmarks</span>
+                        <span class="tool-feature">Notes</span>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <span class="tool-badge">BIENTÔT</span>
+                    <h3 class="tool-title">Base Documentaire</h3>
+                    <p class="tool-desc">
+                        Guides méthodologiques, manuels de formation, kits citoyens. 
+                        Tout le savoir-faire de l'éducation permanente en accès libre.
+                    </p>
+                    <div class="tool-features">
+                        <span class="tool-feature">PDF indexés</span>
+                        <span class="tool-feature">Recherche</span>
+                        <span class="tool-feature">Tags</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners CTA -->
+    <section class="partners-cta" id="partenaires">
+        <div class="container partners-cta-inner">
+            <div class="partners-cta-content">
+                <h2>Vous êtes une ASBL ?</h2>
+                <p>
+                    On n'a pas encore de structure juridique. Vous si. 
+                    Candidatez aux financements avec nos outils, on vous accompagne.
+                </p>
+                <a href="#contact" class="btn btn-primary">
+                    Devenir partenaire →
+                </a>
+            </div>
+            <div class="partners-benefits">
+                <div class="benefit">
+                    <span class="benefit-icon">✓</span>
+                    <span class="benefit-text">
+                        <strong>Outils gratuits</strong> — Valeur estimée 10.000€+, pour vous : 0€
+                    </span>
+                </div>
+                <div class="benefit">
+                    <span class="benefit-icon">✓</span>
+                    <span class="benefit-text">
+                        <strong>Templates de dossiers</strong> — Erasmus+, CERV, FRB, COCOF prêts à adapter
+                    </span>
+                </div>
+                <div class="benefit">
+                    <span class="benefit-icon">✓</span>
+                    <span class="benefit-text">
+                        <strong>Accompagnement</strong> — Relecture, conseils, mise en relation
+                    </span>
+                </div>
+                <div class="benefit">
+                    <span class="benefit-icon">✓</span>
+                    <span class="benefit-text">
+                        <strong>Contribution libre</strong> — Si financé, vous donnez ce que vous voulez
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">FAQ</div>
+                <h2 class="section-title">Questions fréquentes</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3 class="faq-question">C'est vraiment gratuit ?</h3>
+                    <p class="faq-answer">
+                        Oui. Les outils sont open source (AGPL-3.0). Vous pouvez les utiliser, modifier, 
+                        redistribuer. Aucune contrepartie obligatoire.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Et le « pourliche » ?</h3>
+                    <p class="faq-answer">
+                        Si vous utilisez nos outils pour décrocher un financement, vous êtes invité·e à 
+                        contribuer librement (5% suggéré, pas obligatoire). Ça nous aide à créer une ASBL.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Pourquoi vous n'avez pas d'ASBL ?</h3>
+                    <p class="faq-answer">
+                        Ça coûte du temps et de l'argent. On préfère d'abord prouver que ça marche, 
+                        puis créer la structure quand on aura les moyens de le faire correctement.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Mes données sont sécurisées ?</h3>
+                    <p class="faq-answer">
+                        Vos données restent sur votre appareil (localStorage). Rien n'est envoyé à 
+                        aucun serveur. Vous êtes le/la seul·e à y avoir accès.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Je peux modifier les outils ?</h3>
+                    <p class="faq-answer">
+                        Absolument. Licence AGPL : vous pouvez adapter le code à vos besoins. 
+                        Seule obligation : partager vos modifications sous la même licence.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Comment je vous contacte ?</h3>
+                    <p class="faq-answer">
+                        Email pour commencer. On répond sous 48h. Si ça matche, on organise un appel.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <div class="container contact-inner">
+            <div class="section-label">Contact</div>
+            <h2 class="section-title">Envie de collaborer ?</h2>
+            <p class="section-subtitle">
+                Association, collectif, citoyen·ne engagé·e — écrivez-nous.
+            </p>
+            <a href="mailto:hello@ccplc.eu" class="contact-email">
+                hello@ccplc.eu
+            </a>
+            <div class="contact-links">
+                <a href="https://github.com/ccplc" class="contact-link" target="_blank">GitHub</a>
+                <a href="https://nyxo.brussels" class="contact-link" target="_blank">Nyxo</a>
+                <a href="#" class="contact-link">Mastodon</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <span>⚡</span>
+                <span>CCPLC — Collectif Woke the F***</span>
+            </div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Licence AGPL-3.0</a>
+                <a href="#" class="footer-link">CC BY-SA 4.0</a>
+                <span class="footer-link">Bruxelles, Belgique</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

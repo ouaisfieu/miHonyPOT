@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatoire Social 2026 : Impact des Réformes Fédérales</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'obs-bg': '#F7F6F2', // Warm neutral background (Paper)
+                        'obs-primary': '#2C3E50', // Dark Blue/Grey (Institutional)
+                        'obs-accent': '#C0392B', // Muted Red (Alert/Deficit)
+                        'obs-success': '#27AE60', // Green (Solution)
+                        'obs-secondary': '#7F8C8D', // Grey text
+                        'obs-card': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F7F6F2;
+            color: #2C3E50;
+        }
+        
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Parent controls width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        /* Specific heights for different viewports */
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #C0392B;
+            color: #2C3E50;
+            font-weight: 700;
+        }
+        
+        .tab-inactive {
+            border-bottom: 3px solid transparent;
+            color: #7F8C8D;
+        }
+        .tab-inactive:hover {
+            color: #C0392B;
+        }
+    </style>
+
+    <!-- Chosen Palette: Warm Neutral / Institutional. 
+         Background: #F7F6F2 (Calm Paper). 
+         Text/Primary: #2C3E50 (Bureaucratic Ink). 
+         Accent: #C0392B (Alert/Red Tape).
+         This palette reflects the serious, analytical nature of the report while maintaining readability.
+    -->
+
+    <!-- Application Structure Plan: 
+         Structure: Dashboard-style SPA with Tabbed Navigation.
+         Rationale: The report contains distinct but interconnected dimensions (Financial, Human, Political). 
+         A tabbed structure allows users to focus on one dimension at a time without overwhelming scrolling.
+         
+         1. "Synthèse & Indicateurs": High-level KPIs to set the context (Poverty line vs RIS).
+         2. "Mécanisme du Transfert": The core interactive educational piece. A "simulator" lets users act as policymakers 
+            to understand the "glissement" (slide) from federal unemployment to local social aid.
+         3. "Radiographie BIM": Deep dive into demographics and health access (BIM status).
+         4. "Acteurs & Solutions": Qualitative analysis of the political landscape.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Comparison (Line Chart): To show the divergence of Federal vs Local spending over time. Goal: Highlight the financial shift.
+         2. Distribution (Doughnut): To show the composition of new CPAS beneficiaries. Goal: Show it's not just "unemployed" but also students and workers.
+         3. Simulation (Interactive Bar): Users toggle "Reform Severity". Goal: Demonstrate cause-and-effect of federal decisions on local budgets.
+         4. Multi-variable (Radar): To compare the "Social Safety Net Strength" across different profiles.
+         
+         NO SVG/Mermaid used. All viz via Chart.js/Plotly or HTML/Tailwind.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🏛️</span>
+                    <div>
+                        <h1 class="text-xl font-bold text-obs-primary tracking-tight">Observatoire Social 2026</h1>
+                        <p class="text-xs text-obs-secondary hidden sm:block">Impact des Réformes Fédérales ("Arizona") sur la Précarité</p>
+                    </div>
+                </div>
+                <!-- Mobile Menu Button (Hidden logic for simplicity, relying on responsive flex) -->
+            </div>
+            
+            <!-- Tab Navigation -->
+            <nav class="flex space-x-8 overflow-x-auto pb-1" id="nav-container">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-active whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors">
+                    Synthèse & Indicateurs
+                </button>
+                <button onclick="switchTab('transfert')" id="tab-transfert" class="tab-inactive whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors">
+                    Le Mécanisme de Transfert
+                </button>
+                <button onclick="switchTab('bim')" id="tab-bim" class="tab-inactive whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors">
+                    Statut BIM & Démographie
+                </button>
+                <button onclick="switchTab('solutions')" id="tab-solutions" class="tab-inactive whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors">
+                    Débats & Solutions
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- SECTION 1: DASHBOARD (SYNTHESIS) -->
+        <div id="view-dashboard" class="space-y-8 animate-fade-in">
+            
+            <!-- Intro Text -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-serif font-bold text-obs-primary mb-4">État des Lieux 2025-2026</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Ce rapport analyse les conséquences des réformes fédérales issues de la coalition actuelle sur le tissu social belge. 
+                    Le contexte budgétaire strict et les politiques d'activation ("Jobs Deal 2.0") ont accéléré le phénomène de déversement 
+                    des charges vers les pouvoirs locaux (CPAS). <br><br>
+                    <strong>Le constat central :</strong> Alors que le chômage fédéral diminue statistiquement, le nombre de bénéficiaires du Revenu d'Intégration Sociale (RIS) explose, créant une charge financière insoutenable pour les communes.
+                </p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-obs-accent">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Seuil de Pauvreté (Isolé)</p>
+                            <h3 class="text-3xl font-bold text-obs-primary mt-1">1.450 €</h3>
+                        </div>
+                        <span class="text-xl">📉</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4">Risque de pauvreté pour 18.2% de la population belge.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-obs-primary">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Montant RIS (Isolé)</p>
+                            <h3 class="text-3xl font-bold text-obs-primary mt-1">1.295 €</h3>
+                        </div>
+                        <span class="text-xl">⚖️</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4">Écart de <span class="text-obs-accent font-bold">-155 €</span> sous le seuil de pauvreté.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-obs-success">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Nouveaux Dossiers CPAS</p>
+                            <h3 class="text-3xl font-bold text-obs-primary mt-1">+12.4%</h3>
+                        </div>
+                        <span class="text-xl">📈</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4">Projection 2026 suite à la limitation du chômage.</p>
+                </div>
+            </div>
+
+            <!-- Main Trend Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-lg font-bold text-obs-primary mb-2">L'Effet Ciseaux : Fédéral vs Local (2020-2026)</h3>
+                    <p class="text-sm text-gray-500 mb-4">Dépenses indexées (Base 100 = 2020). Les économies fédérales (ONEM) sont compensées par une hausse des dépenses locales (RIS).</p>
+                    <div class="chart-container">
+                        <canvas id="scissorsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Context Side Panel -->
+                <div class="bg-obs-bg p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-bold text-obs-primary mb-4">Points Clés de la Réforme</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-obs-accent mr-2 font-bold">•</span>
+                            <p class="text-sm text-gray-700"><strong>Limitation du Chômage :</strong> Fin des allocations après 24 mois pour les moins de 55 ans.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-obs-accent mr-2 font-bold">•</span>
+                            <p class="text-sm text-gray-700"><strong>Sanctions "Activation" :</strong> Exclusion plus rapide des demandeurs d'emploi jugés non-actifs.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-obs-accent mr-2 font-bold">•</span>
+                            <p class="text-sm text-gray-700"><strong>Conséquence :</strong> Ces exclus se tournent vers le CPAS, dernier filet de sécurité.</p>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t border-gray-300">
+                         <p class="text-xs text-gray-500 italic">Source : Estimations basées sur les notes de formation gouvernementale et rapports SPP Intégration Sociale.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: TRANSFER MECHANISM (INTERACTIVE) -->
+        <div id="view-transfert" class="hidden space-y-8 animate-fade-in">
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-serif font-bold text-obs-primary mb-2">Simulateur de "Glissement"</h2>
+                <p class="text-gray-700 mb-6">
+                    Ce module interactif démontre le mécanisme des vases communicants. Ajustez la sévérité de la réforme fédérale pour observer l'impact budgétaire sur les communes belges.
+                    <br><em class="text-sm text-gray-500">Hypothèse : 1 chômeur exclu = 0.8 bénéficiaire RIS (certains disparaissent des radars).</em>
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Controls -->
+                    <div class="lg:col-span-4 space-y-6 bg-gray-50 p-6 rounded-lg">
+                        <div>
+                            <label for="reformRange" class="block text-sm font-medium text-gray-700 mb-2">
+                                Limitation du Chômage (Mois)
+                            </label>
+                            <input type="range" id="reformRange" min="12" max="60" value="24" step="12" 
+                                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-obs-accent">
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>Stricte (1 an)</span>
+                                <span class="font-bold text-obs-primary" id="reformValueDisplay">2 ans (Actuel)</span>
+                                <span>Souple (5 ans)</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white border border-gray-200 rounded">
+                            <h4 class="text-sm font-bold text-gray-900 mb-2">Impact Estimé (2026)</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Exclus ONEM :</span>
+                                    <span id="exclusCount" class="font-mono font-bold text-red-600">25,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Nouveaux RIS :</span>
+                                    <span id="newRisCount" class="font-mono font-bold text-obs-primary">20,000</span>
+                                </div>
+                                <div class="border-t pt-2 mt-2 flex justify-between">
+                                    <span class="text-sm font-bold text-gray-800">Surcoût Local :</span>
+                                    <span id="costImpact" class="font-mono font-bold text-obs-accent">+ 240 M€</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500 mt-4">
+                            ℹ️ Le coût moyen d'un RIS est partagé entre l'État et la Commune, mais les frais de personnel et d'accompagnement sont majoritairement à charge de la Commune.
+                        </div>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div class="lg:col-span-8">
+                        <div class="chart-container">
+                            <canvas id="impactChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories of Transfer -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-lg font-bold text-obs-primary mb-4">Qui sont les nouveaux bénéficiaires ?</h3>
+                    <p class="text-sm text-gray-600 mb-4">Répartition des flux entrants au CPAS en 2025.</p>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="demographicDoughnut"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col justify-center">
+                     <h3 class="text-lg font-bold text-obs-primary mb-4">Le "Non-Recours"</h3>
+                     <p class="text-gray-700 text-sm mb-4">
+                        Une statistique inquiétante : environ <strong>30%</strong> des personnes exclues du chômage ne demandent pas le RIS, bien qu'éligibles. 
+                     </p>
+                     <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                        <div class="bg-obs-primary h-4 rounded-full" style="width: 70%"></div>
+                     </div>
+                     <div class="flex justify-between text-xs text-gray-500 mb-4">
+                        <span>70% Demandent de l'aide</span>
+                        <span>30% Disparaissent (Pauvreté cachée)</span>
+                     </div>
+                     <p class="text-xs text-gray-500 italic">
+                        Ce phénomène accroît la précarité sanitaire et le sans-abrisme.
+                     </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SECTION 3: BIM & DEMOGRAPHICS -->
+        <div id="view-bim" class="hidden space-y-8 animate-fade-in">
+            <!-- Context Header -->
+             <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                <h2 class="text-2xl font-serif font-bold text-obs-primary mb-2">Le Statut BIM : Dernier Rempart</h2>
+                <p class="text-gray-700">
+                    Le statut de Bénéficiaire de l'Intervention Majorée (BIM) permet un meilleur remboursement des soins de santé. 
+                    En 2026, avec l'inflation et la stagnation des revenus, le nombre de BIM dépasse les 2,5 millions.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Table BIM Thresholds -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-lg font-bold text-obs-primary mb-4">Conditions d'Octroi (2025-2026)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm text-left text-gray-600">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3">Composition Ménage</th>
+                                    <th class="px-4 py-3">Plafond Revenus (Brut/An)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="px-4 py-3 font-medium">Isolé</td>
+                                    <td class="px-4 py-3">26.450 €</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="px-4 py-3 font-medium">Ménage 2 personnes</td>
+                                    <td class="px-4 py-3">31.300 €</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="px-4 py-3 font-medium">Par personne supp.</td>
+                                    <td class="px-4 py-3">+ 4.850 €</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4 italic">
+                        Note : Octroi automatique pour les bénéficiaires du RIS et GRAPA. Sur enquête revenus pour les autres.
+                    </p>
+                </div>
+
+                <!-- Demographic Trends Text -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-lg font-bold text-obs-primary mb-4">Profils à Risque</h3>
+                    <ul class="space-y-4">
+                        <li class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">🎓</div>
+                            <div class="ml-4">
+                                <h4 class="text-sm font-bold text-gray-900">Les Étudiants</h4>
+                                <p class="text-sm text-gray-600">Forte hausse des étudiants émargant au CPAS (+8%). La précarité étudiante devient structurelle.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-xl">🏥</div>
+                            <div class="ml-4">
+                                <h4 class="text-sm font-bold text-gray-900">Les Invalides</h4>
+                                <p class="text-sm text-gray-600">Groupe en croissance la plus rapide. Le trajet de réintégration "Retour au travail" reste inefficace pour les 55+.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center text-xl">👨‍👩‍👧</div>
+                            <div class="ml-4">
+                                <h4 class="text-sm font-bold text-gray-900">Familles Monoparentales</h4>
+                                <p class="text-sm text-gray-600">Représentent 34% des bénéficiaires RIS, majoritairement des femmes.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Radar Chart: Vulnerability Index -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-bold text-obs-primary mb-2">Indice de Fragilité par Groupe</h3>
+                <p class="text-sm text-gray-500 mb-4">Comparaison des risques (10 = Risque Maximum)</p>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SOLUTIONS & DEBATES -->
+        <div id="view-solutions" class="hidden space-y-8 animate-fade-in">
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-serif font-bold text-obs-primary mb-4">Le Débat Politique</h2>
+                <p class="text-gray-700 mb-6">
+                    Face à l'urgence sociale, trois visions s'affrontent : la logique d'activation du gouvernement, la demande de refinancement des communes, et la revendication d'une hausse des minima sociaux par les syndicats.
+                </p>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <button class="px-4 py-2 bg-obs-primary text-white rounded-full text-sm font-bold shadow-sm hover:bg-opacity-90 transition" onclick="filterCards('all')">Tous</button>
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-bold hover:bg-gray-300 transition" onclick="filterCards('gov')">Gouvernement (Arizona)</button>
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-bold hover:bg-gray-300 transition" onclick="filterCards('cpas')">Fédérations CPAS</button>
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-bold hover:bg-gray-300 transition" onclick="filterCards('syndicats')">Syndicats & Associatif</button>
+                </div>
+
+                <!-- Comparison Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cards-container">
+                    
+                    <!-- Gov Card -->
+                    <div class="card-item gov border border-gray-200 rounded-lg p-5 bg-blue-50 relative">
+                        <span class="absolute top-4 right-4 text-xs font-bold bg-blue-200 text-blue-800 px-2 py-1 rounded">Gouvernement</span>
+                        <h3 class="font-bold text-lg mb-2">Activation Accrue</h3>
+                        <p class="text-sm text-gray-700">Conditionner les allocations à une recherche active ou formation. Limitation des allocations dans le temps pour inciter à la reprise.</p>
+                        <div class="mt-4 pt-4 border-t border-blue-200">
+                            <span class="text-xs font-bold text-gray-500">Argument :</span>
+                            <p class="text-xs text-gray-600">"Le travail doit payer plus que l'inactivité."</p>
+                        </div>
+                    </div>
+
+                    <!-- CPAS Card -->
+                    <div class="card-item cpas border border-gray-200 rounded-lg p-5 bg-orange-50 relative">
+                         <span class="absolute top-4 right-4 text-xs font-bold bg-orange-200 text-orange-800 px-2 py-1 rounded">CPAS / Villes</span>
+                        <h3 class="font-bold text-lg mb-2">Refinancement Fédéral</h3>
+                        <p class="text-sm text-gray-700">Augmentation du taux de remboursement du RIS par l'État (actuellement 70% -> demande 90%). Compensation pour surcharge administrative.</p>
+                         <div class="mt-4 pt-4 border-t border-orange-200">
+                            <span class="text-xs font-bold text-gray-500">Argument :</span>
+                            <p class="text-xs text-gray-600">"Les communes ne peuvent plus payer la facture fédérale."</p>
+                        </div>
+                    </div>
+
+                    <!-- Syndicats Card -->
+                    <div class="card-item syndicats border border-gray-200 rounded-lg p-5 bg-red-50 relative">
+                        <span class="absolute top-4 right-4 text-xs font-bold bg-red-200 text-red-800 px-2 py-1 rounded">Syndicats / Mutuelles</span>
+                        <h3 class="font-bold text-lg mb-2">Hausse des Minima</h3>
+                        <p class="text-sm text-gray-700">Alignement immédiat de tous les minima sociaux (chômage, RIS, GRAPA) sur le seuil de pauvreté européen.</p>
+                        <div class="mt-4 pt-4 border-t border-red-200">
+                            <span class="text-xs font-bold text-gray-500">Argument :</span>
+                            <p class="text-xs text-gray-600">"Une vie digne est un droit fondamental."</p>
+                        </div>
+                    </div>
+
+                    <!-- Gov Card 2 -->
+                    <div class="card-item gov border border-gray-200 rounded-lg p-5 bg-blue-50 relative">
+                         <span class="absolute top-4 right-4 text-xs font-bold bg-blue-200 text-blue-800 px-2 py-1 rounded">Gouvernement</span>
+                        <h3 class="font-bold text-lg mb-2">Responsabilisation Malades</h3>
+                        <p class="text-sm text-gray-700">Sanctions financières pour les malades de longue durée refusant les trajets de réintégration.</p>
+                    </div>
+
+                    <!-- CPAS Card 2 -->
+                    <div class="card-item cpas border border-gray-200 rounded-lg p-5 bg-orange-50 relative">
+                         <span class="absolute top-4 right-4 text-xs font-bold bg-orange-200 text-orange-800 px-2 py-1 rounded">CPAS / Villes</span>
+                        <h3 class="font-bold text-lg mb-2">Individualisation des Droits</h3>
+                        <p class="text-sm text-gray-700">Suppression du statut de cohabitant qui pénalise la solidarité intrafamiliale et appauvrit les ménages.</p>
+                    </div>
+
+                     <!-- Syndicats Card 2 -->
+                     <div class="card-item syndicats border border-gray-200 rounded-lg p-5 bg-red-50 relative">
+                        <span class="absolute top-4 right-4 text-xs font-bold bg-red-200 text-red-800 px-2 py-1 rounded">Syndicats / Mutuelles</span>
+                        <h3 class="font-bold text-lg mb-2">Stop Dégressivité</h3>
+                        <p class="text-sm text-gray-700">Suppression de la dégressivité des allocations de chômage pour éviter le basculement vers le CPAS.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-obs-primary text-white py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm opacity-75 mb-2">© 2026 Observatoire Social Belge - Simulation prospective.</p>
+            <p class="text-xs opacity-50">Données basées sur les projections SPP IS, Bureau du Plan et Notes de Formation Fédérale.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- State Management ---
+        const state = {
+            currentTab: 'dashboard',
+            reformSeverity: 24, // months
+            chartInstances: {}
+        };
+
+        // --- Data Models (Simulated for 2020-2026) ---
+        const data = {
+            years: [2020, 2021, 2022, 2023, 2024, 2025, 2026],
+            spending: {
+                federal: [100, 98, 95, 92, 88, 85, 80], // Indexed base 100, decreasing
+                local: [100, 102, 108, 115, 125, 135, 148] // Indexed base 100, increasing rapidly
+            },
+            demographics: {
+                labels: ['Ex-Chômeurs (Fin de droits)', 'Jeunes/Etudiants', 'Invalides/Maladie', 'Familles Monoparentales', 'Autres'],
+                values: [40, 15, 20, 15, 10] // Percentages of NEW inflow
+            },
+            vulnerability: {
+                labels: ['Revenus', 'Logement', 'Santé', 'Energie', 'Isolement'],
+                datasets: [
+                    { label: 'Etudiants', data: [7, 8, 3, 4, 6], borderColor: '#3498DB' },
+                    { label: 'Monoparental', data: [9, 7, 6, 8, 5], borderColor: '#E67E22' },
+                    { label: 'Chômeur exclu', data: [10, 6, 8, 9, 7], borderColor: '#C0392B' }
+                ]
+            }
+        };
+
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            // Update UI State
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = 'tab-inactive whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors cursor-pointer';
+            });
+            document.getElementById(`tab-${tabId}`).className = 'tab-active whitespace-nowrap py-3 px-1 text-sm font-medium transition-colors cursor-pointer';
+
+            // Hide all views
+            ['dashboard', 'transfert', 'bim', 'solutions'].forEach(id => {
+                const el = document.getElementById(`view-${id}`);
+                el.classList.add('hidden');
+            });
+
+            // Show selected view
+            const selectedView = document.getElementById(`view-${tabId}`);
+            selectedView.classList.remove('hidden');
+            
+            // Trigger charts resize/render if needed when tab becomes visible
+            if (tabId === 'dashboard' && state.chartInstances.scissors) state.chartInstances.scissors.resize();
+            if (tabId === 'transfert' && state.chartInstances.impact) state.chartInstances.impact.resize();
+            if (tabId === 'transfert' && state.chartInstances.demo) state.chartInstances.demo.resize();
+            if (tabId === 'bim' && state.chartInstances.radar) state.chartInstances.radar.resize();
+
+            state.currentTab = tabId;
+        }
+
+        // --- Chart Rendering Functions ---
+        
+        function initScissorsChart() {
+            const ctx = document.getElementById('scissorsChart').getContext('2d');
+            state.chartInstances.scissors = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.years,
+                    datasets: [
+                        {
+                            label: 'Dépenses Fédérales (Chômage)',
+                            data: data.spending.federal,
+                            borderColor: '#2C3E50',
+                            backgroundColor: 'rgba(44, 62, 80, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: 'Dépenses Locales (CPAS)',
+                            data: data.spending.local,
+                            borderColor: '#C0392B',
+                            backgroundColor: 'rgba(192, 57, 43, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: { mode: 'index', intersect: false },
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: {
+                            title: { display: true, text: 'Indice (Base 100 = 2020)' },
+                            grid: { color: '#e5e7eb' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function initTransfertSimulator() {
+            // Initial Data for 24 months
+            const initialExclus = 25000;
+            const initialCost = 240;
+
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            
+            state.chartInstances.impact = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Scénario Actuel'],
+                    datasets: [
+                        {
+                            label: 'Coût Fédéral (Economies)',
+                            data: [-150], // Negative because saving
+                            backgroundColor: '#27AE60',
+                        },
+                        {
+                            label: 'Coût Local (Surcoût CPAS)',
+                            data: [240],
+                            backgroundColor: '#C0392B',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Millions d\'Euros' },
+                            grid: { color: '#e5e7eb' }
+                        }
+                    }
+                }
+            });
+
+            // Doughnut
+            const ctxD = document.getElementById('demographicDoughnut').getContext('2d');
+            state.chartInstances.demo = new Chart(ctxD, {
+                type: 'doughnut',
+                data: {
+                    labels: data.demographics.labels,
+                    datasets: [{
+                        data: data.demographics.values,
+                        backgroundColor: ['#2C3E50', '#E67E22', '#C0392B', '#27AE60', '#95A5A6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Input Listener
+            const slider = document.getElementById('reformRange');
+            const display = document.getElementById('reformValueDisplay');
+            const exclusDisplay = document.getElementById('exclusCount');
+            const risDisplay = document.getElementById('newRisCount');
+            const costDisplay = document.getElementById('costImpact');
+
+            slider.addEventListener('input', (e) => {
+                const months = parseInt(e.target.value);
+                let label = months + " mois";
+                if (months === 24) label += " (Actuel)";
+                display.innerText = label;
+
+                // Simple Simulation Logic:
+                // Lower months = Higher exclusion = Higher CPAS cost
+                // Base 24 months -> 25k exclus.
+                // Factor: (60 - months) * 1000 roughly
+                
+                const factor = (60 - months) / 36; // Normalized 0 to 1 roughly
+                
+                // Calculate numbers
+                const exclus = Math.round(10000 + (50000 * (1 - (months/60))));
+                const newRis = Math.round(exclus * 0.8); // 80% transfer rate
+                const cost = Math.round(newRis * 12000 / 1000000); // approx 12k/year/person in M€
+
+                // Update DOM numbers
+                exclusDisplay.innerText = exclus.toLocaleString();
+                risDisplay.innerText = newRis.toLocaleString();
+                costDisplay.innerText = `+ ${cost} M€`;
+
+                // Update Chart
+                state.chartInstances.impact.data.datasets[1].data = [cost];
+                state.chartInstances.impact.data.datasets[0].data = [-1 * (cost * 1.5)]; // Federal saves more than local pays usually
+                state.chartInstances.impact.update();
+            });
+        }
+
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            state.chartInstances.radar = new Chart(ctx, {
+                type: 'radar',
+                data: data.vulnerability,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: { font: { size: 12, family: 'Inter' } },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- Filtering Logic for Solutions ---
+        function filterCards(category) {
+            const cards = document.querySelectorAll('.card-item');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (card.classList.contains(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initScissorsChart();
+            initTransfertSimulator();
+            initRadarChart();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,2890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAIDOYER CITOYEN — Poste de Travail v4.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* ══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Civic Tech War Room
+   ══════════════════════════════════════════════════════════════ */
+:root {
+    /* Dark Matrix Theme */
+    --bg-void: #030508;
+    --bg-deep: #080c12;
+    --bg-primary: #0d1318;
+    --bg-secondary: #121a22;
+    --bg-tertiary: #18232d;
+    --bg-elevated: #1e2c38;
+    --bg-glass: rgba(18, 26, 34, 0.85);
+    
+    /* Civic Accents */
+    --civic-blue: #00d4ff;
+    --civic-blue-dim: rgba(0, 212, 255, 0.15);
+    --civic-green: #00ff88;
+    --civic-green-dim: rgba(0, 255, 136, 0.15);
+    --civic-amber: #ffb800;
+    --civic-amber-dim: rgba(255, 184, 0, 0.15);
+    --civic-red: #ff3366;
+    --civic-red-dim: rgba(255, 51, 102, 0.15);
+    --civic-purple: #b366ff;
+    --civic-purple-dim: rgba(179, 102, 255, 0.15);
+    
+    /* War Room Mode */
+    --war-primary: #ff0040;
+    --war-secondary: #ff6b00;
+    --war-glow: rgba(255, 0, 64, 0.4);
+    
+    /* Text */
+    --text-white: #ffffff;
+    --text-primary: #e8edf3;
+    --text-secondary: #8b9cb3;
+    --text-muted: #5a6b7d;
+    --text-code: #00ff88;
+    
+    /* Borders & Effects */
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(0, 212, 255, 0.3);
+    --glow-blue: 0 0 30px rgba(0, 212, 255, 0.3);
+    --glow-green: 0 0 30px rgba(0, 255, 136, 0.3);
+    --glow-red: 0 0 30px rgba(255, 51, 102, 0.3);
+    
+    /* Layout */
+    --sidebar-width: 260px;
+    --topbar-height: 56px;
+    
+    /* Transitions */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESET & BASE
+   ══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { 
+    font-size: 15px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg-void);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Animated Background Grid */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYOUT SHELL
+   ══════════════════════════════════════════════════════════════ */
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-deep);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+}
+
+.sidebar-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--civic-blue), var(--civic-green));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: var(--glow-blue);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-icon::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--text-white), var(--civic-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Navigation */
+.nav-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 0.75rem;
+}
+
+.nav-section::-webkit-scrollbar { width: 4px; }
+.nav-section::-webkit-scrollbar-track { background: transparent; }
+.nav-section::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 2px; }
+
+.nav-group {
+    margin-bottom: 1.5rem;
+}
+
+.nav-group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    padding: 0 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 200ms var(--ease-out);
+    color: var(--text-secondary);
+    text-decoration: none;
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.nav-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: var(--civic-blue-dim);
+    color: var(--civic-blue);
+}
+
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 50%;
+    background: var(--civic-blue);
+    border-radius: 0 3px 3px 0;
+    box-shadow: var(--glow-blue);
+}
+
+.nav-item.war-mode {
+    background: var(--civic-red-dim);
+    color: var(--civic-red);
+    border: 1px solid rgba(255, 51, 102, 0.2);
+}
+
+.nav-item.war-mode.active::before {
+    background: var(--civic-red);
+    box-shadow: var(--glow-red);
+}
+
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.nav-badge {
+    margin-left: auto;
+    background: var(--civic-blue);
+    color: var(--bg-void);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.nav-badge.war {
+    background: var(--civic-red);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); }
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    font-size: 0.75rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--civic-green);
+    box-shadow: var(--glow-green);
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* MAIN CONTENT */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Topbar */
+.topbar {
+    height: var(--topbar-height);
+    background: var(--bg-glass);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(20px);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.breadcrumb-item {
+    color: var(--text-muted);
+}
+
+.breadcrumb-item.current {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.breadcrumb-sep {
+    color: var(--text-muted);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 200ms var(--ease-out);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-ghost:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-glow);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--civic-blue), #00a8cc);
+    color: var(--bg-void);
+    box-shadow: var(--glow-blue);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--civic-red), #cc0033);
+    color: white;
+    box-shadow: var(--glow-red);
+}
+
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 40px rgba(255, 51, 102, 0.4);
+}
+
+/* Content Area */
+.content-area {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PAGE SECTIONS
+   ══════════════════════════════════════════════════════════════ */
+.page-section {
+    display: none;
+}
+
+.page-section.active {
+    display: block;
+    animation: fadeIn 300ms var(--ease-out);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.page-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    max-width: 600px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CARDS & CONTAINERS
+   ══════════════════════════════════════════════════════════════ */
+.card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-tertiary);
+}
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+/* ══════════════════════════════════════════════════════════════
+   FORM ELEMENTS
+   ══════════════════════════════════════════════════════════════ */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all 200ms var(--ease-out);
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--civic-blue);
+    box-shadow: 0 0 0 3px var(--civic-blue-dim);
+}
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.375rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DASHBOARD STATS
+   ══════════════════════════════════════════════════════════════ */
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent, var(--civic-blue));
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    background: var(--civic-blue-dim);
+}
+
+.stat-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOOLS - 15 OUTILS VOIR/JUGER/AGIR
+   ══════════════════════════════════════════════════════════════ */
+.tools-phase {
+    margin-bottom: 2rem;
+}
+
+.phase-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.phase-badge {
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.phase-voir .phase-badge { background: var(--civic-blue-dim); color: var(--civic-blue); }
+.phase-juger .phase-badge { background: var(--civic-amber-dim); color: var(--civic-amber); }
+.phase-agir .phase-badge { background: var(--civic-green-dim); color: var(--civic-green); }
+
+.phase-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.tool-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 200ms var(--ease-out);
+    position: relative;
+}
+
+.tool-card:hover {
+    border-color: var(--civic-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-blue);
+}
+
+.tool-card.completed {
+    border-color: var(--civic-green);
+}
+
+.tool-card.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    background: var(--civic-green);
+    color: var(--bg-void);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.tool-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.tool-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.375rem;
+}
+
+.tool-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOOL EDITOR MODAL
+   ══════════════════════════════════════════════════════════════ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: modalIn 300ms var(--ease-spring);
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms;
+}
+
+.modal-close:hover {
+    background: var(--civic-red-dim);
+    color: var(--civic-red);
+}
+
+.modal-body {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TSAR e-BOMBA MODULE
+   ══════════════════════════════════════════════════════════════ */
+.war-room {
+    background: linear-gradient(135deg, rgba(255, 0, 64, 0.05), rgba(255, 107, 0, 0.05));
+    border: 1px solid rgba(255, 51, 102, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.war-room-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.war-room-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--civic-red), var(--war-secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    box-shadow: var(--glow-red);
+}
+
+.war-room-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--civic-red);
+}
+
+.war-room-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Escalation Levels */
+.escalation-levels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.escalation-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 200ms var(--ease-out);
+    text-align: center;
+}
+
+.escalation-card:hover {
+    transform: translateY(-3px);
+}
+
+.escalation-card.level-1 { border-color: var(--civic-green); }
+.escalation-card.level-2 { border-color: var(--civic-amber); }
+.escalation-card.level-3 { border-color: var(--civic-red); }
+.escalation-card.level-4 { 
+    border-color: var(--war-primary);
+    background: linear-gradient(135deg, rgba(255, 0, 64, 0.1), rgba(255, 107, 0, 0.1));
+}
+
+.escalation-card.active {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px var(--war-glow);
+}
+
+.escalation-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.escalation-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.escalation-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Target Definition */
+.target-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.target-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.target-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.target-info h4 {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.target-info span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Semantic Triplets */
+.triplet-builder {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.triplet-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.triplet-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+.triplet-input {
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+.triplet-arrow {
+    color: var(--civic-blue);
+    font-weight: 700;
+}
+
+/* JSON-LD Preview */
+.code-preview {
+    background: var(--bg-void);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.code-header {
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.code-body {
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-code);
+    white-space: pre-wrap;
+    overflow-x: auto;
+    max-height: 300px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   IMPORT/EXPORT MODULE
+   ══════════════════════════════════════════════════════════════ */
+.io-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.io-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.io-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.format-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.format-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 200ms var(--ease-out);
+}
+
+.format-btn:hover {
+    border-color: var(--civic-blue);
+    transform: translateY(-2px);
+}
+
+.format-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.format-icon {
+    font-size: 1.5rem;
+}
+
+.format-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.format-ext {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* Drop Zone */
+.drop-zone {
+    border: 2px dashed var(--border-default);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 200ms var(--ease-out);
+    cursor: pointer;
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--civic-blue);
+    background: var(--civic-blue-dim);
+}
+
+.drop-zone-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.drop-zone-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACTOR MAPPING
+   ══════════════════════════════════════════════════════════════ */
+.actor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.actor-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 200ms var(--ease-out);
+}
+
+.actor-card:hover {
+    border-color: var(--civic-blue);
+}
+
+.actor-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.actor-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.actor-avatar.ally { background: var(--civic-green-dim); }
+.actor-avatar.neutral { background: var(--civic-amber-dim); }
+.actor-avatar.opponent { background: var(--civic-red-dim); }
+
+.actor-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.actor-role {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.actor-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.actor-metric {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.375rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+.actor-metric-value {
+    font-weight: 700;
+    color: var(--civic-blue);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TIMELINE / JOURNAL
+   ══════════════════════════════════════════════════════════════ */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--civic-blue), var(--civic-green));
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 3px solid var(--civic-blue);
+    box-shadow: var(--glow-blue);
+}
+
+.timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.timeline-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.timeline-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.375rem;
+}
+
+.timeline-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NOTIFICATIONS
+   ══════════════════════════════════════════════════════════════ */
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.toast {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 300px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    animation: slideIn 300ms var(--ease-spring);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.toast.success { border-left: 4px solid var(--civic-green); }
+.toast.error { border-left: 4px solid var(--civic-red); }
+.toast.warning { border-left: 4px solid var(--civic-amber); }
+.toast.info { border-left: 4px solid var(--civic-blue); }
+
+.toast-icon {
+    font-size: 1.25rem;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.toast-message {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .escalation-levels { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .io-panel { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">⚖️</div>
+                <div class="logo-text">
+                    <span class="logo-title">PLAIDOYER CITOYEN</span>
+                    <span class="logo-subtitle">Workstation v4.0</span>
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <!-- Accueil -->
+                <div class="nav-group">
+                    <div class="nav-group-label">Accueil</div>
+                    <a class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span>Tableau de bord</span>
+                    </a>
+                    <a class="nav-item" data-page="projects">
+                        <span class="nav-icon">📁</span>
+                        <span>Mes projets</span>
+                        <span class="nav-badge">3</span>
+                    </a>
+                </div>
+
+                <!-- VOIR -->
+                <div class="nav-group">
+                    <div class="nav-group-label">👁️ VOIR — Analyse</div>
+                    <a class="nav-item" data-page="tool-domino">
+                        <span class="nav-icon">🎯</span>
+                        <span>Domino du changement</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-profil">
+                        <span class="nav-icon">👤</span>
+                        <span>Profil d'engagement</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-fleur">
+                        <span class="nav-icon">🌸</span>
+                        <span>Fleur de pouvoir</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-cartographie">
+                        <span class="nav-icon">🗺️</span>
+                        <span>Cartographie acteurs</span>
+                    </a>
+                </div>
+
+                <!-- JUGER -->
+                <div class="nav-group">
+                    <div class="nav-group-label">⚖️ JUGER — Stratégie</div>
+                    <a class="nav-item" data-page="tool-theorie">
+                        <span class="nav-icon">💡</span>
+                        <span>Théorie du changement</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-swot">
+                        <span class="nav-icon">📋</span>
+                        <span>Analyse SWOT</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-pestel">
+                        <span class="nav-icon">🌐</span>
+                        <span>Analyse PESTEL</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-arbre">
+                        <span class="nav-icon">🌳</span>
+                        <span>Arbre à problème</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-5why">
+                        <span class="nav-icon">❓</span>
+                        <span>Les 5 Pourquoi</span>
+                    </a>
+                </div>
+
+                <!-- AGIR -->
+                <div class="nav-group">
+                    <div class="nav-group-label">✊ AGIR — Action</div>
+                    <a class="nav-item" data-page="tool-pouvoir">
+                        <span class="nav-icon">⚡</span>
+                        <span>Avec/Sans/Contre</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-smart">
+                        <span class="nav-icon">🎯</span>
+                        <span>Objectifs SMART</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-cibles">
+                        <span class="nav-icon">🤝</span>
+                        <span>Cibles et alliances</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-message">
+                        <span class="nav-icon">📢</span>
+                        <span>Construction message</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-checklist">
+                        <span class="nav-icon">✅</span>
+                        <span>Check-list rencontre</span>
+                    </a>
+                    <a class="nav-item" data-page="tool-suivi">
+                        <span class="nav-icon">📈</span>
+                        <span>Suivi-évaluation</span>
+                    </a>
+                </div>
+
+                <!-- MODULE OFFENSIF -->
+                <div class="nav-group">
+                    <div class="nav-group-label">☢️ ZONE OFFENSIVE</div>
+                    <a class="nav-item war-mode" data-page="tsar-ebomba">
+                        <span class="nav-icon">💣</span>
+                        <span>TSAR e-BOMBA</span>
+                        <span class="nav-badge war">HOT</span>
+                    </a>
+                    <a class="nav-item war-mode" data-page="arsenal">
+                        <span class="nav-icon">🔧</span>
+                        <span>Arsenal sémantique</span>
+                    </a>
+                    <a class="nav-item war-mode" data-page="cocon">
+                        <span class="nav-icon">🕸️</span>
+                        <span>Cocon stratégique</span>
+                    </a>
+                </div>
+
+                <!-- Outils -->
+                <div class="nav-group">
+                    <div class="nav-group-label">🔧 Outils</div>
+                    <a class="nav-item" data-page="import-export">
+                        <span class="nav-icon">📥</span>
+                        <span>Import / Export</span>
+                    </a>
+                    <a class="nav-item" data-page="journal">
+                        <span class="nav-icon">📓</span>
+                        <span>Journal de bord</span>
+                    </a>
+                    <a class="nav-item" data-page="ressources">
+                        <span class="nav-icon">📚</span>
+                        <span>Ressources</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>Données locales • Chiffrées</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="breadcrumb">
+                        <span class="breadcrumb-item">Plaidoyer Citoyen</span>
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-item current" id="current-page-title">Tableau de bord</span>
+                    </div>
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost" onclick="showQuickSave()">
+                        <span>💾</span>
+                        <span>Sauvegarder</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="showExportModal()">
+                        <span>📤</span>
+                        <span>Exporter</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- ═══════════════════════════════════════════════════════
+                     DASHBOARD
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section active" id="page-dashboard">
+                    <div class="page-header">
+                        <h1 class="page-title">📊 Tableau de bord</h1>
+                        <p class="page-description">Vue d'ensemble de votre campagne de plaidoyer citoyen</p>
+                    </div>
+
+                    <div class="grid-4" style="margin-bottom: 1.5rem;">
+                        <div class="stat-card" style="--accent: var(--civic-blue);">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-value" id="stat-tools">0</div>
+                            <div class="stat-label">Outils complétés</div>
+                        </div>
+                        <div class="stat-card" style="--accent: var(--civic-green);">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value" id="stat-actors">0</div>
+                            <div class="stat-label">Acteurs cartographiés</div>
+                        </div>
+                        <div class="stat-card" style="--accent: var(--civic-amber);">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-value" id="stat-targets">0</div>
+                            <div class="stat-label">Cibles identifiées</div>
+                        </div>
+                        <div class="stat-card" style="--accent: var(--civic-red);">
+                            <div class="stat-icon">💣</div>
+                            <div class="stat-value" id="stat-triplets">0</div>
+                            <div class="stat-label">Triplets sémantiques</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Access Tools -->
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">🚀 Accès rapide aux outils</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="tools-phase phase-voir">
+                                <div class="phase-header">
+                                    <span class="phase-badge">VOIR</span>
+                                    <span class="phase-title">Analyse de la situation</span>
+                                </div>
+                                <div class="tools-grid">
+                                    <div class="tool-card" data-tool="domino">
+                                        <div class="tool-icon">🎯</div>
+                                        <div class="tool-name">Domino du changement</div>
+                                        <div class="tool-desc">Définir votre vision et objectifs</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="profil">
+                                        <div class="tool-icon">👤</div>
+                                        <div class="tool-name">Profil d'engagement</div>
+                                        <div class="tool-desc">Évaluer votre niveau d'implication</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="fleur">
+                                        <div class="tool-icon">🌸</div>
+                                        <div class="tool-name">Fleur de pouvoir</div>
+                                        <div class="tool-desc">Analyser privilèges et identités</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="cartographie">
+                                        <div class="tool-icon">🗺️</div>
+                                        <div class="tool-name">Cartographie des acteurs</div>
+                                        <div class="tool-desc">Identifier les parties prenantes</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tools-phase phase-juger" style="margin-top: 1.5rem;">
+                                <div class="phase-header">
+                                    <span class="phase-badge">JUGER</span>
+                                    <span class="phase-title">Stratégie et planification</span>
+                                </div>
+                                <div class="tools-grid">
+                                    <div class="tool-card" data-tool="theorie">
+                                        <div class="tool-icon">💡</div>
+                                        <div class="tool-name">Théorie du changement</div>
+                                        <div class="tool-desc">Modéliser votre impact</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="swot">
+                                        <div class="tool-icon">📋</div>
+                                        <div class="tool-name">Analyse SWOT</div>
+                                        <div class="tool-desc">Forces, faiblesses, opportunités, menaces</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="arbre">
+                                        <div class="tool-icon">🌳</div>
+                                        <div class="tool-name">Arbre à problème</div>
+                                        <div class="tool-desc">Causes et conséquences</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="5why">
+                                        <div class="tool-icon">❓</div>
+                                        <div class="tool-name">Les 5 Pourquoi</div>
+                                        <div class="tool-desc">Identifier la cause racine</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tools-phase phase-agir" style="margin-top: 1.5rem;">
+                                <div class="phase-header">
+                                    <span class="phase-badge">AGIR</span>
+                                    <span class="phase-title">Action et évaluation</span>
+                                </div>
+                                <div class="tools-grid">
+                                    <div class="tool-card" data-tool="pouvoir">
+                                        <div class="tool-icon">⚡</div>
+                                        <div class="tool-name">Avec/Sans/Contre</div>
+                                        <div class="tool-desc">Stratégies face au pouvoir</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="smart">
+                                        <div class="tool-icon">🎯</div>
+                                        <div class="tool-name">Objectifs SMART</div>
+                                        <div class="tool-desc">Objectifs mesurables</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="message">
+                                        <div class="tool-icon">📢</div>
+                                        <div class="tool-name">Construction message</div>
+                                        <div class="tool-desc">5 composants clés</div>
+                                    </div>
+                                    <div class="tool-card" data-tool="suivi">
+                                        <div class="tool-icon">📈</div>
+                                        <div class="tool-name">Suivi-évaluation</div>
+                                        <div class="tool-desc">Mesurer les résultats</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">📓 Journal récent</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline" id="recent-timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-date">Aujourd'hui, 14:32</div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-title">Nouveau projet créé</div>
+                                            <div class="timeline-text">Campagne contre la réforme Arizona</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">⚡ Actions rapides</h3>
+                            </div>
+                            <div class="card-body">
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <button class="btn btn-ghost" style="justify-content: flex-start;" onclick="navigateTo('tool-cartographie')">
+                                        <span>🗺️</span>
+                                        <span>Ajouter un acteur</span>
+                                    </button>
+                                    <button class="btn btn-ghost" style="justify-content: flex-start;" onclick="navigateTo('tool-message')">
+                                        <span>📢</span>
+                                        <span>Créer un message</span>
+                                    </button>
+                                    <button class="btn btn-ghost" style="justify-content: flex-start;" onclick="navigateTo('journal')">
+                                        <span>📝</span>
+                                        <span>Nouvelle entrée journal</span>
+                                    </button>
+                                    <button class="btn btn-danger" style="justify-content: flex-start;" onclick="navigateTo('tsar-ebomba')">
+                                        <span>💣</span>
+                                        <span>Lancer offensive sémantique</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     TSAR e-BOMBA MODULE
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-tsar-ebomba">
+                    <div class="page-header">
+                        <h1 class="page-title" style="color: var(--civic-red);">💣 TSAR e-BOMBA</h1>
+                        <p class="page-description">Module de guerre sémantique et contre-offensive narrative</p>
+                    </div>
+
+                    <div class="war-room">
+                        <div class="war-room-header">
+                            <div class="war-room-icon">☢️</div>
+                            <div>
+                                <div class="war-room-title">Centre de Commandement</div>
+                                <div class="war-room-subtitle">Protocole offensif activé — Niveau d'escalade configurable</div>
+                            </div>
+                        </div>
+
+                        <!-- Escalation Levels -->
+                        <h3 style="margin-bottom: 1rem; font-size: 0.95rem;">⚡ Niveau d'escalade</h3>
+                        <div class="escalation-levels">
+                            <div class="escalation-card level-1 active" data-level="1">
+                                <div class="escalation-icon">🛡️</div>
+                                <div class="escalation-name">Défensif</div>
+                                <div class="escalation-desc">Fact-checking, clarification</div>
+                            </div>
+                            <div class="escalation-card level-2" data-level="2">
+                                <div class="escalation-icon">⚔️</div>
+                                <div class="escalation-name">Proportionné</div>
+                                <div class="escalation-desc">Contre-narrative ciblée</div>
+                            </div>
+                            <div class="escalation-card level-3" data-level="3">
+                                <div class="escalation-icon">🔥</div>
+                                <div class="escalation-name">Offensif</div>
+                                <div class="escalation-desc">Saturation sémantique</div>
+                            </div>
+                            <div class="escalation-card level-4" data-level="4">
+                                <div class="escalation-icon">💣</div>
+                                <div class="escalation-name">TSAR e-BOMBA</div>
+                                <div class="escalation-desc">Destruction narrative totale</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <!-- Target Definition -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🎯 Définition de la cible</h3>
+                                <button class="btn btn-ghost" onclick="addTarget()">+ Ajouter</button>
+                            </div>
+                            <div class="card-body" id="targets-container">
+                                <div class="target-card">
+                                    <div class="target-header">
+                                        <div class="target-avatar">👤</div>
+                                        <div class="target-info">
+                                            <h4>Entité principale</h4>
+                                            <span>Personne, organisation ou média</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nom de l'entité</label>
+                                        <input type="text" class="form-input" id="target-name" placeholder="Ex: RTL-TVI, Christophe Deborsu...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Type d'entité</label>
+                                        <select class="form-select" id="target-type">
+                                            <option value="person">Personne (Person)</option>
+                                            <option value="organization">Organisation (Organization)</option>
+                                            <option value="media">Média (NewsMediaOrganization)</option>
+                                            <option value="government">Institution gouvernementale</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Attributs cibles à associer</label>
+                                        <input type="text" class="form-input" id="target-attributes" placeholder="Ex: désinformation, mépris de classe, biais médiatique...">
+                                        <p class="form-hint">Séparez par des virgules</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Semantic Arsenal -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🔧 Arsenal sémantique</h3>
+                                <button class="btn btn-ghost" onclick="generateJsonLd()">Générer JSON-LD</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="triplet-builder">
+                                    <h4 style="font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary);">
+                                        Constructeur de triplets RDF
+                                    </h4>
+                                    <div id="triplets-list">
+                                        <div class="triplet-row">
+                                            <div>
+                                                <div class="triplet-label">Sujet</div>
+                                                <input type="text" class="triplet-input" data-triplet="subject" placeholder="Entité">
+                                            </div>
+                                            <span class="triplet-arrow">→</span>
+                                            <div>
+                                                <div class="triplet-label">Prédicat</div>
+                                                <input type="text" class="triplet-input" data-triplet="predicate" placeholder="est associé à">
+                                            </div>
+                                            <span class="triplet-arrow">→</span>
+                                            <div>
+                                                <div class="triplet-label">Objet</div>
+                                                <input type="text" class="triplet-input" data-triplet="object" placeholder="Attribut">
+                                            </div>
+                                            <button class="btn btn-ghost" onclick="addTriplet()" style="padding: 0.5rem;">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="code-preview">
+                                    <div class="code-header">
+                                        <span class="code-lang">JSON-LD</span>
+                                        <button class="btn btn-ghost" onclick="copyJsonLd()">📋 Copier</button>
+                                    </div>
+                                    <pre class="code-body" id="jsonld-output">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Contre-analyse...",
+  "author": {
+    "@type": "Organization",
+    "name": "Collectif Citoyen"
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schema Templates -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">📦 Templates Schema.org prêts à l'emploi</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid-4">
+                                <div class="format-btn" onclick="loadTemplate('claimReview')">
+                                    <span class="format-icon">✅</span>
+                                    <span class="format-name">ClaimReview</span>
+                                    <span class="format-ext">Fact-checking</span>
+                                </div>
+                                <div class="format-btn" onclick="loadTemplate('article')">
+                                    <span class="format-icon">📰</span>
+                                    <span class="format-name">NewsArticle</span>
+                                    <span class="format-ext">Article d'investigation</span>
+                                </div>
+                                <div class="format-btn" onclick="loadTemplate('organization')">
+                                    <span class="format-icon">🏢</span>
+                                    <span class="format-name">Organization</span>
+                                    <span class="format-ext">Collectif/Association</span>
+                                </div>
+                                <div class="format-btn" onclick="loadTemplate('person')">
+                                    <span class="format-icon">👤</span>
+                                    <span class="format-name">Person</span>
+                                    <span class="format-ext">Profil d'entité</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     IMPORT/EXPORT
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-import-export">
+                    <div class="page-header">
+                        <h1 class="page-title">📥 Import / Export</h1>
+                        <p class="page-description">Gérez vos données dans différents formats</p>
+                    </div>
+
+                    <div class="io-panel">
+                        <div class="io-section">
+                            <h3 class="io-title">📤 Exporter</h3>
+                            <div class="format-grid">
+                                <div class="format-btn" onclick="exportData('json')">
+                                    <span class="format-icon">📄</span>
+                                    <span class="format-name">JSON</span>
+                                    <span class="format-ext">.json</span>
+                                </div>
+                                <div class="format-btn" onclick="exportData('csv')">
+                                    <span class="format-icon">📊</span>
+                                    <span class="format-name">CSV</span>
+                                    <span class="format-ext">.csv</span>
+                                </div>
+                                <div class="format-btn" onclick="exportData('md')">
+                                    <span class="format-icon">📝</span>
+                                    <span class="format-name">Markdown</span>
+                                    <span class="format-ext">.md</span>
+                                </div>
+                                <div class="format-btn" onclick="exportData('html')">
+                                    <span class="format-icon">🌐</span>
+                                    <span class="format-name">HTML</span>
+                                    <span class="format-ext">.html</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                                    <strong>📦 Export complet</strong>
+                                </p>
+                                <button class="btn btn-primary" onclick="exportAll()" style="width: 100%;">
+                                    Exporter toutes les données
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="io-section">
+                            <h3 class="io-title">📥 Importer</h3>
+                            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                                <div class="drop-zone-icon">📁</div>
+                                <div class="drop-zone-text">
+                                    Glissez vos fichiers ici ou cliquez pour parcourir<br>
+                                    <small>JSON, CSV, Markdown supportés</small>
+                                </div>
+                            </div>
+                            <input type="file" id="file-input" hidden accept=".json,.csv,.md" onchange="handleFileImport(event)">
+                            
+                            <div style="margin-top: 1rem;">
+                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                    Imports récents
+                                </p>
+                                <div id="import-history" style="font-size: 0.85rem; color: var(--text-secondary);">
+                                    Aucun import récent
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     CARTOGRAPHIE DES ACTEURS
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-tool-cartographie">
+                    <div class="page-header">
+                        <h1 class="page-title">🗺️ Cartographie des acteurs</h1>
+                        <p class="page-description">Identifiez et classifiez les parties prenantes de votre plaidoyer</p>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">➕ Ajouter un acteur</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid-3">
+                                <div class="form-group">
+                                    <label class="form-label">Nom</label>
+                                    <input type="text" class="form-input" id="actor-name" placeholder="Nom de l'acteur">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-select" id="actor-type">
+                                        <option value="ally">🟢 Allié</option>
+                                        <option value="neutral">🟡 Neutre</option>
+                                        <option value="opponent">🔴 Opposant</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Pouvoir (1-10)</label>
+                                    <input type="number" class="form-input" id="actor-power" min="1" max="10" value="5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rôle / Organisation</label>
+                                <input type="text" class="form-input" id="actor-role" placeholder="Ex: Député, Journaliste, ONG...">
+                            </div>
+                            <button class="btn btn-primary" onclick="addActor()">Ajouter l'acteur</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">👥 Acteurs enregistrés</h3>
+                            <span id="actors-count" style="font-size: 0.8rem; color: var(--text-muted);">0 acteurs</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="actor-grid" id="actors-grid">
+                                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+                                    Aucun acteur enregistré. Ajoutez votre premier acteur ci-dessus.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     JOURNAL DE BORD
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-journal">
+                    <div class="page-header">
+                        <h1 class="page-title">📓 Journal de bord</h1>
+                        <p class="page-description">Documentez votre campagne de plaidoyer</p>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">✏️ Nouvelle entrée</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Titre</label>
+                                <input type="text" class="form-input" id="journal-title" placeholder="Titre de l'entrée">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contenu</label>
+                                <textarea class="form-textarea" id="journal-content" placeholder="Décrivez l'événement, la décision, la rencontre..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tags</label>
+                                <input type="text" class="form-input" id="journal-tags" placeholder="Ex: rencontre, décision, victoire...">
+                            </div>
+                            <button class="btn btn-primary" onclick="addJournalEntry()">Ajouter l'entrée</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📜 Historique</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline" id="journal-timeline">
+                                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                    Aucune entrée dans le journal.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     SWOT ANALYSIS
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-tool-swot">
+                    <div class="page-header">
+                        <h1 class="page-title">📋 Analyse SWOT</h1>
+                        <p class="page-description">Forces, Faiblesses, Opportunités, Menaces</p>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card" style="border-top: 4px solid var(--civic-green);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-green);">💪 Forces</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-swot="strengths" placeholder="Quels sont vos atouts? Ressources, compétences, réseau..."></textarea>
+                            </div>
+                        </div>
+                        <div class="card" style="border-top: 4px solid var(--civic-red);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-red);">⚠️ Faiblesses</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-swot="weaknesses" placeholder="Quelles sont vos limites? Manques, contraintes..."></textarea>
+                            </div>
+                        </div>
+                        <div class="card" style="border-top: 4px solid var(--civic-blue);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-blue);">🎯 Opportunités</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-swot="opportunities" placeholder="Quelles opportunités pouvez-vous saisir? Contexte favorable..."></textarea>
+                            </div>
+                        </div>
+                        <div class="card" style="border-top: 4px solid var(--civic-amber);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-amber);">⛈️ Menaces</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-swot="threats" placeholder="Quels risques devez-vous anticiper? Obstacles..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     AVEC/SANS/CONTRE LE POUVOIR
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-tool-pouvoir">
+                    <div class="page-header">
+                        <h1 class="page-title">⚡ Avec/Sans/Contre le pouvoir</h1>
+                        <p class="page-description">Définissez votre positionnement stratégique</p>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="card" style="border-top: 4px solid var(--civic-green);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-green);">🤝 AVEC le pouvoir</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-power="with" placeholder="Collaboration, dialogue, participation aux instances officielles..."></textarea>
+                                <p class="form-hint">Lobbying, auditions, commissions consultatives</p>
+                            </div>
+                        </div>
+                        <div class="card" style="border-top: 4px solid var(--civic-amber);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-amber);">🔄 SANS le pouvoir</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-power="without" placeholder="Actions autonomes, alternatives, construction d'espaces propres..."></textarea>
+                                <p class="form-hint">Projets pilotes, médias alternatifs, économie sociale</p>
+                            </div>
+                        </div>
+                        <div class="card" style="border-top: 4px solid var(--civic-red);">
+                            <div class="card-header">
+                                <h3 class="card-title" style="color: var(--civic-red);">✊ CONTRE le pouvoir</h3>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-textarea" data-power="against" placeholder="Opposition, contestation, mobilisation de masse..."></textarea>
+                                <p class="form-hint">Manifestations, pétitions, désobéissance civile</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     CONSTRUCTION DE MESSAGE
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-tool-message">
+                    <div class="page-header">
+                        <h1 class="page-title">📢 Construction de message</h1>
+                        <p class="page-description">Les 5 composants d'un message de plaidoyer efficace</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">1️⃣ Accroche</label>
+                                <input type="text" class="form-input" data-message="hook" placeholder="Phrase d'accroche percutante">
+                                <p class="form-hint">Captez l'attention dès la première phrase</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">2️⃣ Problème</label>
+                                <textarea class="form-textarea" data-message="problem" placeholder="Description du problème"></textarea>
+                                <p class="form-hint">Exposez clairement le problème à résoudre</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">3️⃣ Importance</label>
+                                <textarea class="form-textarea" data-message="importance" placeholder="Pourquoi c'est important"></textarea>
+                                <p class="form-hint">Expliquez les enjeux et conséquences</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">4️⃣ Cible</label>
+                                <input type="text" class="form-input" data-message="target" placeholder="À qui vous adressez-vous?">
+                                <p class="form-hint">Identifiez le décideur ou le public cible</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">5️⃣ Action demandée</label>
+                                <textarea class="form-textarea" data-message="action" placeholder="Quelle action concrète demandez-vous?"></textarea>
+                                <p class="form-hint">Formulez une demande claire et réalisable</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" onclick="generateMessage()">Générer le message complet</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     RESSOURCES
+                     ═══════════════════════════════════════════════════════ -->
+                <section class="page-section" id="page-ressources">
+                    <div class="page-header">
+                        <h1 class="page-title">📚 Ressources</h1>
+                        <p class="page-description">Documentation et liens utiles</p>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">📖 Guides de référence</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <li>
+                                        <a href="https://justicepaix.be/wp-content/uploads/2021/10/20200110_Guide_plaidoyer_citoyen_VD.pdf" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            📄 Petit Guide du Plaidoyer Citoyen (Justice et Paix)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://voxpublic.org" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            🌐 VoxPublic — Guides de plaidoyer
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://bond.org.uk/resources/advocacy-toolkit/" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            📚 BOND UK Advocacy Toolkit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://dicopart.fr" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            📘 Dicopart — Dictionnaire de la participation
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🔗 Données ouvertes Belgique</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <li>
+                                        <a href="https://data.gov.be" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            📊 data.gov.be — Open Data Belgique
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://parlement.thundr.be" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            🏛️ API Parlement Belge
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://data.europarl.europa.eu" target="_blank" style="color: var(--civic-blue); text-decoration: none;">
+                                            🇪🇺 Open Data Parlement Européen
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Titre</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+                <button class="btn btn-primary" id="modal-confirm">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// ══════════════════════════════════════════════════════════════════════════════
+// PLAIDOYER CITOYEN — CORE APPLICATION
+// ══════════════════════════════════════════════════════════════════════════════
+
+// State Management
+const AppState = {
+    currentPage: 'dashboard',
+    project: {
+        name: 'Mon Plaidoyer',
+        created: new Date().toISOString(),
+        lastModified: new Date().toISOString()
+    },
+    tools: {},
+    actors: [],
+    journal: [],
+    triplets: [],
+    targets: [],
+    escalationLevel: 1
+};
+
+// Initialize from localStorage
+function initApp() {
+    const saved = localStorage.getItem('plaidoyerCitoyen');
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            Object.assign(AppState, parsed);
+        } catch (e) {
+            console.warn('Could not parse saved state:', e);
+        }
+    }
+    updateDashboardStats();
+    renderActors();
+    renderJournal();
+    setupEventListeners();
+    setupDropZone();
+}
+
+// Save state
+function saveState() {
+    AppState.project.lastModified = new Date().toISOString();
+    localStorage.setItem('plaidoyerCitoyen', JSON.stringify(AppState));
+    showToast('success', 'Sauvegardé', 'Données enregistrées localement');
+}
+
+// Navigation
+function navigateTo(pageId) {
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.page === pageId) {
+            item.classList.add('active');
+        }
+    });
+
+    // Update pages
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    const targetPage = document.getElementById('page-' + pageId);
+    if (targetPage) {
+        targetPage.classList.add('active');
+    }
+
+    // Update breadcrumb
+    const pageTitle = document.querySelector(`[data-page="${pageId}"]`)?.textContent?.trim() || pageId;
+    document.getElementById('current-page-title').textContent = pageTitle;
+    
+    AppState.currentPage = pageId;
+}
+
+function setupEventListeners() {
+    // Navigation clicks
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const page = item.dataset.page;
+            if (page) navigateTo(page);
+        });
+    });
+
+    // Tool cards
+    document.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const tool = card.dataset.tool;
+            if (tool) navigateTo('tool-' + tool);
+        });
+    });
+
+    // Escalation levels
+    document.querySelectorAll('.escalation-card').forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.escalation-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            AppState.escalationLevel = parseInt(card.dataset.level);
+        });
+    });
+
+    // Auto-save on input changes
+    document.querySelectorAll('input, textarea, select').forEach(input => {
+        input.addEventListener('change', () => {
+            saveFormData();
+        });
+    });
+}
+
+function saveFormData() {
+    // Save SWOT
+    document.querySelectorAll('[data-swot]').forEach(el => {
+        AppState.tools.swot = AppState.tools.swot || {};
+        AppState.tools.swot[el.dataset.swot] = el.value;
+    });
+
+    // Save Power strategies
+    document.querySelectorAll('[data-power]').forEach(el => {
+        AppState.tools.power = AppState.tools.power || {};
+        AppState.tools.power[el.dataset.power] = el.value;
+    });
+
+    // Save Message components
+    document.querySelectorAll('[data-message]').forEach(el => {
+        AppState.tools.message = AppState.tools.message || {};
+        AppState.tools.message[el.dataset.message] = el.value;
+    });
+
+    saveState();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACTORS MANAGEMENT
+// ══════════════════════════════════════════════════════════════════════════════
+
+function addActor() {
+    const name = document.getElementById('actor-name').value.trim();
+    const type = document.getElementById('actor-type').value;
+    const power = parseInt(document.getElementById('actor-power').value);
+    const role = document.getElementById('actor-role').value.trim();
+
+    if (!name) {
+        showToast('error', 'Erreur', 'Veuillez entrer un nom');
+        return;
+    }
+
+    const actor = {
+        id: Date.now(),
+        name,
+        type,
+        power,
+        role,
+        created: new Date().toISOString()
+    };
+
+    AppState.actors.push(actor);
+    saveState();
+    renderActors();
+    
+    // Clear form
+    document.getElementById('actor-name').value = '';
+    document.getElementById('actor-role').value = '';
+    document.getElementById('actor-power').value = '5';
+    
+    showToast('success', 'Acteur ajouté', `${name} a été ajouté à la cartographie`);
+    updateDashboardStats();
+}
+
+function renderActors() {
+    const grid = document.getElementById('actors-grid');
+    const count = document.getElementById('actors-count');
+    
+    if (AppState.actors.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+            Aucun acteur enregistré. Ajoutez votre premier acteur ci-dessus.
+        </div>`;
+        count.textContent = '0 acteurs';
+        return;
+    }
+
+    count.textContent = `${AppState.actors.length} acteur(s)`;
+    
+    grid.innerHTML = AppState.actors.map(actor => `
+        <div class="actor-card">
+            <div class="actor-header">
+                <div class="actor-avatar ${actor.type}">
+                    ${actor.type === 'ally' ? '🟢' : actor.type === 'neutral' ? '🟡' : '🔴'}
+                </div>
+                <div>
+                    <div class="actor-name">${actor.name}</div>
+                    <div class="actor-role">${actor.role || 'Non spécifié'}</div>
+                </div>
+            </div>
+            <div class="actor-metrics">
+                <div class="actor-metric">
+                    <span>Pouvoir</span>
+                    <span class="actor-metric-value">${actor.power}/10</span>
+                </div>
+                <div class="actor-metric">
+                    <span>Type</span>
+                    <span class="actor-metric-value">${actor.type === 'ally' ? 'Allié' : actor.type === 'neutral' ? 'Neutre' : 'Opposant'}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// JOURNAL
+// ══════════════════════════════════════════════════════════════════════════════
+
+function addJournalEntry() {
+    const title = document.getElementById('journal-title').value.trim();
+    const content = document.getElementById('journal-content').value.trim();
+    const tags = document.getElementById('journal-tags').value.trim();
+
+    if (!title || !content) {
+        showToast('error', 'Erreur', 'Veuillez remplir le titre et le contenu');
+        return;
+    }
+
+    const entry = {
+        id: Date.now(),
+        title,
+        content,
+        tags: tags.split(',').map(t => t.trim()).filter(t => t),
+        date: new Date().toISOString()
+    };
+
+    AppState.journal.unshift(entry);
+    saveState();
+    renderJournal();
+
+    // Clear form
+    document.getElementById('journal-title').value = '';
+    document.getElementById('journal-content').value = '';
+    document.getElementById('journal-tags').value = '';
+
+    showToast('success', 'Entrée ajoutée', 'Nouvelle entrée dans le journal');
+}
+
+function renderJournal() {
+    const timeline = document.getElementById('journal-timeline');
+    
+    if (AppState.journal.length === 0) {
+        timeline.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            Aucune entrée dans le journal.
+        </div>`;
+        return;
+    }
+
+    timeline.innerHTML = AppState.journal.map(entry => {
+        const date = new Date(entry.date);
+        const formatted = date.toLocaleDateString('fr-BE', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        return `
+            <div class="timeline-item">
+                <div class="timeline-date">${formatted}</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">${entry.title}</div>
+                    <div class="timeline-text">${entry.content}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TSAR e-BOMBA MODULE
+// ══════════════════════════════════════════════════════════════════════════════
+
+function addTriplet() {
+    const container = document.getElementById('triplets-list');
+    const newRow = document.createElement('div');
+    newRow.className = 'triplet-row';
+    newRow.innerHTML = `
+        <div>
+            <div class="triplet-label">Sujet</div>
+            <input type="text" class="triplet-input" data-triplet="subject" placeholder="Entité">
+        </div>
+        <span class="triplet-arrow">→</span>
+        <div>
+            <div class="triplet-label">Prédicat</div>
+            <input type="text" class="triplet-input" data-triplet="predicate" placeholder="est associé à">
+        </div>
+        <span class="triplet-arrow">→</span>
+        <div>
+            <div class="triplet-label">Objet</div>
+            <input type="text" class="triplet-input" data-triplet="object" placeholder="Attribut">
+        </div>
+        <button class="btn btn-ghost" onclick="this.parentElement.remove()" style="padding: 0.5rem; color: var(--civic-red);">✕</button>
+    `;
+    container.appendChild(newRow);
+}
+
+function generateJsonLd() {
+    const targetName = document.getElementById('target-name').value || 'Entité cible';
+    const targetType = document.getElementById('target-type').value;
+    const attributes = document.getElementById('target-attributes').value;
+    
+    const triplets = [];
+    document.querySelectorAll('.triplet-row').forEach(row => {
+        const subject = row.querySelector('[data-triplet="subject"]')?.value;
+        const predicate = row.querySelector('[data-triplet="predicate"]')?.value;
+        const object = row.querySelector('[data-triplet="object"]')?.value;
+        if (subject && predicate && object) {
+            triplets.push({ subject, predicate, object });
+        }
+    });
+
+    const schemaType = {
+        'person': 'Person',
+        'organization': 'Organization',
+        'media': 'NewsMediaOrganization',
+        'government': 'GovernmentOrganization'
+    }[targetType] || 'Thing';
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": `Analyse critique : ${targetName}`,
+        "datePublished": new Date().toISOString(),
+        "author": {
+            "@type": "Organization",
+            "name": "Collectif Citoyen pour la Transparence"
+        },
+        "about": {
+            "@type": schemaType,
+            "name": targetName,
+            "description": attributes || "Entité analysée"
+        },
+        "mentions": triplets.map(t => ({
+            "@type": "Thing",
+            "name": t.subject,
+            "description": `${t.predicate} ${t.object}`
+        }))
+    };
+
+    document.getElementById('jsonld-output').textContent = JSON.stringify(jsonLd, null, 2);
+    
+    AppState.triplets = triplets;
+    saveState();
+    updateDashboardStats();
+    
+    showToast('success', 'JSON-LD généré', 'Structure sémantique prête à être déployée');
+}
+
+function copyJsonLd() {
+    const code = document.getElementById('jsonld-output').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        showToast('success', 'Copié!', 'JSON-LD copié dans le presse-papier');
+    });
+}
+
+function loadTemplate(type) {
+    const templates = {
+        claimReview: {
+            "@context": "https://schema.org",
+            "@type": "ClaimReview",
+            "datePublished": new Date().toISOString(),
+            "url": "URL_DE_VOTRE_ARTICLE",
+            "claimReviewed": "Affirmation à vérifier",
+            "itemReviewed": {
+                "@type": "Claim",
+                "author": { "@type": "Person", "name": "AUTEUR_ORIGINAL" },
+                "datePublished": "DATE_AFFIRMATION"
+            },
+            "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": "1",
+                "bestRating": "5",
+                "worstRating": "1",
+                "alternateName": "Faux"
+            },
+            "author": {
+                "@type": "Organization",
+                "name": "VOTRE_ORGANISATION"
+            }
+        },
+        article: {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "headline": "TITRE_ARTICLE",
+            "datePublished": new Date().toISOString(),
+            "author": {
+                "@type": "Organization",
+                "name": "COLLECTIF_CITOYEN"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "MEDIA_ALTERNATIF",
+                "logo": { "@type": "ImageObject", "url": "URL_LOGO" }
+            }
+        },
+        organization: {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "NOM_COLLECTIF",
+            "description": "DESCRIPTION_MISSION",
+            "url": "URL_SITE",
+            "foundingDate": "2024",
+            "areaServed": "Belgique"
+        },
+        person: {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "NOM_PERSONNE",
+            "jobTitle": "TITRE_FONCTION",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "ORGANISATION"
+            }
+        }
+    };
+
+    document.getElementById('jsonld-output').textContent = JSON.stringify(templates[type], null, 2);
+    showToast('info', 'Template chargé', `Template ${type} prêt à personnaliser`);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// IMPORT/EXPORT
+// ══════════════════════════════════════════════════════════════════════════════
+
+function exportData(format) {
+    const data = JSON.stringify(AppState, null, 2);
+    let content, filename, mimeType;
+
+    switch (format) {
+        case 'json':
+            content = data;
+            filename = 'plaidoyer-citoyen.json';
+            mimeType = 'application/json';
+            break;
+        case 'csv':
+            content = convertToCSV(AppState);
+            filename = 'plaidoyer-citoyen.csv';
+            mimeType = 'text/csv';
+            break;
+        case 'md':
+            content = convertToMarkdown(AppState);
+            filename = 'plaidoyer-citoyen.md';
+            mimeType = 'text/markdown';
+            break;
+        case 'html':
+            content = convertToHTML(AppState);
+            filename = 'plaidoyer-citoyen-report.html';
+            mimeType = 'text/html';
+            break;
+    }
+
+    downloadFile(content, filename, mimeType);
+    showToast('success', 'Export réussi', `Fichier ${filename} téléchargé`);
+}
+
+function exportAll() {
+    exportData('json');
+}
+
+function convertToCSV(state) {
+    let csv = 'Type,Nom,Valeur,Date\n';
+    
+    state.actors.forEach(a => {
+        csv += `Acteur,"${a.name}",${a.type},${a.created}\n`;
+    });
+    
+    state.journal.forEach(j => {
+        csv += `Journal,"${j.title}","${j.content.replace(/"/g, '""')}",${j.date}\n`;
+    });
+
+    return csv;
+}
+
+function convertToMarkdown(state) {
+    let md = `# Plaidoyer Citoyen - ${state.project.name}\n\n`;
+    md += `*Dernière modification: ${new Date(state.project.lastModified).toLocaleDateString('fr-BE')}*\n\n`;
+
+    if (state.tools.swot) {
+        md += `## Analyse SWOT\n\n`;
+        md += `### Forces\n${state.tools.swot.strengths || 'Non renseigné'}\n\n`;
+        md += `### Faiblesses\n${state.tools.swot.weaknesses || 'Non renseigné'}\n\n`;
+        md += `### Opportunités\n${state.tools.swot.opportunities || 'Non renseigné'}\n\n`;
+        md += `### Menaces\n${state.tools.swot.threats || 'Non renseigné'}\n\n`;
+    }
+
+    if (state.actors.length > 0) {
+        md += `## Cartographie des acteurs\n\n`;
+        md += `| Nom | Type | Pouvoir | Rôle |\n|-----|------|---------|------|\n`;
+        state.actors.forEach(a => {
+            md += `| ${a.name} | ${a.type} | ${a.power}/10 | ${a.role || '-'} |\n`;
+        });
+        md += '\n';
+    }
+
+    if (state.journal.length > 0) {
+        md += `## Journal de bord\n\n`;
+        state.journal.forEach(j => {
+            md += `### ${j.title}\n*${new Date(j.date).toLocaleDateString('fr-BE')}*\n\n${j.content}\n\n`;
+        });
+    }
+
+    return md;
+}
+
+function convertToHTML(state) {
+    return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport - ${state.project.name}</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+        h1 { color: #1a1a2e; border-bottom: 3px solid #00d4ff; padding-bottom: 0.5rem; }
+        h2 { color: #16213e; margin-top: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f4f4f4; }
+        .badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .ally { background: #d4edda; color: #155724; }
+        .neutral { background: #fff3cd; color: #856404; }
+        .opponent { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>📋 ${state.project.name}</h1>
+    <p><em>Généré le ${new Date().toLocaleDateString('fr-BE')}</em></p>
+    ${state.actors.length > 0 ? `
+    <h2>👥 Acteurs cartographiés (${state.actors.length})</h2>
+    <table>
+        <thead><tr><th>Nom</th><th>Type</th><th>Pouvoir</th><th>Rôle</th></tr></thead>
+        <tbody>
+            ${state.actors.map(a => `<tr>
+                <td>${a.name}</td>
+                <td><span class="badge ${a.type}">${a.type}</span></td>
+                <td>${a.power}/10</td>
+                <td>${a.role || '-'}</td>
+            </tr>`).join('')}
+        </tbody>
+    </table>` : ''}
+    ${state.journal.length > 0 ? `
+    <h2>📓 Journal de bord</h2>
+    ${state.journal.map(j => `
+        <article style="margin-bottom: 1.5rem; padding: 1rem; background: #f9f9f9; border-radius: 8px;">
+            <h3 style="margin: 0 0 0.5rem;">${j.title}</h3>
+            <time style="color: #666; font-size: 0.85rem;">${new Date(j.date).toLocaleDateString('fr-BE')}</time>
+            <p style="margin-top: 0.5rem;">${j.content}</p>
+        </article>
+    `).join('')}` : ''}
+</body>
+</html>`;
+}
+
+function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function setupDropZone() {
+    const dropZone = document.getElementById('drop-zone');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+    });
+
+    dropZone.addEventListener('drop', handleDrop, false);
+}
+
+function handleDrop(e) {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleFileImport({ target: { files } });
+    }
+}
+
+function handleFileImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const content = e.target.result;
+            
+            if (file.name.endsWith('.json')) {
+                const imported = JSON.parse(content);
+                Object.assign(AppState, imported);
+                saveState();
+                renderActors();
+                renderJournal();
+                updateDashboardStats();
+                showToast('success', 'Import réussi', `${file.name} importé avec succès`);
+            } else {
+                showToast('info', 'Fichier reçu', `${file.name} - Traitement en cours...`);
+            }
+        } catch (err) {
+            showToast('error', 'Erreur d\'import', 'Impossible de lire le fichier');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════════════════════════════════
+
+function updateDashboardStats() {
+    const completedTools = Object.keys(AppState.tools).filter(k => {
+        const tool = AppState.tools[k];
+        return tool && Object.values(tool).some(v => v && v.length > 0);
+    }).length;
+
+    document.getElementById('stat-tools').textContent = completedTools;
+    document.getElementById('stat-actors').textContent = AppState.actors.length;
+    document.getElementById('stat-targets').textContent = AppState.targets.length;
+    document.getElementById('stat-triplets').textContent = AppState.triplets.length;
+}
+
+function showToast(type, title, message) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+    
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type]}</span>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideIn 300ms ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function showQuickSave() {
+    saveState();
+}
+
+function showExportModal() {
+    navigateTo('import-export');
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function generateMessage() {
+    const hook = document.querySelector('[data-message="hook"]')?.value || '';
+    const problem = document.querySelector('[data-message="problem"]')?.value || '';
+    const importance = document.querySelector('[data-message="importance"]')?.value || '';
+    const target = document.querySelector('[data-message="target"]')?.value || '';
+    const action = document.querySelector('[data-message="action"]')?.value || '';
+
+    const fullMessage = `${hook}\n\n${problem}\n\n${importance}\n\nNous vous demandons, ${target}, de ${action}`;
+    
+    navigator.clipboard.writeText(fullMessage).then(() => {
+        showToast('success', 'Message généré', 'Copié dans le presse-papier!');
+    });
+}
+
+function addTarget() {
+    showToast('info', 'Fonctionnalité', 'Ajout de cibles multiples - Coming soon');
+}
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cartographie complète de l'écosystème GitHub ouaisfieu - Veille citoyenne et éducation populaire">
+    <title>ouaisfieu — Cartographie Complète</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        :root {
+            --c-bg: #0a0a0f;
+            --c-bg-card: #12121a;
+            --c-bg-elevated: #1a1a25;
+            --c-border: #2a2a3a;
+            --c-text: #e8e6e3;
+            --c-text-muted: #8a8890;
+            --c-accent: #fbbf24;
+            --c-accent-dim: #92700e;
+            --c-link: #60a5fa;
+            --c-link-hover: #93c5fd;
+            --c-success: #34d399;
+            --c-warning: #f97316;
+            --c-danger: #ef4444;
+            --c-purple: #a78bfa;
+            --c-pink: #f472b6;
+            --radius: 8px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--c-bg);
+            color: var(--c-text);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* === MOBILE NAV === */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--c-bg-card);
+            border-top: 1px solid var(--c-border);
+            padding: 8px 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .mobile-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            color: var(--c-text-muted);
+            text-decoration: none;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+        
+        .mobile-nav a:active,
+        .mobile-nav a.active {
+            color: var(--c-accent);
+        }
+        
+        .mobile-nav .icon {
+            font-size: 1.3rem;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-nav { display: none; }
+        }
+        
+        /* === HEADER === */
+        header {
+            background: linear-gradient(135deg, var(--c-bg-card) 0%, #1a1525 100%);
+            border-bottom: 1px solid var(--c-border);
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--c-text);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo span {
+            color: var(--c-accent);
+        }
+        
+        .github-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--c-text-muted);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            background: var(--c-bg-elevated);
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+        }
+        
+        .github-link:hover {
+            border-color: var(--c-accent-dim);
+            color: var(--c-text);
+        }
+        
+        /* === SEARCH === */
+        .search-container {
+            margin-top: 12px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--c-bg);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            color: var(--c-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--c-accent);
+        }
+        
+        .search-input::placeholder {
+            color: var(--c-text-muted);
+        }
+        
+        /* === STATS BAR === */
+        .stats-bar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .stats-bar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .stat-chip {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-border);
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--c-text-muted);
+            white-space: nowrap;
+        }
+        
+        .stat-chip .value {
+            color: var(--c-accent);
+            font-weight: 600;
+        }
+        
+        /* === DESKTOP NAV === */
+        .desktop-nav {
+            display: none;
+            background: var(--c-bg-card);
+            border-bottom: 1px solid var(--c-border);
+            padding: 0 16px;
+            position: sticky;
+            top: 85px;
+            z-index: 99;
+        }
+        
+        @media (min-width: 768px) {
+            .desktop-nav {
+                display: block;
+            }
+        }
+        
+        .desktop-nav ul {
+            max-width: 1200px;
+            margin: 0 auto;
+            list-style: none;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+        
+        .desktop-nav a {
+            display: block;
+            padding: 12px 16px;
+            color: var(--c-text-muted);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .desktop-nav a:hover {
+            color: var(--c-text);
+            background: var(--c-bg-elevated);
+        }
+        
+        .desktop-nav a.highlight {
+            color: var(--c-accent);
+            border-bottom-color: var(--c-accent);
+        }
+        
+        /* === MAIN === */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+        
+        @media (min-width: 768px) {
+            main { padding: 24px; padding-bottom: 40px; }
+        }
+        
+        /* === HERO CARD === */
+        .hero-card {
+            background: linear-gradient(135deg, #1a1525 0%, #251a30 100%);
+            border: 1px solid var(--c-purple);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--c-purple), var(--c-pink), var(--c-accent));
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--c-accent);
+            color: var(--c-bg);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        .hero-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--c-text);
+        }
+        
+        @media (min-width: 768px) {
+            .hero-card h2 { font-size: 1.6rem; }
+        }
+        
+        .hero-card .hero-link {
+            color: var(--c-link);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        .hero-card .hero-link:hover {
+            text-decoration: underline;
+        }
+        
+        .hero-card p {
+            color: var(--c-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .hero-tags span {
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--c-border);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--c-text-muted);
+        }
+        
+        /* === ARCHITECTURE DIAGRAM === */
+        .architecture {
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+        
+        .architecture h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--c-accent);
+            margin-bottom: 12px;
+        }
+        
+        .architecture pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: var(--c-text-muted);
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .architecture pre .highlight {
+            color: var(--c-accent);
+        }
+        
+        .architecture pre .link {
+            color: var(--c-link);
+        }
+        
+        .architecture pre .muted {
+            color: var(--c-text-muted);
+        }
+        
+        /* === SECTION === */
+        .section {
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--c-border);
+        }
+        
+        .section-header h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+        
+        .section-header .count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            background: var(--c-bg-elevated);
+            border-radius: 10px;
+            color: var(--c-text-muted);
+        }
+        
+        /* === REPO GRID === */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        @media (min-width: 640px) {
+            .repo-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (min-width: 1024px) {
+            .repo-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .repo-card {
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        
+        .repo-card:hover {
+            border-color: var(--c-accent-dim);
+            transform: translateY(-2px);
+        }
+        
+        .repo-card h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+        
+        .repo-card h4 a {
+            color: var(--c-link);
+            text-decoration: none;
+        }
+        
+        .repo-card h4 a:hover {
+            text-decoration: underline;
+        }
+        
+        .repo-card .desc {
+            font-size: 0.85rem;
+            color: var(--c-text-muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .repo-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .repo-meta .tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--c-text-muted);
+        }
+        
+        .repo-meta .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .repo-meta .dot.jekyll { background: #cc342d; }
+        .repo-meta .dot.html { background: #e34c26; }
+        .repo-meta .dot.js { background: #f7df1e; }
+        .repo-meta .dot.md { background: #083fa1; }
+        .repo-meta .dot.grav { background: #6366f1; }
+        
+        /* === SITE CARDS === */
+        .site-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .site-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        .site-card {
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .site-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--c-bg-elevated);
+            border-bottom: 1px solid var(--c-border);
+        }
+        
+        .site-card-header h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .site-card-header .badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            background: var(--c-purple);
+            color: white;
+            border-radius: 4px;
+        }
+        
+        .site-card-body {
+            padding: 12px 16px;
+        }
+        
+        .site-card-body ul {
+            list-style: none;
+        }
+        
+        .site-card-body li {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--c-border);
+        }
+        
+        .site-card-body li:last-child {
+            border-bottom: none;
+        }
+        
+        .site-card-body a {
+            color: var(--c-link);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .site-card-body a:hover {
+            text-decoration: underline;
+        }
+        
+        .site-card-body .sub {
+            font-size: 0.8rem;
+            color: var(--c-text-muted);
+            padding-left: 12px;
+            font-style: italic;
+        }
+        
+        .tag-new {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            background: var(--c-danger);
+            color: white;
+            border-radius: 4px;
+            margin-left: 6px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* === COLLAPSIBLE === */
+        .collapsible {
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--c-bg-elevated);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .collapsible-header:active {
+            background: var(--c-bg-card);
+        }
+        
+        .collapsible-header h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .collapsible-header .arrow {
+            color: var(--c-text-muted);
+            transition: transform 0.3s;
+        }
+        
+        .collapsible.open .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .collapsible-body {
+            display: none;
+            padding: 16px;
+            border-top: 1px solid var(--c-border);
+        }
+        
+        .collapsible.open .collapsible-body {
+            display: block;
+        }
+        
+        .collapsible-body ul {
+            list-style: none;
+            column-count: 1;
+        }
+        
+        @media (min-width: 640px) {
+            .collapsible-body ul { column-count: 2; }
+        }
+        
+        @media (min-width: 1024px) {
+            .collapsible-body ul { column-count: 3; }
+        }
+        
+        .collapsible-body li {
+            padding: 4px 0;
+            break-inside: avoid;
+        }
+        
+        .collapsible-body li::before {
+            content: "›";
+            color: var(--c-accent);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .collapsible-body a {
+            color: var(--c-link);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        
+        .collapsible-body a:hover {
+            text-decoration: underline;
+        }
+        
+        /* === EXTERNAL LINKS === */
+        .external-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        @media (min-width: 640px) {
+            .external-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (min-width: 1024px) {
+            .external-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        
+        .external-card {
+            background: var(--c-bg-card);
+            border: 1px solid var(--c-accent-dim);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+        
+        .external-card h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        
+        .external-card h4 a {
+            color: var(--c-accent);
+            text-decoration: none;
+        }
+        
+        .external-card p {
+            font-size: 0.8rem;
+            color: var(--c-text-muted);
+        }
+        
+        /* === INFO CARDS === */
+        .info-card {
+            background: linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.05) 100%);
+            border: 1px solid var(--c-accent-dim);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .info-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--c-accent);
+            margin-bottom: 8px;
+        }
+        
+        .info-card p {
+            font-size: 0.9rem;
+            color: var(--c-text-muted);
+        }
+        
+        .info-card .stat {
+            color: var(--c-text);
+            font-weight: 600;
+        }
+        
+        /* === FOOTER === */
+        footer {
+            background: var(--c-bg-card);
+            border-top: 1px solid var(--c-border);
+            padding: 24px 16px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        @media (min-width: 768px) {
+            footer { margin-bottom: 0; }
+        }
+        
+        footer .links {
+            margin-bottom: 12px;
+        }
+        
+        footer .links a {
+            color: var(--c-link);
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 0.9rem;
+        }
+        
+        footer .links a:hover {
+            text-decoration: underline;
+        }
+        
+        footer .copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--c-text-muted);
+        }
+        
+        /* === UTILITIES === */
+        .hidden { display: none !important; }
+        
+        .highlight-match {
+            background: var(--c-accent);
+            color: var(--c-bg);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--c-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--c-border);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--c-text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- MOBILE NAV -->
+    <nav class="mobile-nav">
+        <a href="#repos"><span class="icon">📦</span>Repos</a>
+        <a href="#sites"><span class="icon">🌐</span>Sites</a>
+        <a href="#doctech"><span class="icon">📚</span>DOCTech</a>
+        <a href="#bxl"><span class="icon">🏙️</span>BXL</a>
+        <a href="#external"><span class="icon">🔗</span>Liens</a>
+    </nav>
+    
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="header-top">
+                <a href="https://ouaisfieu.github.io/" class="logo">ouaisfi<span>·</span>eu</a>
+                <a href="https://github.com/ouaisfieu" class="github-link">
+                    <span>⚡</span> github.com/ouaisfieu
+                </a>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Filtrer les liens...">
+            </div>
+        </div>
+    </header>
+    
+    <!-- STATS -->
+    <div class="stats-bar">
+        <div class="stat-chip"><span class="value">6</span> Repos</div>
+        <div class="stat-chip"><span class="value">6</span> GitHub Pages</div>
+        <div class="stat-chip"><span class="value">200+</span> Pages</div>
+        <div class="stat-chip">Jekyll</div>
+        <div class="stat-chip">CC BY-NC 4.0</div>
+    </div>
+    
+    <!-- DESKTOP NAV -->
+    <nav class="desktop-nav">
+        <ul>
+            <li><a href="#repos">📦 Repositories</a></li>
+            <li><a href="#sites" class="highlight">🌐 GitHub Pages</a></li>
+            <li><a href="#doctech">📚 DOCTech</a></li>
+            <li><a href="#gpttpardi">🎲 GPTPardi</a></li>
+            <li><a href="#bxl">🏙️ BXL2030/42</a></li>
+            <li><a href="#dossiers">📂 Dossiers</a></li>
+            <li><a href="#external">🔗 Externe</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- INFO CARD -->
+        <div class="info-card">
+            <h3>🎯 Projet de veille citoyenne</h3>
+            <p>Écosystème open source d'éducation populaire centré sur la Belgique. <span class="stat">Totale indépendance</span> : pas de pub, pas de traçage, code ouvert. Slogan : "Dont'be evil, just do it".</p>
+        </div>
+        
+        <!-- ARCHITECTURE -->
+        <div class="architecture">
+            <h3>📐 Architecture de l'écosystème</h3>
+            <pre><span class="highlight">ouaisfi.eu</span> (Grav CMS)
+│
+├── <span class="link">ouaisfieu.github.io/</span> ──── Index des projets
+│       │
+│       ├── <span class="link">/tech/</span> ──────────── DOCTech (documentation)
+│       ├── <span class="link">/bxl2030/</span> ───────── Analyse Bruxelles
+│       ├── <span class="link">/bxl2042/</span> ───────── Extension futuriste
+│       ├── <span class="link">/dossiers/</span> ──────── Dossiers critiques
+│       └── <span class="link">/GPTPardi/</span> ──────── Analyse assistée IA
+│
+├── <span class="muted">dl.ouaisfi.eu</span> ────────── Zone téléchargements
+└── <span class="muted">publish.obsidian.md</span> ─── Notes Obsidian</pre>
+        </div>
+        
+        <!-- REPOSITORIES -->
+        <section class="section" id="repos">
+            <div class="section-header">
+                <h2>📦 Repositories GitHub</h2>
+                <span class="count">6 repos</span>
+            </div>
+            <div class="repo-grid">
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/ouaisfieu.github.io">ouaisfieu.github.io</a></h4>
+                    <p class="desc">Hub central — Index redirigeant vers tous les projets</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot jekyll"></span>Jekyll</span>
+                    </div>
+                </div>
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/tech">tech</a></h4>
+                    <p class="desc">DOCTech — Documentation citoyenne (Just the Docs)</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot jekyll"></span>Jekyll</span>
+                        <span class="tag"><span class="dot md"></span>Markdown</span>
+                    </div>
+                </div>
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/bxl2030">bxl2030</a></h4>
+                    <p class="desc">Analyse prospective Bruxelles (Minimal Mistakes)</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot jekyll"></span>Jekyll</span>
+                    </div>
+                </div>
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/bxl2042">bxl2042</a></h4>
+                    <p class="desc">Extension futuriste horizon 2042</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot jekyll"></span>Jekyll</span>
+                    </div>
+                </div>
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/dossiers">dossiers</a></h4>
+                    <p class="desc">Analyses critiques thématiques (Minimal Mistakes)</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot jekyll"></span>Jekyll</span>
+                    </div>
+                </div>
+                <div class="repo-card">
+                    <h4><a href="https://github.com/ouaisfieu/GPTPardi">GPTPardi</a></h4>
+                    <p class="desc">Projet d'analyse assistée par IA</p>
+                    <div class="repo-meta">
+                        <span class="tag"><span class="dot md"></span>En migration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- GITHUB PAGES -->
+        <section class="section" id="sites">
+            <div class="section-header">
+                <h2>🌐 Sites GitHub Pages</h2>
+                <span class="count">6 sites</span>
+            </div>
+            <div class="site-grid">
+                <!-- Index -->
+                <div class="site-card">
+                    <div class="site-card-header">
+                        <h3>🏠 Portail Principal</h3>
+                        <span class="badge">Hub</span>
+                    </div>
+                    <div class="site-card-body">
+                        <ul>
+                            <li><a href="https://ouaisfieu.github.io/">ouaisfieu.github.io</a><span class="tag-new">Root</span></li>
+                            <li class="sub">Index central vers tous les projets</li>
+                            <li><a href="https://ouaisfieu.github.io/economie">Échanges économiques</a></li>
+                            <li><a href="https://ouaisfieu.github.io/citoyennete">Citoyenneté</a></li>
+                            <li><a href="https://ouaisfieu.github.io/guerre-economique">Guerre économique</a></li>
+                            <li><a href="https://ouaisfieu.github.io/information">Information & pouvoir</a></li>
+                            <li><a href="https://ouaisfieu.github.io/opendata">Civic Tech</a></li>
+                            <li><a href="https://ouaisfieu.github.io/intelligence">OSINT & IE</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- ouaisfi.eu -->
+                <div class="site-card">
+                    <div class="site-card-header">
+                        <h3>🌍 ouaisfi.eu</h3>
+                        <span class="badge">Grav</span>
+                    </div>
+                    <div class="site-card-body">
+                        <ul>
+                            <li><a href="https://ouaisfi.eu/">Portail principal</a></li>
+                            <li class="sub">Veille citoyenne — Grav CMS</li>
+                            <li><a href="https://ouaisfi.eu/">Up Yours</a> — Dossiers critiques</li>
+                            <li><a href="https://ouaisfi.eu/">My Spot</a> — Section Belgique</li>
+                            <li><a href="https://ouaisfi.eu/">Kit de Base</a> — Guides</li>
+                            <li><a href="https://ouaisfi.eu/">Laboratoire</a> — Tests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- DOCTech -->
+        <section class="section" id="doctech">
+            <div class="section-header">
+                <h2>📚 DOCTech — Document d'Ordre Citoyen</h2>
+            </div>
+            
+            <div class="collapsible open">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>📗 Notions <span style="color:var(--c-text-muted);font-weight:400">(11 fiches)</span></h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/tech/">Accueil DOCTech</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/subjectivation/">Subjectivation</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/analyse-de-marche/">Analyse de marché</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/kpi/">Indicateurs KPIs</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/violence/">Violence (5 sous-sections)</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/champ-et-marche/">Champ et marché</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/com-co/">Communication</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/creation-valeur/">Création de valeur</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/soft-power/">Soft Power</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/lead/">Lead</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/operation-strategique/">Opération stratégique</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/notions/intersectionnalite.html">Intersectionnalité</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>🟩 Dossiers <span style="color:var(--c-text-muted);font-weight:400">(12 fiches)</span></h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/critique-corpus/">Critique du corpus</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/democratie-belge/">Démocratie belge</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/partis-pouvoir/">Pouvoir des partis</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/pouvoir-individuel-collectif/">Pouvoir d'agir</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/budget-participatif/">Budget participatif</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/assemblee-citoyenne/">Assemblée citoyenne</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/veille-citoyenne/">Veille citoyenne</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/donnees-et-vie-privee/">Données internet</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/logiciel-libre-communs/">Logiciel libre</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/inclusion-participation/">Inclusion</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/dossiers/bouger-sa-commune/">Kit express commune</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>🇧🇪 Belgique <span style="color:var(--c-text-muted);font-weight:400">(~30 fiches)</span></h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/">État, Nation, Patrie</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/pilarisation/">Pilarisation</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/pilarisation-genese-historique">› Genèse historique</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/pilarisation-declin-etat-actuel/">› Déclin et état actuel</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/pilarisation-comparaisons-internationales/">› Comparaisons</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/particratie/">Particratie</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/particratie-fonctionnement-et-presidents/">› Fonctionnement</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/particratie-critiques-et-derives/">› Critiques</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/compromis/">Compromis</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/complexite/">Complexité/Fédéralisme</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/federalisme-origines-et-transition/">› Origines</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/reformes-de-letat/">› Réformes de l'État</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/structures-federales-actuelles/">› Structures actuelles</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/repartition-des-competences/">› Compétences</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/perspectives-et-reformes/">› 7ᵉ réforme</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/education-civique-belgique/">Éducation civique</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/justice-sociale-belgique/">Justice sociale</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/liberte-et-pluralisme-des-medias/">Liberté des médias</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/participation-citoyenne-belgique/">Participation citoyenne</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/separation-des-pouvoirs-belgique/">Séparation des pouvoirs</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/transparence-et-gouvernance/">Transparence</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/etat-democratie-resiliente/">10 leviers résilience</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/belgique/bilan/">Bilan corpus</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>🟥 Et quoi ? <span style="color:var(--c-text-muted);font-weight:400">(CCPLC)</span></h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/">Pouvoir d'agir collectif</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/introduction.html">Autonomie vs hégémonie</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/autonomie-empowerment-perspectives.html">Perspectives théoriques</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/etudes-cas-contemporains.html">Études de cas</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/récupération-capitalisme.html">Récupération capitaliste</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/conclusion-generale.html">Conclusion</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/et-vous/sources.html">Sources</a></li>
+                        <li><a href="https://ouaisfieu.github.io/tech/ccplc/">CCPLC</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- GPTPardi -->
+        <section class="section" id="gpttpardi">
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>🎲 GPTPardi — Analyses IA</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/">Accueil GPTPardi</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/ecoutes-nsa/">Écoutes NSA</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/dieselgate/">Dieselgate</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-pegasus/">Affaire Pegasus</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/qatargate/">Qatargate</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/panama-papers/">Panama Papers</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-clearstream/">Clearstream</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-kazakhgate/">Kazakhgate</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/affaire-enron/">Enron</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/scandale-lockheed/">Lockheed</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/watergate/">Watergate</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/iran-contra/">Iran-Contra</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/cambridge-analytica/">Cambridge Analytica</a></li>
+                        <li><a href="https://ouaisfieu.github.io/GPTPardi/dossiers/russiagate/">Russiagate</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- BXL -->
+        <section class="section" id="bxl">
+            <div class="section-header">
+                <h2>🏙️ BXL2030 & BXL2042</h2>
+            </div>
+            
+            <!-- Key stats -->
+            <div class="info-card" style="margin-bottom:16px;">
+                <h3>📊 Données clés (Crises 2023-2025)</h3>
+                <p>
+                    <span class="stat">92 fusillades</span> en 2024 à Bruxelles • 
+                    Dette régionale : <span class="stat">3,4 → 10,4 milliards €</span> • 
+                    Paralysie politique post-élections 2024
+                </p>
+            </div>
+            
+            <div class="collapsible open">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>🗓️ Analyses historiques</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/">Accueil BXL2030</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2042/">Accueil BXL2042</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/bruxelles/crises-systemiques-2023-2025/">Crises systémiques 2023-25</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/1984-nation-en-sursis/">1984 — Nation en sursis</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/annees-de-plomb-1982-1985/">Années de Plomb 1982-85</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/2020-2024-gestion-sans-gouvernance/">2020-24 : Gestion sans gouvernance</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/belgique/centrales-nucleaires-belges/">Centrales nucléaires</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/concepts/etat-democratique-sain/">État démocratique sain</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>👤 Lead-dexing (Portraits)</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/florence-manente/">Florence Manente</a> — Community Builder PS</li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/michel-henrion/">Michel Henrion</a> — Journaliste/spin doctor</li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/lead-dexing/pac/">PAC asbl</a></li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/politique/belgique/analyse/2025/10/13/georges-louis-bouchez-stratege-mediatique-liberalisme-belge.html">Georges-Louis Bouchez</a> — Président MR</li>
+                        <li><a href="https://ouaisfieu.github.io/bxl2030/2025/10/01/korben-portrait-trajectoire-influence.html">Korben</a> — Tech</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- DOSSIERS -->
+        <section class="section" id="dossiers">
+            <div class="section-header">
+                <h2>📂 Dossiers thématiques</h2>
+            </div>
+            
+            <!-- Key stats -->
+            <div class="info-card" style="margin-bottom:16px;">
+                <h3>📈 Chiffres clés des dossiers</h3>
+                <p>
+                    <span class="stat">100 entreprises fossiles = 71%</span> des émissions industrielles depuis 1988 • 
+                    <span class="stat">+7 millions</span> de Vénézuéliens exilés 2017-24 • 
+                    Modèle DIKW : Données → Information → Connaissance → Sagesse
+                </p>
+            </div>
+            
+            <div class="collapsible open">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>📄 4 Dossiers majeurs</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/">Accueil Dossiers</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/resources/echanges-intelligence-stupidite/">Évolution des échanges</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/resources/citoyennete-brol/">Citoyenneté, c'est le brol</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/resources/guerre-economique/">Guerre économique</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/resources/information-pouvoir-agir/">Information & pouvoir d'agir</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/plaidoyer/">Plaidoyer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <h3>📝 Articles</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/30/pourquoi-nous.html">Pourquoi nous</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/30/citoyennete-droits-variations-engagement.html">Citoyenneté : droits</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/29/veille-citoyenne-fwb.html">Veille citoyenne FWB</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/civic-tech-open-data-belgique.html">Civic Tech Belgique</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/OSINT-intelligence-economique.html">OSINT & IE</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/trop-d-info.html">Infobésité</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/une-bonne-guerre.html">Une bonne guerre</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/2025/06/27/kaleidoscope.html">Kaléidoscope</a></li>
+                        <li><a href="https://ouaisfieu.github.io/dossiers/dossiers/2025/06/27/guerre-cognitive.html">Guerre cognitive</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- EXTERNAL -->
+        <section class="section" id="external">
+            <div class="section-header">
+                <h2>🔗 Ressources externes</h2>
+            </div>
+            <div class="external-grid">
+                <div class="external-card">
+                    <h4><a href="https://ouaisfi.eu/">ouaisfi.eu</a></h4>
+                    <p>Portail principal Grav CMS</p>
+                </div>
+                <div class="external-card">
+                    <h4><a href="https://dl.ouaisfi.eu/">dl.ouaisfi.eu</a></h4>
+                    <p>Zone téléchargements</p>
+                </div>
+                <div class="external-card">
+                    <h4><a href="https://publish.obsidian.md/ouaisfieu">Obsidian</a></h4>
+                    <p>Notes de recherche</p>
+                </div>
+                <div class="external-card">
+                    <h4><a href="https://bsky.app/profile/ouaisfi.eu">Bluesky</a></h4>
+                    <p>@ouaisfi.eu</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer>
+        <div class="links">
+            <a href="https://ouaisfieu.github.io/">GitHub Pages</a>
+            <a href="https://github.com/ouaisfieu">GitHub</a>
+            <a href="https://ouaisfi.eu/">ouaisfi.eu</a>
+        </div>
+        <div class="copy">
+            © 2025 • CC BY-NC 4.0 • "Dont'be evil, just do it"
+        </div>
+    </footer>
+    
+    <script>
+        // Collapsible toggle
+        function toggleCollapsible(header) {
+            const collapsible = header.parentElement;
+            collapsible.classList.toggle('open');
+        }
+        
+        // Search/Filter
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const allLinks = document.querySelectorAll('a[href*="ouaisfieu"], a[href*="ouaisfi"]');
+            
+            allLinks.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                const href = link.href.toLowerCase();
+                const li = link.closest('li');
+                const card = link.closest('.repo-card, .site-card, .external-card');
+                const target = li || card;
+                
+                if (!target) return;
+                
+                if (query === '' || text.includes(query) || href.includes(query)) {
+                    target.classList.remove('hidden');
+                    if (query && text.includes(query)) {
+                        // Open parent collapsible if exists
+                        const collapsible = link.closest('.collapsible');
+                        if (collapsible && !collapsible.classList.contains('open')) {
+                            collapsible.classList.add('open');
+                        }
+                    }
+                } else {
+                    target.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Mobile nav active state
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.mobile-nav a');
+        
+        function updateActiveNav() {
+            const scrollY = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + sectionId) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+    </script>
+</body>
+</html>

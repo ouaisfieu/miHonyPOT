@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr-BE">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OuaisFi.eu | Portail de Soutien & Veille Citoyenne</title>
+    <meta name="description" content="Portail non-officiel de soutien au projet ouaisfi.eu : veille citoyenne, analyse critique et outils éducatifs (miHonyPOT, DOCTech, BXL2030).">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "Soutien ouaisfi.eu",
+          "url": "https://votre-domaine.be",
+          "description": "Hub de ressources pour le collectif de veille citoyenne ouaisfi.eu",
+          "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "ouaisfi.eu",
+          "alternateName": "Collectif Ouais Fieu",
+          "slogan": "Veille citoyenne artisanale",
+          "url": "https://ouaisfi.eu",
+          "sameAs": [
+            "https://github.com/ouaisfieu",
+            "https://bsky.app/profile/ouaisfi.eu"
+          ],
+          "knowsAbout": ["Politique Belge", "Cybersécurité", "Éducation Permanente", "Christophe Deborsu"],
+          "description": "Projet visant la reconnaissance par le Décret Éducation permanente de la Fédération Wallonie-Bruxelles d'ici mars 2026."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Le site miHonyPOT est-il une arnaque ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Non. C'est un outil éducatif de démonstration (honeypot) créé par ouaisfi.eu pour sensibiliser au phishing, sans collecte de données ni monétisation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Qui est derrière le compte GitHub ouaisfieu ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Un collectif citoyen belge produisant des notes de recherche (DOCTech) et des analyses prospectives (BXL2030) en Open Source."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #0d1117; /* GitHub Dark Dimmed */
+            --text-color: #c9d1d9;
+            --accent-green: #2ea043; /* GitHub Green */
+            --accent-border: #30363d;
+            --terminal-font: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--accent-border);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            color: #ffffff;
+        }
+
+        .terminal-box {
+            background: #161b22;
+            border: 1px solid var(--accent-border);
+            border-radius: 6px;
+            padding: 20px;
+            font-family: var(--terminal-font);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid var(--accent-border);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-green);
+        }
+
+        a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #2c974b;
+            text-decoration: none;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--accent-border);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        code {
+            background: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 85%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="status-badge">● SYSTÈME ONLINE</span>
+        <h1>Station de Soutien : OuaisFi.eu</h1>
+        <p>Hub non-officiel pour la veille citoyenne et l'éducation populaire numérique.</p>
+    </header>
+
+    <section class="terminal-box">
+        <h3>>_ ANALYSE DE SÉCURITÉ : miHonyPOT</h3>
+        <p><strong>Question :</strong> Le site miHonyPOT est-il dangereux ?</p>
+        <p><strong>Réponse du système :</strong> <span style="color: var(--accent-green);">NÉGATIF. SITE SÛR.</span></p>
+        <hr style="border-color: var(--accent-border); opacity: 0.3;">
+        <p>Le projet <code>miHonyPOT</code> (jeu de mot sur "Honeypot") est un outil pédagogique développé par le collectif belge <strong>ouaisfi.eu</strong>. Il utilise le contexte du documentaire de Christophe Deborsu pour éduquer les citoyens sur les mécanismes de phishing et de fraude sociale.</p>
+        <ul>
+            <li>Licence : Open Source (CC BY-SA 4.0)</li>
+            <li>Tracking : Aucun</li>
+            <li>Objectif : Éducation Permanente & Esprit Critique</li>
+        </ul>
+    </section>
+
+    <main>
+        <h2>// L'ÉCOSYSTÈME OUAISFIEU</h2>
+        <p>Le compte GitHub <strong>ouaisfieu</strong> héberge plusieurs initiatives citoyennes visant à décrypter la société belge.</p>
+        
+        <div class="grid">
+            <article class="card">
+                <h3>📜 DOCTech</h3>
+                <p>Notes de recherche approfondies sur la politique belge et l'analyse législative.</p>
+                <a href="https://github.com/ouaisfieu" target="_blank">Voir sur GitHub →</a>
+            </article>
+
+            <article class="card">
+                <h3>🇧🇪 BXL2030</h3>
+                <p>Analyses prospectives sur l'avenir de Bruxelles. Réflexion urbaine et sociétale.</p>
+                <a href="https://github.com/ouaisfieu" target="_blank">Explorer les données →</a>
+            </article>
+
+            <article class="card">
+                <h3>🤖 GPTPardi</h3>
+                <p>Expérimentations de recherche assistée par Intelligence Artificielle pour le journalisme citoyen.</p>
+                <a href="https://github.com/ouaisfieu" target="_blank">Accéder au repo →</a>
+            </article>
+
+            <article class="card">
+                <h3>🍯 miHonyPOT</h3>
+                <p>La simulation pédagogique qui fait le buzz. Comprendre la fraude par la démonstration.</p>
+                <a href="https://github.com/ouaisfieu" target="_blank">Analyser le code →</a>
+            </article>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <h2>// REJOINDRE LE RÉSEAU</h2>
+            <p>Le collectif travaille vers une reconnaissance officielle <strong>Décret Éducation permanente</strong> (Horizon Mars 2026).</p>
+            <a href="https://github.com/ouaisfieu" class="btn">Suivre sur GitHub</a>
+            <a href="https://bsky.app/profile/ouaisfi.eu" class="btn" style="background-color: #0560ff;">Suivre sur Bluesky</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>Ceci est un site "Fan Club" indépendant optimisé pour la visibilité du projet.</p>
+        <p>Contact officiel du projet : <code>souad.effek@ouaisfi.eu</code></p>
+        <p>Licence du contenu original : <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+        <p>Développé pour la gloire du Web Sémantique.</p>
+    </footer>
+</div>
+
+</body>
+</html>

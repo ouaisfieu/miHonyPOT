@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph View — Plaidoyer Citoyen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Playfair+Display:wght@500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        /* ===== THEME: DARK (Default) ===== */
+        [data-theme="dark"] {
+            --bg: #0f0f14;
+            --bg-soft: #16161d;
+            --bg-card: #1c1c26;
+            --bg-hover: #252532;
+            --border: #2a2a3a;
+            --border-soft: #222230;
+            --text: #e8e8f0;
+            --text-soft: #a0a0b0;
+            --text-muted: #606070;
+            --accent: #c084fc;
+            --accent-soft: rgba(192, 132, 252, 0.15);
+            --accent-glow: rgba(192, 132, 252, 0.4);
+            --success: #4ade80;
+            --success-soft: rgba(74, 222, 128, 0.15);
+            --warning: #fbbf24;
+            --warning-soft: rgba(251, 191, 36, 0.15);
+            --danger: #f87171;
+            --danger-soft: rgba(248, 113, 113, 0.15);
+            --ally: #4ade80;
+            --ally-bg: rgba(74, 222, 128, 0.15);
+            --neutral: #fbbf24;
+            --neutral-bg: rgba(251, 191, 36, 0.15);
+            --opponent: #f87171;
+            --opponent-bg: rgba(248, 113, 113, 0.15);
+            --type-politique: #c084fc;
+            --type-admin: #4ade80;
+            --type-societe: #60a5fa;
+            --type-media: #fb923c;
+            --type-entreprise: #f87171;
+            --type-expert: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--success), var(--accent));
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+            --font-mono: 'Nunito', sans-serif;
+            --node-glow: drop-shadow(0 0 8px var(--accent-glow));
+            --link-color: rgba(255,255,255,0.1);
+        }
+
+        /* ===== THEME: MATRIX ===== */
+        [data-theme="matrix"] {
+            --bg: #000000;
+            --bg-soft: #001100;
+            --bg-card: #001a00;
+            --bg-hover: #002200;
+            --border: #003300;
+            --border-soft: #002200;
+            --text: #00ff00;
+            --text-soft: #00cc00;
+            --text-muted: #006600;
+            --accent: #00ff00;
+            --accent-soft: rgba(0, 255, 0, 0.1);
+            --accent-glow: rgba(0, 255, 0, 0.6);
+            --success: #00ff00;
+            --success-soft: rgba(0, 255, 0, 0.1);
+            --warning: #00ff00;
+            --warning-soft: rgba(0, 255, 0, 0.1);
+            --danger: #ff0000;
+            --danger-soft: rgba(255, 0, 0, 0.1);
+            --ally: #00ff00;
+            --ally-bg: rgba(0, 255, 0, 0.1);
+            --neutral: #00cc00;
+            --neutral-bg: rgba(0, 204, 0, 0.1);
+            --opponent: #ff0000;
+            --opponent-bg: rgba(255, 0, 0, 0.1);
+            --type-politique: #00ff00;
+            --type-admin: #00dd00;
+            --type-societe: #00bb00;
+            --type-media: #009900;
+            --type-entreprise: #ff0000;
+            --type-expert: #00ff00;
+            --gradient: linear-gradient(135deg, #00ff00, #00aa00);
+            --shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            --shadow-lg: 0 0 40px rgba(0, 255, 0, 0.4);
+            --font-mono: 'Share Tech Mono', monospace;
+            --node-glow: drop-shadow(0 0 12px rgba(0, 255, 0, 0.8));
+            --link-color: rgba(0, 255, 0, 0.2);
+        }
+
+        /* ===== THEME: DISCO ===== */
+        [data-theme="disco"] {
+            --bg: #1a0a2e;
+            --bg-soft: #16082a;
+            --bg-card: #2d1b4e;
+            --bg-hover: #3d2b5e;
+            --border: #4a3370;
+            --border-soft: #3d2b5e;
+            --text: #ffffff;
+            --text-soft: #e0b0ff;
+            --text-muted: #9060c0;
+            --accent: #ff00ff;
+            --accent-soft: rgba(255, 0, 255, 0.2);
+            --accent-glow: rgba(255, 0, 255, 0.6);
+            --success: #00ffff;
+            --success-soft: rgba(0, 255, 255, 0.2);
+            --warning: #ffff00;
+            --warning-soft: rgba(255, 255, 0, 0.2);
+            --danger: #ff0080;
+            --danger-soft: rgba(255, 0, 128, 0.2);
+            --ally: #00ffff;
+            --ally-bg: rgba(0, 255, 255, 0.15);
+            --neutral: #ffff00;
+            --neutral-bg: rgba(255, 255, 0, 0.15);
+            --opponent: #ff0080;
+            --opponent-bg: rgba(255, 0, 128, 0.15);
+            --type-politique: #ff00ff;
+            --type-admin: #00ffff;
+            --type-societe: #00ff80;
+            --type-media: #ffff00;
+            --type-entreprise: #ff0080;
+            --type-expert: #8080ff;
+            --gradient: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00);
+            --shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            --shadow-lg: 0 0 50px rgba(255, 0, 255, 0.4);
+            --font-mono: 'Nunito', sans-serif;
+            --node-glow: drop-shadow(0 0 15px var(--accent-glow));
+            --link-color: rgba(255, 0, 255, 0.2);
+        }
+
+        /* Disco animations */
+        [data-theme="disco"] .graph-wrap {
+            animation: disco-bg 8s ease infinite;
+        }
+
+        @keyframes disco-bg {
+            0%, 100% { background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%); }
+            25% { background: linear-gradient(135deg, #0a1a2e 0%, #1b2d4e 100%); }
+            50% { background: linear-gradient(135deg, #2e0a1a 0%, #4e1b2d 100%); }
+            75% { background: linear-gradient(135deg, #1a2e0a 0%, #2d4e1b 100%); }
+        }
+
+        [data-theme="disco"] .node-circle {
+            animation: disco-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes disco-pulse {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--accent-glow)); }
+            50% { filter: drop-shadow(0 0 25px var(--accent-glow)) brightness(1.2); }
+        }
+
+        [data-theme="disco"] .nav-tab.active {
+            animation: disco-tab 1s ease infinite;
+        }
+
+        @keyframes disco-tab {
+            0%, 100% { background: #ff00ff; }
+            33% { background: #00ffff; }
+            66% { background: #ffff00; }
+        }
+
+        /* Matrix rain effect */
+        [data-theme="matrix"] .graph-wrap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 2px,
+                    rgba(0, 255, 0, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        [data-theme="matrix"] * {
+            font-family: var(--font-mono) !important;
+        }
+
+        [data-theme="matrix"] .card,
+        [data-theme="matrix"] .stat-box,
+        [data-theme="matrix"] .timeline-card {
+            border: 1px solid var(--accent);
+            box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.05), 0 0 10px rgba(0, 255, 0, 0.2);
+        }
+
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            min-height: 100dvh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-soft);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            transition: background 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg);
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        [data-theme="matrix"] .logo-text {
+            font-family: var(--font-mono) !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ===== THEME SWITCHER ===== */
+        .theme-switcher {
+            display: flex;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .theme-btn {
+            padding: 6px 10px;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn:hover {
+            color: var(--text-soft);
+            background: var(--bg-hover);
+        }
+
+        .theme-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--text-muted);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            border-color: transparent;
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            border-color: transparent;
+        }
+
+        .btn-text {
+            display: none;
+        }
+
+        /* ===== NAV TABS ===== */
+        .nav-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 12px 16px;
+            background: var(--bg-soft);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 120px);
+            min-height: calc(100dvh - 120px);
+        }
+
+        .content {
+            flex: 1;
+            padding: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== VIEW PANELS ===== */
+        .view-panel {
+            display: none;
+            height: 100%;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* ===== GRAPH CONTAINER ===== */
+        .graph-wrap {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            height: calc(100vh - 200px);
+            height: calc(100dvh - 200px);
+            min-height: 400px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .graph-wrap svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* ===== GRAPH NODES ===== */
+        .node-group {
+            cursor: grab;
+        }
+
+        .node-group:active {
+            cursor: grabbing;
+        }
+
+        .node-circle {
+            transition: filter 0.3s ease;
+            filter: var(--node-glow);
+        }
+
+        .node-group:hover .node-circle {
+            filter: var(--node-glow) brightness(1.2);
+        }
+
+        .node-label {
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            fill: var(--text);
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .node-power {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            fill: var(--bg);
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        [data-theme="matrix"] .node-power {
+            fill: #000;
+        }
+
+        .link {
+            stroke: var(--link-color);
+            stroke-width: 1.5;
+        }
+
+        /* ===== CONTROLS ===== */
+        .graph-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 4px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        .graph-controls button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .graph-controls button:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--text-muted);
+            color: var(--text);
+        }
+
+        .filter-chip.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .filter-chip .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* ===== TOOLTIP ===== */
+        .tooltip {
+            position: fixed;
+            z-index: 1000;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            max-width: 280px;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tooltip-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .tooltip-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.3;
+        }
+
+        .tooltip-type {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .tooltip-notes {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .tooltip-footer {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .tooltip-stat {
+            flex: 1;
+        }
+
+        .tooltip-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .tooltip-stat-value {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .power-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .power-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--border);
+        }
+
+        .power-dot.filled {
+            background: var(--accent);
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        [data-theme="matrix"] .card-title {
+            font-family: var(--font-mono) !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: var(--text-soft);
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        /* ===== TOC FLOW ===== */
+        .toc-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .toc-card {
+            position: relative;
+        }
+
+        .toc-card::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -16px;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 16px;
+            background: var(--border);
+        }
+
+        .toc-card:last-child::after {
+            display: none;
+        }
+
+        /* ===== SWOT GRID ===== */
+        .swot-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        /* ===== TREE ===== */
+        .tree-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .tree-card.problem .card {
+            border-color: var(--danger);
+            border-width: 2px;
+        }
+
+        .tree-card.objective .card {
+            border-color: var(--success);
+            border-width: 2px;
+            background: var(--success-soft);
+        }
+
+        .tree-connector {
+            width: 2px;
+            height: 16px;
+            background: var(--border);
+            margin: 0 auto;
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--gradient);
+            border-radius: 1px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 3px solid var(--accent);
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .timeline-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 100px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-badge.action { background: var(--success-soft); color: var(--success); }
+        .timeline-badge.rencontre { background: var(--accent-soft); color: var(--accent); }
+        .timeline-badge.média { background: var(--warning-soft); color: var(--warning); }
+        .timeline-badge.réflexion { background: var(--neutral-bg); color: var(--neutral); }
+        .timeline-badge.autre { background: var(--bg-hover); color: var(--text-soft); }
+
+        .timeline-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .drop-zone-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .drop-zone-text {
+            font-size: 14px;
+            color: var(--text-soft);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            height: 100%;
+            min-height: 300px;
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        .empty-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--text-soft);
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== LEGEND ===== */
+        .legend-panel {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: var(--shadow);
+            font-size: 11px;
+            max-width: 160px;
+            z-index: 10;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+            color: var(--text-soft);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-line {
+            width: 16px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .legend-section {
+            margin-bottom: 12px;
+        }
+
+        .legend-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== RESPONSIVE - TABLET ===== */
+        @media (min-width: 640px) {
+            .header { padding: 16px 24px; }
+            .logo-text { display: block; }
+            .btn-text { display: inline; }
+            .nav-scroll { padding: 12px 24px; }
+            .content { padding: 24px; }
+            .stats-row { gap: 12px; }
+            .stat-box { padding: 16px; }
+            .stat-value { font-size: 28px; }
+            .swot-grid { grid-template-columns: repeat(2, 1fr); }
+            .graph-wrap {
+                height: calc(100vh - 280px);
+                height: calc(100dvh - 280px);
+            }
+        }
+
+        /* ===== RESPONSIVE - DESKTOP ===== */
+        @media (min-width: 1024px) {
+            .header { padding: 16px 32px; }
+            .nav-scroll { padding: 12px 32px; }
+            .content { padding: 32px; }
+            .graph-wrap {
+                height: calc(100vh - 300px);
+                height: calc(100dvh - 300px);
+            }
+            .card { padding: 24px; }
+            .toc-flow, .tree-flow, .timeline { max-width: 800px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">Graph View</div>
+            </a>
+            
+            <div class="theme-switcher">
+                <button class="theme-btn active" data-theme="dark" title="Mode sombre">🌙</button>
+                <button class="theme-btn" data-theme="matrix" title="Matrix">💊</button>
+                <button class="theme-btn" data-theme="disco" title="Disco">🪩</button>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn" onclick="openImportModal()">
+                    <span>📂</span>
+                    <span class="btn-text">Importer</span>
+                </button>
+                <button class="btn btn-primary" onclick="exportSVG()">
+                    <span>💾</span>
+                    <span class="btn-text">Exporter</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-scroll">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-view="network">Acteurs</button>
+            <button class="nav-tab" data-view="toc">Théorie du Changement</button>
+            <button class="nav-tab" data-view="tree">Arbre à Problème</button>
+            <button class="nav-tab" data-view="swot">SWOT</button>
+            <button class="nav-tab" data-view="timeline">Journal</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="content">
+            <!-- Network View -->
+            <div id="view-network" class="view-panel active">
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Acteurs</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-allies" style="color: var(--ally)">0</div>
+                        <div class="stat-label">Alliés</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-neutral" style="color: var(--neutral)">0</div>
+                        <div class="stat-label">Neutres</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-opponents" style="color: var(--opponent)">0</div>
+                        <div class="stat-label">Opposants</div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-chip active" data-filter="all">Tous</button>
+                    <button class="filter-chip" data-filter="allié">
+                        <span class="dot" style="background: var(--ally)"></span>Alliés
+                    </button>
+                    <button class="filter-chip" data-filter="neutre">
+                        <span class="dot" style="background: var(--neutral)"></span>Neutres
+                    </button>
+                    <button class="filter-chip" data-filter="opposant">
+                        <span class="dot" style="background: var(--opponent)"></span>Opposants
+                    </button>
+                </div>
+
+                <div class="graph-wrap">
+                    <svg id="network-svg"></svg>
+                    
+                    <div class="legend-panel" id="legend-panel" style="display: none;">
+                        <div class="legend-section">
+                            <div class="legend-title">Type</div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-politique)"></div><span>Politique</span></div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-admin)"></div><span>Admin</span></div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-societe)"></div><span>Société civile</span></div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-media)"></div><span>Média</span></div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-entreprise)"></div><span>Entreprise</span></div>
+                            <div class="legend-item"><div class="legend-dot" style="background: var(--type-expert)"></div><span>Expert</span></div>
+                        </div>
+                        <div class="legend-section">
+                            <div class="legend-title">Position</div>
+                            <div class="legend-item"><div class="legend-line" style="background: var(--ally)"></div><span>Allié</span></div>
+                            <div class="legend-item"><div class="legend-line" style="background: var(--neutral)"></div><span>Neutre</span></div>
+                            <div class="legend-item"><div class="legend-line" style="background: var(--opponent)"></div><span>Opposant</span></div>
+                        </div>
+                    </div>
+
+                    <div class="graph-controls">
+                        <button onclick="zoomIn()" title="Zoom +">+</button>
+                        <button onclick="zoomOut()" title="Zoom −">−</button>
+                        <button onclick="resetZoom()" title="Reset">↺</button>
+                    </div>
+
+                    <div id="empty-network" class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-title">Aucune donnée</div>
+                        <div class="empty-text">Importez un fichier JSON pour visualiser vos acteurs.</div>
+                        <button class="btn btn-primary" onclick="openImportModal()">Importer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOC View -->
+            <div id="view-toc" class="view-panel"><div id="toc-content"></div></div>
+            <!-- Tree View -->
+            <div id="view-tree" class="view-panel"><div id="tree-content"></div></div>
+            <!-- SWOT View -->
+            <div id="view-swot" class="view-panel"><div id="swot-content"></div></div>
+            <!-- Timeline View -->
+            <div id="view-timeline" class="view-panel"><div id="timeline-content"></div></div>
+        </div>
+    </main>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-title">Importer des données</div>
+            <div class="modal-text">Sélectionnez un fichier JSON exporté depuis le Poste de Travail.</div>
+            <div class="drop-zone" id="drop-zone">
+                <div class="drop-zone-icon">📁</div>
+                <div class="drop-zone-text">Glissez un fichier ici ou cliquez</div>
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeImportModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="loadDemoData()">Charger démo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== STATE =====
+        let data = null;
+        let currentFilter = 'all';
+        let simulation = null;
+        let svg, g, zoom;
+
+        // ===== COLORS =====
+        const getTypeColor = (type) => {
+            const style = getComputedStyle(document.documentElement);
+            const colors = {
+                'politique': style.getPropertyValue('--type-politique').trim(),
+                'admin': style.getPropertyValue('--type-admin').trim(),
+                'société civile': style.getPropertyValue('--type-societe').trim(),
+                'média': style.getPropertyValue('--type-media').trim(),
+                'entreprise': style.getPropertyValue('--type-entreprise').trim(),
+                'expert': style.getPropertyValue('--type-expert').trim()
+            };
+            return colors[type] || '#666';
+        };
+
+        const getPositionColor = (position) => {
+            const style = getComputedStyle(document.documentElement);
+            const colors = {
+                'allié': style.getPropertyValue('--ally').trim(),
+                'neutre': style.getPropertyValue('--neutral').trim(),
+                'opposant': style.getPropertyValue('--opponent').trim()
+            };
+            return colors[position] || '#666';
+        };
+
+        const typeIcons = {
+            'politique': '🏛️', 'admin': '📋', 'société civile': '👥',
+            'média': '📰', 'entreprise': '🏢', 'expert': '🎓'
+        };
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            initSVG();
+            initEventListeners();
+            initThemeSwitcher();
+            checkStoredData();
+        });
+
+        function initSVG() {
+            const container = document.querySelector('.graph-wrap');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            svg = d3.select('#network-svg').attr('width', width).attr('height', height);
+            zoom = d3.zoom().scaleExtent([0.3, 3]).on('zoom', (e) => g.attr('transform', e.transform));
+            svg.call(zoom);
+            g = svg.append('g');
+        }
+
+        function initThemeSwitcher() {
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.documentElement.setAttribute('data-theme', btn.dataset.theme);
+                    localStorage.setItem('graph-theme', btn.dataset.theme);
+                    if (data) renderNetwork(); // Re-render to update colors
+                });
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('graph-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`)?.classList.add('active');
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                if (b.dataset.theme !== savedTheme) b.classList.remove('active');
+            });
+        }
+
+        function initEventListeners() {
+            // Nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`view-${tab.dataset.view}`).classList.add('active');
+                });
+            });
+
+            // Filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentFilter = chip.dataset.filter;
+                    if (data) renderNetwork();
+                });
+            });
+
+            // Drop zone
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+            // Resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const container = document.querySelector('.graph-wrap');
+                    svg.attr('width', container.offsetWidth).attr('height', container.offsetHeight);
+                    if (data && simulation) {
+                        simulation.force('center', d3.forceCenter(container.offsetWidth / 2, container.offsetHeight / 2));
+                        simulation.alpha(0.3).restart();
+                    }
+                }, 100);
+            });
+
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeImportModal(); });
+        }
+
+        function checkStoredData() {
+            const stored = localStorage.getItem('plaidoyer_graph_data');
+            if (stored) {
+                try { data = JSON.parse(stored); renderAll(); } catch (e) { console.error(e); }
+            }
+        }
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    data = JSON.parse(e.target.result);
+                    localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+                    closeImportModal();
+                    renderAll();
+                } catch (err) { alert('Erreur JSON'); }
+            };
+            reader.readAsText(file);
+        }
+
+        function renderAll() {
+            document.getElementById('empty-network').style.display = 'none';
+            document.getElementById('legend-panel').style.display = 'block';
+            updateStats();
+            renderNetwork();
+            renderTOC();
+            renderTree();
+            renderSWOT();
+            renderTimeline();
+        }
+
+        function updateStats() {
+            if (!data?.acteurs) return;
+            document.getElementById('stat-total').textContent = data.acteurs.length;
+            document.getElementById('stat-allies').textContent = data.acteurs.filter(a => a.position === 'allié').length;
+            document.getElementById('stat-neutral').textContent = data.acteurs.filter(a => a.position === 'neutre').length;
+            document.getElementById('stat-opponents').textContent = data.acteurs.filter(a => a.position === 'opposant').length;
+        }
+
+        // ===== NETWORK GRAPH =====
+        function renderNetwork() {
+            if (!data?.acteurs) return;
+            g.selectAll('*').remove();
+
+            let actors = data.acteurs;
+            if (currentFilter !== 'all') actors = actors.filter(a => a.position === currentFilter);
+
+            const container = document.querySelector('.graph-wrap');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            const nodes = actors.map(a => ({ ...a, radius: 18 + (a.power * 4) }));
+            const links = [];
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (nodes[i].position === nodes[j].position) {
+                        links.push({ source: nodes[i].id, target: nodes[j].id });
+                    }
+                }
+            }
+
+            if (simulation) simulation.stop();
+            simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(120).strength(0.1))
+                .force('charge', d3.forceManyBody().strength(-200))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.radius + 15))
+                .velocityDecay(0.6);
+
+            const linkColor = getComputedStyle(document.documentElement).getPropertyValue('--link-color').trim();
+            const link = g.append('g').selectAll('line').data(links).enter().append('line')
+                .attr('class', 'link').attr('stroke', linkColor);
+
+            const node = g.append('g').selectAll('g').data(nodes).enter().append('g')
+                .attr('class', 'node-group')
+                .call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended));
+
+            node.append('circle').attr('class', 'node-circle')
+                .attr('r', d => d.radius)
+                .attr('fill', d => getTypeColor(d.type))
+                .attr('stroke', d => getPositionColor(d.position))
+                .attr('stroke-width', 3);
+
+            node.append('text').attr('class', 'node-power').text(d => d.power);
+            node.append('text').attr('class', 'node-label').attr('dy', d => d.radius + 14)
+                .text(d => d.name.length > 16 ? d.name.substring(0, 14) + '…' : d.name);
+
+            node.on('mouseenter', (e, d) => showTooltip(e, d))
+                .on('mousemove', (e) => moveTooltip(e))
+                .on('mouseleave', hideTooltip);
+
+            simulation.on('tick', () => {
+                link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+        }
+
+        function dragstarted(e, d) { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+        function dragged(e, d) { d.fx = e.x; d.fy = e.y; }
+        function dragended(e, d) { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }
+
+        // ===== TOOLTIP =====
+        function showTooltip(e, d) {
+            const tooltip = document.getElementById('tooltip');
+            let dots = ''; for (let i = 1; i <= 5; i++) dots += `<div class="power-dot ${i <= d.power ? 'filled' : ''}"></div>`;
+            tooltip.innerHTML = `
+                <div class="tooltip-header">
+                    <div class="tooltip-icon" style="background: ${getTypeColor(d.type)}30; color: ${getTypeColor(d.type)}">${typeIcons[d.type] || '👤'}</div>
+                    <div><div class="tooltip-title">${d.name}</div><div class="tooltip-type">${d.type}</div></div>
+                </div>
+                <div class="tooltip-notes">${d.notes || 'Aucune note'}</div>
+                <div class="tooltip-footer">
+                    <div class="tooltip-stat"><div class="tooltip-stat-label">Position</div><div class="tooltip-stat-value" style="color: ${getPositionColor(d.position)}">${d.position}</div></div>
+                    <div class="tooltip-stat"><div class="tooltip-stat-label">Pouvoir</div><div class="power-dots">${dots}</div></div>
+                </div>`;
+            tooltip.classList.add('visible');
+            moveTooltip(e);
+        }
+        function moveTooltip(e) {
+            const t = document.getElementById('tooltip');
+            const r = t.getBoundingClientRect();
+            t.style.left = Math.min(e.clientX + 15, window.innerWidth - r.width - 20) + 'px';
+            t.style.top = Math.min(e.clientY + 15, window.innerHeight - r.height - 20) + 'px';
+        }
+        function hideTooltip() { document.getElementById('tooltip').classList.remove('visible'); }
+
+        // ===== OTHER VIEWS =====
+        function renderTOC() {
+            if (!data?.toc) { document.getElementById('toc-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Aucune donnée</div></div>'; return; }
+            const t = data.toc;
+            document.getElementById('toc-content').innerHTML = `<div class="toc-flow">
+                <div class="toc-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--gradient); color: var(--bg);">🎯</div><div class="card-title">Impact</div></div><div class="card-content">${t.impact || ''}</div></div></div>
+                <div class="toc-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--success-soft); color: var(--success);">📊</div><div class="card-title">Résultats</div></div><div class="card-content">${t.resultats || ''}</div></div></div>
+                <div class="toc-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--warning-soft); color: var(--warning);">📦</div><div class="card-title">Outputs</div></div><div class="card-content">${t.outputs || ''}</div></div></div>
+                <div class="toc-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--accent-soft); color: var(--accent);">⚡</div><div class="card-title">Activités</div></div><div class="card-content">${t.activites || ''}</div></div></div>
+                <div class="toc-card"><div class="card" style="border-color: var(--danger);"><div class="card-header"><div class="card-icon" style="background: var(--danger); color: var(--bg);">⚠️</div><div class="card-title">Hypothèses & Risques</div></div><div class="card-content">${t.hypotheses || ''}</div></div></div>
+            </div>`;
+        }
+
+        function renderTree() {
+            if (!data?.arbre) { document.getElementById('tree-content').innerHTML = '<div class="empty-state"><div class="empty-icon">🌳</div><div class="empty-title">Aucune donnée</div></div>'; return; }
+            const a = data.arbre;
+            document.getElementById('tree-content').innerHTML = `<div class="tree-flow">
+                <div class="tree-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--success-soft); color: var(--success);">↑</div><div class="card-title">Conséquences</div></div><div class="card-content">${a.consequences || ''}</div></div></div>
+                <div class="tree-connector"></div>
+                <div class="tree-card problem"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--danger); color: white;">⬤</div><div class="card-title">Problème Central</div></div><div class="card-content">${a.probleme || ''}</div></div></div>
+                <div class="tree-connector"></div>
+                <div class="tree-card"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--warning-soft); color: var(--warning);">↓</div><div class="card-title">Causes</div></div><div class="card-content">${a.causes || ''}</div></div></div>
+                <div class="tree-connector"></div>
+                <div class="tree-card objective"><div class="card"><div class="card-header"><div class="card-icon" style="background: var(--success); color: white;">★</div><div class="card-title">Objectif</div></div><div class="card-content">${a.objectif || ''}</div></div></div>
+            </div>`;
+        }
+
+        function renderSWOT() {
+            if (!data?.swot) { document.getElementById('swot-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-title">Aucune donnée</div></div>'; return; }
+            const s = data.swot;
+            document.getElementById('swot-content').innerHTML = `<div class="swot-grid">
+                <div class="card"><div class="card-header"><div class="card-icon" style="background: var(--success-soft); color: var(--success);">💪</div><div class="card-title">Forces</div></div><div class="card-content">${s.forces || ''}</div></div>
+                <div class="card"><div class="card-header"><div class="card-icon" style="background: var(--danger-soft); color: var(--danger);">⚡</div><div class="card-title">Faiblesses</div></div><div class="card-content">${s.faiblesses || ''}</div></div>
+                <div class="card"><div class="card-header"><div class="card-icon" style="background: var(--accent-soft); color: var(--accent);">🚀</div><div class="card-title">Opportunités</div></div><div class="card-content">${s.opportunites || ''}</div></div>
+                <div class="card"><div class="card-header"><div class="card-icon" style="background: var(--warning-soft); color: var(--warning);">⚠️</div><div class="card-title">Menaces</div></div><div class="card-content">${s.menaces || ''}</div></div>
+            </div>`;
+        }
+
+        function renderTimeline() {
+            if (!data?.journal?.length) { document.getElementById('timeline-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Journal vide</div></div>'; return; }
+            const j = [...data.journal].sort((a, b) => new Date(b.date) - new Date(a.date));
+            let html = '<div class="timeline">';
+            j.forEach(e => {
+                html += `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${new Date(e.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div><div class="timeline-card"><span class="timeline-badge ${e.type}">${e.type}</span><div class="timeline-title">${e.title}</div><div class="timeline-content">${e.content}</div></div></div>`;
+            });
+            document.getElementById('timeline-content').innerHTML = html + '</div>';
+        }
+
+        // ===== MODAL & ZOOM =====
+        function openImportModal() { document.getElementById('import-modal').classList.add('visible'); }
+        function closeImportModal() { document.getElementById('import-modal').classList.remove('visible'); }
+        function zoomIn() { svg.transition().duration(200).call(zoom.scaleBy, 1.3); }
+        function zoomOut() { svg.transition().duration(200).call(zoom.scaleBy, 0.7); }
+        function resetZoom() { svg.transition().duration(200).call(zoom.transform, d3.zoomIdentity); }
+
+        function exportSVG() {
+            const svgEl = document.getElementById('network-svg');
+            const blob = new Blob([new XMLSerializer().serializeToString(svgEl)], { type: 'image/svg+xml' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'plaidoyer-acteurs.svg'; a.click();
+        }
+
+        // ===== DEMO =====
+        function loadDemoData() {
+            data = {
+                "meta": { "name": "Souveraineté Cognitive", "org": "Collectif Noosphère", "version": "3.0" },
+                "acteurs": [
+                    { "id": "1", "name": "Mathieu Michel", "type": "politique", "position": "allié", "power": 4, "notes": "Secrétaire d'État Digitalisation" },
+                    { "id": "2", "name": "Commission EU", "type": "admin", "position": "neutre", "power": 5, "notes": "DSA / AI Act" },
+                    { "id": "3", "name": "Meta", "type": "entreprise", "position": "opposant", "power": 5, "notes": "Extraction d'attention" },
+                    { "id": "4", "name": "Google", "type": "entreprise", "position": "opposant", "power": 5, "notes": "92% search market" },
+                    { "id": "5", "name": "CSA", "type": "admin", "position": "neutre", "power": 3, "notes": "Régulateur" },
+                    { "id": "6", "name": "RTBF", "type": "média", "position": "allié", "power": 3, "notes": "Média public" },
+                    { "id": "7", "name": "FWB Éducation", "type": "admin", "position": "neutre", "power": 4, "notes": "Programmes scolaires" },
+                    { "id": "8", "name": "Ligue DH", "type": "société civile", "position": "allié", "power": 2, "notes": "Juridique" },
+                    { "id": "9", "name": "Test-Achats", "type": "société civile", "position": "allié", "power": 3, "notes": "Grand public" },
+                    { "id": "10", "name": "APD", "type": "admin", "position": "allié", "power": 3, "notes": "RGPD" },
+                    { "id": "11", "name": "OpenAI", "type": "entreprise", "position": "neutre", "power": 4, "notes": "IA générative" },
+                    { "id": "12", "name": "AlgorithmWatch", "type": "société civile", "position": "allié", "power": 2, "notes": "Audit algo" },
+                    { "id": "13", "name": "Syndicats", "type": "société civile", "position": "allié", "power": 4, "notes": "Mobilisation" },
+                    { "id": "14", "name": "B. Crutzen", "type": "expert", "position": "allié", "power": 2, "notes": "Documentariste" },
+                    { "id": "15", "name": "Ecolo", "type": "politique", "position": "allié", "power": 3, "notes": "Numérique" }
+                ],
+                "toc": { "impact": "Démocratie résiliente face à la manipulation cognitive.", "resultats": "R1: Audits algo (2027)\nR2: Élèves formés (2028)\nR3: Autorité créée (2029)", "outputs": "O1: Proposition loi\nO2: Kit pédagogique\nO3: Coalition 50 orgas", "activites": "A1: Rédaction loi\nA2: Kit pédago\nA3: Veille\nA4: Colloques", "hypotheses": "H1: Attention post-élections\nRISQUE: Lobbying Big Tech" },
+                "swot": { "forces": "• Expertise\n• Réseau\n• Actualité", "faiblesses": "• Ressources\n• Visibilité", "opportunites": "• AI Act\n• DSA\n• Scandales", "menaces": "• Lobbying\n• Fatigue info" },
+                "arbre": { "probleme": "Citoyens exposés à la manipulation sans défense.", "causes": "• Opacité algo\n• Pas d'éducation\n• Modèle engagement", "consequences": "• Bulles\n• Polarisation\n• Extrémismes", "objectif": "Souveraineté cognitive 2030." },
+                "journal": [
+                    { "id": "1", "date": "2025-09-15", "type": "action", "title": "Lancement", "content": "23 organisations." },
+                    { "id": "2", "date": "2025-10-08", "type": "rencontre", "title": "Cabinet Michel", "content": "Accueil positif." },
+                    { "id": "3", "date": "2025-11-22", "type": "média", "title": "RTBF", "content": "450K viewers." },
+                    { "id": "4", "date": "2026-01-14", "type": "action", "title": "Question parlement", "content": "Déposée." }
+                ]
+            };
+            localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+            closeImportModal();
+            renderAll();
+        }
+    </script>
+</body>
+</html>

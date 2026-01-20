@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph View — Plaidoyer Citoyen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        :root {
+            /* Vert tendre */
+            --green-50: #f0fdf4;
+            --green-100: #dcfce7;
+            --green-200: #bbf7d0;
+            --green-300: #86efac;
+            --green-400: #4ade80;
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            
+            /* Lilas */
+            --lilac-50: #faf5ff;
+            --lilac-100: #f3e8ff;
+            --lilac-200: #e9d5ff;
+            --lilac-300: #d8b4fe;
+            --lilac-400: #c084fc;
+            --lilac-500: #a855f7;
+            --lilac-600: #9333ea;
+            
+            /* Neutres */
+            --white: #ffffff;
+            --gray-50: #fafafa;
+            --gray-100: #f4f4f5;
+            --gray-200: #e4e4e7;
+            --gray-300: #d4d4d8;
+            --gray-400: #a1a1aa;
+            --gray-500: #71717a;
+            --gray-600: #52525b;
+            --gray-700: #3f3f46;
+            --gray-800: #27272a;
+            --gray-900: #18181b;
+            
+            /* Sémantique */
+            --bg: var(--white);
+            --bg-soft: var(--gray-50);
+            --bg-card: var(--white);
+            --border: var(--gray-200);
+            --border-soft: var(--gray-100);
+            --text: var(--gray-800);
+            --text-soft: var(--gray-500);
+            --text-muted: var(--gray-400);
+            --accent: var(--lilac-500);
+            --accent-soft: var(--lilac-100);
+            --success: var(--green-500);
+            --success-soft: var(--green-100);
+            
+            /* Acteurs */
+            --ally: #10b981;
+            --ally-bg: #d1fae5;
+            --neutral: #f59e0b;
+            --neutral-bg: #fef3c7;
+            --opponent: #ef4444;
+            --opponent-bg: #fee2e2;
+            
+            --type-politique: var(--lilac-500);
+            --type-admin: var(--green-500);
+            --type-societe: #3b82f6;
+            --type-media: #f97316;
+            --type-entreprise: #ef4444;
+            --type-expert: var(--gray-500);
+            
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Nunito', system-ui, sans-serif;
+            background: var(--bg-soft);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--green-400), var(--lilac-400));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--green-500), var(--lilac-500));
+            border-color: transparent;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--green-500), var(--lilac-500));
+        }
+
+        .btn-icon {
+            padding: 8px;
+            min-width: 36px;
+        }
+
+        .btn-text {
+            display: none;
+        }
+
+        /* ===== NAV TABS ===== */
+        .nav-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 12px 16px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .nav-tab:hover {
+            background: var(--gray-100);
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 120px);
+            min-height: calc(100dvh - 120px);
+        }
+
+        .content {
+            flex: 1;
+            padding: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== VIEW PANELS ===== */
+        .view-panel {
+            display: none;
+            height: 100%;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* ===== GRAPH CONTAINER ===== */
+        .graph-wrap {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            height: calc(100vh - 200px);
+            height: calc(100dvh - 200px);
+            min-height: 400px;
+            position: relative;
+        }
+
+        .graph-wrap svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* ===== GRAPH NODES - STABLE ===== */
+        .node-group {
+            cursor: grab;
+        }
+
+        .node-group:active {
+            cursor: grabbing;
+        }
+
+        .node-circle {
+            transition: filter 0.2s ease;
+        }
+
+        .node-group:hover .node-circle {
+            filter: brightness(1.1);
+        }
+
+        .node-label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            fill: var(--text);
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .node-power {
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            fill: white;
+            pointer-events: none;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        .link {
+            stroke: var(--gray-200);
+            stroke-width: 1.5;
+        }
+
+        /* ===== CONTROLS OVERLAY ===== */
+        .graph-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 4px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .graph-controls button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .graph-controls button:hover {
+            background: var(--gray-100);
+            color: var(--text);
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--gray-300);
+            color: var(--text);
+        }
+
+        .filter-chip.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .filter-chip .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* ===== TOOLTIP ===== */
+        .tooltip {
+            position: fixed;
+            z-index: 1000;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            max-width: 280px;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tooltip-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .tooltip-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.3;
+        }
+
+        .tooltip-type {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .tooltip-notes {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .tooltip-footer {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .tooltip-stat {
+            flex: 1;
+        }
+
+        .tooltip-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .tooltip-stat-value {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .power-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .power-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--gray-200);
+        }
+
+        .power-dot.filled {
+            background: var(--accent);
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: var(--text-soft);
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        /* ===== TOC FLOW ===== */
+        .toc-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .toc-card {
+            position: relative;
+        }
+
+        .toc-card::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -16px;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 16px;
+            background: var(--gray-200);
+        }
+
+        .toc-card:last-child::after {
+            display: none;
+        }
+
+        /* ===== SWOT GRID ===== */
+        .swot-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        /* ===== TREE ===== */
+        .tree-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .tree-card.problem .card {
+            border-color: var(--opponent);
+            border-width: 2px;
+        }
+
+        .tree-card.objective .card {
+            border-color: var(--green-500);
+            border-width: 2px;
+            background: var(--green-50);
+        }
+
+        .tree-connector {
+            width: 2px;
+            height: 16px;
+            background: var(--gray-200);
+            margin: 0 auto;
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--green-300), var(--lilac-300));
+            border-radius: 1px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -24px;
+            top: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--accent);
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .timeline-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 100px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-badge.action { background: var(--success-soft); color: var(--success); }
+        .timeline-badge.rencontre { background: var(--accent-soft); color: var(--accent); }
+        .timeline-badge.média { background: #ffedd5; color: #ea580c; }
+        .timeline-badge.réflexion { background: var(--neutral-bg); color: #d97706; }
+        .timeline-badge.autre { background: var(--gray-100); color: var(--gray-600); }
+
+        .timeline-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .drop-zone-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .drop-zone-text {
+            font-size: 14px;
+            color: var(--text-soft);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            height: 100%;
+            min-height: 300px;
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        .empty-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--text-soft);
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== LEGEND ===== */
+        .legend-panel {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
+            box-shadow: var(--shadow);
+            font-size: 11px;
+            max-width: 160px;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+            color: var(--text-soft);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-line {
+            width: 16px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .legend-section {
+            margin-bottom: 12px;
+        }
+
+        .legend-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== RESPONSIVE - TABLET ===== */
+        @media (min-width: 640px) {
+            .header {
+                padding: 16px 24px;
+            }
+
+            .logo-text {
+                display: block;
+            }
+
+            .btn-text {
+                display: inline;
+            }
+
+            .nav-scroll {
+                padding: 12px 24px;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .stats-row {
+                gap: 12px;
+            }
+
+            .stat-box {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .swot-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph-wrap {
+                height: calc(100vh - 280px);
+                height: calc(100dvh - 280px);
+            }
+
+            .legend-panel {
+                max-width: 180px;
+            }
+        }
+
+        /* ===== RESPONSIVE - DESKTOP ===== */
+        @media (min-width: 1024px) {
+            .header {
+                padding: 16px 32px;
+            }
+
+            .nav-scroll {
+                padding: 12px 32px;
+            }
+
+            .content {
+                padding: 32px;
+            }
+
+            .graph-wrap {
+                height: calc(100vh - 300px);
+                height: calc(100dvh - 300px);
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .toc-flow,
+            .tree-flow,
+            .timeline {
+                max-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">Graph View</div>
+            </a>
+            <div class="header-actions">
+                <button class="btn" onclick="openImportModal()">
+                    <span>📂</span>
+                    <span class="btn-text">Importer</span>
+                </button>
+                <button class="btn btn-primary" onclick="exportSVG()">
+                    <span>💾</span>
+                    <span class="btn-text">Exporter</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-scroll">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-view="network">Acteurs</button>
+            <button class="nav-tab" data-view="toc">Théorie du Changement</button>
+            <button class="nav-tab" data-view="tree">Arbre à Problème</button>
+            <button class="nav-tab" data-view="swot">SWOT</button>
+            <button class="nav-tab" data-view="timeline">Journal</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="content">
+            <!-- Network View -->
+            <div id="view-network" class="view-panel active">
+                <div class="stats-row" id="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Acteurs</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-allies" style="color: var(--ally)">0</div>
+                        <div class="stat-label">Alliés</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-neutral" style="color: var(--neutral)">0</div>
+                        <div class="stat-label">Neutres</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="stat-opponents" style="color: var(--opponent)">0</div>
+                        <div class="stat-label">Opposants</div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-chip active" data-filter="all">
+                        Tous
+                    </button>
+                    <button class="filter-chip" data-filter="allié">
+                        <span class="dot" style="background: var(--ally)"></span>
+                        Alliés
+                    </button>
+                    <button class="filter-chip" data-filter="neutre">
+                        <span class="dot" style="background: var(--neutral)"></span>
+                        Neutres
+                    </button>
+                    <button class="filter-chip" data-filter="opposant">
+                        <span class="dot" style="background: var(--opponent)"></span>
+                        Opposants
+                    </button>
+                </div>
+
+                <div class="graph-wrap">
+                    <svg id="network-svg"></svg>
+                    
+                    <div class="legend-panel" id="legend-panel" style="display: none;">
+                        <div class="legend-section">
+                            <div class="legend-title">Type d'acteur</div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-politique)"></div>
+                                <span>Politique</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-admin)"></div>
+                                <span>Administration</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-societe)"></div>
+                                <span>Société civile</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-media)"></div>
+                                <span>Média</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-entreprise)"></div>
+                                <span>Entreprise</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: var(--type-expert)"></div>
+                                <span>Expert</span>
+                            </div>
+                        </div>
+                        <div class="legend-section">
+                            <div class="legend-title">Position (bordure)</div>
+                            <div class="legend-item">
+                                <div class="legend-line" style="background: var(--ally)"></div>
+                                <span>Allié</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-line" style="background: var(--neutral)"></div>
+                                <span>Neutre</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-line" style="background: var(--opponent)"></div>
+                                <span>Opposant</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="graph-controls">
+                        <button onclick="zoomIn()" title="Zoom +">+</button>
+                        <button onclick="zoomOut()" title="Zoom −">−</button>
+                        <button onclick="resetZoom()" title="Réinitialiser">↺</button>
+                    </div>
+
+                    <div id="empty-network" class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-title">Aucune donnée</div>
+                        <div class="empty-text">Importez un fichier JSON pour visualiser votre cartographie d'acteurs.</div>
+                        <button class="btn btn-primary" onclick="openImportModal()">Importer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOC View -->
+            <div id="view-toc" class="view-panel">
+                <div id="toc-content"></div>
+            </div>
+
+            <!-- Tree View -->
+            <div id="view-tree" class="view-panel">
+                <div id="tree-content"></div>
+            </div>
+
+            <!-- SWOT View -->
+            <div id="view-swot" class="view-panel">
+                <div id="swot-content"></div>
+            </div>
+
+            <!-- Timeline View -->
+            <div id="view-timeline" class="view-panel">
+                <div id="timeline-content"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-title">Importer des données</div>
+            <div class="modal-text">Sélectionnez un fichier JSON exporté depuis le Poste de Travail Plaidoyer Citoyen.</div>
+            <div class="drop-zone" id="drop-zone">
+                <div class="drop-zone-icon">📁</div>
+                <div class="drop-zone-text">Glissez un fichier ici ou cliquez</div>
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeImportModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="loadDemoData()">Charger démo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== STATE =====
+        let data = null;
+        let currentFilter = 'all';
+        let simulation = null;
+        let svg, g, zoom;
+
+        // ===== COLORS =====
+        const typeColors = {
+            'politique': '#a855f7',
+            'admin': '#22c55e',
+            'société civile': '#3b82f6',
+            'média': '#f97316',
+            'entreprise': '#ef4444',
+            'expert': '#71717a'
+        };
+
+        const positionColors = {
+            'allié': '#10b981',
+            'neutre': '#f59e0b',
+            'opposant': '#ef4444'
+        };
+
+        const typeIcons = {
+            'politique': '🏛️',
+            'admin': '📋',
+            'société civile': '👥',
+            'média': '📰',
+            'entreprise': '🏢',
+            'expert': '🎓'
+        };
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            initSVG();
+            initEventListeners();
+            checkStoredData();
+        });
+
+        function initSVG() {
+            const container = document.querySelector('.graph-wrap');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            svg = d3.select('#network-svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            zoom = d3.zoom()
+                .scaleExtent([0.3, 3])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+            g = svg.append('g');
+        }
+
+        function initEventListeners() {
+            // Nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const view = tab.dataset.view;
+                    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`view-${view}`).classList.add('active');
+                });
+            });
+
+            // Filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentFilter = chip.dataset.filter;
+                    if (data) renderNetwork();
+                });
+            });
+
+            // Drop zone
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file) handleFile(file);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleFile(file);
+            });
+
+            // Resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const container = document.querySelector('.graph-wrap');
+                    svg.attr('width', container.offsetWidth).attr('height', container.offsetHeight);
+                    if (data && simulation) {
+                        simulation.force('center', d3.forceCenter(container.offsetWidth / 2, container.offsetHeight / 2));
+                        simulation.alpha(0.3).restart();
+                    }
+                }, 100);
+            });
+
+            // Escape closes modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeImportModal();
+            });
+        }
+
+        function checkStoredData() {
+            const stored = localStorage.getItem('plaidoyer_graph_data');
+            if (stored) {
+                try {
+                    data = JSON.parse(stored);
+                    renderAll();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    data = JSON.parse(e.target.result);
+                    localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+                    closeImportModal();
+                    renderAll();
+                } catch (err) {
+                    alert('Erreur de lecture du fichier JSON');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function renderAll() {
+            document.getElementById('empty-network').style.display = 'none';
+            document.getElementById('legend-panel').style.display = 'block';
+            updateStats();
+            renderNetwork();
+            renderTOC();
+            renderTree();
+            renderSWOT();
+            renderTimeline();
+        }
+
+        function updateStats() {
+            if (!data?.acteurs) return;
+            const actors = data.acteurs;
+            document.getElementById('stat-total').textContent = actors.length;
+            document.getElementById('stat-allies').textContent = actors.filter(a => a.position === 'allié').length;
+            document.getElementById('stat-neutral').textContent = actors.filter(a => a.position === 'neutre').length;
+            document.getElementById('stat-opponents').textContent = actors.filter(a => a.position === 'opposant').length;
+        }
+
+        // ===== NETWORK GRAPH - STABLE =====
+        function renderNetwork() {
+            if (!data?.acteurs) return;
+
+            g.selectAll('*').remove();
+
+            let actors = data.acteurs;
+            if (currentFilter !== 'all') {
+                actors = actors.filter(a => a.position === currentFilter);
+            }
+
+            const container = document.querySelector('.graph-wrap');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            // Nodes with fixed radius based on power
+            const nodes = actors.map(actor => ({
+                ...actor,
+                radius: 18 + (actor.power * 4)
+            }));
+
+            // Links between same position
+            const links = [];
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (nodes[i].position === nodes[j].position) {
+                        links.push({
+                            source: nodes[i].id,
+                            target: nodes[j].id
+                        });
+                    }
+                }
+            }
+
+            // Stop previous simulation
+            if (simulation) simulation.stop();
+
+            // Create simulation
+            simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(120).strength(0.1))
+                .force('charge', d3.forceManyBody().strength(-200))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.radius + 15))
+                .velocityDecay(0.6);
+
+            // Draw links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('class', 'link');
+
+            // Draw nodes
+            const node = g.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'node-group')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            // Circle
+            node.append('circle')
+                .attr('class', 'node-circle')
+                .attr('r', d => d.radius)
+                .attr('fill', d => typeColors[d.type] || '#71717a')
+                .attr('stroke', d => positionColors[d.position] || '#71717a')
+                .attr('stroke-width', 3);
+
+            // Power number
+            node.append('text')
+                .attr('class', 'node-power')
+                .text(d => d.power);
+
+            // Label
+            node.append('text')
+                .attr('class', 'node-label')
+                .attr('dy', d => d.radius + 14)
+                .text(d => d.name.length > 16 ? d.name.substring(0, 14) + '…' : d.name);
+
+            // Tooltip events (no transform change to avoid jiggle)
+            node.on('mouseenter', (event, d) => showTooltip(event, d))
+                .on('mousemove', (event, d) => moveTooltip(event))
+                .on('mouseleave', hideTooltip);
+
+            // Tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            // Run simulation to stabilize quickly
+            simulation.alpha(1).restart();
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // ===== TOOLTIP =====
+        function showTooltip(event, d) {
+            const tooltip = document.getElementById('tooltip');
+            
+            let powerDots = '';
+            for (let i = 1; i <= 5; i++) {
+                powerDots += `<div class="power-dot ${i <= d.power ? 'filled' : ''}"></div>`;
+            }
+
+            tooltip.innerHTML = `
+                <div class="tooltip-header">
+                    <div class="tooltip-icon" style="background: ${typeColors[d.type]}20; color: ${typeColors[d.type]}">
+                        ${typeIcons[d.type] || '👤'}
+                    </div>
+                    <div>
+                        <div class="tooltip-title">${d.name}</div>
+                        <div class="tooltip-type">${d.type}</div>
+                    </div>
+                </div>
+                <div class="tooltip-notes">${d.notes || 'Aucune note'}</div>
+                <div class="tooltip-footer">
+                    <div class="tooltip-stat">
+                        <div class="tooltip-stat-label">Position</div>
+                        <div class="tooltip-stat-value" style="color: ${positionColors[d.position]}">${d.position}</div>
+                    </div>
+                    <div class="tooltip-stat">
+                        <div class="tooltip-stat-label">Pouvoir</div>
+                        <div class="power-dots">${powerDots}</div>
+                    </div>
+                </div>
+            `;
+
+            tooltip.classList.add('visible');
+            moveTooltip(event);
+        }
+
+        function moveTooltip(event) {
+            const tooltip = document.getElementById('tooltip');
+            const x = event.clientX + 15;
+            const y = event.clientY + 15;
+            
+            // Keep within viewport
+            const rect = tooltip.getBoundingClientRect();
+            const maxX = window.innerWidth - rect.width - 20;
+            const maxY = window.innerHeight - rect.height - 20;
+            
+            tooltip.style.left = Math.min(x, maxX) + 'px';
+            tooltip.style.top = Math.min(y, maxY) + 'px';
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('visible');
+        }
+
+        // ===== TOC =====
+        function renderTOC() {
+            if (!data?.toc) {
+                document.getElementById('toc-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Aucune donnée</div></div>';
+                return;
+            }
+
+            const toc = data.toc;
+            document.getElementById('toc-content').innerHTML = `
+                <div class="toc-flow">
+                    <div class="toc-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: linear-gradient(135deg, var(--green-400), var(--lilac-400)); color: white;">🎯</div>
+                                <div class="card-title">Impact (Vision)</div>
+                            </div>
+                            <div class="card-content">${toc.impact || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--success-soft); color: var(--success);">📊</div>
+                                <div class="card-title">Résultats (Outcomes)</div>
+                            </div>
+                            <div class="card-content">${toc.resultats || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--neutral-bg); color: var(--neutral);">📦</div>
+                                <div class="card-title">Produits (Outputs)</div>
+                            </div>
+                            <div class="card-content">${toc.outputs || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--accent-soft); color: var(--accent);">⚡</div>
+                                <div class="card-title">Activités</div>
+                            </div>
+                            <div class="card-content">${toc.activites || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-card">
+                        <div class="card" style="border-color: var(--opponent); background: var(--opponent-bg);">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--opponent); color: white;">⚠️</div>
+                                <div class="card-title">Hypothèses & Risques</div>
+                            </div>
+                            <div class="card-content">${toc.hypotheses || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== TREE =====
+        function renderTree() {
+            if (!data?.arbre) {
+                document.getElementById('tree-content').innerHTML = '<div class="empty-state"><div class="empty-icon">🌳</div><div class="empty-title">Aucune donnée</div></div>';
+                return;
+            }
+
+            const arbre = data.arbre;
+            document.getElementById('tree-content').innerHTML = `
+                <div class="tree-flow">
+                    <div class="tree-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--success-soft); color: var(--success);">↑</div>
+                                <div class="card-title">Conséquences</div>
+                            </div>
+                            <div class="card-content">${arbre.consequences || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-card problem">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--opponent); color: white;">⬤</div>
+                                <div class="card-title">Problème Central</div>
+                            </div>
+                            <div class="card-content" style="font-size: 15px; color: var(--text);">${arbre.probleme || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-card">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--neutral-bg); color: var(--neutral);">↓</div>
+                                <div class="card-title">Causes</div>
+                            </div>
+                            <div class="card-content">${arbre.causes || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-card objective">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background: var(--success); color: white;">★</div>
+                                <div class="card-title">Objectif de Transformation</div>
+                            </div>
+                            <div class="card-content" style="color: var(--text);">${arbre.objectif || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== SWOT =====
+        function renderSWOT() {
+            if (!data?.swot) {
+                document.getElementById('swot-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-title">Aucune donnée</div></div>';
+                return;
+            }
+
+            const swot = data.swot;
+            document.getElementById('swot-content').innerHTML = `
+                <div class="swot-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: var(--success-soft); color: var(--success);">💪</div>
+                            <div class="card-title">Forces</div>
+                        </div>
+                        <div class="card-content">${swot.forces || ''}</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: var(--opponent-bg); color: var(--opponent);">⚡</div>
+                            <div class="card-title">Faiblesses</div>
+                        </div>
+                        <div class="card-content">${swot.faiblesses || ''}</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: var(--accent-soft); color: var(--accent);">🚀</div>
+                            <div class="card-title">Opportunités</div>
+                        </div>
+                        <div class="card-content">${swot.opportunites || ''}</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: var(--neutral-bg); color: var(--neutral);">⚠️</div>
+                            <div class="card-title">Menaces</div>
+                        </div>
+                        <div class="card-content">${swot.menaces || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== TIMELINE =====
+        function renderTimeline() {
+            if (!data?.journal?.length) {
+                document.getElementById('timeline-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Journal vide</div></div>';
+                return;
+            }
+
+            const journal = [...data.journal].sort((a, b) => new Date(b.date) - new Date(a.date));
+            let html = '<div class="timeline">';
+
+            journal.forEach(entry => {
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${formatDate(entry.date)}</div>
+                        <div class="timeline-card">
+                            <span class="timeline-badge ${entry.type}">${entry.type}</span>
+                            <div class="timeline-title">${entry.title}</div>
+                            <div class="timeline-content">${entry.content}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            document.getElementById('timeline-content').innerHTML = html;
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        // ===== MODAL =====
+        function openImportModal() {
+            document.getElementById('import-modal').classList.add('visible');
+        }
+
+        function closeImportModal() {
+            document.getElementById('import-modal').classList.remove('visible');
+        }
+
+        // ===== ZOOM =====
+        function zoomIn() {
+            svg.transition().duration(200).call(zoom.scaleBy, 1.3);
+        }
+
+        function zoomOut() {
+            svg.transition().duration(200).call(zoom.scaleBy, 0.7);
+        }
+
+        function resetZoom() {
+            svg.transition().duration(200).call(zoom.transform, d3.zoomIdentity);
+        }
+
+        // ===== EXPORT =====
+        function exportSVG() {
+            const svgEl = document.getElementById('network-svg');
+            const svgData = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plaidoyer-acteurs.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ===== DEMO DATA =====
+        function loadDemoData() {
+            data = {
+                "meta": { "name": "Souveraineté Cognitive Citoyenne", "org": "Collectif Noosphère Libre", "version": "3.0" },
+                "acteurs": [
+                    { "id": "1", "name": "Mathieu Michel", "type": "politique", "position": "allié", "power": 4, "notes": "Secrétaire d'État à la Digitalisation. Sensible aux enjeux IA." },
+                    { "id": "2", "name": "Commission Européenne", "type": "admin", "position": "neutre", "power": 5, "notes": "Pilote le DSA et l'AI Act." },
+                    { "id": "3", "name": "Meta/Facebook", "type": "entreprise", "position": "opposant", "power": 5, "notes": "Modèle basé sur l'extraction d'attention." },
+                    { "id": "4", "name": "Google/Alphabet", "type": "entreprise", "position": "opposant", "power": 5, "notes": "Contrôle 92% du marché search." },
+                    { "id": "5", "name": "CSA Belgique", "type": "admin", "position": "neutre", "power": 3, "notes": "Régulateur en transition." },
+                    { "id": "6", "name": "RTBF", "type": "média", "position": "allié", "power": 3, "notes": "Média public, partenaire potentiel." },
+                    { "id": "7", "name": "FWB Éducation", "type": "admin", "position": "neutre", "power": 4, "notes": "Programmes scolaires." },
+                    { "id": "8", "name": "Ligue Droits Humains", "type": "société civile", "position": "allié", "power": 2, "notes": "Expertise juridique." },
+                    { "id": "9", "name": "Test-Achats", "type": "société civile", "position": "allié", "power": 3, "notes": "Forte légitimité." },
+                    { "id": "10", "name": "APD", "type": "admin", "position": "allié", "power": 3, "notes": "RGPD." },
+                    { "id": "11", "name": "OpenAI", "type": "entreprise", "position": "neutre", "power": 4, "notes": "IA générative." },
+                    { "id": "12", "name": "AlgorithmWatch", "type": "société civile", "position": "allié", "power": 2, "notes": "Audit algorithmique." },
+                    { "id": "13", "name": "FGTB/CSC", "type": "société civile", "position": "allié", "power": 4, "notes": "Mobilisation massive." },
+                    { "id": "14", "name": "Bernard Crutzen", "type": "expert", "position": "allié", "power": 2, "notes": "Documentariste." },
+                    { "id": "15", "name": "Ecolo-Groen", "type": "politique", "position": "allié", "power": 3, "notes": "Enjeux numériques." }
+                ],
+                "toc": {
+                    "impact": "Une démocratie résiliente face à la manipulation cognitive.",
+                    "resultats": "R1: Algorithmes audités (2027)\nR2: Élèves formés (2028)\nR3: Autorité créée (2029)",
+                    "outputs": "O1: Proposition de loi\nO2: Kit pédagogique\nO3: Coalition 50 orgas\nO4: 10K signatures",
+                    "activites": "A1: Rédaction loi\nA2: Kit pédagogique\nA3: Veille\nA4: Colloques\nA5: Campagne sociale",
+                    "hypotheses": "H1: Attention maintenue post-élections\nH2: Scandales tech = opportunités\nRISQUE: Lobbying massif"
+                },
+                "swot": {
+                    "forces": "• Expertise pointue\n• Réseau diversifié\n• Sujet d'actualité\n• Ancrage européen",
+                    "faiblesses": "• Ressources limitées\n• Visibilité faible\n• Complexité technique",
+                    "opportunites": "• AI Act\n• DSA\n• Scandales récurrents\n• Réforme scolaire",
+                    "menaces": "• Lobbying Big Tech\n• Capture réglementaire\n• Fatigue informationnelle"
+                },
+                "arbre": {
+                    "probleme": "Les citoyens sont exposés à des contenus manipulés sans outils de défense.",
+                    "causes": "• Opacité algorithmique\n• Pas d'éducation critique\n• Modèle de l'engagement\n• Régulation faible",
+                    "consequences": "• Bulles de filtres\n• Polarisation\n• Érosion confiance\n• Extrémismes",
+                    "objectif": "D'ici 2030, les citoyens exercent leur souveraineté cognitive."
+                },
+                "journal": [
+                    { "id": "1", "date": "2025-09-15", "type": "action", "title": "Lancement collectif", "content": "23 organisations fondatrices." },
+                    { "id": "2", "date": "2025-10-08", "type": "rencontre", "title": "Cabinet Mathieu Michel", "content": "Accueil positif." },
+                    { "id": "3", "date": "2025-11-22", "type": "média", "title": "Reportage RTBF", "content": "450K téléspectateurs." },
+                    { "id": "4", "date": "2025-12-05", "type": "réflexion", "title": "Bilan mi-parcours", "content": "Coalition solide." },
+                    { "id": "5", "date": "2026-01-14", "type": "action", "title": "Question parlementaire", "content": "Cécile Thibaut dépose question." }
+                ]
+            };
+
+            localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+            closeImportModal();
+            renderAll();
+        }
+    </script>
+</body>
+</html>

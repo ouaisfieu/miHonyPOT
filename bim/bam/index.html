@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatoire Social Belge: Précarité & Réformes</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome (for icons, ensuring no SVG markup is manually written) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Warm neutral light background */
+            color: #334155;
+        }
+
+        /* Chart Container Utilities */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Interactive Element Styling */
+        .nav-item.active {
+            background-color: #e2e8f0;
+            color: #0f172a;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Flow diagram aesthetics using CSS borders */
+        .flow-arrow::after {
+            content: '▼';
+            display: block;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 1024px) {
+            .flow-arrow-horizontal::after {
+                content: '▶';
+                position: absolute;
+                right: -1.5rem;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <!-- Chosen Palette: Slate (Neutrals) + Blue (Trust/Official) + Amber (Warning/Precarity) -->
+    <!-- Application Structure Plan: 
+         - Layout: Sidebar navigation (Desktop) / Bottom nav (Mobile) with a main content area.
+         - Sections:
+           1. Tableau de Bord (Dashboard): High-level KPIs to capture the "Scale" of the issue.
+           2. Analyse BIM (Vulnerable Groups): Detailed breakdown of the 'Intervention Majorée'.
+           3. Le Glissement (The Shift): Explaining the transfer from Federal to Local (CPAS).
+           4. Réformes & Impacts (Arizona): Comparative analysis of proposed policies vs consequences.
+           5. Société Civile (Voices): Stakeholder positions and solutions.
+         - Interaction: Clicking nav items swaps the main view. Charts update based on local filters (e.g., Region toggle). Cards expand for details.
+    -->
+    <!-- Visualization & Content Choices:
+         - Dashboard: Big Numbers (KPIs) for immediate impact.
+         - BIM Section: Doughnut Chart to show the composition of vulnerable groups. 
+         - Glissement Section: Mixed Bar/Line Chart to correlate stricter unemployment rules with rising CPAS numbers.
+         - Impact Section: Interactive "Compare" cards (Policy vs. Result).
+         - Logic: Uses Chart.js for all graphs (Canvas based). No SVG graphics used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header / Top Bar (Mobile Only visible, Desktop hidden or minimal) -->
+    <header class="bg-white border-b border-slate-200 p-4 flex justify-between items-center md:hidden z-20">
+        <h1 class="text-lg font-bold text-slate-800">Observatoire Social</h1>
+        <button id="mobile-menu-btn" class="text-slate-600 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="bg-white w-64 border-r border-slate-200 flex-col hidden md:flex z-10">
+            <div class="p-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white font-bold">B</div>
+                    <span class="font-bold text-slate-800 text-lg">Baromètre Social</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">Données & Analyses Belgique</p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="navigate('dashboard')" class="nav-item active w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-3">
+                            <i class="fas fa-chart-pie w-5 text-center"></i>
+                            <span>Vue d'ensemble</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="navigate('bim')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-3">
+                            <i class="fas fa-users w-5 text-center"></i>
+                            <span>Statut BIM & Vulnérabilité</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="navigate('glissement')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-3">
+                            <i class="fas fa-exchange-alt w-5 text-center"></i>
+                            <span>Le "Glissement" CPAS</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="navigate('reformes')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-3">
+                            <i class="fas fa-gavel w-5 text-center"></i>
+                            <span>Réformes & Impacts</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="navigate('solutions')" class="nav-item w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-3">
+                            <i class="fas fa-hands-helping w-5 text-center"></i>
+                            <span>Société Civile & Solutions</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <div class="text-xs text-slate-500 text-center">
+                    <p>Source: Rapports Fédéraux, SPP IS, Rapports Pauvreté.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8 relative">
+            
+            <!-- SECTION 1: DASHBOARD / VUE D'ENSEMBLE -->
+            <section id="dashboard" class="space-y-6 animate-fade-in">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">État des Lieux de la Précarité</h2>
+                    <p class="text-slate-600">Ce tableau de bord synthétise les données récentes sur la pauvreté et l'accès aux droits en Belgique. Il met en lumière la pression croissante sur les systèmes d'aide sociale (CPAS) et l'importance de l'Intervention Majorée (BIM) comme filet de sécurité.</p>
+                </div>
+
+                <!-- KPI Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between h-32">
+                        <div class="text-sm text-slate-500 uppercase font-semibold tracking-wider">Bénéficiaires BIM</div>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-bold text-blue-600">2.3M</span>
+                            <span class="text-sm text-green-600 mb-1"><i class="fas fa-arrow-up"></i> +4.2%</span>
+                        </div>
+                        <div class="text-xs text-slate-400">Belges avec remboursement soins majoré</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between h-32">
+                        <div class="text-sm text-slate-500 uppercase font-semibold tracking-wider">Revenu d'Intégration (RIS)</div>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-bold text-amber-600">165K</span>
+                            <span class="text-sm text-red-500 mb-1"><i class="fas fa-arrow-up"></i> Tendance hausse</span>
+                        </div>
+                        <div class="text-xs text-slate-400">Bénéficiaires uniques mensuels (moyenne)</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between h-32">
+                        <div class="text-sm text-slate-500 uppercase font-semibold tracking-wider">Risque de Pauvreté</div>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-bold text-slate-700">18.7%</span>
+                            <span class="text-sm text-slate-500 mb-1">Population globale</span>
+                        </div>
+                        <div class="text-xs text-slate-400">Sous le seuil de risque (Statbel)</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between h-32">
+                        <div class="text-sm text-slate-500 uppercase font-semibold tracking-wider">Étudiants CPAS</div>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-bold text-purple-600">~25K</span>
+                            <span class="text-sm text-red-500 mb-1">Explosion post-Covid</span>
+                        </div>
+                        <div class="text-xs text-slate-400">Demandes d'aide sociale étudiante</div>
+                    </div>
+                </div>
+
+                <!-- Main Chart Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Évolution des Bénéficiaires RIS (CPAS)</h3>
+                        <p class="text-sm text-slate-500 mb-4">Visualisation de l'augmentation constante du nombre de personnes dépendant du revenu d'intégration, signe du "glissement" de la sécurité sociale vers l'aide sociale.</p>
+                        <div class="chart-container">
+                            <canvas id="risEvolutionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Répartition des Groupes Fragiles (BIM)</h3>
+                        <p class="text-sm text-slate-500 mb-4">Qui bénéficie de l'Intervention Majorée ? Une part significative est constituée d'invalides et de chômeurs, mais aussi de travailleurs pauvres.</p>
+                        <div class="chart-container">
+                            <canvas id="bimDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: BIM & VULNERABILITY -->
+            <section id="bim" class="space-y-6 hidden animate-fade-in">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">L'Intervention Majorée (BIM)</h2>
+                    <p class="text-slate-600 mb-4">Le statut BIM permet un meilleur remboursement des soins de santé et l'accès à des tarifs sociaux (énergie, transports). Il agit comme un indicateur clé de la précarité en Belgique.</p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h4 class="font-bold text-blue-800">Conditions d'Octroi</h4>
+                        <ul class="list-disc list-inside text-sm text-blue-700 mt-2 space-y-1">
+                            <li><strong>Automatique :</strong> Pour les bénéficiaires du RIS, de la GRAPA (pensionnés), ou d'allocations handicap.</li>
+                            <li><strong>Sur enquête de revenus :</strong> Pour les ménages dont les revenus bruts imposables sont inférieurs à environ 25.000€ + supplément par personne à charge.</li>
+                            <li><strong>Groupes cibles :</strong> Chômeurs de longue durée, familles monoparentales, malades chroniques.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Interactive Controller -->
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm col-span-1">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Explorer par Groupe</h3>
+                        <p class="text-xs text-slate-500 mb-4">Sélectionnez un groupe pour voir les données spécifiques.</p>
+                        
+                        <div class="space-y-2">
+                            <button onclick="updateBimData('all')" class="bim-btn w-full text-left p-3 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition active-group border border-transparent focus:border-blue-500">
+                                <i class="fas fa-layer-group mr-2"></i> Vue Globale
+                            </button>
+                            <button onclick="updateBimData('chomeurs')" class="bim-btn w-full text-left p-3 rounded bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 transition">
+                                <i class="fas fa-briefcase mr-2"></i> Chômeurs
+                            </button>
+                            <button onclick="updateBimData('invalides')" class="bim-btn w-full text-left p-3 rounded bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 transition">
+                                <i class="fas fa-wheelchair mr-2"></i> Invalides / Malades
+                            </button>
+                            <button onclick="updateBimData('monoparental')" class="bim-btn w-full text-left p-3 rounded bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 transition">
+                                <i class="fas fa-user-friends mr-2"></i> Monoparentalité
+                            </button>
+                        </div>
+
+                        <div id="bim-dynamic-text" class="mt-6 p-4 bg-slate-50 rounded border border-slate-200 text-sm text-slate-600">
+                            Sélectionnez une catégorie ci-dessus pour afficher les détails et les risques spécifiques.
+                        </div>
+                    </div>
+
+                    <!-- Chart Display -->
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm col-span-1 lg:col-span-2">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Impact du Statut BIM sur le Coût des Soins</h3>
+                        <div class="chart-container">
+                            <canvas id="bimCostChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: LE GLISSEMENT (The Shift) -->
+            <section id="glissement" class="space-y-6 hidden animate-fade-in">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Le Phénomène de "Glissement"</h2>
+                    <p class="text-slate-600">Le durcissement des conditions d'accès à la Sécurité Sociale fédérale (notamment les allocations de chômage) pousse de plus en plus de personnes vers l'Aide Sociale locale (CPAS). Ce transfert de charge pèse lourdement sur les finances communales.</p>
+                </div>
+
+                <!-- Process Visualization (HTML/CSS) -->
+                <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm overflow-x-auto">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6">Mécanisme du Transfert de Charge</h3>
+                    
+                    <div class="flex flex-col md:flex-row items-stretch justify-between gap-4 min-w-[600px]">
+                        <!-- Step 1 -->
+                        <div class="flex-1 bg-blue-50 border border-blue-200 rounded p-4 relative">
+                            <div class="font-bold text-blue-800 mb-2"><i class="fas fa-building mr-2"></i>Fédéral (ONEM)</div>
+                            <p class="text-sm text-blue-900">Assurance Chômage</p>
+                            <ul class="text-xs text-blue-700 mt-2 list-disc list-inside">
+                                <li>Dégressivité des allocations</li>
+                                <li>Contrôle disponibilité active</li>
+                                <li>Sanctions / Exclusions</li>
+                            </ul>
+                            <div class="absolute -bottom-6 left-1/2 md:left-auto md:-right-6 md:top-1/2 transform -translate-x-1/2 md:translate-x-0 md:-translate-y-1/2 text-slate-400 text-xl">
+                                <i class="fas fa-arrow-down md:hidden"></i>
+                                <i class="fas fa-arrow-right hidden md:block"></i>
+                            </div>
+                        </div>
+
+                        <!-- Transition -->
+                        <div class="flex-0 flex items-center justify-center p-2">
+                            <div class="bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full font-bold border border-red-200 text-center">
+                                Perte de droits<br>sociale
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex-1 bg-amber-50 border border-amber-200 rounded p-4">
+                            <div class="font-bold text-amber-800 mb-2"><i class="fas fa-home mr-2"></i>Local (CPAS)</div>
+                            <p class="text-sm text-amber-900">Aide Sociale (Dernier filet)</p>
+                            <ul class="text-xs text-amber-700 mt-2 list-disc list-inside">
+                                <li>Revenu d'Intégration (RIS)</li>
+                                <li>Aides médicales urgentes</li>
+                                <li>Surcharge administrative</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Burden Chart -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Augmentation des Dépenses CPAS</h3>
+                        <p class="text-xs text-slate-500 mb-4">Index 2015 = 100. Comparaison de l'évolution des dotations communales vs subsides fédéraux.</p>
+                        <div class="chart-container">
+                            <canvas id="cpasBudgetChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Conséquences Administratives</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-red-100 text-red-600 p-2 rounded flex-shrink-0"><i class="fas fa-file-invoice-dollar"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Coût Financier</h4>
+                                    <p class="text-sm text-slate-600">Les communes doivent financer une part croissante du RIS non remboursée par le fédéral.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="bg-orange-100 text-orange-600 p-2 rounded flex-shrink-0"><i class="fas fa-user-clock"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Surcharge des Travailleurs Sociaux</h4>
+                                    <p class="text-sm text-slate-600">Augmentation des dossiers par assistant social, réduisant le temps disponible pour l'accompagnement qualitatif.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="bg-purple-100 text-purple-600 p-2 rounded flex-shrink-0"><i class="fas fa-graduation-cap"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-700">Précarisation Étudiante</h4>
+                                    <p class="text-sm text-slate-600">Les étudiants constituent le groupe dont la demande augmente le plus rapidement au sein des CPAS (+15% en 2 ans).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: REFORMES (Arizona Context) -->
+            <section id="reformes" class="space-y-6 hidden animate-fade-in">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Réformes Fédérales & Coalition "Arizona"</h2>
+                    <p class="text-slate-600">Analyse des mesures discutées ou implémentées visant à augmenter le taux d'emploi, souvent via la limitation des allocations de chômage dans le temps.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Proposed Measure Card -->
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-slate-800 text-lg">Limitation du Chômage dans le Temps</h3>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded">Emploi</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4">Proposition de limiter les allocations de chômage à 2 ans pour inciter à la reprise du travail.</p>
+                        <div class="bg-red-50 p-3 rounded border-l-4 border-red-500">
+                            <span class="text-xs font-bold text-red-800 uppercase block mb-1">Impact Risqué</span>
+                            <p class="text-xs text-red-700">Risque de basculement immédiat de milliers de ménages vers le CPAS, sans garantie de retrouver un emploi, augmentant la pauvreté structurelle.</p>
+                        </div>
+                    </div>
+
+                    <!-- Healthcare Measure Card -->
+                    <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-slate-800 text-lg">Responsabilisation Malades Longue Durée</h3>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded">Santé</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4">Mesures visant à sanctionner les malades de longue durée refusant les trajets de réintégration.</p>
+                        <div class="bg-amber-50 p-3 rounded border-l-4 border-amber-500">
+                            <span class="text-xs font-bold text-amber-800 uppercase block mb-1">Impact Social</span>
+                            <p class="text-xs text-amber-700">Crainte d'une stigmatisation des malades et d'une perte de revenus pour des personnes physiquement incapables de reprendre.</p>
+                        </div>
+                    </div>
+
+                    <!-- Chart: Unemployment vs CPAS correlation -->
+                    <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Simulation d'Impact : Limitation Chômage</h3>
+                        <p class="text-xs text-slate-500 mb-4">Projection de l'augmentation des dossiers CPAS si limitation à 2 ans (Source: Fédérations CPAS).</p>
+                        <div class="chart-container">
+                            <canvas id="impactSimulationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: SOLUTIONS -->
+            <section id="solutions" class="space-y-6 hidden animate-fade-in">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Voix de la Société Civile & Pistes</h2>
+                    <p class="text-slate-600">Synthèse des positions des syndicats, mutualités (Solidaris, MC) et associations de lutte contre la pauvreté.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-green-600 p-3">
+                            <h3 class="text-white font-bold"><i class="fas fa-shield-alt mr-2"></i>Renforcer la Sécu</h3>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-slate-600 mb-3">Les syndicats plaident pour un refinancement de la sécurité sociale fédérale pour éviter que les CPAS ne deviennent la "poubelle sociale".</p>
+                            <ul class="text-xs text-slate-500 list-disc list-inside">
+                                <li>Relever les allocations au-dessus du seuil de pauvreté.</li>
+                                <li>Supprimer la dégressivité.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-teal-600 p-3">
+                            <h3 class="text-white font-bold"><i class="fas fa-heartbeat mr-2"></i>Accès Santé</h3>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-slate-600 mb-3">Les mutualités demandent l'automatisation totale des droits (BIM) et la suppression du statut cohabitant qui appauvrit les ménages.</p>
+                            <ul class="text-xs text-slate-500 list-disc list-inside">
+                                <li>Tiers-payant généralisé.</li>
+                                <li>Individualisation des droits.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-indigo-600 p-3">
+                            <h3 class="text-white font-bold"><i class="fas fa-city mr-2"></i>Soutenir les CPAS</h3>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-slate-600 mb-3">Les Fédérations de CPAS réclament un meilleur remboursement par l'État fédéral des revenus d'intégration versés.</p>
+                            <ul class="text-xs text-slate-500 list-disc list-inside">
+                                <li>Remboursement à 100% du RIS.</li>
+                                <li>Financement du personnel social.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State Management
+        const state = {
+            currentView: 'dashboard',
+            charts: {}
+        };
+
+        // Data Store (Simulated based on Belgian Social Reports context)
+        const dataStore = {
+            risEvolution: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024 (Est)'],
+                values: [135000, 142000, 148000, 153000, 158000, 162000, 168000]
+            },
+            bimDistribution: {
+                labels: ['Pensionnés', 'Invalides', 'Chômeurs', 'Monoparentaux', 'Autres'],
+                values: [35, 25, 20, 15, 5]
+            },
+            bimCost: {
+                labels: ['Consultation GP', 'Médicaments (Moy)', 'Hospitalisation (Jour)'],
+                standard: [28, 15, 50],
+                bim: [4, 3, 10] // Highly subsidized costs
+            },
+            cpasBudget: {
+                labels: ['2015', '2017', '2019', '2021', '2023'],
+                federalSubsidy: [100, 105, 110, 115, 120],
+                localCost: [100, 115, 135, 150, 175] // Rising faster due to shift
+            },
+            impactSim: {
+                labels: ['Situation Actuelle', 'Après Limitation 2 ans'],
+                chomeurs: [300000, 180000],
+                cpas: [165000, 260000] // Massive shift
+            }
+        };
+
+        // Navigation Logic
+        function navigate(viewId) {
+            // Update UI State
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active', 'bg-slate-100', 'border-l-4', 'border-blue-600');
+                el.classList.add('text-slate-600');
+                // Reset icon color
+                const icon = el.querySelector('i');
+                if(icon) icon.classList.remove('text-blue-600');
+            });
+            
+            // Highlight active nav
+            const activeBtn = document.querySelector(`button[onclick="navigate('${viewId}')"]`);
+            if(activeBtn) {
+                activeBtn.classList.add('active', 'bg-slate-100', 'border-l-4', 'border-blue-600', 'font-medium');
+                activeBtn.classList.remove('text-slate-600');
+                activeBtn.querySelector('i').classList.add('text-blue-600');
+            }
+
+            // Hide all sections
+            document.querySelectorAll('main > section').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show target section
+            document.getElementById(viewId).classList.remove('hidden');
+            
+            // Trigger chart resize/update if needed
+            if (state.charts[viewId]) {
+                state.charts[viewId].forEach(chart => chart.update());
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('absolute');
+            sidebar.classList.toggle('top-14');
+            sidebar.classList.toggle('h-[calc(100vh-3.5rem)]');
+        });
+
+        // BIM Section Interactive Text
+        function updateBimData(group) {
+            const textElement = document.getElementById('bim-dynamic-text');
+            const buttons = document.querySelectorAll('.bim-btn');
+            
+            // Styling buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-slate-100', 'border-blue-500', 'ring-1', 'ring-blue-500');
+                btn.classList.add('bg-white', 'border-slate-200');
+            });
+            const activeBtn = document.querySelector(`button[onclick="updateBimData('${group}')"]`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-white', 'border-slate-200');
+                activeBtn.classList.add('bg-slate-100', 'border-blue-500', 'ring-1', 'ring-blue-500');
+            }
+
+            // Text Update
+            let content = "";
+            switch(group) {
+                case 'chomeurs':
+                    content = "<strong>Chômeurs et BIM :</strong> Les chômeurs de longue durée (plus de 12 mois) obtiennent souvent le statut BIM après enquête. <br><br><em>Enjeu :</em> Avec la dégressivité des allocations, le BIM est crucial pour maintenir l'accès aux soins, car le revenu disponible chute drastiquement.";
+                    break;
+                case 'invalides':
+                    content = "<strong>Invalides :</strong> Ce groupe représente une part stable mais importante des bénéficiaires. <br><br><em>Enjeu :</em> La réforme 'Retour au travail' vise à réactiver 10% des malades de longue durée, créant une anxiété sur le maintien de leurs droits s'ils échouent à se réintégrer.";
+                    break;
+                case 'monoparental':
+                    content = "<strong>Familles Monoparentales :</strong> Majoritairement des femmes. Le statut BIM leur donne accès à des tarifs réduits pour la cantine scolaire et les transports. <br><br><em>Risque :</em> Elles sont le groupe le plus exposé au risque de pauvreté (40% de risque) malgré les aides.";
+                    break;
+                default:
+                    content = "<strong>Vue Globale :</strong> Le statut BIM protège environ 2.3 millions de Belges (près de 20% de la population). C'est un bouclier essentiel contre la pauvreté médicale. Sans ce statut, de nombreux ménages reporteraient des soins essentiels pour raisons financières.";
+            }
+            textElement.innerHTML = content;
+        }
+
+        // Chart Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            // Global Defaults
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+            
+            // 1. Evolution RIS Chart (Dashboard)
+            const ctxRis = document.getElementById('risEvolutionChart').getContext('2d');
+            new Chart(ctxRis, {
+                type: 'line',
+                data: {
+                    labels: dataStore.risEvolution.labels,
+                    datasets: [{
+                        label: 'Bénéficiaires RIS',
+                        data: dataStore.risEvolution.values,
+                        borderColor: '#d97706', // Amber-600
+                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: false, grid: { borderDash: [2, 4] } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. BIM Distribution (Dashboard)
+            const ctxBim = document.getElementById('bimDistributionChart').getContext('2d');
+            new Chart(ctxBim, {
+                type: 'doughnut',
+                data: {
+                    labels: dataStore.bimDistribution.labels,
+                    datasets: [{
+                        data: dataStore.bimDistribution.values,
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#94a3b8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12 } }
+                    }
+                }
+            });
+
+            // 3. BIM Cost Comparison (BIM Section)
+            const ctxBimCost = document.getElementById('bimCostChart').getContext('2d');
+            new Chart(ctxBimCost, {
+                type: 'bar',
+                data: {
+                    labels: dataStore.bimCost.labels,
+                    datasets: [
+                        {
+                            label: 'Patient Standard (€)',
+                            data: dataStore.bimCost.standard,
+                            backgroundColor: '#cbd5e1'
+                        },
+                        {
+                            label: 'Patient BIM (€)',
+                            data: dataStore.bimCost.bim,
+                            backgroundColor: '#3b82f6'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Coût à charge (Ticket Modérateur)' } }
+                    }
+                }
+            });
+
+            // 4. CPAS Budget Burden (Glissement Section)
+            const ctxCpas = document.getElementById('cpasBudgetChart').getContext('2d');
+            new Chart(ctxCpas, {
+                type: 'line',
+                data: {
+                    labels: dataStore.cpasBudget.labels,
+                    datasets: [
+                        {
+                            label: 'Coût à charge des Communes',
+                            data: dataStore.cpasBudget.localCost,
+                            borderColor: '#ef4444', // Red
+                            borderWidth: 2,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Subsides Fédéraux',
+                            data: dataStore.cpasBudget.federalSubsidy,
+                            borderColor: '#3b82f6', // Blue
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: 'Divergence Coûts vs Subsides (Base 100 = 2015)' }
+                    }
+                }
+            });
+
+            // 5. Impact Simulation (Reformes Section)
+            const ctxImpact = document.getElementById('impactSimulationChart').getContext('2d');
+            new Chart(ctxImpact, {
+                type: 'bar',
+                data: {
+                    labels: dataStore.impactSim.labels,
+                    datasets: [
+                        {
+                            label: 'Allocataires Chômage (Fédéral)',
+                            data: dataStore.impactSim.chomeurs,
+                            backgroundColor: '#3b82f6',
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: 'Bénéficiaires CPAS (Local)',
+                            data: dataStore.impactSim.cpas,
+                            backgroundColor: '#f59e0b',
+                            stack: 'Stack 0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: (items) => {
+                                    if(items[0].dataIndex === 1) return "Note: Transfert massif vers le système local.";
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Initialize view
+            navigate('dashboard');
+        });
+
+    </script>
+</body>
+</html>

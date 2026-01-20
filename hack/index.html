@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL_ACCES_V3</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            overflow: hidden; /* Empêche le scroll classique */
+        }
+        #console {
+            width: 100%;
+            height: 80vh;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt {
+            color: #ff0055;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        input {
+            background: transparent;
+            border: none;
+            color: #00ff41;
+            font-family: inherit;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+        }
+        .error { color: red; }
+        .success { color: cyan; }
+        .warning { color: yellow; }
+        
+        /* Effet de crash final */
+        .crash-mode {
+            animation: shake 0.5s infinite;
+            background: blue !important;
+            color: white !important;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="console">
+        <div>INITIALISATION DU PROTOCOLE...</div>
+        <div>CONNEXION AU RÉSEAU SÉCURISÉ... OK.</div>
+        <br>
+        <div>Bienvenue, Utilisateur.</div>
+        <div>Cible détectée : SERVEURS CODEPEN (Protégés par KORBEN_DEFENSE_GRID)</div>
+        <div>Tapez <span class="warning">'help'</span> pour voir les commandes disponibles.</div>
+        <br>
+    </div>
+
+    <div class="input-line">
+        <span class="prompt">root@hack:~$</span>
+        <input type="text" id="userInput" autocomplete="off" autofocus>
+    </div>
+
+<script>
+    const consoleDiv = document.getElementById('console');
+    const inputField = document.getElementById('userInput');
+
+    // Base de données fictive
+    const files = ["korben_secrets.txt", "codepen_backend.js", "admin_passwords.db"];
+    let firewallStrength = 100;
+
+    inputField.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const command = inputField.value.toLowerCase().trim();
+            printLine(`root@hack:~$ ${command}`);
+            processCommand(command);
+            inputField.value = '';
+            // Auto-scroll vers le bas
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+    });
+
+    function printLine(text, type = '') {
+        const line = document.createElement('div');
+        line.textContent = text;
+        if (type) line.className = type;
+        consoleDiv.appendChild(line);
+    }
+
+    function processCommand(cmd) {
+        if (cmd === 'help') {
+            printLine("COMMANDES DISPONIBLES :", "warning");
+            printLine("- scan : Analyser les vulnérabilités de la cible.");
+            printLine("- ls : Lister les fichiers trouvés.");
+            printLine("- attack : Lancer une attaque par injection SQL.");
+            printLine("- nuke : Lancer la surcharge finale (Nécessite firewall < 20%).");
+            printLine("- clear : Effacer l'écran.");
+        } 
+        else if (cmd === 'clear') {
+            consoleDiv.innerHTML = '';
+        }
+        else if (cmd === 'scan') {
+            printLine("Analyse en cours...", "success");
+            setTimeout(() => printLine("FAILLE TROUVÉE : Port 8080 ouvert sur Korben_Server.", "warning"), 1000);
+        }
+        else if (cmd === 'ls') {
+            printLine("Fichiers système distants :", "success");
+            files.forEach(f => printLine(`- ${f}`));
+        }
+        else if (cmd === 'attack') {
+            if (firewallStrength > 0) {
+                firewallStrength -= 25;
+                printLine(`Attaque lancée... Paquets envoyés.`, "success");
+                printLine(`Intégrité du Firewall Korben : ${firewallStrength}%`, "warning");
+                if (firewallStrength <= 0) printLine("FIREWALL DÉTRUIT. SYSTÈME VULNÉRABLE.", "error");
+            } else {
+                printLine("Le firewall est déjà détruit. Finissez-le avec la commande 'nuke'.", "success");
+            }
+        }
+        else if (cmd === 'nuke') {
+            if (firewallStrength > 20) {
+                printLine("ERREUR : Firewall trop puissant. Affaiblissez-le d'abord avec 'attack'.", "error");
+            } else {
+                launchNuke();
+            }
+        }
+        else {
+            printLine(`Commande '${cmd}' inconnue. Tapez 'help'.`, "error");
+        }
+    }
+
+    function launchNuke() {
+        printLine("INITIATION DE LA SURCHARGE GLOBALE...", "error");
+        let i = 0;
+        const interval = setInterval(() => {
+            printLine(`SUPPRESSION DE CODEPEN_DATABASE_PART_${i}... OK`, "success");
+            i++;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            if (i > 20) {
+                clearInterval(interval);
+                triggerCrash();
+            }
+        }, 100);
+    }
+
+    function triggerCrash() {
+        document.body.classList.add('crash-mode');
+        consoleDiv.innerHTML = '';
+        const bigMessage = document.createElement('h1');
+        bigMessage.innerText = "FATAL SYSTEM ERROR : KORBEN HAS FALLEN";
+        bigMessage.style.fontSize = "50px";
+        bigMessage.style.textAlign = "center";
+        bigMessage.style.marginTop = "20%";
+        document.body.appendChild(bigMessage);
+    }
+</script>
+
+</body>
+</html>

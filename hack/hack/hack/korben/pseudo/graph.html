@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph View — Plaidoyer Citoyen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-surface: #12121a;
+            --bg-elevated: #1a1a24;
+            --bg-hover: #22222e;
+            --border: #2a2a3a;
+            --border-light: #3a3a4a;
+            --text-primary: #e8e8ec;
+            --text-secondary: #9898a8;
+            --text-muted: #68687a;
+            --accent-gold: #d4a574;
+            --accent-gold-dim: #a68554;
+            --node-ally: #4ecdc4;
+            --node-neutral: #f7b731;
+            --node-opponent: #fc5c65;
+            --node-politique: #a55eea;
+            --node-admin: #26de81;
+            --node-societe: #4b7bec;
+            --node-media: #fd9644;
+            --node-entreprise: #fc5c65;
+            --node-expert: #d1d8e0;
+            --phase-voir: #4ecdc4;
+            --phase-juger: #f7b731;
+            --phase-agir: #fc5c65;
+            --glow-gold: rgba(212, 165, 116, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dim) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Instrument Serif', serif;
+            font-size: 20px;
+            color: var(--bg-deep);
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-family: 'Instrument Serif', serif;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .logo-text span {
+            color: var(--accent-gold);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-light);
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--bg-deep);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-gold-dim);
+            border-color: var(--accent-gold-dim);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-surface);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-gold);
+            color: var(--bg-deep);
+        }
+
+        /* Main Layout */
+        .main {
+            padding-top: 64px;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 64px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .stat-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-line {
+            width: 24px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Filter Controls */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .filter-btn .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Canvas Area */
+        .canvas {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .graph-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            height: calc(100vh - 112px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Graph Styles */
+        .node {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+        }
+
+        .node-circle {
+            stroke-width: 2px;
+            transition: all 0.2s;
+        }
+
+        .node-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            fill: var(--text-primary);
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .link {
+            stroke-opacity: 0.4;
+            transition: stroke-opacity 0.2s;
+        }
+
+        .link:hover {
+            stroke-opacity: 0.8;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            max-width: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .tooltip-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .tooltip-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .tooltip-type {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tooltip-body {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .tooltip-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .tooltip-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tooltip-meta-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tooltip-meta-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Power indicator */
+        .power-bar {
+            display: flex;
+            gap: 3px;
+            margin-top: 4px;
+        }
+
+        .power-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--border);
+        }
+
+        .power-dot.filled {
+            background: var(--accent-gold);
+        }
+
+        /* View Panels */
+        .view-panel {
+            display: none;
+            height: 100%;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* Theory of Change View */
+        .toc-container {
+            padding: 40px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .toc-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .toc-level {
+            position: relative;
+        }
+
+        .toc-level::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            height: 24px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--border-light), transparent);
+        }
+
+        .toc-level:last-child::before {
+            display: none;
+        }
+
+        .toc-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .toc-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .toc-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .toc-card-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 18px;
+        }
+
+        .toc-card-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        /* Timeline View */
+        .timeline-container {
+            padding: 40px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .timeline {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-gold), var(--border));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            padding-bottom: 32px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 3px solid var(--accent-gold);
+        }
+
+        .timeline-date {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .timeline-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .timeline-type {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-type.action { background: rgba(78, 205, 196, 0.2); color: var(--node-ally); }
+        .timeline-type.rencontre { background: rgba(165, 94, 234, 0.2); color: var(--node-politique); }
+        .timeline-type.média { background: rgba(253, 150, 68, 0.2); color: var(--node-media); }
+        .timeline-type.réflexion { background: rgba(247, 183, 49, 0.2); color: var(--node-neutral); }
+        .timeline-type.autre { background: rgba(209, 216, 224, 0.2); color: var(--node-expert); }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* SWOT View */
+        .swot-container {
+            padding: 40px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .swot-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 250px;
+        }
+
+        .swot-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .swot-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .swot-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 18px;
+        }
+
+        .swot-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        /* Problem Tree View */
+        .tree-container {
+            padding: 40px;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .tree-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            min-width: 800px;
+        }
+
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .tree-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .tree-card.problem {
+            border-color: var(--node-opponent);
+            box-shadow: 0 0 30px rgba(252, 92, 101, 0.15);
+        }
+
+        .tree-card.causes {
+            border-color: var(--node-neutral);
+        }
+
+        .tree-card.consequences {
+            border-color: var(--node-ally);
+        }
+
+        .tree-card.objective {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px var(--glow-gold);
+        }
+
+        .tree-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .tree-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .tree-connector {
+            width: 2px;
+            height: 24px;
+            background: var(--border-light);
+            margin: 0 auto;
+        }
+
+        /* Import Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 48px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .drop-zone:hover, .drop-zone.drag-over {
+            border-color: var(--accent-gold);
+            background: rgba(212, 165, 116, 0.05);
+        }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .drop-zone-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 48px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            opacity: 0.3;
+        }
+
+        .empty-state-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin-bottom: 24px;
+        }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            .canvas {
+                margin-left: 0;
+            }
+            .swot-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">G</div>
+            <div class="logo-text">Graph<span>View</span></div>
+        </div>
+        
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-view="network">Acteurs</button>
+            <button class="nav-tab" data-view="toc">Théorie du Changement</button>
+            <button class="nav-tab" data-view="tree">Arbre à Problème</button>
+            <button class="nav-tab" data-view="swot">SWOT</button>
+            <button class="nav-tab" data-view="timeline">Journal</button>
+        </nav>
+        
+        <div class="header-actions">
+            <button class="btn" onclick="openImportModal()">📂 Importer JSON</button>
+            <button class="btn btn-primary" onclick="exportSVG()">💾 Exporter SVG</button>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Statistiques</div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-actors">0</div>
+                        <div class="stat-label">Acteurs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-allies">0</div>
+                        <div class="stat-label">Alliés</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-neutral">0</div>
+                        <div class="stat-label">Neutres</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-opponents">0</div>
+                        <div class="stat-label">Opposants</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Filtrer par position</div>
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">
+                        <span class="dot" style="background: var(--text-primary)"></span>
+                        Tous les acteurs
+                    </button>
+                    <button class="filter-btn" data-filter="allié">
+                        <span class="dot" style="background: var(--node-ally)"></span>
+                        Alliés uniquement
+                    </button>
+                    <button class="filter-btn" data-filter="neutre">
+                        <span class="dot" style="background: var(--node-neutral)"></span>
+                        Neutres uniquement
+                    </button>
+                    <button class="filter-btn" data-filter="opposant">
+                        <span class="dot" style="background: var(--node-opponent)"></span>
+                        Opposants uniquement
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Légende - Types</div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-politique)"></div>
+                        <span>Politique</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-admin)"></div>
+                        <span>Administration</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-societe)"></div>
+                        <span>Société civile</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-media)"></div>
+                        <span>Média</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-entreprise)"></div>
+                        <span>Entreprise</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: var(--node-expert)"></div>
+                        <span>Expert</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Légende - Positions</div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: var(--node-ally)"></div>
+                        <span>Allié (bordure)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: var(--node-neutral)"></div>
+                        <span>Neutre (bordure)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: var(--node-opponent)"></div>
+                        <span>Opposant (bordure)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Projet</div>
+                <div id="project-info" style="font-size: 12px; color: var(--text-secondary);">
+                    Aucun projet chargé
+                </div>
+            </div>
+        </aside>
+
+        <!-- Canvas -->
+        <div class="canvas">
+            <div class="graph-container">
+                <!-- Network View -->
+                <div id="view-network" class="view-panel active">
+                    <svg id="network-svg"></svg>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomIn()">+</button>
+                        <button class="zoom-btn" onclick="zoomOut()">−</button>
+                        <button class="zoom-btn" onclick="resetZoom()">⟲</button>
+                    </div>
+                </div>
+
+                <!-- Theory of Change View -->
+                <div id="view-toc" class="view-panel">
+                    <div class="toc-container" id="toc-content"></div>
+                </div>
+
+                <!-- Problem Tree View -->
+                <div id="view-tree" class="view-panel">
+                    <div class="tree-container" id="tree-content"></div>
+                </div>
+
+                <!-- SWOT View -->
+                <div id="view-swot" class="view-panel">
+                    <div class="swot-container" id="swot-content"></div>
+                </div>
+
+                <!-- Timeline View -->
+                <div id="view-timeline" class="view-panel">
+                    <div class="timeline-container" id="timeline-content"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📊</div>
+                    <div class="empty-state-title">Aucune donnée</div>
+                    <div class="empty-state-text">
+                        Importez un fichier JSON depuis le Poste de Travail Plaidoyer Citoyen pour visualiser vos données.
+                    </div>
+                    <button class="btn btn-primary" onclick="openImportModal()">Importer un fichier</button>
+                </div>
+            </div>
+
+            <!-- Tooltip -->
+            <div id="tooltip" class="tooltip"></div>
+        </div>
+    </main>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-title">Importer des données</div>
+            <div class="modal-text">
+                Sélectionnez un fichier JSON exporté depuis le Poste de Travail Plaidoyer Citoyen.
+            </div>
+            <div class="drop-zone" id="drop-zone">
+                <div class="drop-zone-icon">📁</div>
+                <div class="drop-zone-text">
+                    Glissez un fichier ici ou cliquez pour sélectionner
+                </div>
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeImportModal()">Annuler</button>
+                <button class="btn" onclick="loadDemoData()">Charger démo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let data = null;
+        let currentFilter = 'all';
+        let simulation = null;
+        let svg, g, zoom;
+
+        // Color mappings
+        const typeColors = {
+            'politique': '#a55eea',
+            'admin': '#26de81',
+            'société civile': '#4b7bec',
+            'média': '#fd9644',
+            'entreprise': '#fc5c65',
+            'expert': '#d1d8e0'
+        };
+
+        const positionColors = {
+            'allié': '#4ecdc4',
+            'neutre': '#f7b731',
+            'opposant': '#fc5c65'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initSVG();
+            initEventListeners();
+            checkStoredData();
+        });
+
+        function initSVG() {
+            const container = document.getElementById('view-network');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            svg = d3.select('#network-svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            // Add zoom behavior
+            zoom = d3.zoom()
+                .scaleExtent([0.3, 3])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+
+            // Create main group
+            g = svg.append('g');
+
+            // Add gradient definitions
+            const defs = svg.append('defs');
+            
+            // Glow filter
+            const filter = defs.append('filter')
+                .attr('id', 'glow')
+                .attr('x', '-50%')
+                .attr('y', '-50%')
+                .attr('width', '200%')
+                .attr('height', '200%');
+            
+            filter.append('feGaussianBlur')
+                .attr('stdDeviation', '3')
+                .attr('result', 'coloredBlur');
+            
+            const feMerge = filter.append('feMerge');
+            feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+        }
+
+        function initEventListeners() {
+            // Navigation tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const view = tab.dataset.view;
+                    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`view-${view}`).classList.add('active');
+                });
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    if (data) updateNetwork();
+                });
+            });
+
+            // Drop zone
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file) handleFile(file);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleFile(file);
+            });
+
+            // Window resize
+            window.addEventListener('resize', () => {
+                if (data) {
+                    const container = document.getElementById('view-network');
+                    svg.attr('width', container.offsetWidth)
+                       .attr('height', container.offsetHeight);
+                }
+            });
+
+            // Close modal on escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeImportModal();
+            });
+        }
+
+        function checkStoredData() {
+            const stored = localStorage.getItem('plaidoyer_graph_data');
+            if (stored) {
+                try {
+                    data = JSON.parse(stored);
+                    renderAll();
+                } catch (e) {
+                    showEmptyState();
+                }
+            } else {
+                showEmptyState();
+            }
+        }
+
+        function showEmptyState() {
+            document.getElementById('empty-state').style.display = 'flex';
+        }
+
+        function hideEmptyState() {
+            document.getElementById('empty-state').style.display = 'none';
+        }
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    data = JSON.parse(e.target.result);
+                    localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+                    closeImportModal();
+                    renderAll();
+                } catch (err) {
+                    alert('Erreur lors de la lecture du fichier JSON');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function renderAll() {
+            hideEmptyState();
+            updateStats();
+            updateProjectInfo();
+            renderNetwork();
+            renderTOC();
+            renderTree();
+            renderSWOT();
+            renderTimeline();
+        }
+
+        function updateStats() {
+            if (!data || !data.acteurs) return;
+            
+            const actors = data.acteurs;
+            document.getElementById('stat-actors').textContent = actors.length;
+            document.getElementById('stat-allies').textContent = actors.filter(a => a.position === 'allié').length;
+            document.getElementById('stat-neutral').textContent = actors.filter(a => a.position === 'neutre').length;
+            document.getElementById('stat-opponents').textContent = actors.filter(a => a.position === 'opposant').length;
+        }
+
+        function updateProjectInfo() {
+            if (!data || !data.meta) return;
+            
+            const info = document.getElementById('project-info');
+            info.innerHTML = `
+                <strong>${data.meta.name || 'Sans nom'}</strong><br>
+                <span style="color: var(--text-muted)">${data.meta.org || ''}</span><br>
+                <span style="color: var(--text-muted); font-size: 11px;">v${data.meta.version || '1.0'}</span>
+            `;
+        }
+
+        function renderNetwork() {
+            if (!data || !data.acteurs) return;
+
+            // Clear previous
+            g.selectAll('*').remove();
+
+            // Filter actors
+            let actors = data.acteurs;
+            if (currentFilter !== 'all') {
+                actors = actors.filter(a => a.position === currentFilter);
+            }
+
+            const container = document.getElementById('view-network');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            // Create nodes
+            const nodes = actors.map(actor => ({
+                ...actor,
+                radius: 20 + (actor.power * 5)
+            }));
+
+            // Create links between actors (by type similarity)
+            const links = [];
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (nodes[i].position === nodes[j].position) {
+                        links.push({
+                            source: nodes[i].id,
+                            target: nodes[j].id,
+                            strength: 0.3
+                        });
+                    }
+                }
+            }
+
+            // Create simulation
+            if (simulation) simulation.stop();
+            
+            simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(0.1))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.radius + 20));
+
+            // Draw links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('class', 'link')
+                .attr('stroke', '#2a2a3a')
+                .attr('stroke-width', 1);
+
+            // Draw nodes
+            const node = g.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            // Node circles
+            node.append('circle')
+                .attr('class', 'node-circle')
+                .attr('r', d => d.radius)
+                .attr('fill', d => typeColors[d.type] || '#666')
+                .attr('stroke', d => positionColors[d.position] || '#666')
+                .attr('stroke-width', 3)
+                .attr('filter', 'url(#glow)');
+
+            // Node labels
+            node.append('text')
+                .attr('class', 'node-label')
+                .attr('dy', d => d.radius + 16)
+                .text(d => d.name.length > 20 ? d.name.substring(0, 18) + '...' : d.name);
+
+            // Power indicator
+            node.append('text')
+                .attr('dy', 5)
+                .attr('text-anchor', 'middle')
+                .attr('font-family', 'Space Mono, monospace')
+                .attr('font-size', '12px')
+                .attr('font-weight', 'bold')
+                .attr('fill', '#fff')
+                .text(d => d.power);
+
+            // Tooltip events
+            node.on('mouseenter', (event, d) => showTooltip(event, d))
+                .on('mouseleave', hideTooltip);
+
+            // Update positions
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+        }
+
+        function updateNetwork() {
+            renderNetwork();
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        function showTooltip(event, d) {
+            const tooltip = document.getElementById('tooltip');
+            
+            let powerDots = '';
+            for (let i = 1; i <= 5; i++) {
+                powerDots += `<div class="power-dot ${i <= d.power ? 'filled' : ''}"></div>`;
+            }
+
+            tooltip.innerHTML = `
+                <div class="tooltip-header">
+                    <div class="tooltip-icon" style="background: ${typeColors[d.type]}">
+                        ${getTypeIcon(d.type)}
+                    </div>
+                    <div>
+                        <div class="tooltip-title">${d.name}</div>
+                        <div class="tooltip-type">${d.type}</div>
+                    </div>
+                </div>
+                <div class="tooltip-body">${d.notes || 'Aucune note'}</div>
+                <div class="tooltip-meta">
+                    <div class="tooltip-meta-item">
+                        <div class="tooltip-meta-label">Position</div>
+                        <div class="tooltip-meta-value" style="color: ${positionColors[d.position]}">${d.position}</div>
+                    </div>
+                    <div class="tooltip-meta-item">
+                        <div class="tooltip-meta-label">Pouvoir</div>
+                        <div class="power-bar">${powerDots}</div>
+                    </div>
+                </div>
+            `;
+
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = (rect.right + 10) + 'px';
+            tooltip.style.top = (rect.top - 10) + 'px';
+            tooltip.classList.add('visible');
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('visible');
+        }
+
+        function getTypeIcon(type) {
+            const icons = {
+                'politique': '🏛️',
+                'admin': '📋',
+                'société civile': '👥',
+                'média': '📰',
+                'entreprise': '🏢',
+                'expert': '🎓'
+            };
+            return icons[type] || '👤';
+        }
+
+        function renderTOC() {
+            if (!data || !data.toc) return;
+
+            const container = document.getElementById('toc-content');
+            const toc = data.toc;
+
+            container.innerHTML = `
+                <div class="toc-flow">
+                    <div class="toc-level animate-in" style="animation-delay: 0.1s">
+                        <div class="toc-card">
+                            <div class="toc-card-header">
+                                <div class="toc-card-icon" style="background: var(--accent-gold); color: var(--bg-deep);">🎯</div>
+                                <div class="toc-card-title">Impact (Vision)</div>
+                            </div>
+                            <div class="toc-card-content">${toc.impact || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-level animate-in" style="animation-delay: 0.2s">
+                        <div class="toc-card">
+                            <div class="toc-card-header">
+                                <div class="toc-card-icon" style="background: var(--node-ally);">📊</div>
+                                <div class="toc-card-title">Résultats (Outcomes)</div>
+                            </div>
+                            <div class="toc-card-content">${toc.resultats || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-level animate-in" style="animation-delay: 0.3s">
+                        <div class="toc-card">
+                            <div class="toc-card-header">
+                                <div class="toc-card-icon" style="background: var(--node-neutral);">📦</div>
+                                <div class="toc-card-title">Produits (Outputs)</div>
+                            </div>
+                            <div class="toc-card-content">${toc.outputs || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-level animate-in" style="animation-delay: 0.4s">
+                        <div class="toc-card">
+                            <div class="toc-card-header">
+                                <div class="toc-card-icon" style="background: var(--node-politique);">⚡</div>
+                                <div class="toc-card-title">Activités</div>
+                            </div>
+                            <div class="toc-card-content">${toc.activites || ''}</div>
+                        </div>
+                    </div>
+                    <div class="toc-level animate-in" style="animation-delay: 0.5s">
+                        <div class="toc-card" style="border-color: var(--node-opponent); background: rgba(252, 92, 101, 0.05);">
+                            <div class="toc-card-header">
+                                <div class="toc-card-icon" style="background: var(--node-opponent);">⚠️</div>
+                                <div class="toc-card-title">Hypothèses & Risques</div>
+                            </div>
+                            <div class="toc-card-content">${toc.hypotheses || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTree() {
+            if (!data || !data.arbre) return;
+
+            const container = document.getElementById('tree-content');
+            const arbre = data.arbre;
+
+            container.innerHTML = `
+                <div class="tree-layout">
+                    <div class="tree-level animate-in" style="animation-delay: 0.1s">
+                        <div class="tree-card consequences">
+                            <div class="tree-label" style="color: var(--node-ally);">↑ Conséquences</div>
+                            <div class="tree-content">${arbre.consequences || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-level animate-in" style="animation-delay: 0.2s">
+                        <div class="tree-card problem">
+                            <div class="tree-label" style="color: var(--node-opponent);">⬤ Problème Central</div>
+                            <div class="tree-content" style="font-size: 16px; color: var(--text-primary);">${arbre.probleme || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-level animate-in" style="animation-delay: 0.3s">
+                        <div class="tree-card causes">
+                            <div class="tree-label" style="color: var(--node-neutral);">↓ Causes</div>
+                            <div class="tree-content">${arbre.causes || ''}</div>
+                        </div>
+                    </div>
+                    <div class="tree-connector"></div>
+                    <div class="tree-level animate-in" style="animation-delay: 0.4s">
+                        <div class="tree-card objective">
+                            <div class="tree-label" style="color: var(--accent-gold);">★ Objectif de Transformation</div>
+                            <div class="tree-content" style="color: var(--text-primary);">${arbre.objectif || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSWOT() {
+            if (!data || !data.swot) return;
+
+            const container = document.getElementById('swot-content');
+            const swot = data.swot;
+
+            container.innerHTML = `
+                <div class="swot-grid">
+                    <div class="swot-card animate-in" style="animation-delay: 0.1s">
+                        <div class="swot-card-header">
+                            <div class="swot-icon" style="background: var(--node-ally);">💪</div>
+                            <div class="swot-title">Forces</div>
+                        </div>
+                        <div class="swot-content">${swot.forces || ''}</div>
+                    </div>
+                    <div class="swot-card animate-in" style="animation-delay: 0.2s">
+                        <div class="swot-card-header">
+                            <div class="swot-icon" style="background: var(--node-opponent);">⚡</div>
+                            <div class="swot-title">Faiblesses</div>
+                        </div>
+                        <div class="swot-content">${swot.faiblesses || ''}</div>
+                    </div>
+                    <div class="swot-card animate-in" style="animation-delay: 0.3s">
+                        <div class="swot-card-header">
+                            <div class="swot-icon" style="background: var(--node-neutral);">🚀</div>
+                            <div class="swot-title">Opportunités</div>
+                        </div>
+                        <div class="swot-content">${swot.opportunites || ''}</div>
+                    </div>
+                    <div class="swot-card animate-in" style="animation-delay: 0.4s">
+                        <div class="swot-card-header">
+                            <div class="swot-icon" style="background: var(--node-politique);">⚠️</div>
+                            <div class="swot-title">Menaces</div>
+                        </div>
+                        <div class="swot-content">${swot.menaces || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTimeline() {
+            if (!data || !data.journal || data.journal.length === 0) {
+                document.getElementById('timeline-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <div class="empty-state-title">Journal vide</div>
+                        <div class="empty-state-text">Aucune entrée dans le journal de bord.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const container = document.getElementById('timeline-content');
+            const journal = [...data.journal].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            let html = '<div class="timeline">';
+            
+            journal.forEach((entry, i) => {
+                html += `
+                    <div class="timeline-item animate-in" style="animation-delay: ${0.1 * i}s">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">${formatDate(entry.date)}</div>
+                        <div class="timeline-card">
+                            <span class="timeline-type ${entry.type}">${entry.type}</span>
+                            <div class="timeline-title">${entry.title}</div>
+                            <div class="timeline-content">${entry.content}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        // Modal functions
+        function openImportModal() {
+            document.getElementById('import-modal').classList.add('visible');
+        }
+
+        function closeImportModal() {
+            document.getElementById('import-modal').classList.remove('visible');
+        }
+
+        // Zoom controls
+        function zoomIn() {
+            svg.transition().call(zoom.scaleBy, 1.3);
+        }
+
+        function zoomOut() {
+            svg.transition().call(zoom.scaleBy, 0.7);
+        }
+
+        function resetZoom() {
+            svg.transition().call(zoom.transform, d3.zoomIdentity);
+        }
+
+        // Export SVG
+        function exportSVG() {
+            const svgElement = document.getElementById('network-svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plaidoyer-network.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Demo data loader
+        function loadDemoData() {
+            // Load the demo dataset
+            const demoData = {
+                "meta": {
+                    "version": "3.0",
+                    "name": "Souveraineté Cognitive Citoyenne",
+                    "org": "Collectif Noosphère Libre",
+                    "description": "Plaidoyer pour une régulation démocratique des algorithmes"
+                },
+                "acteurs": [
+                    { "id": "act_001", "name": "Mathieu Michel", "type": "politique", "position": "allié", "power": 4, "notes": "Secrétaire d'État à la Digitalisation. Sensible aux enjeux IA." },
+                    { "id": "act_002", "name": "Commission Européenne", "type": "admin", "position": "neutre", "power": 5, "notes": "Pilote le DSA et l'AI Act." },
+                    { "id": "act_003", "name": "Meta/Facebook", "type": "entreprise", "position": "opposant", "power": 5, "notes": "Modèle basé sur l'extraction d'attention." },
+                    { "id": "act_004", "name": "Google/Alphabet", "type": "entreprise", "position": "opposant", "power": 5, "notes": "Contrôle 92% du marché search." },
+                    { "id": "act_005", "name": "CSA Belgique", "type": "admin", "position": "neutre", "power": 3, "notes": "Régulateur en transition vers le numérique." },
+                    { "id": "act_006", "name": "RTBF", "type": "média", "position": "allié", "power": 3, "notes": "Média public, partenaire potentiel." },
+                    { "id": "act_007", "name": "FWB Éducation", "type": "admin", "position": "neutre", "power": 4, "notes": "Compétente pour les programmes scolaires." },
+                    { "id": "act_008", "name": "Ligue des Droits Humains", "type": "société civile", "position": "allié", "power": 2, "notes": "Expertise juridique complémentaire." },
+                    { "id": "act_009", "name": "Test-Achats", "type": "société civile", "position": "allié", "power": 3, "notes": "Forte légitimité grand public." },
+                    { "id": "act_010", "name": "APD", "type": "admin", "position": "allié", "power": 3, "notes": "Applique le RGPD." },
+                    { "id": "act_011", "name": "OpenAI", "type": "entreprise", "position": "neutre", "power": 4, "notes": "Discours d'ouverture sur la sécurité." },
+                    { "id": "act_012", "name": "AlgorithmWatch", "type": "société civile", "position": "allié", "power": 2, "notes": "ONG experte en audit algorithmique." },
+                    { "id": "act_013", "name": "FGTB/CSC", "type": "société civile", "position": "allié", "power": 4, "notes": "Base de mobilisation massive." },
+                    { "id": "act_014", "name": "Bernard Crutzen", "type": "expert", "position": "allié", "power": 2, "notes": "Documentariste, vulgarisateur." },
+                    { "id": "act_015", "name": "Ecolo-Groen", "type": "politique", "position": "allié", "power": 3, "notes": "Sensibles aux enjeux numériques." }
+                ],
+                "toc": {
+                    "impact": "Une démocratie belge et européenne résiliente face à la manipulation cognitive.",
+                    "resultats": "R1: Algorithmes soumis à audits indépendants (2027)\nR2: 100% des élèves formés à la pensée critique (2028)\nR3: Autorité de Régulation Cognitive créée (2029)",
+                    "outputs": "O1: Proposition de loi déposée\nO2: Kit pédagogique dans 500 écoles\nO3: Coalition de 50 organisations\nO4: 10.000 signatures pétition",
+                    "activites": "A1: Rédaction proposition de loi\nA2: Conception kit pédagogique\nA3: Veille et documentation\nA4: Colloques régionaux\nA5: Campagne réseaux sociaux",
+                    "hypotheses": "H1: Contexte post-élections maintient l'attention\nH2: Scandales tech créent des opportunités\nRISQUE: Lobbying tech massif"
+                },
+                "swot": {
+                    "forces": "• Expertise pointue\n• Réseau diversifié\n• Sujet d'actualité\n• Ancrage européen",
+                    "faiblesses": "• Ressources limitées\n• Manque de visibilité\n• Complexité technique",
+                    "opportunites": "• AI Act européen\n• DSA en vigueur\n• Scandales récurrents\n• Réforme scolaire",
+                    "menaces": "• Lobbying Big Tech\n• Capture réglementaire\n• Fatigue informationnelle"
+                },
+                "arbre": {
+                    "probleme": "Les citoyen·ne·s sont exposé·e·s à des contenus manipulés sans outils de défense.",
+                    "causes": "• Opacité des algorithmes\n• Absence d'éducation critique\n• Modèle économique de l'engagement\n• Régulation insuffisante",
+                    "consequences": "• Bulles de filtres\n• Polarisation politique\n• Érosion de la confiance\n• Montée des extrémismes",
+                    "objectif": "D'ici 2030, les citoyen·ne·s disposent des compétences et protections pour exercer leur souveraineté cognitive."
+                },
+                "journal": [
+                    { "id": "j_001", "date": "2025-09-15", "type": "action", "title": "Lancement du collectif", "content": "Assemblée constitutive avec 23 organisations." },
+                    { "id": "j_002", "date": "2025-10-08", "type": "rencontre", "title": "Cabinet Mathieu Michel", "content": "Accueil positif. Suggère des quick wins." },
+                    { "id": "j_003", "date": "2025-11-22", "type": "média", "title": "Reportage RTBF", "content": "15 minutes d'antenne, 450.000 téléspectateurs." },
+                    { "id": "j_004", "date": "2025-12-05", "type": "réflexion", "title": "Bilan mi-parcours", "content": "Coalition solide mais mobilisation insuffisante." },
+                    { "id": "j_005", "date": "2026-01-14", "type": "action", "title": "Question parlementaire", "content": "Cécile Thibaut dépose question orale." }
+                ]
+            };
+
+            data = demoData;
+            localStorage.setItem('plaidoyer_graph_data', JSON.stringify(data));
+            closeImportModal();
+            renderAll();
+        }
+    </script>
+</body>
+</html>

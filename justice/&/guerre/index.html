@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉDUCATION POPULAIRE — Centre de Commande</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #08090a;
+            --bg-base: #0d0f11;
+            --bg-surface: #1a1d21;
+            --bg-card: #1f2328;
+            --bg-hover: #262b31;
+            --signal-green: #00d26a;
+            --signal-green-dim: rgba(0, 210, 106, 0.15);
+            --signal-amber: #ffb300;
+            --signal-amber-dim: rgba(255, 179, 0, 0.15);
+            --signal-red: #ff3d57;
+            --signal-blue: #00b4d8;
+            --signal-blue-dim: rgba(0, 180, 216, 0.15);
+            --signal-purple: #a78bfa;
+            --signal-purple-dim: rgba(167, 139, 250, 0.15);
+            --signal-cyan: #22d3ee;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-subtle: rgba(148, 163, 184, 0.08);
+            --border-default: rgba(148, 163, 184, 0.15);
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 14px; }
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--signal-green), var(--signal-cyan), var(--signal-purple));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .header-title span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 1rem;
+        }
+        .main {
+            flex: 1;
+            padding: var(--space-2xl);
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--signal-green), var(--signal-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+        .tool-card.green::before { background: var(--signal-green); }
+        .tool-card.blue::before { background: var(--signal-blue); }
+        .tool-card.purple::before { background: var(--signal-purple); }
+        .tool-card.amber::before { background: var(--signal-amber); }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--signal-green);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: var(--space-lg);
+        }
+        .tool-card.green .tool-icon { background: var(--signal-green-dim); }
+        .tool-card.blue .tool-icon { background: var(--signal-blue-dim); }
+        .tool-card.purple .tool-icon { background: var(--signal-purple-dim); }
+        .tool-card.amber .tool-icon { background: var(--signal-amber-dim); }
+        .tool-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+        .tool-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-lg);
+        }
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        .feature-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--bg-surface);
+            color: var(--text-muted);
+        }
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--signal-green);
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .quick-link:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--signal-green);
+        }
+        .footer {
+            background: var(--bg-base);
+            border-top: 1px solid var(--border-subtle);
+            padding: var(--space-lg);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer a {
+            color: var(--signal-cyan);
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-brand">
+            <div class="header-logo">⚡</div>
+            <div class="header-title">
+                CENTRE DE COMMANDE
+                <span>Éducation Populaire & Plaidoyer</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="hero">
+            <h1>Votre Poste de Travail</h1>
+            <p>Outils intégrés pour le plaidoyer citoyen, la gestion de projets et le suivi des financements.</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="stat-projects">0</div>
+                <div class="stat-label">Projets actifs</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-fundings">0</div>
+                <div class="stat-label">Opportunités</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-urgent">0</div>
+                <div class="stat-label">Deadlines < 30j</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="stat-budget">0€</div>
+                <div class="stat-label">Budget potentiel</div>
+            </div>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card green" onclick="openTool('plaidoyer')">
+                <div class="tool-icon">✊</div>
+                <h3>Plaidoyer Citoyen</h3>
+                <p>15 outils méthodologiques VOIR-JUGER-AGIR pour structurer vos campagnes de plaidoyer selon la méthode Justice et Paix.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">Domino du changement</span>
+                    <span class="feature-tag">SWOT / PESTEL</span>
+                    <span class="feature-tag">Cartographie acteurs</span>
+                    <span class="feature-tag">Message builder</span>
+                    <span class="feature-tag">Export multi-formats</span>
+                </div>
+            </div>
+
+            <div class="tool-card blue" onclick="openTool('funding')">
+                <div class="tool-icon">💰</div>
+                <h3>Monitoring Financements</h3>
+                <p>Suivi stratégique des opportunités de financement 2026-2032 : Européen, Fédéral, Régional, Fondations.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">50+ opportunités</span>
+                    <span class="feature-tag">Calendrier deadlines</span>
+                    <span class="feature-tag">Anti-rapport EP</span>
+                    <span class="feature-tag">Contacts</span>
+                    <span class="feature-tag">Budget prévisionnel</span>
+                </div>
+            </div>
+
+            <div class="tool-card purple" onclick="openTool('docs')">
+                <div class="tool-icon">📚</div>
+                <h3>Base Documentaire</h3>
+                <p>Accès aux guides, manuels et ressources méthodologiques pour l'éducation permanente et le plaidoyer.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">Guide Plaidoyer JP</span>
+                    <span class="feature-tag">Manuel EP</span>
+                    <span class="feature-tag">Kits Citoyens</span>
+                    <span class="feature-tag">Actes Journées EP</span>
+                </div>
+            </div>
+
+            <div class="tool-card amber" onclick="openTool('veille')">
+                <div class="tool-icon">📡</div>
+                <h3>Veille & Intelligence</h3>
+                <p>Flux RSS, monitoring des actualités et alertes pour rester informé sur vos thématiques.</p>
+                <div class="tool-features">
+                    <span class="feature-tag">Flux RSS</span>
+                    <span class="feature-tag">Alertes</span>
+                    <span class="feature-tag">Bookmarks</span>
+                    <span class="feature-tag">Notes</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <a href="#" class="quick-link" onclick="openTool('plaidoyer')">🚀 Nouveau projet de plaidoyer</a>
+            <a href="#" class="quick-link" onclick="openTool('funding')">📅 Voir les deadlines</a>
+            <a href="https://justicepaix.be" target="_blank" class="quick-link">🔗 Justice et Paix</a>
+            <a href="https://kbs-frb.be" target="_blank" class="quick-link">🔗 Fondation Roi Baudouin</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Outils d'éducation populaire — Open Source — <a href="https://github.com" target="_blank">Contribuer</a></p>
+        <p style="margin-top: 8px;">Inspiré par les méthodologies de <a href="https://justicepaix.be" target="_blank">Justice et Paix</a> et le décret EP 2003/2021</p>
+    </footer>
+
+    <script>
+        // Load stats from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Plaidoyer projects
+            const plaidoyerState = JSON.parse(localStorage.getItem('plaidoyerState') || '{}');
+            const projectCount = (plaidoyerState.projects || []).length;
+            document.getElementById('stat-projects').textContent = projectCount;
+
+            // Funding data
+            const fundingData = JSON.parse(localStorage.getItem('fundingData') || '{}');
+            const fundings = fundingData.fundings || [];
+            document.getElementById('stat-fundings').textContent = fundings.length;
+
+            // Urgent deadlines
+            const now = new Date();
+            const urgent = fundings.filter(f => {
+                if (!f.deadline || ['Permanent', 'Rolling', 'Continu'].includes(f.deadline)) return false;
+                const deadline = new Date(f.deadline);
+                const days = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+                return days <= 30 && days >= 0;
+            }).length;
+            document.getElementById('stat-urgent').textContent = urgent;
+
+            // Total budget
+            const total = fundings.reduce((sum, f) => sum + (f.amount || 0), 0);
+            document.getElementById('stat-budget').textContent = formatAmount(total);
+        });
+
+        function formatAmount(amount) {
+            if (!amount) return '0€';
+            if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M€';
+            if (amount >= 1000) return Math.round(amount / 1000) + 'k€';
+            return amount + '€';
+        }
+
+        function openTool(tool) {
+            const urls = {
+                plaidoyer: 'plaidoyer-workstation-v3.html',
+                funding: 'funding-workstation.html',
+                docs: '#docs',
+                veille: '#veille'
+            };
+            
+            if (urls[tool] && !urls[tool].startsWith('#')) {
+                window.location.href = urls[tool];
+            } else {
+                alert('Module en développement');
+            }
+        }
+    </script>
+</body>
+</html>

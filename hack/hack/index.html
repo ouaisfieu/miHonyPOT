@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>PROJECT_KORBEN_OVERRIDE // V.2.0</title>
+    <style>
+        /* --- ESTHÉTIQUE CYBERPUNK --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* Effet Matrix en fond */
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.2; /* Subtil */
+        }
+
+        /* Interface au premier plan */
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 20px;
+        }
+
+        /* Fenêtres de style Terminal */
+        .window {
+            border: 1px solid #00ff41;
+            background: rgba(0, 20, 0, 0.85);
+            box-shadow: 0 0 10px #00ff41;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .window-header {
+            background: #00ff41;
+            color: #000;
+            padding: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            margin: -15px -15px 10px -15px;
+        }
+
+        /* Contenu du Terminal Principal */
+        #terminal-content {
+            flex-grow: 1;
+            overflow-y: hidden;
+            white-space: pre-wrap;
+            font-size: 14px;
+            text-shadow: 0 0 2px #0f0;
+        }
+
+        .log-line { margin-bottom: 5px; }
+        .error { color: #ff3333; text-shadow: 0 0 5px red; }
+        .success { color: #00ffff; text-shadow: 0 0 5px cyan; }
+        .warn { color: #ffff00; }
+
+        /* Barre d'input */
+        .input-area {
+            display: flex;
+            border-top: 1px solid #004400;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+            margin-left: 10px;
+        }
+
+        /* Panneau Latéral (Monitoring) */
+        #monitor-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .status-block {
+            border: 1px dashed #004400;
+            padding: 10px;
+        }
+        
+        .progress-bar {
+            background: #002200;
+            height: 15px;
+            width: 100%;
+            margin-top: 5px;
+            position: relative;
+        }
+        .progress-fill {
+            background: #00ff41;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Effet CRT (Scanlines) */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Animation Glitch */
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        .shake { animation: glitch 0.2s infinite; color: red !important; border-color: red !important; }
+
+    </style>
+</head>
+<body class="crt">
+
+    <canvas id="matrix"></canvas>
+
+    <div id="ui-layer">
+        <div class="window" id="main-window">
+            <div class="window-header">Terminal / Root / Korben_Infiltration_Unit</div>
+            <div id="terminal-content">
+                <div class="log-line">INITIALISATION DU NOYAU LINUX... OK</div>
+                <div class="log-line">CHARGEMENT DES MODULES D'EXPLOIT... OK</div>
+                <div class="log-line warn">CIBLE VERROUILLÉE : KORBEN.INFO / CODEPEN.IO</div>
+                <br>
+                <div class="log-line">En attente de commande. Tapez 'help' pour la liste.</div>
+            </div>
+            <div class="input-area">
+                <span>root@blackbox:~#</span>
+                <input type="text" id="cmd" autofocus autocomplete="off">
+            </div>
+        </div>
+
+        <div class="window" id="monitor-panel">
+            <div class="window-header">Statut Réseau</div>
+            
+            <div class="status-block">
+                <div>CONNEXION PROXY (TOR)</div>
+                <div class="log-line" id="ip-display">IP: 192.168.0.X (Masquée)</div>
+            </div>
+
+            <div class="status-block">
+                <div>DÉCRYPTAGE WPA2</div>
+                <div class="log-line" id="decrypt-text">HASH: 8f4a...</div>
+                <div class="progress-bar"><div class="progress-fill" id="bar-decrypt"></div></div>
+            </div>
+
+            <div class="status-block">
+                <div>INJECTION SQL (Target: RTL)</div>
+                <div class="progress-bar"><div class="progress-fill" id="bar-sql"></div></div>
+            </div>
+
+            <div class="status-block">
+                <div style="font-size:10px; opacity:0.7">CPU LOAD</div>
+                <div id="cpu-graph" style="font-family: monospace; white-space: pre;">
+                    [||||||----] 60%
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- 1. MATRIX RAIN EFFECT ---
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789Z';
+    const alphabet = katakana.split('');
+
+    const fontSize = 16;
+    const columns = canvas.width/fontSize;
+    const drops = [];
+
+    for(let x = 0; x < columns; x++) drops[x] = 1;
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0F0';
+        ctx.font = fontSize + 'px monospace';
+
+        for(let i = 0; i < drops.length; i++) {
+            const text = alphabet[Math.floor(Math.random()*alphabet.length)];
+            ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+            if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 30);
+
+    // --- 2. TERMINAL LOGIC ---
+    const term = document.getElementById('terminal-content');
+    const input = document.getElementById('cmd');
+    const mainWin = document.getElementById('main-window');
+
+    const sounds = {
+        type: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU') // Placeholder silencieux
+    };
+
+    function log(msg, type='') {
+        const div = document.createElement('div');
+        div.className = 'log-line ' + type;
+        div.textContent = `> ${msg}`;
+        term.appendChild(div);
+        term.scrollTop = term.scrollHeight;
+    }
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const val = input.value.trim().toLowerCase();
+            log(val);
+            input.value = '';
+            execute(val);
+        }
+    });
+
+    function execute(cmd) {
+        if(cmd === 'help') {
+            log("COMMANDES DISPONIBLES :", "warn");
+            log("1. bruteforce - Attaque dictionnaire sur les admins.");
+            log("2. ddos - Surcharge des serveurs RTL/Codepen.");
+            log("3. inject - Injection de payload SQL.");
+            log("4. shutdown - Tout arrêter.");
+        } 
+        else if (cmd === 'bruteforce') {
+            runHackSequence('bar-decrypt', 'Cassage du mot de passe Admin...', 2000);
+            animateTextDecode();
+        }
+        else if (cmd === 'ddos') {
+            runHackSequence('bar-sql', 'Envoi de 50TB de paquets poubelles...', 4000);
+            log("Botnet activé : 45,000 zombies connectés.", "success");
+        }
+        else if (cmd === 'inject') {
+            log("Recherche de failles XSS...", "warn");
+            setTimeout(() => {
+                log("FAILLE CRITIQUE DÉTECTÉE.", "error");
+                log("Injection du script 'Deborsu_Leaks.exe'...", "success");
+                runHackSequence('bar-sql', 'Upload en cours...', 3000);
+            }, 1000);
+        }
+        else if (cmd === 'shutdown') {
+            document.body.innerHTML = '<h1 style="color:white; text-align:center; margin-top:20%">CONNEXION TERMINÉE</h1>';
+        }
+        else {
+            log("Commande inconnue.", "error");
+        }
+    }
+
+    // --- 3. SIMULATION VISUELLE ---
+    
+    function runHackSequence(barId, msg, duration) {
+        log(msg, "warn");
+        const bar = document.getElementById(barId);
+        let width = 0;
+        const interval = setInterval(() => {
+            width += Math.random() * 5;
+            if(width > 100) width = 100;
+            bar.style.width = width + '%';
+            
+            if(width === 100) {
+                clearInterval(interval);
+                log("OPÉRATION TERMINÉE AVEC SUCCÈS.", "success");
+                mainWin.classList.add('shake'); // Effet de tremblement
+                setTimeout(() => mainWin.classList.remove('shake'), 500);
+            }
+        }, duration / 50);
+    }
+
+    function animateTextDecode() {
+        const target = document.getElementById('decrypt-text');
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@&";
+        let inter = setInterval(() => {
+            let str = "PASS: ";
+            for(let i=0; i<8; i++) str += chars.charAt(Math.floor(Math.random() * chars.length));
+            target.innerText = str;
+        }, 50);
+        
+        setTimeout(() => {
+            clearInterval(inter);
+            target.innerText = "PASS: KORBEN_GOD_MODE";
+            target.style.color = "#00ffff";
+            log("MOT DE PASSE TROUVÉ : KORBEN_GOD_MODE", "success");
+        }, 3000);
+    }
+
+    // Animation CPU random
+    setInterval(() => {
+        const load = Math.floor(Math.random() * 100);
+        const bars = Math.floor(load / 10);
+        let str = "[";
+        for(let i=0; i<10; i++) str += (i < bars) ? "|" : "-";
+        str += `] ${load}%`;
+        document.getElementById('cpu-graph').innerText = str;
+        if(load > 80) document.getElementById('cpu-graph').style.color = 'red';
+        else document.getElementById('cpu-graph').style.color = '#0f0';
+    }, 500);
+
+</script>
+</body>
+</html>

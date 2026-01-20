@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "version": "3.0",
+    "name": "Souveraineté Cognitive Citoyenne",
+    "org": "Collectif Noosphère Libre",
+    "description": "Plaidoyer pour une régulation démocratique des algorithmes d'influence et la mise en place d'une éducation à la résilience cognitive dans les programmes scolaires et d'éducation permanente.",
+    "created": "2025-09-15T10:00:00.000Z",
+    "updated": "2026-01-20T14:30:00.000Z"
+  },
+  "domino": {
+    "pourquoi": "Face à la guerre cognitive permanente menée par des acteurs étatiques et privés, les citoyen·ne·s sont devenu·e·s des cibles sans défense. La manipulation algorithmique redéfinit notre perception de la réalité, érode la confiance démocratique et fragmente le tissu social. Sans action, la souveraineté populaire devient une fiction.",
+    "valeurs": "Autonomie intellectuelle, Transparence algorithmique, Dignité cognitive, Solidarité informationnelle, Démocratie délibérative, Accès universel au savoir vérifié",
+    "changements": "1. Obligation de transparence algorithmique pour les plateformes (audit citoyen)\n2. Intégration de l'éducation aux médias et à la pensée critique dès le primaire\n3. Création d'une Autorité Indépendante de Régulation Cognitive (AIRC)\n4. Financement public de médias d'investigation et de fact-checking\n5. Droit à l'explication des décisions algorithmiques personnalisées",
+    "vision": "Une société où chaque citoyen·ne dispose des outils cognitifs pour résister à la manipulation, où les algorithmes servent l'intérêt général plutôt que l'extraction d'attention, et où le débat démocratique repose sur des faits partagés plutôt que sur des bulles de filtres antagonistes."
+  },
+  "profil": {
+    "competences_fortes": "Analyse critique des médias, Rédaction et vulgarisation, Connaissance des mécanismes SEO/GEO, Réseau dans l'éducation permanente, Compréhension des enjeux algorithmiques, Animation de débats citoyens",
+    "competences_dev": "Lobbying institutionnel (à renforcer), Communication sur réseaux sociaux (formation en cours), Mobilisation de masse (besoin de partenaires), Expertise juridique (nécessite alliance)",
+    "temps": "15h/semaine en moyenne, pics possibles lors des fenêtres d'opportunité politiques (élections, scandales médiatiques, débats parlementaires)",
+    "reseaux": "Justice et Paix, CNCD-11.11.11, Réseau Éducation Permanente FWB, Collectif Against Attention, European Digital Rights (EDRi), AlgorithmWatch, Journalistes d'investigation (Apache, Médor)",
+    "experience": "3 ans de travail sur la désinformation, 2 campagnes de sensibilisation réussies (écoles), 1 audition parlementaire (2024), rédaction du Livre Blanc 'Guerre Cognitive Totale'"
+  },
+  "fleur": {
+    "genre": "Collectif mixte avec attention particulière aux voix marginalisées dans le débat tech (femmes, personnes racisées, classes populaires)",
+    "origine": "Belgique francophone, ancrage européen via EDRi, connexions francophones (France, Suisse, Québec)",
+    "classe": "Membres issus majoritairement de la classe moyenne éduquée - vigilance sur l'accessibilité du discours et l'inclusion des publics précarisés",
+    "education": "Niveau universitaire dominant - nécessité de créer des outils pédagogiques adaptés à tous les niveaux",
+    "age": "Noyau dur 30-50 ans, effort de recrutement jeunes (18-25) et seniors (retraités actifs)",
+    "autres": "Privilège numérique à conscientiser : nous maîtrisons les outils que nous critiquons. Comment inclure ceux qui subissent sans comprendre ?",
+    "reflexion": "Notre position d'experts peut créer une distance avec le public cible. Le plaidoyer doit rester ancré dans les expériences concrètes : manipulation de l'info-divertissement, bulles de filtres familiales, radicalisation de proches. Partir du vécu, pas de la théorie."
+  },
+  "acteurs": [
+    {
+      "id": "act_001",
+      "name": "Mathieu Michel",
+      "type": "politique",
+      "position": "allié",
+      "power": 4,
+      "notes": "Secrétaire d'État à la Digitalisation. Sensible aux enjeux, a lancé plusieurs initiatives sur l'IA éthique. Point d'entrée stratégique au fédéral. Rencontre obtenue en mars 2025."
+    },
+    {
+      "id": "act_002",
+      "name": "Commission Européenne (DG CONNECT)",
+      "type": "admin",
+      "position": "neutre",
+      "power": 5,
+      "notes": "Pilote le Digital Services Act et l'AI Act. Ouverture aux consultations citoyennes mais forte pression des lobbies tech. Besoin d'alliances européennes coordonnées."
+    },
+    {
+      "id": "act_003",
+      "name": "Meta/Facebook",
+      "type": "entreprise",
+      "position": "opposant",
+      "power": 5,
+      "notes": "Modèle économique basé sur l'extraction d'attention. Lobbying massif contre toute régulation. Opacité algorithmique totale. Adversaire structurel mais dialogue possible sur points précis."
+    },
+    {
+      "id": "act_004",
+      "name": "Google/Alphabet",
+      "type": "entreprise",
+      "position": "opposant",
+      "power": 5,
+      "notes": "Contrôle 92% du marché search en Europe. Knowledge Graph = infrastructure critique de la vérité. AI Overview renforce le monopole cognitif. Vulnérabilité : antitrust en cours."
+    },
+    {
+      "id": "act_005",
+      "name": "CSA (Conseil Supérieur de l'Audiovisuel)",
+      "type": "admin",
+      "position": "neutre",
+      "power": 3,
+      "notes": "Régulateur belge. Compétence limitée aux médias traditionnels, en transition vers le numérique. Peut devenir allié si compétences élargies. À convaincre de l'urgence."
+    },
+    {
+      "id": "act_006",
+      "name": "RTBF",
+      "type": "média",
+      "position": "allié",
+      "power": 3,
+      "notes": "Média public avec mission d'éducation. Intérêt pour les sujets de désinformation (#Investigation). Partenariat possible pour campagne de sensibilisation grand public."
+    },
+    {
+      "id": "act_007",
+      "name": "Fédération Wallonie-Bruxelles (Éducation)",
+      "type": "admin",
+      "position": "neutre",
+      "power": 4,
+      "notes": "Compétente pour les programmes scolaires. Nouveau Tronc Commun = fenêtre d'opportunité pour intégrer l'éducation aux médias. Ministre à sensibiliser."
+    },
+    {
+      "id": "act_008",
+      "name": "Ligue des Droits Humains",
+      "type": "société civile",
+      "position": "allié",
+      "power": 2,
+      "notes": "Alliance naturelle sur les droits numériques. Expertise juridique complémentaire. Co-signature de tribunes et actions contentieuses possibles."
+    },
+    {
+      "id": "act_009",
+      "name": "Test-Achats",
+      "type": "société civile",
+      "position": "allié",
+      "power": 3,
+      "notes": "Forte légitimité auprès du grand public. Travaille sur les dark patterns et la protection des consommateurs numériques. Relais de masse pour nos messages."
+    },
+    {
+      "id": "act_010",
+      "name": "Autorité de Protection des Données (APD)",
+      "type": "admin",
+      "position": "allié",
+      "power": 3,
+      "notes": "Applique le RGPD. Décisions récentes favorables à la transparence. Sous-dotée en moyens. Notre plaidoyer peut appuyer leurs demandes de ressources."
+    },
+    {
+      "id": "act_011",
+      "name": "OpenAI/Anthropic",
+      "type": "entreprise",
+      "position": "neutre",
+      "power": 4,
+      "notes": "Nouveaux acteurs de l'IA générative. Discours d'ouverture sur la sécurité mais pratiques à surveiller. Opportunité : leur besoin de légitimité peut ouvrir un dialogue."
+    },
+    {
+      "id": "act_012",
+      "name": "AlgorithmWatch",
+      "type": "société civile",
+      "position": "allié",
+      "power": 2,
+      "notes": "ONG berlinoise experte en audit algorithmique. Méthodologie et outils techniques. Partenariat européen stratégique pour crédibiliser nos demandes."
+    },
+    {
+      "id": "act_013",
+      "name": "Syndicats (FGTB/CSC)",
+      "type": "société civile",
+      "position": "allié",
+      "power": 4,
+      "notes": "Enjeu du management algorithmique et de la surveillance au travail. Base de mobilisation massive. Intégrer nos revendications dans leur cahier de doléances."
+    },
+    {
+      "id": "act_014",
+      "name": "Bernard Crutzen",
+      "type": "expert",
+      "position": "allié",
+      "power": 2,
+      "notes": "Documentariste, auteur de 'Derrière nos écrans de fumée' belge. Capacité de vulgarisation et accès médiatique. Porte-parole potentiel pour campagne grand public."
+    },
+    {
+      "id": "act_015",
+      "name": "Groupe Ecolo-Groen",
+      "type": "politique",
+      "position": "allié",
+      "power": 3,
+      "notes": "Historiquement sensibles aux enjeux numériques et démocratiques. Plusieurs député·e·s engagé·e·s. Peuvent porter nos propositions au Parlement."
+    }
+  ],
+  "toc": {
+    "impact": "Une démocratie belge et européenne résiliente face à la manipulation cognitive, où les citoyen·ne·s exercent leur souveraineté informationnelle en toute autonomie.",
+    "resultats": "R1: Les algorithmes des grandes plateformes sont soumis à des audits indépendants réguliers (2027)\nR2: 100% des élèves belges reçoivent une formation à la pensée critique et aux médias (2028)\nR3: Une Autorité de Régulation Cognitive est créée avec pouvoirs d'investigation et sanction (2029)\nR4: Le 'droit à l'explication algorithmique' est inscrit dans la loi (2027)",
+    "outputs": "O1: Proposition de loi 'Transparence Algorithmique' rédigée et déposée\nO2: Kit pédagogique 'Résilience Cognitive' diffusé dans 500 écoles\nO3: Rapport annuel 'État de la Manipulation en Belgique' publié et médiatisé\nO4: Coalition de 50 organisations signataires de la Charte pour la Souveraineté Cognitive\nO5: 10.000 signatures sur la pétition citoyenne européenne",
+    "activites": "A1: Rédaction collaborative de la proposition de loi avec juristes\nA2: Conception et test du kit pédagogique avec enseignants pilotes\nA3: Veille et documentation des cas de manipulation (base de données)\nA4: Organisation de 3 colloques régionaux (Bruxelles, Liège, Namur)\nA5: Campagne réseaux sociaux #MaVéritéMesChoix\nA6: Rencontres avec 20 parlementaires fédéraux et européens\nA7: Formation de 100 'ambassadeurs cognitifs' dans les associations",
+    "hypotheses": "H1: Le contexte post-élections 2024 maintient l'attention sur la désinformation\nH2: Les scandales tech (fuites données, manipulation électorale) créent des fenêtres d'opportunité\nH3: L'AI Act européen crée un précédent régulatoire favorable\nH4: Les enseignants sont demandeurs d'outils face aux défis numériques\nH5: Les citoyen·ne·s sont préoccupé·e·s mais manquent d'outils d'action\nRISQUE: Lobbying tech massif, fatigue informationnelle du public, complexité technique perçue"
+  },
+  "swot": {
+    "forces": "• Expertise pointue (Livre Blanc, recherches)\n• Réseau diversifié (associatif, académique, médiatique)\n• Sujet d'actualité brûlante (IA, deepfakes, élections)\n• Ancrage européen (EDRi, AlgorithmWatch)\n• Outils méthodologiques solides (plaidoyer Justice et Paix)\n• Légitimité acquise (audition parlementaire 2024)",
+    "faiblesses": "• Ressources financières limitées\n• Manque de visibilité grand public\n• Complexité technique du sujet (barrière à l'entrée)\n• Pas de juriste permanent dans l'équipe\n• Dépendance aux bénévoles\n• Difficulté à toucher les publics précarisés",
+    "opportunites": "• AI Act européen en implémentation (2024-2026)\n• DSA impose nouvelles obligations aux plateformes\n• Scandales récurrents (Cambridge Analytica 2.0, manipulations électorales)\n• Réforme des programmes scolaires FWB en cours\n• Intérêt médiatique croissant pour l'IA\n• Émergence d'outils d'audit citoyens (browser extensions)\n• Coalition syndicale sur le management algorithmique",
+    "menaces": "• Lobbying Big Tech puissant et coordonné\n• Capture réglementaire (revolving doors)\n• Complexité perçue = démobilisation citoyenne\n• Fragmentation du paysage associatif\n• Risque de récupération politique (extrêmes)\n• Évolution technologique plus rapide que la régulation\n• Fatigue informationnelle et apathie démocratique"
+  },
+  "pestel": {
+    "p": "Instabilité gouvernementale belge (coalitions fragiles) mais fenêtre européenne favorable (AI Act, DSA). Polarisation politique renforce l'urgence du sujet. Élections communales 2024 = opportunité locale. Tensions géopolitiques (guerre info russe/chinoise) légitiment le plaidoyer défensif.",
+    "e": "Valorisation boursière des GAFAM dépend de l'extraction de données - résistance structurelle à la régulation. Mais amendes records (DMA) créent précédent. Financement associatif sous pression. Opportunité : fonds européens pour la démocratie numérique.",
+    "s": "Défiance croissante envers les institutions et médias traditionnels. Fracture générationnelle (digital natives vs. boomers). Montée des théories conspirationnistes. Demande sociale de 'vérité' et d'authenticité. Mouvement global pour la 'slow information'.",
+    "t": "IA générative (ChatGPT, deepfakes) accélère la crise. GEO (Generative Engine Optimization) remplace SEO - nouvelle frontière de manipulation. Outils de détection en retard sur les outils de création. Blockchain et Web3 offrent pistes de traçabilité mais immatures.",
+    "env": "Empreinte carbone du numérique croissante. Lien entre extractivisme cognitif et extractivisme environnemental (modèle de croissance infinie). Alliance possible avec mouvements écologistes sur la sobriété numérique.",
+    "l": "RGPD en vigueur mais application inégale. AI Act adopté (2024) - phase d'implémentation. DSA impose transparence publicitaire. Jurisprudence CJUE favorable (droit à l'oubli, portabilité). Vide juridique sur les 'recommandations algorithmiques'. Projet de directive 'Médias Freedom Act'."
+  },
+  "arbre": {
+    "probleme": "Les citoyen·ne·s sont massivement exposé·e·s à des contenus manipulés par des algorithmes opaques sans disposer des outils pour s'en défendre, érodant la confiance démocratique et la cohésion sociale.",
+    "causes": "CAUSES DIRECTES:\n• Opacité totale des algorithmes de recommandation\n• Absence d'éducation systématique à la pensée critique\n• Modèle économique basé sur l'engagement (clickbait, outrage)\n• Régulation insuffisante et fragmentée\n\nCAUSES PROFONDES:\n• Monopole des Big Tech sur l'infrastructure informationnelle\n• Capture réglementaire par les lobbies\n• Fracture numérique (accès ≠ littératie)\n• Désengagement civique généralisé\n• Vitesse de l'info incompatible avec la vérification",
+    "consequences": "CONSÉQUENCES IMMÉDIATES:\n• Bulles de filtres et chambres d'écho\n• Viralité de la désinformation\n• Manipulation des comportements (consommation, vote)\n• Détresse psychologique (FOMO, comparaison sociale)\n\nCONSÉQUENCES SYSTÉMIQUES:\n• Polarisation politique extrême\n• Érosion de la confiance institutionnelle\n• Fragmentation du débat public\n• Montée des extrémismes\n• Paralysie décisionnelle démocratique\n• 'Infodémie' permanente",
+    "objectif": "D'ici 2030, les citoyen·ne·s belges disposent des compétences critiques et des protections légales pour exercer leur souveraineté cognitive face aux systèmes algorithmiques, et les plateformes numériques opèrent dans un cadre de transparence et de redevabilité démocratique."
+  },
+  "why": {
+    "depart": "Pourquoi les citoyen·ne·s sont-ils/elles vulnérables à la manipulation algorithmique ?",
+    "w1": "Parce qu'ils/elles n'ont pas accès au fonctionnement des algorithmes qui filtrent leur information.",
+    "w2": "Parce que les plateformes refusent toute transparence pour protéger leur avantage concurrentiel et leur modèle économique.",
+    "w3": "Parce que le cadre réglementaire actuel ne les y oblige pas efficacement.",
+    "w4": "Parce que les régulateurs manquent de moyens, d'expertise et de volonté politique face au lobbying intense des Big Tech.",
+    "w5": "Parce que le rapport de force démocratique est déséquilibré : les citoyens sont atomisés face à des acteurs concentrés et puissants.",
+    "racine": "La cause racine est le déséquilibre structurel de pouvoir entre des plateformes monopolistiques et des citoyens non organisés, combiné à l'absence d'une culture démocratique de la régulation technologique. → Notre plaidoyer doit à la fois renforcer le pouvoir citoyen (éducation, mobilisation) ET contraindre les plateformes (régulation, sanctions)."
+  },
+  "pouvoir": {
+    "avec": "AVEC LE POUVOIR (Coopération institutionnelle):\n• Participation aux consultations DSA/AI Act\n• Partenariat avec le CSA pour méthodologie d'audit\n• Co-construction du kit pédagogique avec la FWB\n• Dialogue avec Mathieu Michel (Secrétaire d'État)\n• Contribution aux travaux de l'APD\n• Expertise fournie aux parlementaires alliés",
+    "sans": "SANS LE POUVOIR (Alternatives citoyennes):\n• Création d'outils d'audit citoyens (extensions navigateur)\n• Formation d'ambassadeurs cognitifs autonomes\n• Production de contenus éducatifs libres (AGPL)\n• Réseau de fact-checking participatif\n• Médias alternatifs et journalisme d'investigation indépendant\n• Communautés de pratique entre enseignants",
+    "contre": "CONTRE LE POUVOIR (Pression et contentieux):\n• Plaintes RGPD groupées contre les plateformes opaques\n• Mobilisation citoyenne (pétition européenne, manifestations)\n• Name & shame des cas de manipulation documentés\n• Actions en justice stratégiques (contentieux d'intérêt public)\n• Campagnes de boycott ciblées (annonceurs)\n• Interpellation publique des parlementaires inactifs",
+    "strategie": "Approche hybride : nous privilégions le dialogue institutionnel (AVEC) tant que des avancées sont possibles, tout en construisant des alternatives citoyennes (SANS) pour démontrer la faisabilité. Le registre CONTRE est activé face aux blocages ou pour créer le rapport de force nécessaire. Calibrage selon les acteurs : coopération avec les alliés institutionnels, pression sur les neutres, confrontation avec les adversaires structurels (Big Tech)."
+  },
+  "smart": {
+    "s": "Obtenir le dépôt d'une proposition de loi 'Transparence Algorithmique' au Parlement fédéral belge, imposant aux plateformes un audit indépendant annuel de leurs systèmes de recommandation.",
+    "m": "Indicateurs : 1 texte de loi déposé, 15 co-signataires parlementaires minimum, 3 auditions en commission, couverture dans 5 médias nationaux, 5000 signatures citoyennes de soutien.",
+    "a": "Ressources disponibles : équipe de 5 personnes (2 ETP équivalents), budget 25.000€, réseau de 50 organisations partenaires, 3 juristes bénévoles, accès à 10 parlementaires sensibilisés.",
+    "r": "Contexte favorable : post-AI Act européen, scandale récent de manipulation électorale, demande citoyenne documentée (sondage : 78% favorables à la régulation), précédents dans d'autres pays (Allemagne, France).",
+    "t": "Échéance : dépôt de la proposition avant juin 2026 (avant les élections fédérales 2027), pour permettre un débat parlementaire et une adoption potentielle en fin de législature.",
+    "final": "D'ici juin 2026, nous obtenons le dépôt au Parlement fédéral belge d'une proposition de loi 'Transparence Algorithmique' co-signée par au moins 15 parlementaires de 3 familles politiques différentes, imposant un audit indépendant annuel des algorithmes de recommandation des plateformes atteignant plus de 500.000 utilisateurs belges."
+  },
+  "cibles": {
+    "principale": "Caroline Désir (Ministre de l'Éducation FWB) - Compétente pour intégrer l'éducation aux médias dans les programmes. Profil : sensible aux enjeux sociaux, PS, ancienne enseignante. Accès : via les syndicats enseignants alliés et le réseau éducation permanente.",
+    "pourquoi": "L'intégration systématique de l'éducation à la résilience cognitive dans le Tronc Commun est un levier structurel de long terme. Une génération formée = un changement durable. C'est aussi une demande des enseignants (légitimité du terrain) et un sujet moins polarisant que la régulation des Big Tech.",
+    "secondaires": "1. Georges Gilkinet (Ministre Mobilité/Vice-PM Ecolo) - Porte d'entrée gouvernementale, sensibilité aux enjeux démocratiques\n2. Sophie Wilmès (MR, ex-PM) - Figure d'autorité, expérience européenne, peut crédibiliser le bipartisan\n3. Rapporteur DSA au Parlement européen - Influence sur l'implémentation belge\n4. Direction de la RTBF - Partenariat médiatique pour campagne grand public",
+    "allies_actuels": "Justice et Paix (méthodologie), EDRi (réseau européen), AlgorithmWatch (expertise technique), Test-Achats (relais grand public), Ligue des Droits Humains (contentieux), FGTB/CSC (mobilisation), Ecolo (relais parlementaire), RTBF #Investigation (médiatisation)",
+    "allies_potentiels": "1. Mouvement associatif des aînés (Énéo, Espace Seniors) - Public vulnérable, relais de confiance\n2. Fédération des parents d'élèves (UFAPEC, FAPEO) - Légitimité sur l'éducation\n3. Mutualités (Solidaris, MC) - Réseau de proximité massif\n4. Patronat progressiste (Réseau Entreprises et Développement Durable) - Crédibilité économique\n5. Ordres professionnels (journalistes, psychologues) - Expertise et déontologie"
+  },
+  "message": {
+    "accroche": "En 2024, un Belge sur trois a partagé une fausse information sans le savoir. Les algorithmes décident ce que vous voyez — il est temps que vous décidiez ce qu'ils vous montrent.",
+    "probleme": "Les géants du numérique utilisent des algorithmes opaques pour maximiser votre temps d'écran, pas votre bien-être. Ces systèmes amplifient la désinformation, polarisent le débat public et manipulent nos comportements sans aucune supervision démocratique.",
+    "importance": "Notre démocratie repose sur des citoyens informés. Quand des machines invisibles décident de ce que nous croyons vrai, c'est notre liberté collective qui est en jeu. Chaque jour de retard, c'est une génération de plus exposée sans défense.",
+    "cible": "Madame la Ministre, vous avez le pouvoir de former des citoyens éclairés. En intégrant l'éducation à la résilience cognitive dans les programmes, vous donnez à chaque jeune Belge les outils pour se défendre.",
+    "action": "Nous vous demandons d'inscrire un module obligatoire 'Pensée critique et littératie médiatique' de 2h/semaine dans le Tronc Commun, avec formation des enseignants et ressources pédagogiques adaptées.",
+    "complet": "En 2024, un Belge sur trois a partagé une fausse information sans le savoir. Les géants du numérique utilisent des algorithmes opaques qui amplifient la désinformation et manipulent nos comportements sans supervision démocratique. Notre démocratie repose sur des citoyens informés — c'est notre liberté collective qui est en jeu. Madame la Ministre Désir, vous avez le pouvoir de former des citoyens éclairés. Nous vous demandons d'inscrire un module obligatoire 'Pensée critique et littératie médiatique' dans le Tronc Commun, avec formation des enseignants. Donnez à chaque jeune Belge les outils pour se défendre."
+  },
+  "checklist": {
+    "qui": "Rencontre avec Caroline Désir (Ministre Éducation FWB)\nDate visée : Mars 2026\nParticipants côté collectif : 3 personnes max\n- Porte-parole principal : [Enseignant.e terrain crédible]\n- Expert pédagogique : [Responsable kit éducatif]\n- Représentant partenaire : [Délégué CNCD ou Justice et Paix]",
+    "objectif": "Objectif principal : Obtenir l'engagement de la Ministre à intégrer un module pilote 'Résilience cognitive' dans 50 écoles dès septembre 2026.\n\nObjectif secondaire : Obtenir une réunion technique avec son cabinet pour affiner la proposition pédagogique.\n\nObjectif minimal : Établir un canal de communication régulier avec le cabinet.",
+    "arguments": "1. DEMANDE TERRAIN : Sondage enseignants (78% demandeurs d'outils face au numérique)\n2. FAISABILITÉ : Kit pédagogique prêt, testé dans 20 écoles pilotes avec résultats positifs\n3. PRÉCÉDENTS : Finlande, Estonie ont intégré avec succès (études d'impact disponibles)\n4. COHÉRENCE : S'inscrit dans les objectifs du Pacte d'Excellence (citoyenneté active)\n5. URGENCE : 67% des 12-17 ans incapables de distinguer pub et info (étude UCL 2025)\n6. COÛT MODÉRÉ : Intégration dans modules existants + formation continue",
+    "objections": "OBJECTION 1 : 'Les programmes sont déjà surchargés'\n→ Réponse : Intégration transversale (français, sciences, citoyenneté), pas de matière supplémentaire\n\nOBJECTION 2 : 'Les enseignants ne sont pas formés'\n→ Réponse : Partenariat avec IFC + notre formation clé en main (déjà testée)\n\nOBJECTION 3 : 'Ce n'est pas la priorité du moment'\n→ Réponse : Sondage parental + incidents récents (harcèlement IA, arnaques jeunes)\n\nOBJECTION 4 : 'Risque de polémique politique'\n→ Réponse : Consensus transversal documenté, soutien Test-Achats et syndicats",
+    "compte_rendu": "[À compléter après la rencontre]\n\nDate effective : ___\nDurée : ___\nParticipants côté cabinet : ___\n\nPoints clés abordés :\n- \n\nEngagements obtenus :\n- \n\nPoints de blocage identifiés :\n- \n\nTone général : ___\n\nProchaines étapes convenues :\n- ",
+    "suivi": "ACTIONS POST-RENCONTRE :\n[ ] Envoyer mail de remerciement sous 48h avec résumé\n[ ] Transmettre le kit pédagogique complet\n[ ] Partager les contacts des écoles pilotes\n[ ] Proposer date pour réunion technique\n[ ] Informer les partenaires du résultat\n[ ] Mettre à jour la stratégie selon réponse\n[ ] Si refus : préparer plan B (interpellation parlementaire)"
+  },
+  "suivi": {
+    "outputs": "INDICATEURS DE RÉALISATION (Outputs) :\n\n1. Proposition de loi rédigée : [En cours - 70%]\n   → Cible : version finale mars 2026\n\n2. Kit pédagogique diffusé : [Réalisé partiellement]\n   → 127 écoles touchées / objectif 500\n   → Taux satisfaction enseignants : 4.2/5\n\n3. Coalition constituée : [Objectif atteint]\n   → 53 organisations signataires de la Charte\n\n4. Pétition citoyenne : [En cours]\n   → 3.847 signatures / objectif 10.000\n   → Taux conversion réseaux sociaux : 2.3%\n\n5. Parlementaires rencontrés : [En bonne voie]\n   → 14 rencontres réalisées / objectif 20\n   → 8 engagements fermes de soutien",
+    "outcomes": "INDICATEURS DE CHANGEMENT (Outcomes) :\n\n1. Couverture médiatique :\n   → 23 articles/reportages depuis lancement\n   → 2 passages JT RTBF, 1 LN24\n   → Tonalité : 78% positive/neutre\n\n2. Positionnement politique :\n   → Question parlementaire déposée (Ecolo)\n   → Mention dans note gouvernementale digitalisation\n   → Invitation audition commission prévue mai 2026\n\n3. Perception publique :\n   → Sondage pre/post : +12 points notoriété enjeu\n   → Hashtag #SouverainetéCognitive : 8.400 mentions\n\n4. Comportement des cibles :\n   → Cabinet Désir : 2 réunions techniques obtenues\n   → CSA : intégration partielle dans rapport annuel",
+    "succes": "SUCCÈS À CAPITALISER :\n\n✓ Coalition large et diversifiée (53 orgas)\n✓ Kit pédagogique bien reçu par le terrain\n✓ Crédibilité académique établie (Livre Blanc cité)\n✓ Relais médiatique régulier\n✓ Dialogue ouvert avec cabinet ministériel\n✓ Intégration dans agenda syndical (FGTB)\n\nFACTEURS DE SUCCÈS :\n→ Ancrage dans l'expertise existante (Justice et Paix)\n→ Timing post-scandales IA favorable\n→ Discours accessible + technique = double légitimité",
+    "ameliorations": "POINTS D'AMÉLIORATION :\n\n✗ Mobilisation citoyenne insuffisante (pétition lente)\n   → Réviser stratégie réseaux sociaux\n   → Tester format vidéo court (TikTok/Reels)\n\n✗ Publics précarisés peu touchés\n   → Partenariat CPAS et maisons de quartier\n   → Traduction en formats accessibles\n\n✗ Couverture médias flamands quasi nulle\n   → Activer réseau EDRi côté néerlandophone\n   → Traduction communiqués et site\n\n✗ Juriste manquant pour contentieux\n   → Recherche financement poste dédié\n   → Convention avec clinique juridique universitaire",
+    "prochaines": "PROCHAINES ÉTAPES PRIORITAIRES :\n\n1. [Février 2026] Finaliser proposition de loi avec juristes\n2. [Mars 2026] Rencontre Ministre Désir\n3. [Mars 2026] Lancement campagne vidéo #MaVéritéMesChoix\n4. [Avril 2026] Colloque Bruxelles + présentation Livre Blanc actualisé\n5. [Mai 2026] Audition commission parlementaire\n6. [Juin 2026] Dépôt officiel proposition de loi\n7. [Sept 2026] Lancement pilote 50 écoles (si accord)\n\nÉCHÉANCES CRITIQUES :\n→ Fenêtre parlementaire avant vacances été 2026\n→ Rentrée scolaire 2026 pour pilote éducatif\n→ Élections 2027 = deadline pour ancrage législatif"
+  },
+  "journal": [
+    {
+      "id": "j_001",
+      "date": "2025-09-15",
+      "type": "action",
+      "title": "Lancement officiel du collectif",
+      "content": "Assemblée constitutive avec 23 organisations fondatrices. Adoption de la Charte pour la Souveraineté Cognitive. Élection du comité de pilotage (7 membres). Budget prévisionnel validé : 25.000€ première année."
+    },
+    {
+      "id": "j_002",
+      "date": "2025-10-08",
+      "type": "rencontre",
+      "title": "Première rencontre cabinet Mathieu Michel",
+      "content": "Accueil positif sur le principe. Le Secrétaire d'État souligne les contraintes européennes (attendre implémentation AI Act). Suggère de travailler sur des 'quick wins' : transparence publicitaire, protection des mineurs. A transmis nos coordonnées à la DG CONNECT. Suivi prévu en janvier."
+    },
+    {
+      "id": "j_003",
+      "date": "2025-11-22",
+      "type": "média",
+      "title": "Reportage RTBF #Investigation",
+      "content": "Participation à l'émission sur les algorithmes de TikTok. 15 minutes d'antenne, 450.000 téléspectateurs. Pic de trafic sur notre site (+800%). 340 nouvelles signatures pétition dans les 48h. Très bonne exposition mais attention à ne pas être réduits au 'problème TikTok'."
+    },
+    {
+      "id": "j_004",
+      "date": "2025-12-05",
+      "type": "réflexion",
+      "title": "Bilan stratégique mi-parcours",
+      "content": "Points forts : coalition solide, crédibilité établie, dialogue institutionnel ouvert. Points faibles : mobilisation citoyenne insuffisante, absence de relais flamand, manque de ressources juridiques. Décision : prioriser la campagne grand public Q1 2026 et chercher financement pour juriste."
+    },
+    {
+      "id": "j_005",
+      "date": "2026-01-14",
+      "type": "action",
+      "title": "Dépôt question parlementaire",
+      "content": "Cécile Thibaut (Ecolo) dépose question orale à la Ministre Désir sur l'éducation aux médias. Texte co-rédigé avec notre équipe. Réponse attendue en séance plénière le 28/01. Préparer brief pour la députée et éléments de langage pour réseaux sociaux."
+    },
+    {
+      "id": "j_006",
+      "date": "2026-01-18",
+      "type": "rencontre",
+      "title": "Réunion technique cabinet Éducation",
+      "content": "2h de travail avec conseiller pédagogique. Intérêt réel pour le kit mais questionnements sur l'intégration curriculaire. Demandent une note technique sur la compatibilité avec le Tronc Commun. Proposition de co-financer une étude d'impact avec l'UCL. Ambiance constructive, pas d'opposition de principe."
+    },
+    {
+      "id": "j_007",
+      "date": "2026-01-20",
+      "type": "autre",
+      "title": "Mise à jour outils de travail",
+      "content": "Migration vers le nouveau Poste de Travail Plaidoyer Citoyen v3. Import de toutes les données historiques. Formation de l'équipe prévue le 25/01. Objectif : centraliser le suivi et améliorer la coordination entre les groupes de travail."
+    }
+  ]
+}

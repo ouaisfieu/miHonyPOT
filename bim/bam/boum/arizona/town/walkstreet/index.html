@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARIZONA ECONOMY — Le Grand Jeu de la Survie Sociale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* VOID */
+      --void: #000000;
+      --abyss: #050608;
+      --deep: #0a0c10;
+      --night: #0f1218;
+      --shadow: #151a22;
+      --smoke: #1c222c;
+      --slate: #252d3a;
+      
+      /* WEALTH SPECTRUM */
+      --gold: #ffd700;
+      --gold-dim: rgba(255,215,0,0.2);
+      --gold-glow: rgba(255,215,0,0.5);
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
+      --copper: #b87333;
+      
+      /* STATUS */
+      --prosperity: #00ff88;
+      --prosperity-dim: rgba(0,255,136,0.15);
+      --stability: #00aaff;
+      --stability-dim: rgba(0,170,255,0.15);
+      --precarity: #ff8800;
+      --precarity-dim: rgba(255,136,0,0.15);
+      --crisis: #ff3333;
+      --crisis-dim: rgba(255,51,51,0.15);
+      
+      /* FACTIONS */
+      --resistance: #00ff41;
+      --resistance-dim: rgba(0,255,65,0.15);
+      --empire: #8b0000;
+      --empire-dim: rgba(139,0,0,0.2);
+      
+      /* TEXT */
+      --text: #e8e6e3;
+      --text-soft: #a0a8b0;
+      --text-dim: #606870;
+    }
+
+    html, body { 
+      height: 100%; 
+      overflow: hidden;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    @keyframes glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes countUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    @keyframes coinSpin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+    @keyframes moneyRain { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100px) rotate(360deg); opacity: 0; } }
+    @keyframes chartGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes alertPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--crisis-dim); } 50% { box-shadow: 0 0 0 10px transparent; } }
+    @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYERS
+    ═══════════════════════════════════════════════════════════════ */
+    .layer-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .layer-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, var(--void) 100%);
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       APP LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════════════════════════ */
+    header {
+      height: 70px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: linear-gradient(180deg, var(--shadow) 0%, var(--night) 100%);
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-coin {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--gold), var(--bronze));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 20px var(--gold-dim), inset 0 -3px 10px rgba(0,0,0,0.3);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .logo-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .logo-text .tagline {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    /* WALLET BAR */
+    .wallet-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      margin-left: 20px;
+    }
+
+    .wallet-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--deep);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+    }
+
+    .wallet-icon { font-size: 1.1rem; }
+
+    .wallet-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .wallet-label {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .wallet-item.health .wallet-value { color: var(--prosperity); }
+    .wallet-item.stress .wallet-value { color: var(--crisis); }
+
+    /* CLASS BADGE */
+    .class-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, var(--gold-dim), transparent);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+    }
+
+    .class-icon { font-size: 1.5rem; }
+
+    .class-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+
+    .class-info p {
+      font-size: 0.6rem;
+      color: var(--text-soft);
+    }
+
+    /* TIME */
+    .time-display {
+      text-align: right;
+    }
+
+    .time-cycle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--stability);
+    }
+
+    .time-date {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TICKER
+    ═══════════════════════════════════════════════════════════════ */
+    .ticker-bar {
+      height: 32px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--gold-dim);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ticker-content {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      white-space: nowrap;
+      animation: ticker 30s linear infinite;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 30px;
+      font-size: 0.75rem;
+    }
+
+    .ticker-item .up { color: var(--prosperity); }
+    .ticker-item .down { color: var(--crisis); }
+    .ticker-item .name { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      gap: 16px;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PANELS
+    ═══════════════════════════════════════════════════════════════ */
+    .panel {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      background: linear-gradient(180deg, var(--slate), var(--shadow));
+      border-bottom: 1px solid var(--gold-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      padding: 4px 8px;
+      background: var(--resistance-dim);
+      color: var(--resistance);
+      border-radius: 4px;
+    }
+
+    .panel-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LEFT SIDEBAR - CHARACTER & STATUS
+    ═══════════════════════════════════════════════════════════════ */
+    .sidebar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* CHARACTER CARD */
+    .character-card {
+      background: linear-gradient(135deg, var(--smoke), var(--shadow));
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .char-avatar {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      background: var(--gold-dim);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 30px var(--gold-dim);
+    }
+
+    .char-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .char-class {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+
+    .char-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .char-stat {
+      background: var(--night);
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .char-stat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .char-stat-label {
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* INCOME PANEL */
+    .income-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: var(--night);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .income-name {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .income-value {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+    }
+
+    .income-value.positive { color: var(--prosperity); }
+    .income-value.negative { color: var(--crisis); }
+
+    .income-total {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--gold-dim);
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+    }
+
+    /* NEEDS BARS */
+    .need-item {
+      margin-bottom: 14px;
+    }
+
+    .need-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+    }
+
+    .need-bar {
+      height: 8px;
+      background: var(--night);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .need-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .need-fill.health { background: linear-gradient(90deg, var(--crisis), var(--prosperity)); }
+    .need-fill.dignity { background: linear-gradient(90deg, var(--crisis), var(--gold)); }
+    .need-fill.hope { background: linear-gradient(90deg, var(--crisis), var(--stability)); }
+    .need-fill.network { background: linear-gradient(90deg, var(--crisis), var(--resistance)); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CENTER - MAIN GAME AREA
+    ═══════════════════════════════════════════════════════════════ */
+    .center-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    /* TABS */
+    .game-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--deep);
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .game-tab {
+      flex: 1;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 12px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .game-tab:hover {
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .game-tab.active {
+      color: var(--gold);
+      background: var(--shadow);
+      border-color: var(--gold);
+    }
+
+    .tab-content {
+      flex: 1;
+      display: none;
+      overflow: hidden;
+    }
+
+    .tab-content.active { display: flex; flex-direction: column; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB: ECONOMY OVERVIEW
+    ═══════════════════════════════════════════════════════════════ */
+    .economy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .eco-card {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .eco-icon { font-size: 2rem; margin-bottom: 10px; }
+
+    .eco-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+    }
+
+    .eco-value.gold { color: var(--gold); }
+    .eco-value.green { color: var(--prosperity); }
+    .eco-value.red { color: var(--crisis); }
+    .eco-value.blue { color: var(--stability); }
+
+    .eco-label {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+    }
+
+    .eco-trend {
+      font-size: 0.7rem;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .eco-trend.up { background: var(--prosperity-dim); color: var(--prosperity); }
+    .eco-trend.down { background: var(--crisis-dim); color: var(--crisis); }
+    .eco-trend.stable { background: var(--stability-dim); color: var(--stability); }
+
+    /* WEALTH DISTRIBUTION */
+    .wealth-chart {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .chart-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pyramid-level {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .pyramid-level:hover {
+      transform: scale(1.02);
+    }
+
+    .pyramid-level.top {
+      width: 30%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+      border: 1px solid var(--gold);
+    }
+
+    .pyramid-level.upper {
+      width: 50%;
+      background: var(--silver);
+      color: var(--void);
+    }
+
+    .pyramid-level.middle {
+      width: 70%;
+      background: var(--bronze);
+      color: var(--void);
+    }
+
+    .pyramid-level.lower {
+      width: 85%;
+      background: var(--precarity-dim);
+      border: 1px solid var(--precarity);
+    }
+
+    .pyramid-level.bottom {
+      width: 100%;
+      background: var(--crisis-dim);
+      border: 1px solid var(--crisis);
+    }
+
+    .pyramid-label {
+      flex: 1;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .pyramid-percent {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .pyramid-wealth {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB: MARKET
+    ═══════════════════════════════════════════════════════════════ */
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .market-section {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .market-header {
+      padding: 12px 16px;
+      background: var(--slate);
+      border-bottom: 1px solid var(--gold-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--gold);
+    }
+
+    .market-items { padding: 12px; }
+
+    .market-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--night);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .market-item:hover {
+      border-color: var(--gold);
+      transform: translateX(4px);
+    }
+
+    .market-item.owned {
+      border-color: var(--prosperity);
+      background: var(--prosperity-dim);
+    }
+
+    .market-icon { font-size: 1.5rem; }
+
+    .market-info { flex: 1; }
+
+    .market-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .market-desc {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .market-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB: POLICY SIMULATOR
+    ═══════════════════════════════════════════════════════════════ */
+    .policy-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .policy-panel {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .policy-header {
+      padding: 16px;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .policy-header.arizona {
+      background: linear-gradient(180deg, var(--empire-dim), transparent);
+      color: var(--crisis);
+      border-bottom: 2px solid var(--crisis);
+    }
+
+    .policy-header.alternative {
+      background: linear-gradient(180deg, var(--resistance-dim), transparent);
+      color: var(--resistance);
+      border-bottom: 2px solid var(--resistance);
+    }
+
+    .policy-body { padding: 16px; }
+
+    .policy-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--night);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .policy-name { font-size: 0.8rem; }
+
+    .policy-value {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+    }
+
+    .policy-value.bad { color: var(--crisis); }
+    .policy-value.good { color: var(--prosperity); }
+    .policy-value.neutral { color: var(--gold); }
+
+    .policy-result {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--deep);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .policy-result h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .result-stat {
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 4px;
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .result-stat.negative {
+      background: var(--crisis-dim);
+      color: var(--crisis);
+    }
+
+    .result-stat.positive {
+      background: var(--prosperity-dim);
+      color: var(--prosperity);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB: ACTIONS
+    ═══════════════════════════════════════════════════════════════ */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      flex: 1;
+      overflow-y: auto;
+      align-content: start;
+    }
+
+    .action-card {
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .action-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .action-card.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .action-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+    .action-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .action-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .action-cost {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      background: var(--gold-dim);
+      color: var(--gold);
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .action-effect {
+      margin-top: 10px;
+      font-size: 0.65rem;
+      color: var(--prosperity);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RIGHT SIDEBAR - EVENTS & QUESTS
+    ═══════════════════════════════════════════════════════════════ */
+    .sidebar-right {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* EVENT LOG */
+    .event-item {
+      padding: 12px;
+      background: var(--night);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 10px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .event-item.positive { border-color: var(--prosperity); }
+    .event-item.negative { border-color: var(--crisis); }
+    .event-item.neutral { border-color: var(--stability); }
+
+    .event-time {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .event-text {
+      font-size: 0.8rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .event-effect {
+      margin-top: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+    }
+
+    .event-effect.gain { color: var(--prosperity); }
+    .event-effect.loss { color: var(--crisis); }
+
+    /* QUESTS */
+    .quest-item {
+      padding: 14px;
+      background: var(--night);
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .quest-item:hover {
+      border-color: var(--gold);
+    }
+
+    .quest-item.completed {
+      opacity: 0.6;
+      border-color: var(--prosperity);
+    }
+
+    .quest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .quest-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+
+    .quest-reward {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: var(--prosperity);
+    }
+
+    .quest-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .quest-progress {
+      height: 6px;
+      background: var(--deep);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .quest-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--shadow);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-icon { font-size: 4rem; margin-bottom: 20px; }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .modal-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .modal-btn.primary {
+      background: var(--gold);
+      color: var(--void);
+    }
+
+    .modal-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .modal-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* CLASS SELECT */
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .class-option {
+      padding: 20px;
+      background: var(--night);
+      border: 2px solid var(--gold-dim);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .class-option:hover {
+      border-color: var(--gold);
+      transform: scale(1.02);
+    }
+
+    .class-option.selected {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .class-option-icon { font-size: 2rem; margin-bottom: 10px; }
+
+    .class-option-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .class-option-desc {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .class-option-stats {
+      margin-top: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      top: 120px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      padding: 14px 20px;
+      background: var(--shadow);
+      border-radius: 8px;
+      animation: slideIn 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+
+    .toast.gain {
+      border: 1px solid var(--prosperity);
+      color: var(--prosperity);
+    }
+
+    .toast.loss {
+      border: 1px solid var(--crisis);
+      color: var(--crisis);
+    }
+
+    .toast.info {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+      main { grid-template-columns: 250px 1fr; }
+      .sidebar-right { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .sidebar-left { display: none; }
+      header { flex-wrap: wrap; height: auto; padding: 12px; }
+      .wallet-bar { order: 3; width: 100%; margin-left: 0; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layer-grid"></div>
+  <div class="layer-vignette"></div>
+
+  <div class="app">
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <div class="logo-coin">🪙</div>
+        <div class="logo-text">
+          <h1>ARIZONA ECONOMY</h1>
+          <div class="tagline">LE GRAND JEU DE LA SURVIE SOCIALE</div>
+        </div>
+      </div>
+
+      <div class="wallet-bar">
+        <div class="wallet-item">
+          <span class="wallet-icon">🪙</span>
+          <div>
+            <div class="wallet-value" id="wallet-solidaris">0</div>
+            <div class="wallet-label">Solidaris (SOL)</div>
+          </div>
+        </div>
+        <div class="wallet-item health">
+          <span class="wallet-icon">❤️</span>
+          <div>
+            <div class="wallet-value" id="wallet-health">100%</div>
+            <div class="wallet-label">Santé</div>
+          </div>
+        </div>
+        <div class="wallet-item stress">
+          <span class="wallet-icon">😰</span>
+          <div>
+            <div class="wallet-value" id="wallet-stress">0%</div>
+            <div class="wallet-label">Stress</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="class-badge">
+        <span class="class-icon" id="header-class-icon">👤</span>
+        <div class="class-info">
+          <h3 id="header-class-name">Citoyen</h3>
+          <p id="header-class-tier">Choisissez votre classe</p>
+        </div>
+      </div>
+
+      <div class="time-display">
+        <div class="time-cycle">Cycle <span id="game-cycle">1</span></div>
+        <div class="time-date" id="game-date">Janvier 2026</div>
+      </div>
+    </header>
+
+    <!-- TICKER -->
+    <div class="ticker-bar">
+      <div class="ticker-content" id="ticker">
+        <span class="ticker-item"><span class="name">📊 GINI</span> 0.27 <span class="up">▲</span></span>
+        <span class="ticker-item"><span class="name">💼 CHÔMAGE</span> 5.6% <span class="down">▼</span></span>
+        <span class="ticker-item"><span class="name">🏠 SANS-ABRI</span> 50,000 <span class="up">▲</span></span>
+        <span class="ticker-item"><span class="name">💰 PIB</span> 582 Md€ <span class="up">▲</span></span>
+        <span class="ticker-item"><span class="name">🔴 AROPE</span> 18.3% <span class="stable">━</span></span>
+        <span class="ticker-item"><span class="name">⚖️ ART.23</span> EN VIGUEUR <span class="up">✓</span></span>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main>
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar-left">
+        <div class="character-card">
+          <div class="char-avatar" id="char-avatar">👤</div>
+          <div class="char-name" id="char-name">Nouveau Joueur</div>
+          <div class="char-class" id="char-class">Cliquez pour choisir votre classe</div>
+          <div class="char-stats">
+            <div class="char-stat">
+              <div class="char-stat-value" id="stat-months" style="color: var(--crisis)">24</div>
+              <div class="char-stat-label">Mois Restants</div>
+            </div>
+            <div class="char-stat">
+              <div class="char-stat-value" id="stat-level" style="color: var(--gold)">1</div>
+              <div class="char-stat-label">Niveau</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">💰 Revenus / Cycle</div>
+          </div>
+          <div class="panel-body" id="income-list">
+            <div class="income-item">
+              <span class="income-name">Allocation</span>
+              <span class="income-value positive">+0 SOL</span>
+            </div>
+            <div class="income-item">
+              <span class="income-name">Loyer</span>
+              <span class="income-value negative">-0 SOL</span>
+            </div>
+            <div class="income-total">
+              <span>Net</span>
+              <span id="income-net" style="color: var(--gold)">0 SOL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📊 Besoins</div>
+          </div>
+          <div class="panel-body">
+            <div class="need-item">
+              <div class="need-header">
+                <span>❤️ Santé</span>
+                <span id="need-health-val">100%</span>
+              </div>
+              <div class="need-bar">
+                <div class="need-fill health" id="need-health" style="width: 100%"></div>
+              </div>
+            </div>
+            <div class="need-item">
+              <div class="need-header">
+                <span>👑 Dignité</span>
+                <span id="need-dignity-val">100%</span>
+              </div>
+              <div class="need-bar">
+                <div class="need-fill dignity" id="need-dignity" style="width: 100%"></div>
+              </div>
+            </div>
+            <div class="need-item">
+              <div class="need-header">
+                <span>⭐ Espoir</span>
+                <span id="need-hope-val">100%</span>
+              </div>
+              <div class="need-bar">
+                <div class="need-fill hope" id="need-hope" style="width: 100%"></div>
+              </div>
+            </div>
+            <div class="need-item">
+              <div class="need-header">
+                <span>🤝 Réseau</span>
+                <span id="need-network-val">50%</span>
+              </div>
+              <div class="need-bar">
+                <div class="need-fill network" id="need-network" style="width: 50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER -->
+      <div class="center-area">
+        <div class="game-tabs">
+          <button class="game-tab active" data-tab="economy">📊 Économie</button>
+          <button class="game-tab" data-tab="market">🏪 Marché</button>
+          <button class="game-tab" data-tab="policy">⚖️ Politiques</button>
+          <button class="game-tab" data-tab="actions">⚡ Actions</button>
+        </div>
+
+        <!-- ECONOMY TAB -->
+        <div class="tab-content active" id="tab-economy">
+          <div class="economy-grid">
+            <div class="eco-card">
+              <div class="eco-icon">🏦</div>
+              <div class="eco-value gold" id="eco-gdp">582</div>
+              <div class="eco-label">PIB (Milliards €)</div>
+              <div class="eco-trend up">▲ +1.2%</div>
+            </div>
+            <div class="eco-card">
+              <div class="eco-icon">📉</div>
+              <div class="eco-value red" id="eco-gini">0.27</div>
+              <div class="eco-label">Coefficient GINI</div>
+              <div class="eco-trend down">▲ +0.02</div>
+            </div>
+            <div class="eco-card">
+              <div class="eco-icon">🚨</div>
+              <div class="eco-value red" id="eco-excluded">0</div>
+              <div class="eco-label">Exclus du Système</div>
+              <div class="eco-trend down">▲ Vague II</div>
+            </div>
+          </div>
+
+          <div class="wealth-chart">
+            <div class="chart-title">⚖️ PYRAMIDE DE LA RICHESSE NATIONALE</div>
+            <div class="pyramid">
+              <div class="pyramid-level top">
+                <span class="pyramid-label">🎩 Les Seigneurs (1%)</span>
+                <span class="pyramid-percent">25%</span>
+                <span class="pyramid-wealth">de la richesse</span>
+              </div>
+              <div class="pyramid-level upper">
+                <span class="pyramid-label">💼 Classe Supérieure (9%)</span>
+                <span class="pyramid-percent">35%</span>
+                <span class="pyramid-wealth">de la richesse</span>
+              </div>
+              <div class="pyramid-level middle">
+                <span class="pyramid-label">🏠 Classe Moyenne (40%)</span>
+                <span class="pyramid-percent">30%</span>
+                <span class="pyramid-wealth">de la richesse</span>
+              </div>
+              <div class="pyramid-level lower">
+                <span class="pyramid-label">⚠️ Précaires (30%)</span>
+                <span class="pyramid-percent">8%</span>
+                <span class="pyramid-wealth">de la richesse</span>
+              </div>
+              <div class="pyramid-level bottom">
+                <span class="pyramid-label">🚨 Exclus & Pauvres (20%)</span>
+                <span class="pyramid-percent">2%</span>
+                <span class="pyramid-wealth">de la richesse</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MARKET TAB -->
+        <div class="tab-content" id="tab-market">
+          <div class="market-grid">
+            <div class="market-section">
+              <div class="market-header">🛡️ Protections Sociales</div>
+              <div class="market-items" id="market-protections"></div>
+            </div>
+            <div class="market-section">
+              <div class="market-header">📚 Formations</div>
+              <div class="market-items" id="market-skills"></div>
+            </div>
+            <div class="market-section">
+              <div class="market-header">🤝 Réseau</div>
+              <div class="market-items" id="market-network"></div>
+            </div>
+            <div class="market-section">
+              <div class="market-header">🏠 Biens Essentiels</div>
+              <div class="market-items" id="market-essentials"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POLICY TAB -->
+        <div class="tab-content" id="tab-policy">
+          <div class="policy-layout">
+            <div class="policy-panel">
+              <div class="policy-header arizona">🏜️ RÉGIME ARIZONA</div>
+              <div class="policy-body">
+                <div class="policy-item">
+                  <span class="policy-name">Durée chômage</span>
+                  <span class="policy-value bad">24 mois max</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Taxe millionnaires</span>
+                  <span class="policy-value bad">0%</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Compensation CPAS</span>
+                  <span class="policy-value bad">518€/dossier</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Contrôle malades</span>
+                  <span class="policy-value bad">Renforcé</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Économies visées</span>
+                  <span class="policy-value neutral">23 Md€</span>
+                </div>
+                <div class="policy-result">
+                  <h4>Impact Simulé</h4>
+                  <span class="result-stat negative">-90,000 protégés</span>
+                  <span class="result-stat negative">+1 Md€ CPAS</span>
+                  <span class="result-stat negative">+37% précarité</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="policy-panel">
+              <div class="policy-header alternative">🌱 RÉGIME ALTERNATIF</div>
+              <div class="policy-body">
+                <div class="policy-item">
+                  <span class="policy-name">Durée chômage</span>
+                  <span class="policy-value good">Illimitée</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Taxe millionnaires</span>
+                  <span class="policy-value good">2%</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Lutte fraude fiscale</span>
+                  <span class="policy-value good">Renforcée</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Investissement santé</span>
+                  <span class="policy-value good">+3 Md€</span>
+                </div>
+                <div class="policy-item">
+                  <span class="policy-name">Recettes nouvelles</span>
+                  <span class="policy-value good">47 Md€</span>
+                </div>
+                <div class="policy-result">
+                  <h4>Impact Simulé</h4>
+                  <span class="result-stat positive">+90,000 protégés</span>
+                  <span class="result-stat positive">-15% précarité</span>
+                  <span class="result-stat positive">+2% PIB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS TAB -->
+        <div class="tab-content" id="tab-actions">
+          <div class="actions-grid" id="actions-grid"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="sidebar-right">
+        <div class="panel" style="flex: 1;">
+          <div class="panel-header">
+            <div class="panel-title">📜 Événements</div>
+            <div class="panel-badge">LIVE</div>
+          </div>
+          <div class="panel-body" id="event-log"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🎯 Quêtes</div>
+          </div>
+          <div class="panel-body" id="quest-list"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- CLASS SELECT MODAL -->
+  <div class="modal-overlay" id="modal-class">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-icon">🎭</div>
+      <div class="modal-title">Choisissez Votre Destin</div>
+      <div class="modal-text">Dans l'économie de l'Arizone, votre classe sociale détermine votre point de départ. Survivrez-vous aux Vagues ?</div>
+      <div class="class-grid">
+        <div class="class-option" data-class="chomeur">
+          <div class="class-option-icon">😰</div>
+          <div class="class-option-name">Le Chômeur</div>
+          <div class="class-option-desc">24 mois pour trouver un emploi ou tomber dans l'abîme</div>
+          <div class="class-option-stats">💰 1200 SOL/mois | ⏱️ 24 mois | 😓 Difficulté: HARD</div>
+        </div>
+        <div class="class-option" data-class="precaire">
+          <div class="class-option-icon">⚠️</div>
+          <div class="class-option-name">Le Précaire</div>
+          <div class="class-option-desc">CDD, intérim, temps partiel... la survie au jour le jour</div>
+          <div class="class-option-stats">💰 1500 SOL/mois | 🎲 Aléatoire | 😅 Difficulté: MEDIUM</div>
+        </div>
+        <div class="class-option" data-class="salarie">
+          <div class="class-option-icon">💼</div>
+          <div class="class-option-name">Le Salarié</div>
+          <div class="class-option-desc">CDI stable, mais attention aux restructurations...</div>
+          <div class="class-option-stats">💰 2500 SOL/mois | 🛡️ Protégé | 😊 Difficulté: EASY</div>
+        </div>
+        <div class="class-option" data-class="cpas">
+          <div class="class-option-icon">🏥</div>
+          <div class="class-option-name">Le Bénéficiaire RIS</div>
+          <div class="class-option-desc">Au bout de la chaîne. Le dernier filet avant la rue.</div>
+          <div class="class-option-stats">💰 800 SOL/mois | 📋 Contrôles | 😱 Difficulté: EXTREME</div>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn primary" id="btn-start" disabled>Commencer l'Aventure</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT MODAL -->
+  <div class="modal-overlay" id="modal-event">
+    <div class="modal">
+      <div class="modal-icon" id="event-modal-icon">⚡</div>
+      <div class="modal-title" id="event-modal-title">Événement</div>
+      <div class="modal-text" id="event-modal-text">Description</div>
+      <div class="modal-buttons">
+        <button class="modal-btn primary" onclick="closeEventModal()">Continuer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toasts"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // GAME STATE
+    // ═══════════════════════════════════════════════════════════════
+    const GAME = {
+      // Player
+      class: null,
+      money: 0,
+      health: 100,
+      dignity: 100,
+      hope: 100,
+      network: 50,
+      stress: 0,
+      level: 1,
+      xp: 0,
+      monthsRemaining: 24,
+      
+      // Economy
+      cycle: 1,
+      month: 1,
+      year: 2026,
+      gdp: 582,
+      gini: 0.27,
+      excluded: 0,
+      unemploymentRate: 5.6,
+      
+      // Inventory
+      owned: [],
+      completedQuests: [],
+      
+      // Income/Expenses
+      income: 0,
+      expenses: 0
+    };
+
+    const CLASSES = {
+      chomeur: {
+        name: "Chômeur",
+        icon: "😰",
+        tier: "3e période - En danger",
+        income: 1200,
+        expenses: 900,
+        months: 24,
+        healthDrain: 2,
+        dignityDrain: 3,
+        hopeDrain: 4,
+        stressGain: 5
+      },
+      precaire: {
+        name: "Travailleur Précaire",
+        icon: "⚠️",
+        tier: "CDD / Intérim",
+        income: 1500,
+        expenses: 1100,
+        months: 999,
+        healthDrain: 3,
+        dignityDrain: 2,
+        hopeDrain: 2,
+        stressGain: 4
+      },
+      salarie: {
+        name: "Salarié",
+        icon: "💼",
+        tier: "CDI - Stable",
+        income: 2500,
+        expenses: 1800,
+        months: 999,
+        healthDrain: 1,
+        dignityDrain: 0,
+        hopeDrain: 0,
+        stressGain: 2
+      },
+      cpas: {
+        name: "Bénéficiaire RIS",
+        icon: "🏥",
+        tier: "Revenu d'Intégration",
+        income: 800,
+        expenses: 750,
+        months: 999,
+        healthDrain: 4,
+        dignityDrain: 5,
+        hopeDrain: 3,
+        stressGain: 6
+      }
+    };
+
+    const MARKET = {
+      protections: [
+        {id: "mutuelle", name: "Mutuelle Complémentaire", desc: "+20% remboursement santé", price: 500, effect: {health: 10}},
+        {id: "assurance", name: "Assurance Juridique", desc: "Protection contre les abus", price: 300, effect: {dignity: 10}},
+        {id: "syndicat", name: "Adhésion Syndicale", desc: "Rejoindre la Résistance", price: 200, effect: {network: 20, hope: 10}}
+      ],
+      skills: [
+        {id: "formation", name: "Formation Professionnelle", desc: "+15% chances d'emploi", price: 800, effect: {hope: 15}},
+        {id: "digital", name: "Compétences Numériques", desc: "Éviter la fracture digitale", price: 400, effect: {dignity: 10}},
+        {id: "langue", name: "Cours de Langue", desc: "Ouvrir de nouvelles portes", price: 600, effect: {network: 15}}
+      ],
+      network: [
+        {id: "association", name: "Rejoindre une Association", desc: "Tisser des liens solidaires", price: 100, effect: {network: 25, hope: 5}},
+        {id: "manifestation", name: "Participer aux Manifs", desc: "Faire entendre sa voix", price: 50, effect: {hope: 20, dignity: 10}},
+        {id: "benevole", name: "Devenir Bénévole", desc: "Donner et recevoir", price: 0, effect: {network: 15, dignity: 15}}
+      ],
+      essentials: [
+        {id: "nourriture", name: "Aide Alimentaire", desc: "Ne plus avoir faim", price: 0, effect: {health: 20}},
+        {id: "logement", name: "Logement Social", desc: "-40% de loyer", price: 200, effect: {stress: -20}},
+        {id: "transport", name: "Carte Transport Social", desc: "Se déplacer dignement", price: 100, effect: {dignity: 10}}
+      ]
+    };
+
+    const ACTIONS = [
+      {id: "work_search", name: "Chercher du Travail", icon: "🔍", desc: "Envoyer des CV", cost: 0, cooldown: 0, effects: {hope: -5, stress: 10}, chance: "emploi"},
+      {id: "rest", name: "Se Reposer", icon: "😴", desc: "Récupérer ses forces", cost: 0, cooldown: 0, effects: {health: 10, stress: -15}},
+      {id: "socialize", name: "Voir des Proches", icon: "👥", desc: "Maintenir les liens", cost: 50, cooldown: 0, effects: {hope: 15, dignity: 5, network: 5}},
+      {id: "protest", name: "Manifester", icon: "✊", desc: "Rejoindre le Front", cost: 20, cooldown: 3, effects: {hope: 25, dignity: 15, network: 10, stress: 5}},
+      {id: "learn", name: "Se Former", icon: "📚", desc: "Acquérir des compétences", cost: 100, cooldown: 2, effects: {hope: 10}},
+      {id: "cpas_visit", name: "Visiter le CPAS", icon: "🏥", desc: "Demander de l'aide", cost: 0, cooldown: 1, effects: {dignity: -10, money: 200}},
+      {id: "foodbank", name: "Banque Alimentaire", icon: "🍞", desc: "Se nourrir gratuitement", cost: 0, cooldown: 1, effects: {health: 15, dignity: -5}},
+      {id: "legal_aid", name: "Aide Juridique", icon: "⚖️", desc: "Connaître ses droits", cost: 0, cooldown: 5, effects: {hope: 20, dignity: 10}},
+      {id: "therapy", name: "Soutien Psy", icon: "🧠", desc: "Prendre soin de sa santé mentale", cost: 50, cooldown: 2, effects: {stress: -30, hope: 10}}
+    ];
+
+    const QUESTS = [
+      {id: "q1", name: "Premiers Pas", desc: "Effectuer 3 actions", target: 3, current: 0, reward: 200, type: "actions"},
+      {id: "q2", name: "Résistant", desc: "Participer à une manifestation", target: 1, current: 0, reward: 300, type: "protest"},
+      {id: "q3", name: "Solidaire", desc: "Rejoindre un syndicat", target: 1, current: 0, reward: 250, type: "syndicat"},
+      {id: "q4", name: "Survivant", desc: "Survivre 6 cycles", target: 6, current: 0, reward: 500, type: "cycles"}
+    ];
+
+    const EVENTS = [
+      {type: "positive", icon: "🎉", title: "Bonne Nouvelle !", text: "Votre candidature a retenu l'attention d'un employeur.", effects: {hope: 20}},
+      {type: "negative", icon: "📉", title: "Mauvaise Nouvelle", text: "L'inflation grignote votre pouvoir d'achat.", effects: {money: -100, stress: 10}},
+      {type: "neutral", icon: "📬", title: "Courrier Administratif", text: "Vous devez mettre à jour votre dossier au Forem/Actiris.", effects: {stress: 5, dignity: -5}},
+      {type: "positive", icon: "🤝", title: "Solidarité", text: "Un voisin vous propose de l'aide.", effects: {network: 10, hope: 10}},
+      {type: "negative", icon: "🏥", title: "Problème de Santé", text: "Une visite médicale imprévue.", effects: {health: -15, money: -150}},
+      {type: "positive", icon: "📰", title: "Le Front Commun Avance", text: "Une nouvelle mobilisation réussie !", effects: {hope: 15}},
+      {type: "negative", icon: "⚠️", title: "Contrôle de Disponibilité", text: "Vous êtes convoqué pour vérification.", effects: {stress: 20, dignity: -10}}
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      initTabs();
+      initClassSelect();
+      renderMarket();
+      renderActions();
+      renderQuests();
+      showModal('modal-class');
+    });
+
+    function initTabs() {
+      document.querySelectorAll('.game-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+      });
+    }
+
+    function initClassSelect() {
+      document.querySelectorAll('.class-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.class-option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          GAME.class = opt.dataset.class;
+          document.getElementById('btn-start').disabled = false;
+        });
+      });
+
+      document.getElementById('btn-start').addEventListener('click', startGame);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // GAME LOGIC
+    // ═══════════════════════════════════════════════════════════════
+    function startGame() {
+      const cls = CLASSES[GAME.class];
+      GAME.money = cls.income * 2; // Start with 2 months
+      GAME.income = cls.income;
+      GAME.expenses = cls.expenses;
+      GAME.monthsRemaining = cls.months;
+      
+      hideModal('modal-class');
+      updateUI();
+      addEvent('neutral', `Vous commencez votre vie en tant que ${cls.name}. Bonne chance.`);
+      
+      // Start game loop
+      setInterval(gameTick, 100); // UI updates
+    }
+
+    function gameTick() {
+      // Just update UI, actual cycle advancement is manual
+    }
+
+    function advanceCycle() {
+      GAME.cycle++;
+      GAME.month++;
+      if (GAME.month > 12) {
+        GAME.month = 1;
+        GAME.year++;
+      }
+      
+      const cls = CLASSES[GAME.class];
+      
+      // Apply income/expenses
+      GAME.money += GAME.income - GAME.expenses;
+      
+      // Apply class drains
+      GAME.health = Math.max(0, Math.min(100, GAME.health - cls.healthDrain));
+      GAME.dignity = Math.max(0, Math.min(100, GAME.dignity - cls.dignityDrain));
+      GAME.hope = Math.max(0, Math.min(100, GAME.hope - cls.hopeDrain));
+      GAME.stress = Math.max(0, Math.min(100, GAME.stress + cls.stressGain));
+      
+      // Decrease months for chomeur
+      if (GAME.class === 'chomeur') {
+        GAME.monthsRemaining--;
+        if (GAME.monthsRemaining <= 0) {
+          triggerExclusion();
+        } else if (GAME.monthsRemaining <= 6) {
+          addEvent('negative', `⚠️ ALERTE: Plus que ${GAME.monthsRemaining} mois avant l'exclusion !`);
+        }
+      }
+      
+      // Random event
+      if (Math.random() < 0.3) {
+        triggerRandomEvent();
+      }
+      
+      // Update quests
+      updateQuest('cycles', 1);
+      
+      // Check game over
+      checkGameState();
+      
+      updateUI();
+      toast(`Cycle ${GAME.cycle} - ${getMonthName(GAME.month)} ${GAME.year}`, 'info');
+    }
+
+    function triggerExclusion() {
+      GAME.class = 'cpas';
+      GAME.income = CLASSES.cpas.income;
+      GAME.expenses = CLASSES.cpas.expenses;
+      GAME.excluded++;
+      GAME.dignity -= 30;
+      GAME.hope -= 40;
+      
+      showEventModal('negative', '🚨', "EXCLUSION", 
+        "Vos 24 mois sont écoulés. Vous basculez vers le CPAS. Votre revenu passe à 800€/mois. Bienvenue dans la réalité de 90 000 personnes.");
+    }
+
+    function triggerRandomEvent() {
+      const event = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+      applyEffects(event.effects);
+      addEvent(event.type, event.text);
+    }
+
+    function applyEffects(effects) {
+      if (effects.money) GAME.money += effects.money;
+      if (effects.health) GAME.health = Math.max(0, Math.min(100, GAME.health + effects.health));
+      if (effects.dignity) GAME.dignity = Math.max(0, Math.min(100, GAME.dignity + effects.dignity));
+      if (effects.hope) GAME.hope = Math.max(0, Math.min(100, GAME.hope + effects.hope));
+      if (effects.network) GAME.network = Math.max(0, Math.min(100, GAME.network + effects.network));
+      if (effects.stress) GAME.stress = Math.max(0, Math.min(100, GAME.stress + effects.stress));
+    }
+
+    function checkGameState() {
+      if (GAME.health <= 0 || GAME.hope <= 0 || GAME.money < -1000) {
+        showEventModal('negative', '💔', "FIN DE PARTIE",
+          "Vous n'avez pas survécu au système. Comme des milliers d'autres. Mais la lutte continue...");
+      }
+    }
+
+    function doAction(actionId) {
+      const action = ACTIONS.find(a => a.id === actionId);
+      if (!action) return;
+      
+      if (GAME.money < action.cost) {
+        toast("Pas assez de Solidaris !", 'loss');
+        return;
+      }
+      
+      GAME.money -= action.cost;
+      applyEffects(action.effects);
+      
+      updateQuest('actions', 1);
+      if (actionId === 'protest') updateQuest('protest', 1);
+      
+      addEvent('neutral', `✅ ${action.name}`);
+      advanceCycle();
+    }
+
+    function buyItem(category, itemId) {
+      const item = MARKET[category].find(i => i.id === itemId);
+      if (!item) return;
+      
+      if (GAME.owned.includes(itemId)) {
+        toast("Déjà acquis !", 'info');
+        return;
+      }
+      
+      if (GAME.money < item.price) {
+        toast("Pas assez de Solidaris !", 'loss');
+        return;
+      }
+      
+      GAME.money -= item.price;
+      GAME.owned.push(itemId);
+      applyEffects(item.effect);
+      
+      if (itemId === 'syndicat') updateQuest('syndicat', 1);
+      
+      toast(`${item.name} acquis !`, 'gain');
+      renderMarket();
+      updateUI();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // QUESTS
+    // ═══════════════════════════════════════════════════════════════
+    function updateQuest(type, amount) {
+      QUESTS.forEach(q => {
+        if (q.type === type && !GAME.completedQuests.includes(q.id)) {
+          q.current = Math.min(q.target, q.current + amount);
+          if (q.current >= q.target) {
+            completeQuest(q);
+          }
+        }
+      });
+      renderQuests();
+    }
+
+    function completeQuest(quest) {
+      GAME.completedQuests.push(quest.id);
+      GAME.money += quest.reward;
+      GAME.xp += quest.reward;
+      toast(`🎯 Quête "${quest.name}" accomplie ! +${quest.reward} SOL`, 'gain');
+      addEvent('positive', `🏆 Quête accomplie : ${quest.name}`);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDERING
+    // ═══════════════════════════════════════════════════════════════
+    function updateUI() {
+      const cls = CLASSES[GAME.class] || {name: 'Citoyen', icon: '👤', tier: 'Non défini'};
+      
+      // Wallet
+      document.getElementById('wallet-solidaris').textContent = GAME.money.toLocaleString();
+      document.getElementById('wallet-health').textContent = GAME.health + '%';
+      document.getElementById('wallet-stress').textContent = GAME.stress + '%';
+      
+      // Header
+      document.getElementById('header-class-icon').textContent = cls.icon;
+      document.getElementById('header-class-name').textContent = cls.name;
+      document.getElementById('header-class-tier').textContent = cls.tier;
+      
+      // Time
+      document.getElementById('game-cycle').textContent = GAME.cycle;
+      document.getElementById('game-date').textContent = getMonthName(GAME.month) + ' ' + GAME.year;
+      
+      // Character
+      document.getElementById('char-avatar').textContent = cls.icon;
+      document.getElementById('char-name').textContent = cls.name;
+      document.getElementById('char-class').textContent = cls.tier;
+      document.getElementById('stat-months').textContent = GAME.monthsRemaining === 999 ? '∞' : GAME.monthsRemaining;
+      document.getElementById('stat-level').textContent = Math.floor(GAME.xp / 500) + 1;
+      
+      // Income
+      document.getElementById('income-net').textContent = (GAME.income - GAME.expenses) + ' SOL';
+      document.getElementById('income-net').style.color = (GAME.income - GAME.expenses) >= 0 ? 'var(--prosperity)' : 'var(--crisis)';
+      
+      // Needs
+      updateNeed('health', GAME.health);
+      updateNeed('dignity', GAME.dignity);
+      updateNeed('hope', GAME.hope);
+      updateNeed('network', GAME.network);
+      
+      // Economy
+      document.getElementById('eco-excluded').textContent = GAME.excluded.toLocaleString();
+    }
+
+    function updateNeed(need, value) {
+      document.getElementById('need-' + need).style.width = value + '%';
+      document.getElementById('need-' + need + '-val').textContent = value + '%';
+    }
+
+    function renderMarket() {
+      Object.keys(MARKET).forEach(category => {
+        const container = document.getElementById('market-' + category);
+        if (!container) return;
+        container.innerHTML = MARKET[category].map(item => `
+          <div class="market-item ${GAME.owned.includes(item.id) ? 'owned' : ''}" onclick="buyItem('${category}', '${item.id}')">
+            <span class="market-icon">${item.id === 'nourriture' ? '🍞' : item.id === 'syndicat' ? '✊' : '📦'}</span>
+            <div class="market-info">
+              <div class="market-name">${item.name}</div>
+              <div class="market-desc">${item.desc}</div>
+            </div>
+            <div class="market-price">${item.price === 0 ? 'GRATUIT' : item.price + ' SOL'}</div>
+          </div>
+        `).join('');
+      });
+    }
+
+    function renderActions() {
+      document.getElementById('actions-grid').innerHTML = ACTIONS.map(a => `
+        <div class="action-card" onclick="doAction('${a.id}')">
+          <div class="action-icon">${a.icon}</div>
+          <div class="action-name">${a.name}</div>
+          <div class="action-desc">${a.desc}</div>
+          <div class="action-cost">${a.cost === 0 ? 'GRATUIT' : a.cost + ' SOL'}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderQuests() {
+      document.getElementById('quest-list').innerHTML = QUESTS.map(q => `
+        <div class="quest-item ${GAME.completedQuests.includes(q.id) ? 'completed' : ''}">
+          <div class="quest-header">
+            <span class="quest-name">${q.name}</span>
+            <span class="quest-reward">+${q.reward} SOL</span>
+          </div>
+          <div class="quest-desc">${q.desc}</div>
+          <div class="quest-progress">
+            <div class="quest-fill" style="width: ${(q.current / q.target) * 100}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addEvent(type, text) {
+      const log = document.getElementById('event-log');
+      const now = new Date();
+      const time = `Cycle ${GAME.cycle} - ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+      
+      const eventEl = document.createElement('div');
+      eventEl.className = 'event-item ' + type;
+      eventEl.innerHTML = `
+        <div class="event-time">${time}</div>
+        <div class="event-text">${text}</div>
+      `;
+      
+      log.insertBefore(eventEl, log.firstChild);
+      
+      // Keep only last 20 events
+      while (log.children.length > 20) {
+        log.removeChild(log.lastChild);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MODALS & TOASTS
+    // ═══════════════════════════════════════════════════════════════
+    function showModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function hideModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function showEventModal(type, icon, title, text) {
+      document.getElementById('event-modal-icon').textContent = icon;
+      document.getElementById('event-modal-title').textContent = title;
+      document.getElementById('event-modal-text').textContent = text;
+      showModal('modal-event');
+    }
+
+    function closeEventModal() {
+      hideModal('modal-event');
+    }
+
+    function toast(msg, type = 'info') {
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = msg;
+      document.getElementById('toasts').appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // HELPERS
+    // ═══════════════════════════════════════════════════════════════
+    function getMonthName(m) {
+      const months = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+      return months[m];
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⟨ ARIZONA CHRONICLES ⟩ — La Dernière Taverne</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* THE VOID */
+      --void: #000000;
+      --abyss: #030305;
+      --deep: #08090f;
+      --night: #0c0e16;
+      --shadow: #12151f;
+      --smoke: #1a1e2a;
+      
+      /* THE LIGHT */
+      --gold: #ffd700;
+      --gold-dim: rgba(255,215,0,0.3);
+      --gold-glow: rgba(255,215,0,0.6);
+      --ember: #ff6b35;
+      --ember-dim: rgba(255,107,53,0.3);
+      --blood: #8b0000;
+      --blood-glow: rgba(139,0,0,0.5);
+      
+      /* THE CODE */
+      --matrix: #00ff41;
+      --matrix-dim: rgba(0,255,65,0.15);
+      --matrix-glow: rgba(0,255,65,0.5);
+      --cyan: #00ffff;
+      --cyan-dim: rgba(0,255,255,0.15);
+      
+      /* THE FORCE */
+      --jedi: #4169e1;
+      --jedi-glow: rgba(65,105,225,0.5);
+      --sith: #ff0000;
+      --sith-glow: rgba(255,0,0,0.5);
+      
+      /* THE RING */
+      --elvish: #c0c0c0;
+      --mordor: #4a0000;
+      --shire: #228b22;
+      
+      /* TEXT */
+      --text: #e8e6e3;
+      --text-dim: #888;
+      --parchment: #f4e4bc;
+    }
+
+    html, body { 
+      height: 100%; 
+      overflow: hidden;
+      background: var(--void);
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FONTS
+    ═══════════════════════════════════════════════════════════════ */
+    .font-ancient { font-family: 'Cinzel', serif; }
+    .font-tech { font-family: 'Orbitron', sans-serif; }
+    .font-code { font-family: 'Share Tech Mono', monospace; }
+    .font-prose { font-family: 'Crimson Pro', Georgia, serif; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       INTRO SEQUENCE
+    ═══════════════════════════════════════════════════════════════ */
+    #intro {
+      position: fixed;
+      inset: 0;
+      background: var(--void);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 1.5s ease-out;
+    }
+
+    #intro.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .intro-matrix {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      opacity: 0.15;
+    }
+
+    .matrix-column {
+      position: absolute;
+      top: -100%;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      color: var(--matrix);
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      animation: matrix-fall linear infinite;
+      text-shadow: 0 0 10px var(--matrix);
+    }
+
+    @keyframes matrix-fall {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(200vh); }
+    }
+
+    .intro-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+      padding: 40px;
+    }
+
+    .intro-crawl {
+      perspective: 400px;
+      overflow: hidden;
+      height: 60vh;
+      position: relative;
+    }
+
+    .crawl-content {
+      position: absolute;
+      top: 100%;
+      width: 100%;
+      transform-origin: 50% 100%;
+      animation: crawl 60s linear forwards;
+    }
+
+    @keyframes crawl {
+      0% { top: 100%; transform: rotateX(25deg); }
+      100% { top: -300%; transform: rotateX(25deg); }
+    }
+
+    .crawl-episode {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: 6px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px var(--gold-dim);
+    }
+
+    .crawl-title {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 40px var(--gold-glow), 0 0 80px var(--gold-dim);
+      margin-bottom: 40px;
+      letter-spacing: 4px;
+    }
+
+    .crawl-text {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1.4rem;
+      line-height: 2;
+      color: var(--gold);
+      text-align: justify;
+      opacity: 0.9;
+    }
+
+    .crawl-text p { margin-bottom: 30px; }
+
+    .intro-skip {
+      position: absolute;
+      bottom: 40px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--matrix);
+      letter-spacing: 2px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN APP
+    ═══════════════════════════════════════════════════════════════ */
+    #app {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+    }
+
+    #app.active { display: flex; }
+
+    /* CANVAS BACKGROUND */
+    #canvas-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* LAYERS */
+    .layer-noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .layer-vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, var(--void) 100%);
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    .layer-scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--matrix), transparent);
+      box-shadow: 0 0 20px var(--matrix-glow);
+      animation: scan 5s linear infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-10px); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER - THE SALOON SIGN
+    ═══════════════════════════════════════════════════════════════ */
+    header {
+      position: relative;
+      z-index: 100;
+      height: 80px;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      background: linear-gradient(180deg, rgba(12,14,22,0.95) 0%, rgba(8,9,15,0.9) 100%);
+      border-bottom: 1px solid rgba(255,215,0,0.2);
+      backdrop-filter: blur(20px);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+    }
+
+    .saloon-sign {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .sign-icon {
+      width: 56px;
+      height: 56px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sign-ring {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes ring-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; box-shadow: 0 0 10px var(--gold-dim); }
+      50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 30px var(--gold-glow); }
+    }
+
+    .sign-ring-inner {
+      position: absolute;
+      inset: 8px;
+      border: 1px solid var(--ember);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    .sign-eye {
+      width: 12px;
+      height: 12px;
+      background: var(--sith);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--sith-glow), 0 0 40px var(--blood-glow);
+      animation: eye-watch 4s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes eye-watch {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .sign-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sign-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px var(--gold-dim);
+    }
+
+    .sign-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--matrix);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      margin-left: 30px;
+    }
+
+    .nav-rune {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 12px 22px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .nav-rune:hover {
+      color: var(--gold);
+      background: var(--gold-dim);
+      border-color: rgba(255,215,0,0.3);
+    }
+
+    .nav-rune.active {
+      color: var(--gold);
+      background: linear-gradient(180deg, var(--gold-dim), transparent);
+      border-color: var(--gold);
+      text-shadow: 0 0 10px var(--gold-dim);
+    }
+
+    .nav-rune.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    /* STATUS CRYSTAL */
+    .status-cluster {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .crystal-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, rgba(139,0,0,0.3), rgba(255,0,0,0.1));
+      border: 1px solid rgba(255,0,0,0.3);
+      border-radius: 6px;
+      animation: crystal-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes crystal-pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+      50% { box-shadow: 0 0 25px rgba(255,0,0,0.4); }
+    }
+
+    .crystal-gem {
+      width: 10px;
+      height: 10px;
+      background: var(--sith);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      animation: blink 1s infinite;
+      box-shadow: 0 0 10px var(--sith);
+    }
+
+    .crystal-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--sith);
+      letter-spacing: 1px;
+    }
+
+    .time-rune {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--matrix);
+      text-shadow: 0 0 10px var(--matrix-dim);
+      padding: 8px 14px;
+      background: var(--matrix-dim);
+      border: 1px solid rgba(0,255,65,0.3);
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    .realm { display: none; flex: 1; overflow: hidden; }
+    .realm.active { display: flex; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REALM: THE TAVERN (Dashboard)
+    ═══════════════════════════════════════════════════════════════ */
+    .tavern {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 340px 1fr 360px;
+      grid-template-rows: auto 1fr;
+      gap: 16px;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    /* PROPHECY BANNER */
+    .prophecy-banner {
+      grid-column: 1 / -1;
+      background: linear-gradient(90deg, var(--shadow), var(--smoke), var(--shadow));
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prophecy-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--blood-glow), transparent, var(--blood-glow));
+      opacity: 0.1;
+    }
+
+    .prophecy-stat {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .prophecy-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .prophecy-number.doom { color: var(--sith); text-shadow: 0 0 30px var(--sith-glow); }
+    .prophecy-number.hope { color: var(--matrix); text-shadow: 0 0 30px var(--matrix-glow); }
+    .prophecy-number.fate { color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); }
+    .prophecy-number.force { color: var(--jedi); text-shadow: 0 0 30px var(--jedi-glow); }
+
+    .prophecy-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .prophecy-omen {
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      margin-top: 6px;
+      display: inline-block;
+    }
+
+    .prophecy-omen.dark { background: rgba(139,0,0,0.3); color: var(--sith); }
+    .prophecy-omen.light { background: var(--matrix-dim); color: var(--matrix); }
+
+    /* SCROLL PANELS */
+    .scroll-panel {
+      background: linear-gradient(180deg, var(--smoke), var(--shadow));
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--ember), var(--gold), var(--ember));
+    }
+
+    .scroll-header {
+      padding: 14px 18px;
+      background: linear-gradient(180deg, rgba(26,30,42,0.8), transparent);
+      border-bottom: 1px solid var(--gold-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .scroll-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .scroll-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      padding: 4px 10px;
+      background: var(--matrix-dim);
+      color: var(--matrix);
+      border-radius: 3px;
+      letter-spacing: 1px;
+    }
+
+    .scroll-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    /* TIMELINE OF DOOM */
+    .timeline-panel { grid-row: 2; }
+
+    .doom-timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .doom-timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--sith), var(--ember), var(--gold), var(--matrix));
+    }
+
+    .doom-event {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .doom-marker {
+      position: absolute;
+      left: -21px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--shadow);
+    }
+
+    .doom-marker.fallen { background: var(--text-dim); }
+    .doom-marker.burning { 
+      background: var(--sith);
+      box-shadow: 0 0 15px var(--sith-glow);
+      animation: burn 1s infinite;
+    }
+    .doom-marker.awaiting { background: var(--gold); opacity: 0.5; }
+
+    @keyframes burn {
+      0%, 100% { box-shadow: 0 0 10px var(--sith-glow); }
+      50% { box-shadow: 0 0 25px var(--sith-glow), 0 0 40px rgba(255,107,53,0.3); }
+    }
+
+    .doom-card {
+      background: var(--night);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .doom-card:hover {
+      border-color: var(--gold);
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .doom-date {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: var(--ember);
+      margin-bottom: 4px;
+    }
+
+    .doom-name {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .doom-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .doom-toll {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--sith);
+      margin-top: 8px;
+    }
+
+    /* CENTER PANEL */
+    .center-scrolls { grid-row: 2; display: flex; flex-direction: column; gap: 16px; }
+
+    /* THE PROPHECY */
+    .prophecy-card {
+      background: linear-gradient(135deg, rgba(139,0,0,0.2), rgba(255,215,0,0.1));
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prophecy-card::before {
+      content: '☙';
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 40px;
+      color: var(--gold);
+      opacity: 0.15;
+    }
+
+    .prophecy-card::after {
+      content: '❧';
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 40px;
+      color: var(--gold);
+      opacity: 0.15;
+    }
+
+    .prophecy-verse {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--parchment);
+      line-height: 1.9;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .prophecy-doom {
+      color: var(--sith);
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .prophecy-seals {
+      margin-top: 20px;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--matrix);
+    }
+
+    /* FELLOWSHIP STATS */
+    .fellowship-card { flex: 1; }
+
+    .fellowship-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      height: 100%;
+    }
+
+    .fellowship-stat {
+      background: var(--night);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 18px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .fellowship-stat:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .fellowship-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--matrix);
+      text-shadow: 0 0 15px var(--matrix-dim);
+    }
+
+    .fellowship-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+    }
+
+    /* ORACLE FEED */
+    .oracle-panel { grid-row: 2; }
+
+    .oracle-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(90deg, rgba(139,0,0,0.2), transparent);
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    .oracle-eye {
+      width: 12px;
+      height: 12px;
+      background: var(--sith);
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+      box-shadow: 0 0 10px var(--sith);
+    }
+
+    .oracle-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--sith);
+      letter-spacing: 2px;
+    }
+
+    .oracle-visions { flex: 1; overflow-y: auto; }
+
+    .vision {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--gold-dim);
+      transition: background 0.2s;
+    }
+
+    .vision:hover { background: var(--night); }
+
+    .vision-time {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .vision-text {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REALM: THE ARMORY (Arguments)
+    ═══════════════════════════════════════════════════════════════ */
+    .armory {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+
+    .armory-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .armory-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px var(--gold-dim);
+      margin-bottom: 10px;
+    }
+
+    .armory-subtitle {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-dim);
+    }
+
+    .weapons-rack {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .weapon-card {
+      background: linear-gradient(180deg, var(--smoke), var(--shadow));
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .weapon-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--gold), var(--ember));
+    }
+
+    .weapon-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 30px var(--gold-dim);
+    }
+
+    .weapon-rune {
+      display: inline-block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, var(--ember-dim), transparent);
+      color: var(--ember);
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .weapon-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .weapon-power {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .weapon-origin {
+      margin-top: 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--matrix);
+      padding-top: 12px;
+      border-top: 1px dashed var(--gold-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REALM: THE ARCHIVES (Flashcards)
+    ═══════════════════════════════════════════════════════════════ */
+    .archives {
+      flex: 1;
+      overflow-y: auto;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .archives-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .archives-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px var(--gold-dim);
+      margin-bottom: 10px;
+    }
+
+    .archives-subtitle {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-dim);
+    }
+
+    .tome-container {
+      width: 100%;
+      max-width: 750px;
+    }
+
+    .tome {
+      background: linear-gradient(135deg, var(--smoke), var(--shadow));
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 60px 50px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tome::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, var(--gold-dim), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tome:hover {
+      transform: scale(1.02) perspective(1000px) rotateX(2deg);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 50px var(--gold-dim);
+    }
+
+    .tome:hover::before { opacity: 0.3; }
+
+    .tome-question {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1.5rem;
+      color: var(--parchment);
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tome-answer {
+      display: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-shadow: 0 0 30px var(--gold-glow);
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 2px dashed var(--gold);
+      position: relative;
+      z-index: 1;
+    }
+
+    .tome.revealed .tome-question { display: none; }
+    .tome.revealed .tome-answer { display: block; }
+
+    .tome-controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .tome-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      background: var(--shadow);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .tome-btn:hover {
+      background: var(--gold);
+      color: var(--void);
+      box-shadow: 0 0 30px var(--gold-dim);
+    }
+
+    .tome-btn.reveal {
+      background: linear-gradient(135deg, var(--gold), var(--ember));
+      color: var(--void);
+      border: none;
+    }
+
+    .tome-progress {
+      text-align: center;
+      margin-top: 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .tome-hint {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--matrix);
+      margin-top: 10px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REALM: THE FORGE (Tools)
+    ═══════════════════════════════════════════════════════════════ */
+    .forge {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+
+    .forge-header {
+      margin-bottom: 30px;
+    }
+
+    .forge-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px var(--gold-dim);
+    }
+
+    .forge-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .forge-station {
+      background: linear-gradient(180deg, var(--smoke), var(--shadow));
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .station-header {
+      padding: 14px 18px;
+      background: linear-gradient(180deg, rgba(26,30,42,0.8), transparent);
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    .station-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .station-body { padding: 18px; }
+
+    /* INCANTATION GENERATOR */
+    .incantation-output {
+      background: var(--night);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 20px;
+      min-height: 100px;
+      margin-bottom: 16px;
+    }
+
+    .incantation-text {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--parchment);
+      line-height: 1.7;
+    }
+
+    .incantation-btn {
+      width: 100%;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 16px;
+      background: linear-gradient(90deg, var(--ember), var(--gold));
+      border: none;
+      color: var(--void);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .incantation-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 30px var(--gold-dim);
+    }
+
+    /* MATRIX TERMINAL */
+    .matrix-terminal {
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      padding: 10px 14px;
+      background: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.r { background: var(--sith); }
+    .terminal-dot.y { background: var(--gold); }
+    .terminal-dot.g { background: var(--matrix); }
+
+    .terminal-name {
+      flex: 1;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--matrix);
+    }
+
+    .terminal-screen {
+      padding: 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--matrix);
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .terminal-line {
+      margin-bottom: 6px;
+    }
+
+    .terminal-line::before {
+      content: '>';
+      color: var(--gold);
+      margin-right: 8px;
+    }
+
+    .terminal-line.sys { color: var(--text-dim); }
+    .terminal-line.sys::before { content: '//'; }
+    .terminal-line.warn { color: var(--gold); }
+    .terminal-line.err { color: var(--sith); }
+    .terminal-line.ok { color: var(--matrix); }
+
+    /* QUICK SPELLS */
+    .spells-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .spell-card {
+      background: var(--night);
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .spell-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+
+    .spell-icon { font-size: 2rem; margin-bottom: 10px; }
+    .spell-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .spell-effect {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REALM: THE CODEX (Lore)
+    ═══════════════════════════════════════════════════════════════ */
+    .codex {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      overflow: hidden;
+    }
+
+    .codex-index {
+      background: var(--shadow);
+      border-right: 1px solid var(--gold-dim);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .codex-section {
+      margin-bottom: 24px;
+    }
+
+    .codex-section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gold-dim);
+      margin-bottom: 12px;
+    }
+
+    .codex-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .codex-entry:hover {
+      background: var(--night);
+      color: var(--text);
+    }
+
+    .codex-entry.active {
+      background: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .codex-content {
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    .lore-page {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .lore-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 30px var(--gold-dim);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .lore-subtitle {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-dim);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .lore-text {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.9;
+    }
+
+    .lore-text p { margin-bottom: 20px; }
+
+    .lore-text .highlight { color: var(--gold); font-weight: 600; }
+    .lore-text .doom { color: var(--sith); }
+    .lore-text .hope { color: var(--matrix); }
+    .lore-text .force { color: var(--jedi); }
+
+    .lore-quote {
+      background: linear-gradient(135deg, var(--gold-dim), transparent);
+      border-left: 4px solid var(--gold);
+      padding: 20px 24px;
+      margin: 30px 0;
+      font-style: italic;
+      color: var(--parchment);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--smoke);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 16px 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 30px var(--gold-dim);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--abyss); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+      .tavern { grid-template-columns: 300px 1fr; }
+      .oracle-panel { display: none; }
+      .codex { grid-template-columns: 1fr; }
+      .codex-index { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .tavern { grid-template-columns: 1fr; }
+      header { flex-wrap: wrap; height: auto; padding: 12px; gap: 12px; }
+      nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
+      .status-cluster { order: 2; }
+      .forge-layout { grid-template-columns: 1fr; }
+      .spells-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     INTRO SEQUENCE
+═══════════════════════════════════════════════════════════════ -->
+<div id="intro" onclick="skipIntro()">
+  <div class="intro-matrix" id="matrix-rain"></div>
+  
+  <div class="intro-content">
+    <div class="intro-crawl">
+      <div class="crawl-content">
+        <div class="crawl-episode">ÉPISODE ZÉRO</div>
+        <div class="crawl-title">ARIZONA CHRONICLES</div>
+        <div class="crawl-text">
+          <p>Il y a longtemps, dans un royaume appelé Belgique, existait un pacte sacré. L'ARTICLE 23. Un serment que nul ne devait briser : le droit à une vie digne pour tous.</p>
+          
+          <p>Mais les ténèbres ont pris forme. Une coalition nommée ARIZONA s'est levée, portant le masque de la nécessité et le sceptre de l'austérité.</p>
+          
+          <p>Leur plan : LIMITER. EXCLURE. OUBLIER. 90 000 âmes condamnées au désert en 24 lunes.</p>
+          
+          <p>Pourtant, dans les tavernes secrètes, la RÉSISTANCE s'organise. Le FRONT COMMUN rassemble 1,5 million de cœurs. La COUR CONSTITUTIONNELLE détient l'espoir d'un jugement.</p>
+          
+          <p>Tu viens de passer les portes du SALOON — la dernière taverne libre. Ici, tu apprendras la vérité cachée derrière la simulation. Tu forgeras des armes de savoir. Tu rejoindras la Communauté.</p>
+          
+          <p>Car celui qui contrôle le récit contrôle le réel.</p>
+          
+          <p>LA GUERRE DES MOTS A COMMENCÉ.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="intro-skip">[ CLIQUEZ POUR ENTRER DANS LE SALOON ]</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MAIN APPLICATION
+═══════════════════════════════════════════════════════════════ -->
+<div id="app">
+  <canvas id="canvas-bg"></canvas>
+  <div class="layer-noise"></div>
+  <div class="layer-scanline"></div>
+  <div class="layer-vignette"></div>
+
+  <header>
+    <div class="saloon-sign">
+      <div class="sign-icon">
+        <div class="sign-ring"></div>
+        <div class="sign-ring-inner"></div>
+        <div class="sign-eye"></div>
+      </div>
+      <div class="sign-text">
+        <div class="sign-title">LE SALOON</div>
+        <div class="sign-subtitle">[ DERNIÈRE TAVERNE LIBRE ]</div>
+      </div>
+    </div>
+
+    <nav>
+      <button class="nav-rune active" data-realm="tavern">La Taverne</button>
+      <button class="nav-rune" data-realm="armory">L'Armurerie</button>
+      <button class="nav-rune" data-realm="archives">Les Archives</button>
+      <button class="nav-rune" data-realm="forge">La Forge</button>
+      <button class="nav-rune" data-realm="codex">Le Codex</button>
+    </nav>
+
+    <div class="status-cluster">
+      <div class="crystal-status">
+        <div class="crystal-gem"></div>
+        <span class="crystal-text">VAGUE II — J-40</span>
+      </div>
+      <div class="time-rune" id="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- THE TAVERN -->
+    <div class="realm active" id="realm-tavern">
+      <div class="tavern">
+        <div class="prophecy-banner">
+          <div class="prophecy-stat">
+            <div class="prophecy-number doom">90,000</div>
+            <div class="prophecy-label">Âmes Menacées</div>
+            <div class="prophecy-omen dark">↑ La Purge</div>
+          </div>
+          <div class="prophecy-stat">
+            <div class="prophecy-number hope">30,122</div>
+            <div class="prophecy-label">Chutes vers l'Abîme</div>
+            <div class="prophecy-omen dark">↑ +12.7%</div>
+          </div>
+          <div class="prophecy-stat">
+            <div class="prophecy-number fate">2.2M</div>
+            <div class="prophecy-label">Porteurs du Sceau BIM</div>
+            <div class="prophecy-omen light">Protection</div>
+          </div>
+          <div class="prophecy-stat">
+            <div class="prophecy-number force">1.5M</div>
+            <div class="prophecy-label">Guerriers du Front</div>
+            <div class="prophecy-omen light">Résistance</div>
+          </div>
+          <div class="prophecy-stat">
+            <div class="prophecy-number doom">1 Md€</div>
+            <div class="prophecy-label">Prix du Silence</div>
+            <div class="prophecy-omen dark">↑ Non Payé</div>
+          </div>
+        </div>
+
+        <div class="scroll-panel timeline-panel">
+          <div class="scroll-header">
+            <div class="scroll-title"><span>⚔️</span> Les Vagues de l'Ombre</div>
+            <div class="scroll-badge">Prophétie</div>
+          </div>
+          <div class="scroll-body">
+            <div class="doom-timeline" id="doom-timeline"></div>
+          </div>
+        </div>
+
+        <div class="center-scrolls">
+          <div class="prophecy-card">
+            <div class="prophecy-verse">
+              « En la terre de Belgique, 90 000 âmes perdront leur bouclier d'ici l'an 2027.<br><br>
+              Non point car elles trouvèrent labeur.<br>
+              Mais car un conseil décréta que 24 lunes suffisaient.<br><br>
+              Après ? Les Refuges CPAS.<br>
+              Et quand les Refuges seront vides de ressources ?<br>
+              <span class="prophecy-doom">Les Rues de Mordor.</span> »
+            </div>
+            <div class="prophecy-seals">#StopArizona #Article23 #LaRésistance</div>
+          </div>
+
+          <div class="scroll-panel fellowship-card">
+            <div class="scroll-header">
+              <div class="scroll-title"><span>📊</span> Forces de la Communauté</div>
+            </div>
+            <div class="scroll-body">
+              <div class="fellowship-grid">
+                <div class="fellowship-stat">
+                  <div class="fellowship-value">23 Md€</div>
+                  <div class="fellowship-name">Tribut Exigé</div>
+                </div>
+                <div class="fellowship-stat">
+                  <div class="fellowship-value">17 Md€</div>
+                  <div class="fellowship-name">Taxe Sauron</div>
+                </div>
+                <div class="fellowship-stat">
+                  <div class="fellowship-value">140K</div>
+                  <div class="fellowship-name">Marcheurs</div>
+                </div>
+                <div class="fellowship-stat">
+                  <div class="fellowship-value">Art. 23</div>
+                  <div class="fellowship-name">L'Anneau</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scroll-panel oracle-panel">
+          <div class="oracle-header">
+            <div class="oracle-eye"></div>
+            <div class="oracle-title">Visions de l'Oracle</div>
+          </div>
+          <div class="oracle-visions" id="oracle-visions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE ARMORY -->
+    <div class="realm" id="realm-armory">
+      <div class="armory">
+        <div class="armory-header">
+          <div class="armory-title">⚔️ L'ARMURERIE</div>
+          <div class="armory-subtitle">« Forgées dans le feu de la vérité, ces armes percent le voile des mensonges »</div>
+        </div>
+        <div class="weapons-rack" id="weapons-rack"></div>
+      </div>
+    </div>
+
+    <!-- THE ARCHIVES -->
+    <div class="realm" id="realm-archives">
+      <div class="archives">
+        <div class="archives-header">
+          <div class="archives-title">📜 LES ARCHIVES</div>
+          <div class="archives-subtitle">« Connaissance interdite, sagesse oubliée »</div>
+        </div>
+        <div class="tome-container">
+          <div class="tome" id="tome" onclick="revealTome()">
+            <div class="tome-question" id="tome-q">Cliquez pour consulter les archives</div>
+            <div class="tome-answer" id="tome-a"></div>
+          </div>
+          <div class="tome-controls">
+            <button class="tome-btn" onclick="prevTome()">◀ PRÉCÉDENT</button>
+            <button class="tome-btn reveal" onclick="revealTome()">RÉVÉLER</button>
+            <button class="tome-btn" onclick="nextTome()">SUIVANT ▶</button>
+          </div>
+          <div class="tome-progress" id="tome-progress">0 / 30</div>
+          <div class="tome-hint">[ ← → ESPACE ]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE FORGE -->
+    <div class="realm" id="realm-forge">
+      <div class="forge">
+        <div class="forge-header">
+          <div class="forge-title">🔥 LA FORGE</div>
+        </div>
+        <div class="forge-layout">
+          <div class="forge-station">
+            <div class="station-header">
+              <div class="station-title">✨ Générateur d'Incantations</div>
+            </div>
+            <div class="station-body">
+              <div class="incantation-output">
+                <div class="incantation-text" id="incantation">« Les réformes Arizona ne sont point une 'activation'. C'est un <strong>glissement orchestré</strong> de la solidarité fédérale vers les refuges locaux. »</div>
+              </div>
+              <button class="incantation-btn" onclick="conjure()">⚡ INVOQUER UNE NOUVELLE FORMULE</button>
+            </div>
+          </div>
+
+          <div class="forge-station">
+            <div class="station-header">
+              <div class="station-title">💻 Terminal de la Matrice</div>
+            </div>
+            <div class="station-body" style="padding: 0;">
+              <div class="matrix-terminal">
+                <div class="terminal-bar">
+                  <div class="terminal-dot r"></div>
+                  <div class="terminal-dot y"></div>
+                  <div class="terminal-dot g"></div>
+                  <div class="terminal-name">neo@resistance:~</div>
+                </div>
+                <div class="terminal-screen" id="terminal">
+                  <div class="terminal-line sys">SALOON OS v1.0 — La Matrice est partout</div>
+                  <div class="terminal-line">wake_up_neo();</div>
+                  <div class="terminal-line ok">loading archives... 30 tomes</div>
+                  <div class="terminal-line ok">connecting to front_commun... 1.5M nodes</div>
+                  <div class="terminal-line warn">ALERT: Vague II en approche — 40 cycles</div>
+                  <div class="terminal-line">« Il n'y a pas de cuillère. »</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spells-grid">
+          <div class="spell-card" onclick="copyWeapon()">
+            <div class="spell-icon">📋</div>
+            <div class="spell-name">Copier Arme</div>
+            <div class="spell-effect">Argument aléatoire</div>
+          </div>
+          <div class="spell-card" onclick="copyBird()">
+            <div class="spell-icon">🐦</div>
+            <div class="spell-name">Message Pigeon</div>
+            <div class="spell-effect">Tweet prêt</div>
+          </div>
+          <div class="spell-card" onclick="enterRealm('archives')">
+            <div class="spell-icon">📜</div>
+            <div class="spell-name">Archives</div>
+            <div class="spell-effect">30 tomes</div>
+          </div>
+          <div class="spell-card" onclick="exportScroll()">
+            <div class="spell-icon">📥</div>
+            <div class="spell-name">Exporter Parchemin</div>
+            <div class="spell-effect">Données JSON</div>
+          </div>
+          <div class="spell-card" onclick="randomTome()">
+            <div class="spell-icon">🎲</div>
+            <div class="spell-name">Oracle Aléatoire</div>
+            <div class="spell-effect">Tester son savoir</div>
+          </div>
+          <div class="spell-card" onclick="enterRealm('codex')">
+            <div class="spell-icon">📖</div>
+            <div class="spell-name">Le Codex</div>
+            <div class="spell-effect">L'histoire complète</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE CODEX -->
+    <div class="realm" id="realm-codex">
+      <div class="codex">
+        <div class="codex-index">
+          <div class="codex-section">
+            <div class="codex-section-title">🌍 Le Monde</div>
+            <div class="codex-entry active" data-lore="world">🗺️ Le Désert Arizona</div>
+            <div class="codex-entry" data-lore="saloon">🍺 Le Saloon</div>
+            <div class="codex-entry" data-lore="matrix">💊 La Matrice</div>
+          </div>
+          <div class="codex-section">
+            <div class="codex-section-title">⚔️ Les Factions</div>
+            <div class="codex-entry" data-lore="empire">🏰 L'Empire Arizona</div>
+            <div class="codex-entry" data-lore="fellowship">🤝 La Communauté du Front</div>
+            <div class="codex-entry" data-lore="cpas">🏥 Les Refuges CPAS</div>
+          </div>
+          <div class="codex-section">
+            <div class="codex-section-title">👤 Les Figures</div>
+            <div class="codex-entry" data-lore="sauron">👁️ Bart-h Sauron</div>
+            <div class="codex-entry" data-lore="oracle">🔮 L'Oracle Bodson</div>
+            <div class="codex-entry" data-lore="council">⚖️ Le Haut Conseil</div>
+          </div>
+          <div class="codex-section">
+            <div class="codex-section-title">💎 Les Artefacts</div>
+            <div class="codex-entry" data-lore="ring">💍 L'Anneau Article 23</div>
+            <div class="codex-entry" data-lore="pill">💊 La Pilule Rouge</div>
+            <div class="codex-entry" data-lore="saber">⚔️ Le Sabre Syndical</div>
+          </div>
+        </div>
+        <div class="codex-content" id="codex-content">
+          <!-- Lore loaded dynamically -->
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// MATRIX RAIN
+// ═══════════════════════════════════════════════════════════════
+function createMatrixRain() {
+  const container = document.getElementById('matrix-rain');
+  const chars = '日月火水木金土アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ARIZONA';
+  
+  for (let i = 0; i < 50; i++) {
+    const column = document.createElement('div');
+    column.className = 'matrix-column';
+    column.style.left = (i * 2) + '%';
+    column.style.animationDuration = (5 + Math.random() * 10) + 's';
+    column.style.animationDelay = (Math.random() * 5) + 's';
+    
+    let text = '';
+    for (let j = 0; j < 50; j++) {
+      text += chars[Math.floor(Math.random() * chars.length)] + ' ';
+    }
+    column.textContent = text;
+    container.appendChild(column);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PARTICLE BACKGROUND
+// ═══════════════════════════════════════════════════════════════
+const canvas = document.getElementById('canvas-bg');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function initCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  particles = [];
+  
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 2 + 0.5,
+      color: ['#ffd700', '#ff6b35', '#00ff41'][Math.floor(Math.random() * 3)]
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255, 215, 0, ${(1 - dist / 150) * 0.1})`;
+        ctx.stroke();
+      }
+    }
+  }
+  
+  // Particles
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+  });
+  
+  requestAnimationFrame(drawParticles);
+}
+
+window.addEventListener('resize', initCanvas);
+
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const tomes = [
+  {q: "Comment se nomme la coalition des ténèbres formée en l'an 2025 ?", a: "La Coalition Arizona"},
+  {q: "Qui siège sur le trône de Premier Ministre d'Arizona ?", a: "Bart De Wever (N-VA)"},
+  {q: "Quels sont les 5 clans de la Coalition Arizona ?", a: "N-VA, MR, Les Engagés, CD&V et Vooruit"},
+  {q: "Quel tribut en or l'Empire exige-t-il d'ici 2029 ?", a: "23 milliards d'euros"},
+  {q: "Combien de lunes de protection restent aux sans-emploi ?", a: "24 lunes (12 + 12)"},
+  {q: "Quelle est la date de la Grande Vague II ?", a: "1er mars 2026"},
+  {q: "Comment nomme-t-on la chute massive vers les Refuges ?", a: "Le Grand Glissement"},
+  {q: "Combien d'âmes tomberont immédiatement vers le RIS ?", a: "30 122 âmes"},
+  {q: "Que signifie le sceau RIS ?", a: "Revenu d'Intégration Sociale"},
+  {q: "Quel article sacré garantit le droit à une vie digne ?", a: "L'Article 23"},
+  {q: "Quel clan propose la Taxe des Seigneurs ?", a: "Le PTB"},
+  {q: "Que signifie le sceau AROPE ?", a: "At Risk of Poverty or Social Exclusion"},
+  {q: "Combien rapporterait la Taxe des Seigneurs Millionnaires ?", a: "17 milliards d'or"},
+  {q: "Combien d'or échappe au Trésor par la fraude ?", a: "30 milliards"},
+  {q: "Combien de guerriers compte le Front Commun ?", a: "1,5 million de membres"},
+  {q: "Combien marchèrent en octobre de l'an 2025 ?", a: "140 000 marcheurs"},
+  {q: "Quel pourcentage du peuple souffre de vulnérabilité numérique ?", a: "40%"},
+  {q: "Combien d'errants comptait Bruxelles en novembre 2024 ?", a: "9 777 âmes"},
+  {q: "Comment nomme-t-on le principe interdisant de réduire les protections ?", a: "Le Standstill (effet cliquet)"},
+  {q: "Quelle mutualité a nommé les réformes 'Taxe Santé' ?", a: "Solidaris"},
+  {q: "Quel subside reçoivent les Refuges par dossier d'exclu ?", a: "518 pièces d'or"},
+  {q: "Quelle région supporte 45% du fardeau national ?", a: "La Wallonie"},
+  {q: "Quel est le taux AROPE à Bruxelles ?", a: "37,3%"},
+  {q: "Combien de cycles pour former le gouvernement ?", a: "239 jours"},
+  {q: "Que signifie BIM ?", a: "Bénéficiaire de l'Intervention Majorée"},
+  {q: "Quel pourcentage du RIS représente le seuil de pauvreté ?", a: "78%"},
+  {q: "Quelle date pour le recours devant le Haut Conseil ?", a: "29 octobre 2025"},
+  {q: "Combien d'années de carrière pour être protégé après 55 hivers ?", a: "31 années"},
+  {q: "Quel % des invalides souffrent de maux liés au labeur ?", a: "60%"},
+  {q: "Quelle sanction pour un malade jugé non coopérant ?", a: "2,5% de l'indemnité"}
+];
+
+const weapons = [
+  {rune: "Économie", name: "L'Alternative Existe", power: "La Taxe des Seigneurs rapporterait 17 milliards d'or. La chasse à la fraude : 30 milliards. Mais l'Empire préfère cibler les 90 000 plus vulnérables.", origin: "Archives du PTB — Bureau du Plan"},
+  {rune: "Social", name: "Le Grand Glissement", power: "30 122 âmes basculeront vers les Refuges. Le surcoût : 1 milliard d'or. La compensation impériale ? 518 pièces par dossier.", origin: "UVCW, Brulocalis — An 2025"},
+  {rune: "Juridique", name: "L'Anneau Article 23", power: "Le principe du Standstill interdit de réduire la protection existante. Le recours du 29 octobre 2025 invoque cette magie ancienne.", origin: "Parchemins du Front Commun"},
+  {rune: "Santé", name: "Les Victimes Ciblées", power: "60% des invalides le sont pour des maux causés par le labeur lui-même. La réforme punit les victimes, non les bourreaux.", origin: "Solidaris — An 2025"},
+  {rune: "Territoire", name: "La Punition des Pauvres", power: "Bruxelles supporte 1/3 des exclusions pour 1/10 de la population. Le système bonus-malus châtie les terres déjà blessées.", origin: "Vivalis — An 2026"},
+  {rune: "Idéologie", name: "Le Mythe de l'Activation", power: "Supprimer un bouclier ne crée point de labeur. Les vrais obstacles : santé, âge, mobilité, discrimination.", origin: "EU-SILC 2024"},
+  {rune: "Histoire", name: "80 Hivers de Recul", power: "Le système de protection illimitée existait depuis 1944. Les guildes nomment ceci 'le plus grand recul depuis 80 hivers'.", origin: "FGTB — An 2025"},
+  {rune: "Numérique", name: "La Fracture Digitale", power: "40% des Belges souffrent de vulnérabilité numérique (68% chez les peu lettrés). eBox et MyBenefits deviennent des murs.", origin: "Fondation Roi Baudouin"}
+];
+
+const doomEvents = [
+  {date: "1 JANVIER 2026", name: "VAGUE I — Les Anciens", desc: "Chômeurs 3e période >20 ans", toll: "~28,000 âmes", status: "fallen"},
+  {date: "1 MARS 2026", name: "VAGUE II — Le Gros Œuvre", desc: "Chômeurs 3e période 8-20 ans", toll: "~35,000 âmes", status: "burning"},
+  {date: "1 AVRIL 2026", name: "VAGUE III — L'Avalanche", desc: "Chômeurs 3e période <8 ans", toll: "~27,000 âmes", status: "awaiting"},
+  {date: "1 JUILLET 2026", name: "VAGUE IV — La Fin", desc: "Chômeurs 2e période", toll: "À compter", status: "awaiting"},
+  {date: "FIN 2026", name: "⚖️ LE JUGEMENT", desc: "Arrêt du Haut Conseil", toll: "ESPOIR", status: "awaiting"}
+];
+
+const visions = [
+  {time: "20/01/2026 — 14:32", text: "📢 La Vague II se confirme — 35 000 âmes concernées"},
+  {time: "19/01/2026 — 09:15", text: "⚖️ Le Haut Conseil délibère — les délais s'allongent"},
+  {time: "18/01/2026 — 16:45", text: "🏛️ L'UVCW dénonce l'insuffisance des compensations"},
+  {time: "17/01/2026 — 11:20", text: "✊ Le Front Commun prépare de nouvelles batailles"},
+  {time: "16/01/2026 — 15:00", text: "📊 DULBEA révèle de nouveaux chiffres accablants"}
+];
+
+const incantations = [
+  "« Les réformes Arizona ne sont point une 'activation'. C'est un <strong>glissement orchestré</strong> de la solidarité fédérale vers les refuges locaux. »",
+  "« 30 122 : c'est le nombre de familles qui tomberont dans l'abîme. Point des chiffres. Des parents. Des enfants. <strong>Des vies.</strong> »",
+  "« Supprimer un bouclier ne crée point de labeur. <strong>Ce n'est point économie, c'est idéologie.</strong> »",
+  "« La Taxe des Seigneurs rapporterait 17 milliards. Mais on préfère cibler les plus faibles. <strong>Question de priorités.</strong> »",
+  "« Après 24 lunes ? Les Refuges. Et quand les Refuges seront vides ? <strong>Les rues de Mordor.</strong> »"
+];
+
+const lore = {
+  world: {
+    title: "Le Désert Arizona",
+    subtitle: "Là où la solidarité vient mourir",
+    content: `<p>Il était une fois un royaume nommé <span class="highlight">Belgique</span>, terre de compromis et de protection sociale. Pendant 80 hivers, ses habitants bénéficièrent d'un pacte sacré : nul ne serait abandonné dans le désert de la précarité.</p>
+    <p>Mais en l'an 2025, une coalition nommée <span class="doom">ARIZONA</span> prit le pouvoir. Son nom n'était point hasard — c'était une promesse. Transformer le royaume verdoyant en <span class="doom">désert aride</span>, où seuls les plus forts survivraient.</p>
+    <div class="lore-quote">« L'Arizona n'est pas un lieu. C'est une simulation. Un récit qu'on nous impose pour nous faire accepter l'inacceptable. »</div>
+    <p>La <span class="highlight">Matrice Arizona</span> fonctionne ainsi : elle vous fait croire que l'austérité est nécessaire, que les économies sur les plus faibles sont inévitables, que <span class="doom">« There Is No Alternative »</span>.</p>
+    <p>Mais ceux qui ont pris la <span class="hope">Pilule Rouge</span> savent la vérité : <span class="highlight">17 milliards</span> dorment dans les coffres des Seigneurs millionnaires. <span class="highlight">30 milliards</span> s'évaporent dans la fraude. L'alternative existe. Elle est juste... <span class="doom">interdite</span>.</p>`
+  },
+  saloon: {
+    title: "Le Saloon",
+    subtitle: "La Dernière Taverne Libre",
+    content: `<p>Au cœur du Désert Arizona, cachée entre les dunes de désinformation, se trouve une taverne. <span class="highlight">Le Saloon</span>.</p>
+    <p>Ici, les voyageurs égarés trouvent refuge. Ici, la <span class="hope">vérité</span> coule comme le whisky — âpre mais nécessaire. Ici, on apprend les <span class="highlight">armes de savoir</span> qui percent le voile des mensonges.</p>
+    <div class="lore-quote">« Dans le Saloon, on ne sert pas de pilules bleues. Seulement la vérité, straight up. »</div>
+    <p>Le Saloon est à la fois :</p>
+    <p>• Une <span class="force">base rebelle</span> où la Résistance planifie<br>
+    • Un <span class="highlight">temple du savoir</span> où circulent les Archives<br>
+    • Une <span class="hope">forge</span> où se créent les contre-discours<br>
+    • Un <span class="highlight">oracle</span> qui révèle les visions du futur</p>
+    <p>Tu es entré dans le Saloon. Tu ne peux plus prétendre ne pas savoir.</p>`
+  },
+  empire: {
+    title: "L'Empire Arizona",
+    subtitle: "La Coalition des Ténèbres",
+    content: `<p>L'Empire Arizona est né de l'union improbable de <span class="doom">cinq clans</span> :</p>
+    <p>• <span class="doom">N-VA</span> — Les Nationalistes du Nord, menés par Bart-h Sauron<br>
+    • <span class="doom">MR</span> — Les Chevaliers de l'Austérité, gardiens de l'orthodoxie budgétaire<br>
+    • <span class="highlight">Les Engagés</span> — Les Convertis, anciens humanistes passés du côté obscur<br>
+    • <span class="highlight">CD&V</span> — Les Chrétiens Silencieux, complices par leur silence<br>
+    • <span class="force">Vooruit</span> — Les Socialistes Perdus, déchirés entre leur histoire et leur alliance</p>
+    <div class="lore-quote">« L'Empire ne règne pas par la force. Il règne par le récit. Faites croire au peuple qu'il n'y a pas d'alternative, et il acceptera tout. »</div>
+    <p>Leur plan : <span class="doom">23 milliards</span> d'économies d'ici 2029. Leur cible : les plus faibles. Leur méthode : la <span class="doom">limitation à 24 lunes</span>, puis le <span class="doom">Grand Glissement</span> vers les Refuges.</p>`
+  },
+  fellowship: {
+    title: "La Communauté du Front",
+    subtitle: "1.5 Million de Cœurs Unis",
+    content: `<p>Face à l'Empire, une alliance s'est formée. Ils l'appellent le <span class="hope">Front Commun</span> — mais c'est bien plus qu'un front. C'est une <span class="highlight">Communauté</span>.</p>
+    <p>• <span class="hope">FGTB</span> — La Guilde Rouge, menée par l'Oracle Bodson<br>
+    • <span class="hope">CSC</span> — Les Chevaliers Chrétiens du Travail<br>
+    • <span class="hope">CGSLB</span> — Les Libéraux Rebelles<br>
+    • <span class="highlight">Solidaris</span> — Les Guérisseurs<br>
+    • <span class="highlight">Réseaux Anti-Pauvreté</span> — Les Veilleurs des Marges</p>
+    <div class="lore-quote">« Seuls, nous sommes des gouttes. Ensemble, nous sommes un océan. »</div>
+    <p>Le 28 avril 2025, <span class="hope">140 000 marcheurs</span> ont déferlé dans les rues. Ce n'était que le début. La Communauté prépare la bataille finale — celle du <span class="highlight">Haut Conseil Constitutionnel</span>.</p>`
+  },
+  sauron: {
+    title: "Bart-h Sauron",
+    subtitle: "L'Œil qui Voit Tout... Sauf les Pauvres",
+    content: `<p><span class="doom">Bart De Wever</span>. Premier Ministre de l'Empire Arizona. Architecte de la Limitation. Celui qu'on nomme dans les tavernes : <span class="doom">Bart-h Sauron</span>.</p>
+    <p>Son œil de flamme surveille le royaume depuis la Citadelle Fédérale. Il voit les déficits. Il voit les « profiteurs ». Il voit les « inactifs ».</p>
+    <p>Mais il ne voit pas :</p>
+    <p>• Les 60% d'invalides brisés par le travail lui-même<br>
+    • Les 40% de citoyens perdus dans le labyrinthe numérique<br>
+    • Les 17 milliards dormant dans les coffres des Seigneurs</p>
+    <div class="lore-quote">« L'Œil ne voit que ce qu'il choisit de voir. Et il a choisi de ne pas voir les alternatives. »</div>
+    <p>Sa force : le <span class="doom">récit</span>. Il a convaincu le royaume que l'austérité était destin, que le sacrifice des faibles était nécessité, que <span class="doom">TINA</span> (There Is No Alternative) était vérité.</p>
+    <p>Sa faiblesse : l'<span class="highlight">Article 23</span>. L'Anneau de pouvoir qu'il ne peut détruire.</p>`
+  },
+  ring: {
+    title: "L'Anneau Article 23",
+    subtitle: "Le Pouvoir du Peuple",
+    content: `<p>Au cœur de la Constitution belge repose un artefact de pouvoir : l'<span class="highlight">Article 23</span>.</p>
+    <p>Forgé dans les flammes de l'après-guerre, cet Anneau garantit à chacun le droit de mener <span class="highlight">une vie conforme à la dignité humaine</span>.</p>
+    <div class="lore-quote">« Un Anneau pour les gouverner tous,<br>Un Anneau pour les protéger,<br>Un Anneau pour dans la solidarité les rassembler,<br>Et dans la dignité les garder. »</div>
+    <p>L'Anneau contient un pouvoir ancien : le <span class="hope">principe de standstill</span>. Une magie qui interdit de <span class="doom">réduire</span> le niveau de protection sociale existant.</p>
+    <p>L'Empire Arizona a tenté de contourner cet Anneau. Mais le <span class="highlight">29 octobre 2025</span>, la Communauté du Front a porté recours devant le <span class="highlight">Haut Conseil Constitutionnel</span>.</p>
+    <p>La bataille finale se jouera là. L'Anneau tiendra-t-il face aux ténèbres ?</p>`
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let currentTome = 0;
+
+// ═══════════════════════════════════════════════════════════════
+// INTRO
+// ═══════════════════════════════════════════════════════════════
+function skipIntro() {
+  document.getElementById('intro').classList.add('fade-out');
+  setTimeout(() => {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('app').classList.add('active');
+    initCanvas();
+    drawParticles();
+  }, 1500);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  createMatrixRain();
+  initClock();
+  initNav();
+  initCodex();
+  renderDoom();
+  renderVisions();
+  renderWeapons();
+  updateTome();
+  
+  // Auto-skip intro after 30s
+  setTimeout(() => {
+    if (!document.getElementById('intro').classList.contains('fade-out')) {
+      skipIntro();
+    }
+  }, 30000);
+});
+
+function initClock() {
+  const tick = () => document.getElementById('clock').textContent = new Date().toLocaleTimeString('fr-BE');
+  tick();
+  setInterval(tick, 1000);
+}
+
+function initNav() {
+  document.querySelectorAll('.nav-rune').forEach(btn => {
+    btn.addEventListener('click', () => enterRealm(btn.dataset.realm));
+  });
+}
+
+function enterRealm(id) {
+  document.querySelectorAll('.nav-rune').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.realm').forEach(r => r.classList.remove('active'));
+  document.querySelector(`[data-realm="${id}"]`)?.classList.add('active');
+  document.getElementById('realm-' + id)?.classList.add('active');
+}
+
+function initCodex() {
+  document.querySelectorAll('.codex-entry').forEach(entry => {
+    entry.addEventListener('click', () => {
+      document.querySelectorAll('.codex-entry').forEach(e => e.classList.remove('active'));
+      entry.classList.add('active');
+      showLore(entry.dataset.lore);
+    });
+  });
+  showLore('world');
+}
+
+function showLore(key) {
+  const l = lore[key];
+  if (!l) return;
+  document.getElementById('codex-content').innerHTML = `
+    <div class="lore-page">
+      <div class="lore-title">${l.title}</div>
+      <div class="lore-subtitle">${l.subtitle}</div>
+      <div class="lore-text">${l.content}</div>
+    </div>
+  `;
+}
+
+function renderDoom() {
+  document.getElementById('doom-timeline').innerHTML = doomEvents.map(e => `
+    <div class="doom-event">
+      <div class="doom-marker ${e.status}"></div>
+      <div class="doom-card">
+        <div class="doom-date">${e.date}</div>
+        <div class="doom-name">${e.name}</div>
+        <div class="doom-desc">${e.desc}</div>
+        <div class="doom-toll">${e.toll}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderVisions() {
+  document.getElementById('oracle-visions').innerHTML = visions.map(v => `
+    <div class="vision">
+      <div class="vision-time">${v.time}</div>
+      <div class="vision-text">${v.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderWeapons() {
+  document.getElementById('weapons-rack').innerHTML = weapons.map(w => `
+    <div class="weapon-card" onclick="copyWeaponText(this)">
+      <div class="weapon-rune">${w.rune}</div>
+      <div class="weapon-name">${w.name}</div>
+      <div class="weapon-power">${w.power}</div>
+      <div class="weapon-origin">📜 ${w.origin}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TOMES (Flashcards)
+// ═══════════════════════════════════════════════════════════════
+function updateTome() {
+  document.getElementById('tome-q').textContent = tomes[currentTome].q;
+  document.getElementById('tome-a').textContent = tomes[currentTome].a;
+  document.getElementById('tome-progress').textContent = `${currentTome + 1} / ${tomes.length}`;
+  document.getElementById('tome').classList.remove('revealed');
+}
+
+function revealTome() { document.getElementById('tome').classList.toggle('revealed'); }
+function nextTome() { currentTome = (currentTome + 1) % tomes.length; updateTome(); }
+function prevTome() { currentTome = (currentTome - 1 + tomes.length) % tomes.length; updateTome(); }
+function randomTome() { currentTome = Math.floor(Math.random() * tomes.length); enterRealm('archives'); updateTome(); }
+
+// ═══════════════════════════════════════════════════════════════
+// FORGE
+// ═══════════════════════════════════════════════════════════════
+function conjure() {
+  document.getElementById('incantation').innerHTML = incantations[Math.floor(Math.random() * incantations.length)];
+}
+
+function copyWeaponText(el) {
+  const text = el.querySelector('.weapon-name').textContent + ': ' + el.querySelector('.weapon-power').textContent;
+  navigator.clipboard.writeText(text);
+  toast('Arme copiée dans le presse-papiers !');
+}
+
+function copyWeapon() {
+  const w = weapons[Math.floor(Math.random() * weapons.length)];
+  navigator.clipboard.writeText(w.name + ': ' + w.power);
+  toast('Arme copiée !');
+}
+
+function copyBird() {
+  const tweets = [
+    "90 000 âmes perdront leur bouclier d'ici 2027. Non car elles trouvèrent labeur — mais car un conseil décréta que 24 lunes suffisaient. #StopArizona #Article23",
+    "La Taxe des Seigneurs rapporterait 17 milliards. Mais on préfère cibler les plus vulnérables. Question de priorités. #StopArizona"
+  ];
+  navigator.clipboard.writeText(tweets[Math.floor(Math.random() * tweets.length)]);
+  toast('Message pigeon copié !');
+}
+
+function exportScroll() {
+  const data = {tomes, weapons, doomEvents, incantations, lore};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'arizona-chronicles-data.json';
+  a.click();
+  toast('Parchemin exporté !');
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span>✨</span> ${msg}`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (document.getElementById('realm-archives').classList.contains('active')) {
+    if (e.key === 'ArrowRight') nextTome();
+    if (e.key === 'ArrowLeft') prevTome();
+    if (e.key === ' ') { e.preventDefault(); revealTome(); }
+  }
+  if (e.key === 'Escape' || e.key === 'Enter') skipIntro();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// TERMINAL AUTO-UPDATE
+// ═══════════════════════════════════════════════════════════════
+setInterval(() => {
+  const term = document.getElementById('terminal');
+  if (!term) return;
+  const msgs = [
+    {text: 'ping zion_mainframe... OK', cls: 'ok'},
+    {text: 'scanning for agents...', cls: 'warn'},
+    {text: 'the_one.status = AWAKENING', cls: ''},
+    {text: '« Follow the white rabbit. »', cls: ''},
+    {text: 'article_23.integrity = HOLDING', cls: 'ok'},
+    {text: 'vague_II.countdown = 40 CYCLES', cls: 'warn'}
+  ];
+  const m = msgs[Math.floor(Math.random() * msgs.length)];
+  const line = document.createElement('div');
+  line.className = 'terminal-line ' + m.cls;
+  line.textContent = m.text;
+  term.appendChild(line);
+  term.scrollTop = term.scrollHeight;
+  if (term.children.length > 15) term.removeChild(term.children[0]);
+}, 4000);
+</script>
+</body>
+</html>

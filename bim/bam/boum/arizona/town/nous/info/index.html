@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégies de Souveraineté Distribuée | Infographie Interactive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Tactical Zen -->
+    <!-- Application Structure Plan: A vertical scrolling SPA infographic narrative divided into three strategic layers (Micro, Meso, Macro).
+         - Header: Introduction to the 'Grey Zone' doctrine.
+         - Nav: Sticky navigation to jump between strategic levels.
+         - Sections: Each level contains context, a specific visualization (Radar, Bubble, Doughnut), and key takeaways.
+         - Synthesis: An interactive filterable matrix at the bottom.
+         This structure allows the user to read the report linearly as a story of 'professionalization', or jump to specific data points. -->
+
+    <!-- Visualization & Content Choices:
+         - Micro Level: Radar Chart to contrast the 'Reactive Rioter' vs the 'Sovereign Technician' (Goal: Compare).
+         - Meso Level: Bubble Chart to show the efficiency of small, autonomous cells vs large hierarchies (Goal: Relationships/Organize).
+         - Macro Level: Doughnut Chart to visualize the 'Stack' independence (Goal: Inform/Composition).
+         - Synthesis: HTML Table to summarize the toolset (Goal: Organize).
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Utility for sticky nav active state */
+        .nav-btn.active {
+            background-color: #57534e; /* stone-600 */
+            color: white;
+            border-bottom: 4px solid #a8a29e; /* stone-400 */
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Hero Section -->
+    <header class="bg-stone-800 text-stone-50 py-16 px-4 shadow-xl">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">Stratégies de Souveraineté Distribuée</h1>
+            <p class="text-xl text-stone-300 font-light mb-8">De l'émeute cinétique à la paix sociale radicale.</p>
+            <div class="bg-stone-700 p-6 rounded-lg text-left shadow-inner border border-stone-600">
+                <p class="mb-4 leading-relaxed">
+                    <strong>Contexte :</strong> Ce document propose une doctrine de "Zone Grise" pour transformer les mouvements sociaux. L'objectif est de remplacer la colère réactive par une compétence technique froide. Nous ne cherchons pas l'affrontement, mais la construction d'une infrastructure souveraine (le CCPLC) capable d'imposer une "paix armée" par la domination cognitive.
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-stone-400">
+                    <span class="border border-stone-500 px-2 py-1 rounded">#Noopolitique</span>
+                    <span class="border border-stone-500 px-2 py-1 rounded">#Auftragstaktik</span>
+                    <span class="border border-stone-500 px-2 py-1 rounded">#HygièneNumérique</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 z-50 bg-white shadow-md border-b border-stone-200">
+        <div class="max-w-6xl mx-auto flex justify-center md:justify-start overflow-x-auto">
+            <button onclick="scrollToSection('micro')" id="nav-micro" class="nav-btn px-6 py-4 text-stone-600 font-bold hover:bg-stone-100 transition whitespace-nowrap active">
+                1. MICRO (La Troupe)
+            </button>
+            <button onclick="scrollToSection('meso')" id="nav-meso" class="nav-btn px-6 py-4 text-stone-600 font-bold hover:bg-stone-100 transition whitespace-nowrap">
+                2. MÉSO (L'Organisation)
+            </button>
+            <button onclick="scrollToSection('macro')" id="nav-macro" class="nav-btn px-6 py-4 text-stone-600 font-bold hover:bg-stone-100 transition whitespace-nowrap">
+                3. MACRO (Le Système)
+            </button>
+            <button onclick="scrollToSection('synthesis')" id="nav-synthesis" class="nav-btn px-6 py-4 text-stone-600 font-bold hover:bg-stone-100 transition whitespace-nowrap">
+                SYNTHÈSE
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        
+        <!-- SECTION 1: MICRO -->
+        <section id="micro" class="py-16 px-4 bg-stone-50 border-b border-stone-200">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div class="order-2 md:order-1">
+                    <div class="mb-6">
+                        <span class="text-xs font-bold tracking-widest text-stone-500 uppercase">Niveau 1 : Individuel</span>
+                        <h2 class="text-3xl font-bold text-stone-800 mt-2 mb-4">Le "Team Building" par l'Empowerment</h2>
+                        <div class="w-16 h-1 bg-stone-400 mb-6"></div>
+                    </div>
+                    
+                    <p class="text-stone-700 leading-relaxed mb-4">
+                        Pour pacifier une troupe radicale, il ne faut pas la désarmer, mais la <strong>professionnaliser</strong>. L'énergie perdue dans l'émotion et le chaos de la rue est redirigée vers la maîtrise d'outils techniques.
+                    </p>
+                    <p class="text-stone-700 leading-relaxed mb-6">
+                        L'outil central est le <strong>Kit USBA</strong> (USB Auto/Archive). Au lieu de slogans, le militant reçoit des outils de souveraineté numérique (Tails, Tor, Obsidian). Il passe du statut d'émeutier vulnérable à celui de technicien intouchable ("Zero Trust").
+                    </p>
+
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-400 mb-6">
+                        <h3 class="font-bold text-stone-800 mb-2">Tactique : Gamification</h3>
+                        <p class="text-sm text-stone-600">
+                            Le "e-Bomba Game" simule la violence pour éviter qu'elle ne se produise dans le réel. C'est une catharsis numérique qui préserve l'intégrité physique tout en enseignant la stratégie.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="order-1 md:order-2 flex flex-col items-center">
+                    <div class="w-full mb-4 flex justify-between items-end">
+                        <h3 class="font-bold text-stone-700">Profil de Compétence</h3>
+                        <span class="text-xs bg-stone-200 px-2 py-1 rounded text-stone-600">Comparatif</span>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="chartMicro"></canvas>
+                    </div>
+
+                    <p class="text-xs text-stone-500 mt-3 text-center italic max-w-sm">
+                        Comparaison entre le profil "Chaos" (Réactif) et le profil "CCPLC" (Souverain). Notez l'augmentation drastique de la discipline et de la sécurité.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MESO -->
+        <section id="meso" class="py-16 px-4 bg-white border-b border-stone-200">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Visualization (Left on desktop for variety) -->
+                <div class="order-1 flex flex-col items-center">
+                    <div class="w-full mb-4 flex justify-between items-end">
+                        <h3 class="font-bold text-stone-700">Topologie Organisationnelle</h3>
+                        <span class="text-xs bg-stone-200 px-2 py-1 rounded text-stone-600">Distribution</span>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="chartMeso"></canvas>
+                    </div>
+
+                    <p class="text-xs text-stone-500 mt-3 text-center italic max-w-sm">
+                        Visualisation de l'efficacité des cellules autonomes (CCPLC) face aux structures monolithiques. Les cellules couvrent plus de terrain avec moins de ressources.
+                    </p>
+                </div>
+
+                <!-- Text Content -->
+                <div class="order-2">
+                    <div class="mb-6">
+                        <span class="text-xs font-bold tracking-widest text-stone-500 uppercase">Niveau 2 : Collectif</span>
+                        <h2 class="text-3xl font-bold text-stone-800 mt-2 mb-4">Auftragstaktik & Cellules Autonomes</h2>
+                        <div class="w-16 h-1 bg-stone-400 mb-6"></div>
+                    </div>
+                    
+                    <p class="text-stone-700 leading-relaxed mb-4">
+                        L'organisation pyramidale est trop lente pour l'ère numérique. La doctrine préconise l'<strong>Auftragstaktik</strong> (Commandement par mission) : le leadership définit l'intention, mais laisse aux cellules locales la liberté totale de l'exécution.
+                    </p>
+                    <p class="text-stone-700 leading-relaxed mb-6">
+                        Cela crée une résilience extrême. Si une tête tombe, le corps continue d'opérer. L'<strong>Éducation Permanente</strong> agit comme le système nerveux, assurant que toutes les cellules partagent le même "code source" culturel.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-stone-100 p-4 rounded text-center">
+                            <div class="text-2xl mb-1">🕸️</div>
+                            <div class="font-bold text-sm">Décentralisé</div>
+                        </div>
+                        <div class="bg-stone-100 p-4 rounded text-center">
+                            <div class="text-2xl mb-1">🧠</div>
+                            <div class="font-bold text-sm">Cognitif</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: MACRO -->
+        <section id="macro" class="py-16 px-4 bg-stone-50 border-b border-stone-200">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div class="order-2 md:order-1">
+                    <div class="mb-6">
+                        <span class="text-xs font-bold tracking-widest text-stone-500 uppercase">Niveau 3 : Systémique</span>
+                        <h2 class="text-3xl font-bold text-stone-800 mt-2 mb-4">Souveraineté dans "The Stack"</h2>
+                        <div class="w-16 h-1 bg-stone-400 mb-6"></div>
+                    </div>
+                    
+                    <p class="text-stone-700 leading-relaxed mb-4">
+                        Au niveau géopolitique, le "Syndicat" doit sécuriser sa propre existence matérielle et numérique. On ne peut pas faire la révolution sur des serveurs loués à Google.
+                    </p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <span class="mr-2 text-green-600">✔</span>
+                            <span class="text-stone-700 text-sm"><strong>Infra :</strong> Utilisation de Solid et IPFS pour échapper à la censure GAFAM.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-green-600">✔</span>
+                            <span class="text-stone-700 text-sm"><strong>Fiscalité (ECP) :</strong> Création d'Entités de Commercialisation de Prestations pour sécuriser les revenus (BIM protégé).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 text-green-600">✔</span>
+                            <span class="text-stone-700 text-sm"><strong>Pre-bunking :</strong> "Vaccination cognitive" contre la désinformation adverse.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Visualization -->
+                <div class="order-1 md:order-2 flex flex-col items-center">
+                    <div class="w-full mb-4 flex justify-between items-end">
+                        <h3 class="font-bold text-stone-700">Dépendance Infrastructurelle</h3>
+                        <span class="text-xs bg-stone-200 px-2 py-1 rounded text-stone-600">Analyse de Risque</span>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="chartMacro"></canvas>
+                    </div>
+
+                    <p class="text-xs text-stone-500 mt-3 text-center italic max-w-sm">
+                        Répartition de l'infrastructure technologique. L'objectif est de maximiser la zone "Souveraine" pour garantir la pérennité du mouvement.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SYNTHESIS -->
+        <section id="synthesis" class="py-16 px-4 bg-stone-800 text-stone-300">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-50">Matrice de Synthèse CCPLC</h2>
+                    <p class="mt-2 text-stone-400">Le "Syndicat Anarchiste Citoyen" comme infrastructure de paix.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex justify-center gap-4 mb-8">
+                    <button onclick="filterTable('all')" class="filter-btn px-4 py-2 bg-stone-700 hover:bg-stone-600 rounded text-sm font-semibold active-filter text-white">Tout</button>
+                    <button onclick="filterTable('Micro')" class="filter-btn px-4 py-2 bg-stone-900 hover:bg-stone-600 rounded text-sm font-semibold border border-stone-700">Micro</button>
+                    <button onclick="filterTable('Meso')" class="filter-btn px-4 py-2 bg-stone-900 hover:bg-stone-600 rounded text-sm font-semibold border border-stone-700">Meso</button>
+                    <button onclick="filterTable('Macro')" class="filter-btn px-4 py-2 bg-stone-900 hover:bg-stone-600 rounded text-sm font-semibold border border-stone-700">Macro</button>
+                </div>
+
+                <!-- Table -->
+                <div class="bg-stone-900 rounded-lg overflow-hidden shadow-2xl border border-stone-700">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-stone-950 text-stone-400 uppercase text-xs tracking-wider">
+                                <tr>
+                                    <th class="p-4 border-b border-stone-800">Niveau</th>
+                                    <th class="p-4 border-b border-stone-800">Action de "Team Building"</th>
+                                    <th class="p-4 border-b border-stone-800">Outil d'Apaisement / Concept</th>
+                                </tr>
+                            </thead>
+                            <tbody id="synthesis-body" class="text-sm divide-y divide-stone-800">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center text-xs text-stone-500">
+                    <p>Source: "Stratégies de Souveraineté Distribuée et Paix Sociale Radicale"</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-950 text-stone-600 py-6 text-center text-sm">
+        <p>&copy; 2024 Simulation Interactive CCPLC. Infrastructure de Souveraineté.</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- Color Palette (Tactical Zen) ---
+        const theme = {
+            primary: '#57534e', // stone-600
+            secondary: '#a8a29e', // stone-400
+            accent: '#78716c', // stone-500
+            success: '#84cc16', // lime-500 (Growth/Peace)
+            danger: '#ef4444', // red-500 (Action/Risk)
+            bg: '#f5f5f4' // stone-100
+        };
+
+        // --- Data ---
+        const synthesisData = [
+            { level: 'Micro', action: 'Formation à l\'hygiène numérique', tool: 'Kit USBA & Jeu e-Bomba' },
+            { level: 'Micro', action: 'Transformation de la colère', tool: 'Compétence Technique Froide' },
+            { level: 'Micro', action: 'Validation Identitaire', tool: 'Statut de "Résistant Numérique"' },
+            { level: 'Meso', action: 'Organisation en cellules autonomes', tool: 'Auftragstaktik (Commandement par mission)' },
+            { level: 'Meso', action: 'Cohésion culturelle', tool: 'Éducation Permanente' },
+            { level: 'Macro', action: 'Négociation administrative', tool: 'Ruling Fiscal (ECP)' },
+            { level: 'Macro', action: 'Indépendance Technologique', tool: 'The Stack (Solid / IPFS)' },
+            { level: 'Macro', action: 'Défense Cognitive', tool: 'Pre-bunking (Loi de Brandolini)' }
+        ];
+
+        // --- Charts Initialization ---
+        
+        // Common Tooltip Configuration (Mandatory)
+        const commonTooltip = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) return label.join(' ');
+                    return label;
+                }
+            }
+        };
+
+        // Label Wrapping Helper
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        window.onload = function() {
+            // 1. Micro Chart (Radar)
+            const ctxMicro = document.getElementById('chartMicro').getContext('2d');
+            new Chart(ctxMicro, {
+                type: 'radar',
+                data: {
+                    labels: ['Sécurité Ops', 'Anonymat', 'Discipline Technique', 'Émotion Réactive', 'Violence Physique'].map(l => wrapLabel(l)),
+                    datasets: [{
+                        label: 'Militant CCPLC (Souverain)',
+                        data: [90, 85, 95, 20, 10],
+                        backgroundColor: 'rgba(132, 204, 22, 0.2)', // Lime
+                        borderColor: '#65a30d',
+                        pointBackgroundColor: '#65a30d',
+                        borderWidth: 2
+                    }, {
+                        label: 'Militant Standard (Chaos)',
+                        data: [20, 10, 30, 90, 80],
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)', // Red
+                        borderColor: '#ef4444',
+                        pointBackgroundColor: '#ef4444',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e7e5e4' },
+                            grid: { color: '#e7e5e4' },
+                            pointLabels: {
+                                font: { size: 11, family: 'Inter' },
+                                color: '#57534e'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: { tooltip: commonTooltip, legend: { position: 'bottom' } }
+                }
+            });
+
+            // 2. Meso Chart (Bubble)
+            const ctxMeso = document.getElementById('chartMeso').getContext('2d');
+            new Chart(ctxMeso, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Cellules CCPLC',
+                        data: [
+                            { x: 80, y: 90, r: 15 },
+                            { x: 70, y: 60, r: 10 },
+                            { x: 90, y: 85, r: 12 },
+                            { x: 60, y: 40, r: 8 },
+                            { x: 85, y: 75, r: 20 }
+                        ],
+                        backgroundColor: '#78716c' // Stone 500
+                    }, {
+                        label: 'Hiérarchie Classique',
+                        data: [
+                            { x: 20, y: 50, r: 45 } // Low autonomy, slow
+                        ],
+                        backgroundColor: '#d6d3d1' // Stone 300
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Autonomie Décisionnelle (%)' },
+                            min: 0, max: 100 
+                        },
+                        y: { 
+                            title: { display: true, text: 'Impact Stratégique (%)' },
+                            min: 0, max: 100 
+                        }
+                    },
+                    plugins: { tooltip: commonTooltip, legend: { position: 'bottom' } }
+                }
+            });
+
+            // 3. Macro Chart (Doughnut)
+            const ctxMacro = document.getElementById('chartMacro').getContext('2d');
+            new Chart(ctxMacro, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Infra Souveraine', 'Dépendance GAFAM', 'Zone Grise'].map(l => wrapLabel(l)),
+                    datasets: [{
+                        data: [60, 15, 25],
+                        backgroundColor: [
+                            '#57534e', // Sovereign (Stone 600)
+                            '#ef4444', // Danger (Red 500)
+                            '#a8a29e'  // Grey Zone (Stone 400)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        tooltip: commonTooltip, 
+                        legend: { position: 'right' } 
+                    }
+                }
+            });
+
+            // Initialize Table
+            renderTable(synthesisData);
+        };
+
+        // --- Interactions ---
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            const navHeight = document.querySelector('nav').offsetHeight;
+            const y = el.getBoundingClientRect().top + window.pageYOffset - navHeight;
+            
+            window.scrollTo({top: y, behavior: 'smooth'});
+
+            // Update Active State manually for immediate feedback
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'bg-stone-600', 'text-white'));
+            const btn = document.getElementById('nav-' + id);
+            if(btn) btn.classList.add('active');
+        }
+
+        // Filter Synthesis Table
+        function renderTable(data) {
+            const tbody = document.getElementById('synthesis-body');
+            tbody.innerHTML = '';
+            
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stone-800 transition duration-150";
+                tr.innerHTML = `
+                    <td class="p-4 border-b border-stone-800 font-bold text-stone-500">${row.level}</td>
+                    <td class="p-4 border-b border-stone-800 text-stone-300 font-medium">${row.action}</td>
+                    <td class="p-4 border-b border-stone-800 text-stone-400 italic">${row.tool}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTable(level) {
+            // Update Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-stone-700', 'text-white', 'active-filter');
+                btn.classList.add('bg-stone-900', 'border', 'border-stone-700');
+            });
+            event.target.classList.remove('bg-stone-900', 'border', 'border-stone-700');
+            event.target.classList.add('bg-stone-700', 'text-white', 'active-filter');
+
+            // Filter Data
+            if (level === 'all') {
+                renderTable(synthesisData);
+            } else {
+                const filtered = synthesisData.filter(item => item.level === level);
+                renderTable(filtered);
+            }
+        }
+
+        // Scroll Spy for Nav highlighting
+        window.addEventListener('scroll', () => {
+            const sections = ['micro', 'meso', 'macro', 'synthesis'];
+            const navHeight = document.querySelector('nav').offsetHeight;
+            
+            let current = '';
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (window.scrollY >= (element.offsetTop - navHeight - 100)) {
+                    current = section;
+                }
+            });
+
+            if (current) {
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('nav-' + current).classList.add('active');
+            }
+        });
+
+    </script>
+</body>
+</html>
